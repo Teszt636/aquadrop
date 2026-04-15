@@ -1,1 +1,2 @@
-export {};
+export * from '@/lib/env';
+export * from '@/lib/supabase';
