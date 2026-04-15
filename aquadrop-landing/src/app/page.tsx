@@ -1,4 +1,4 @@
-import { BenefitsSection, GiftSection, HeroSection, TechnologySection, TrustSection } from '@/components/sections';
+import { AnnouncementSection, BenefitsSection, GiftSection, HeroSection, TechnologySection, TrustSection } from '@/components/sections';
 
 export default function Home() {
   return (
@@ -8,6 +8,7 @@ export default function Home() {
       <GiftSection />
       <TechnologySection />
       <TrustSection />
+      <AnnouncementSection />
     </main>
   );
 }
