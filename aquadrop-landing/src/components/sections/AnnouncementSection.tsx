@@ -1,8 +1,62 @@
 'use client';
 
+import { type FormEvent, useState } from 'react';
+import { useRouter } from 'next/navigation';
+
 import { Button } from '@/components/ui/Button';
+import { insertIntoTable } from '@/lib/supabase';
+
+type FormState = {
+  name: string;
+  email: string;
+  phone: string;
+  consent: boolean;
+};
+
+const INITIAL_FORM_STATE: FormState = {
+  name: '',
+  email: '',
+  phone: '',
+  consent: false
+};
 
 export function AnnouncementSection() {
+  const router = useRouter();
+  const [formState, setFormState] = useState<FormState>(INITIAL_FORM_STATE);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const trimmedName = formState.name.trim();
+    const trimmedEmail = formState.email.trim();
+    const trimmedPhone = formState.phone.trim();
+
+    if (!trimmedName || !trimmedEmail || !formState.consent) {
+      setErrorMessage('Kérlek, töltsd ki a kötelező mezőket és fogadd el az adatkezelést.');
+
+      return;
+    }
+
+    setIsSubmitting(true);
+    setErrorMessage(null);
+
+    try {
+      await insertIntoTable('announcement_signups', {
+        name: trimmedName,
+        email: trimmedEmail,
+        phone: trimmedPhone || null,
+        consent: formState.consent
+      });
+
+      router.push('/koszonjuk/feliratkozas');
+    } catch {
+      setErrorMessage('Hiba történt a feliratkozás során. Kérlek, próbáld újra.');
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <section className="ds-section bg-slate-50">
       <div className="ds-container">
@@ -14,7 +68,7 @@ export function AnnouncementSection() {
             </p>
           </div>
 
-          <form className="mx-auto mt-8 max-w-xl space-y-4" onSubmit={(event) => event.preventDefault()}>
+          <form className="mx-auto mt-8 max-w-xl space-y-4" onSubmit={handleSubmit} noValidate>
             <div>
               <label className="mb-2 block text-sm font-semibold text-slate-700" htmlFor="announcement-name">
                 Név
@@ -25,6 +79,10 @@ export function AnnouncementSection() {
                 name="name"
                 placeholder="Add meg a neved"
                 type="text"
+                required
+                value={formState.name}
+                onChange={(event) => setFormState((prev) => ({ ...prev, name: event.target.value }))}
+                disabled={isSubmitting}
               />
             </div>
 
@@ -38,10 +96,52 @@ export function AnnouncementSection() {
                 name="email"
                 placeholder="Add meg az e-mail címed"
                 type="email"
+                required
+                value={formState.email}
+                onChange={(event) => setFormState((prev) => ({ ...prev, email: event.target.value }))}
+                disabled={isSubmitting}
               />
             </div>
 
-            <Button className="w-full">Elsőként szeretnék értesülni</Button>
+            <div>
+              <label className="mb-2 block text-sm font-semibold text-slate-700" htmlFor="announcement-phone">
+                Telefonszám (opcionális)
+              </label>
+              <input
+                className="w-full rounded-lg border border-slate-300 px-4 py-3 text-slate-900 placeholder:text-slate-400 focus:border-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary/20"
+                id="announcement-phone"
+                name="phone"
+                placeholder="Add meg a telefonszámod"
+                type="tel"
+                value={formState.phone}
+                onChange={(event) => setFormState((prev) => ({ ...prev, phone: event.target.value }))}
+                disabled={isSubmitting}
+              />
+            </div>
+
+            <label className="flex items-start gap-3 rounded-lg border border-slate-200 p-3 text-sm text-slate-700">
+              <input
+                className="mt-0.5 h-4 w-4 rounded border-slate-300 text-brand-primary focus:ring-brand-primary/30"
+                type="checkbox"
+                name="consent"
+                checked={formState.consent}
+                onChange={(event) =>
+                  setFormState((prev) => ({
+                    ...prev,
+                    consent: event.target.checked
+                  }))
+                }
+                disabled={isSubmitting}
+                required
+              />
+              <span>Elfogadom az adatkezelési tájékoztatót és hozzájárulok az adataim kezeléséhez.</span>
+            </label>
+
+            {errorMessage ? <p className="text-sm text-red-600">{errorMessage}</p> : null}
+
+            <Button className="w-full" disabled={isSubmitting}>
+              {isSubmitting ? 'Küldés...' : 'Elsőként szeretnék értesülni'}
+            </Button>
           </form>
         </div>
       </div>
