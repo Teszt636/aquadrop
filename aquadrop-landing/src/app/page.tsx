@@ -1,14 +1,25 @@
-import { AnnouncementSection, BenefitsSection, GiftSection, HeroSection, TechnologySection, TrustSection } from '@/components/sections';
+import {
+  AnnouncementSection,
+  BenefitsSection,
+  FooterSection,
+  GiftSection,
+  HeroSection,
+  ResellerSection,
+  TechnologySection,
+  TrustSection
+} from '@/components/sections';
 
 export default function Home() {
   return (
-    <main>
+    <main className="flex flex-col">
       <HeroSection />
       <BenefitsSection />
-      <GiftSection />
       <TechnologySection />
       <TrustSection />
+      <GiftSection />
       <AnnouncementSection />
+      <ResellerSection />
+      <FooterSection />
     </main>
   );
 }
