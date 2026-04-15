@@ -1,4 +1,7 @@
-import { env } from '@/lib/env';
+import {
+  NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  NEXT_PUBLIC_SUPABASE_URL
+} from '@/lib/env';
 
 type JsonValue =
   | string
@@ -10,11 +13,11 @@ type JsonValue =
 
 type InsertPayload = Record<string, JsonValue> | Array<Record<string, JsonValue>>;
 
-const SUPABASE_URL = env.NEXT_PUBLIC_SUPABASE_URL.replace(/\/$/, '');
+const SUPABASE_URL = NEXT_PUBLIC_SUPABASE_URL.replace(/\/$/, '');
 
 export const supabaseConfig = {
   url: SUPABASE_URL,
-  anonKey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  anonKey: NEXT_PUBLIC_SUPABASE_ANON_KEY,
   restUrl: `${SUPABASE_URL}/rest/v1`,
   storageUrl: `${SUPABASE_URL}/storage/v1`
 } as const;
