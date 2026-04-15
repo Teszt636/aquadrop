@@ -1,4 +1,4 @@
-import { BenefitsSection, HeroSection, TechnologySection } from '@/components/sections';
+import { BenefitsSection, HeroSection, TechnologySection, TrustSection } from '@/components/sections';
 
 export default function Home() {
   return (
@@ -6,6 +6,7 @@ export default function Home() {
       <HeroSection />
       <BenefitsSection />
       <TechnologySection />
+      <TrustSection />
     </main>
   );
 }
