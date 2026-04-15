@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/Button';
 import { insertIntoTable } from '@/lib/supabase';
+import { uploadGiftReceipt } from '@/lib/supabase-storage';
 
 type GiftFormState = {
   full_name: string;
@@ -13,7 +14,6 @@ type GiftFormState = {
   shipping_address: string;
   purchase_location: string;
   purchase_date: string;
-  receipt_file_url: string;
   consent: boolean;
   purchase_declaration: boolean;
 };
@@ -25,7 +25,6 @@ const INITIAL_FORM_STATE: GiftFormState = {
   shipping_address: '',
   purchase_location: '',
   purchase_date: '',
-  receipt_file_url: '',
   consent: false,
   purchase_declaration: false
 };
@@ -33,6 +32,7 @@ const INITIAL_FORM_STATE: GiftFormState = {
 export function GiftSection() {
   const router = useRouter();
   const [formState, setFormState] = useState<GiftFormState>(INITIAL_FORM_STATE);
+  const [receiptFile, setReceiptFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -45,6 +45,29 @@ export function GiftSection() {
     }));
   };
 
+
+
+  const handleReceiptChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0] ?? null;
+
+    if (!file) {
+      setReceiptFile(null);
+
+      return;
+    }
+
+    if (!file.type.startsWith('image/')) {
+      setReceiptFile(null);
+      setErrorMessage('Kérlek, csak képfájlt tölts fel a blokkhoz.');
+      event.target.value = '';
+
+      return;
+    }
+
+    setErrorMessage(null);
+    setReceiptFile(file);
+  };
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -55,7 +78,6 @@ export function GiftSection() {
       shipping_address: formState.shipping_address.trim(),
       purchase_location: formState.purchase_location.trim(),
       purchase_date: formState.purchase_date,
-      receipt_file_url: formState.receipt_file_url.trim(),
       consent: formState.consent,
       purchase_declaration: formState.purchase_declaration
     };
@@ -67,7 +89,6 @@ export function GiftSection() {
       !payload.shipping_address ||
       !payload.purchase_location ||
       !payload.purchase_date ||
-      !payload.receipt_file_url ||
       !payload.consent ||
       !payload.purchase_declaration
     ) {
@@ -76,19 +97,33 @@ export function GiftSection() {
       return;
     }
 
+    if (!receiptFile) {
+      setErrorMessage('Kérlek, töltsd fel a blokk képét.');
+
+      return;
+    }
+
+    if (!receiptFile.type.startsWith('image/')) {
+      setErrorMessage('Kérlek, csak képfájlt tölts fel a blokkhoz.');
+
+      return;
+    }
+
     setIsSubmitting(true);
     setErrorMessage(null);
 
     try {
+      const receiptFileUrl = await uploadGiftReceipt(receiptFile);
+
       await insertIntoTable('gift_claims', {
         ...payload,
-        receipt_file_url: payload.receipt_file_url || null,
+        receipt_file_url: receiptFileUrl,
         status: 'uj'
       });
 
       router.push('/koszonjuk/ajandek');
     } catch {
-      setErrorMessage('Hiba történt az igénylés elküldése közben. Kérlek, próbáld újra.');
+      setErrorMessage('Hiba történt a blokk feltöltése vagy az igénylés elküldése közben. Kérlek, próbáld újra.');
       setIsSubmitting(false);
     }
   };
@@ -117,8 +152,7 @@ export function GiftSection() {
           >
             <h3 className="text-xl font-semibold text-slate-900">Ajándékdoboz igénylőlap</h3>
             <p className="mt-2 text-sm text-slate-600">
-              Töltsd ki az alábbi mezőket magyarul. A blokk feltöltéshez most ideiglenes mezőt használunk,
-              a fájlfeltöltés a következő lépésben érkezik.
+              Töltsd ki az alábbi mezőket magyarul, majd töltsd fel a vásárlási blokk képét.
             </p>
 
             <div className="mt-6 grid gap-4 md:grid-cols-2">
@@ -211,18 +245,17 @@ export function GiftSection() {
                 />
               </label>
 
-              <label className="grid gap-1.5 text-sm font-semibold text-slate-700" htmlFor="gift-receipt-file-url">
-                Blokk hivatkozás (ideiglenes) *
+              <label className="grid gap-1.5 text-sm font-semibold text-slate-700" htmlFor="gift-receipt-file">
+                Blokk feltöltése *
                 <input
-                  id="gift-receipt-file-url"
-                  name="receipt_file_url"
-                  type="text"
+                  id="gift-receipt-file"
+                  name="receipt_file"
+                  type="file"
                   required
-                  value={formState.receipt_file_url}
-                  onChange={handleChange}
+                  accept="image/*"
+                  onChange={handleReceiptChange}
                   disabled={isSubmitting}
-                  placeholder="Ideiglenes mező: add meg a blokk URL-jét vagy azonosítóját"
-                  className="h-11 rounded-lg border border-slate-300 bg-white px-3 text-base text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20"
+                  className="h-11 rounded-lg border border-slate-300 bg-white px-3 py-2 text-base text-slate-900 outline-none transition file:mr-3 file:rounded-md file:border-0 file:bg-brand-primary/10 file:px-3 file:py-1 file:text-sm file:font-semibold file:text-brand-primary hover:file:bg-brand-primary/20 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20"
                 />
               </label>
             </div>
