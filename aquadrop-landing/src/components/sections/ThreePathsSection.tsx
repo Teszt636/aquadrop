@@ -23,10 +23,7 @@ export function ThreePathsSection() {
         </div>
 
         <div className="mt-8 grid gap-5 md:grid-cols-3 md:items-stretch">
-          <article className="group relative flex h-full flex-col rounded-2xl border-2 border-brand-primary/35 bg-white p-6 shadow-lg shadow-brand-primary/10 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl md:p-7">
-            <span className="mb-4 inline-flex w-fit rounded-full border border-brand-primary/20 bg-brand-light px-3 py-1 text-xs font-bold uppercase tracking-[0.08em] text-brand-primary">
-              Fő út
-            </span>
+          <article className="group relative flex h-full flex-col items-center rounded-2xl border-2 border-brand-primary/35 bg-white p-6 text-center shadow-lg shadow-brand-primary/10 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl md:p-7">
             <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-brand-primary/10 text-2xl">
               🎁
             </div>
@@ -46,7 +43,7 @@ export function ThreePathsSection() {
             </button>
           </article>
 
-          <article className="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-lg md:p-7">
+          <article className="group flex h-full flex-col items-center rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-lg md:p-7">
             <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 text-2xl">
               🔔
             </div>
@@ -66,7 +63,7 @@ export function ThreePathsSection() {
             </button>
           </article>
 
-          <article className="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-lg md:p-7">
+          <article className="group flex h-full flex-col items-center rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-lg md:p-7">
             <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 text-2xl">
               🤝
             </div>
