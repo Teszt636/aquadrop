@@ -1,13 +1,10 @@
 'use client';
 
+import Link from 'next/link';
+
 import { Button } from '@/components/ui/Button';
 
-const heroBullets = [
-  '4 az 1-ben hatás',
-  'Magas koncentráció (70–80% aktív hatóanyag)',
-  'Hosszan tartó prémium illat',
-  'Szövetbarát és bőrbarát formula'
-];
+const miniTrustItems = ['4 az 1-ben hatás', 'Magas koncentráció', 'Prémium illat'];
 
 export function HeroSection() {
   const scrollToSection = (sectionId: string) => {
@@ -28,30 +25,27 @@ export function HeroSection() {
             <p className="inline-flex rounded-full border border-brand-primary/20 bg-brand-light px-3 py-1 text-sm font-semibold text-brand-primary">
               Aquadrop Expert Pro kapszula
             </p>
-            <h1 className="mt-4 text-4xl leading-tight md:text-5xl">
-              Prémium mosókapszula valódi teljesítménnyel
-            </h1>
+            <h1 className="mt-4 text-4xl leading-tight md:text-5xl">Prémium mosókapszula valódi teljesítménnyel</h1>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-700">
               Az Aquadrop Expert Pro egy magas koncentrációjú, modern mosókapszula, amely nemcsak tisztít, hanem új
               szintre emeli a mindennapi mosást.
             </p>
 
-            <ul className="mt-7 space-y-3">
-              {heroBullets.map((item) => (
-                <li className="flex items-start gap-3" key={item}>
-                  <span className="mt-1 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-success-green/15 text-success-green">
-                    ✓
-                  </span>
-                  <span className="font-medium text-slate-800">{item}</span>
-                </li>
-              ))}
-            </ul>
-
-            <div className="mt-8 flex flex-wrap justify-center gap-3 md:justify-start">
-              <Button onClick={() => scrollToSection('gift-campaign')}>Kérem az ajándék dobozt</Button>
-              <Button variant="secondary" onClick={() => scrollToSection('announcement-signup')}>
-                Értesítést kérek
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+              <Button
+                id="hero-cta-primary"
+                className="w-full shadow-lg shadow-brand-primary/25 sm:w-auto"
+                onClick={() => scrollToSection('gift-campaign')}
+              >
+                Kérem az ajándék dobozt
               </Button>
+              <Link
+                id="hero-cta-secondary"
+                href="/partner"
+                className="ds-button-secondary inline-flex w-full justify-center border-2 border-brand-primary/40 font-semibold sm:w-auto"
+              >
+                Viszonteladó vagyok
+              </Link>
             </div>
           </div>
 
@@ -65,6 +59,17 @@ export function HeroSection() {
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="mt-6 grid gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-4 shadow-sm sm:grid-cols-3 sm:gap-4 sm:px-6">
+          {miniTrustItems.map((item) => (
+            <p
+              key={item}
+              className="text-center text-sm font-semibold text-slate-700 sm:border-r sm:border-slate-200 sm:last:border-r-0"
+            >
+              {item}
+            </p>
+          ))}
         </div>
       </div>
     </section>
