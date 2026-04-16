@@ -1,8 +1,6 @@
 'use client';
 
-import Link from 'next/link';
-
-import { Button } from '@/components/ui/Button';
+import { Button, ButtonLink } from '@/components/ui/Button';
 
 const miniTrustItems = ['4 az 1-ben hatás', 'Magas koncentráció', 'Prémium illat'];
 
@@ -39,13 +37,14 @@ export function HeroSection() {
               >
                 Kérem az ajándék dobozt
               </Button>
-              <Link
+              <ButtonLink
                 id="hero-cta-secondary"
                 href="/partner"
-                className="ds-button-secondary inline-flex w-full justify-center border-2 border-brand-primary/40 font-semibold sm:w-auto"
+                variant="secondary"
+                className="inline-flex w-full justify-center border-2 border-brand-primary/40 font-semibold sm:w-auto"
               >
                 Viszonteladó vagyok
-              </Link>
+              </ButtonLink>
             </div>
           </div>
 
