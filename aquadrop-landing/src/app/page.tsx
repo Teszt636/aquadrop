@@ -8,7 +8,8 @@ import {
   TechnologySection,
   TrustSection,
   ThreePathsSection,
-  MobileStickyCTA
+  MobileStickyCTA,
+  SocialProofSection
 } from '@/components/sections';
 
 export default function Home() {
@@ -21,6 +22,7 @@ export default function Home() {
       <TrustSection />
       <ThreePathsSection />
       <GiftSection />
+      <SocialProofSection />
       <AnnouncementSection />
       <FooterSection />
       <MobileStickyCTA />
