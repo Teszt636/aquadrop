@@ -26,10 +26,9 @@ export function HeroSection() {
             <p className="inline-flex rounded-full border border-brand-primary/20 bg-brand-light px-3 py-1 text-sm font-semibold text-brand-primary">
               Aquadrop Expert Pro kapszula
             </p>
-            <h1 className="mt-4 text-4xl leading-tight md:text-5xl">Prémium mosókapszula valódi teljesítménnyel</h1>
+            <h1 className="mt-4 text-4xl leading-tight md:text-5xl">Prémium mosókapszula, ami nemcsak illatosít, hanem tényleg tisztít</h1>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-700">
-              Az Aquadrop Expert Pro egy magas koncentrációjú, modern mosókapszula, amely nemcsak tisztít, hanem új
-              szintre emeli a mindennapi mosást.
+              Az Aquadrop Expert Pro magas koncentrációjú formula, amely hatékony tisztítást, friss illatot és megbízható mindennapi teljesítményt ad.
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
@@ -41,7 +40,7 @@ export function HeroSection() {
                   scrollToSection('gift-campaign');
                 }}
               >
-                Kérem az ajándék dobozt
+                Kérem a 3. dobozt ajándékba
               </Button>
               <ButtonLink
                 id="hero-cta-secondary"

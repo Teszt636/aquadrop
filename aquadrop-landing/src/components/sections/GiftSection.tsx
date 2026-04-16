@@ -318,7 +318,7 @@ export function GiftSection() {
             <div className="mt-6 flex flex-col items-start gap-3 md:flex-row md:items-center md:justify-between">
               <p className="text-xs text-slate-500">* Kötelező mezők</p>
               <Button type="submit" className="px-8 py-3 text-base" disabled={isSubmitting}>
-                {isSubmitting ? 'Küldés...' : 'Ajándék dobozt igényelek'}
+                {isSubmitting ? 'Küldés...' : 'Kérem a 3. dobozt ajándékba'}
               </Button>
             </div>
           </form>
