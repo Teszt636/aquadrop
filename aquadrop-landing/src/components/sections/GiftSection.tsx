@@ -265,6 +265,10 @@ export function GiftSection() {
                     {receiptFile ? receiptFile.name : 'Blokk képének kiválasztása'}
                   </span>
                 </label>
+                <p className="text-xs font-normal leading-5 text-slate-500">
+                  Ha a 2 termék 2 külön blokkon szerepel, kérjük, a két blokkot egyetlen jól olvasható közös képen töltsd fel.
+                  Kérjük, ügyelj arra, hogy a vásárlás adatai jól olvashatók legyenek.
+                </p>
               </div>
             </div>
 
