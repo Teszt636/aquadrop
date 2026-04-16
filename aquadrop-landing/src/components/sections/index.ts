@@ -1,4 +1,5 @@
 export * from './HeroSection';
+export * from './ProblemSection';
 export * from './BenefitsSection';
 export * from './TechnologySection';
 export * from './TrustSection';

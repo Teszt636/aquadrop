@@ -4,6 +4,7 @@ import {
   FooterSection,
   GiftSection,
   HeroSection,
+  ProblemSection,
   TechnologySection,
   TrustSection,
   MobileStickyCTA
@@ -13,6 +14,7 @@ export default function Home() {
   return (
     <main className="flex flex-col pb-24 md:pb-0">
       <HeroSection />
+      <ProblemSection />
       <BenefitsSection />
       <TechnologySection />
       <TrustSection />
