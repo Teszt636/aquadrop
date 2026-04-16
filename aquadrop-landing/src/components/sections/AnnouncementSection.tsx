@@ -61,7 +61,7 @@ export function AnnouncementSection() {
   };
 
   return (
-    <section className="ds-section ds-section-quiet" id="announcement-signup">
+    <section className="ds-section" id="announcement-signup">
       <div className="ds-container">
         <div className="mx-auto max-w-3xl rounded-3xl border border-slate-200 bg-white p-8 shadow-card md:p-12">
           <div className="text-center">
