@@ -55,11 +55,11 @@ export function HeroSection() {
             </div>
           </div>
 
-          <div className="relative order-first md:order-last">
+          <div className="relative mt-2 md:mt-0">
             <div className="absolute -inset-4 -z-10 rounded-[2rem] bg-gradient-to-br from-brand-primary/15 via-brand-light to-success-green/10 blur-2xl" />
             <div className="relative aspect-[5/4] overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-3 shadow-inner md:p-4">
               <Image
-                src="/hero-aquadrop.jpg"
+                src="/hero-aquadrop.png"
                 alt="Aquadrop Expert Pro mosókapszula modern mosógép mellett"
                 fill
                 className="object-contain"
@@ -74,7 +74,7 @@ export function HeroSection() {
           {miniTrustItems.map((item) => (
             <p
               key={item}
-              className="text-center text-sm font-semibold text-slate-700 sm:border-r sm:border-slate-200 sm:last:border-r-0"
+              className="text-center text-base font-bold text-slate-900 sm:border-r sm:border-slate-200 sm:last:border-r-0"
             >
               {item}
             </p>
