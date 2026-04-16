@@ -12,10 +12,12 @@ import {
   ThreePathsSection,
   TrustSection
 } from '@/components/sections';
+import { ScrollDepthTracker } from '@/components/analytics';
 
 export default function Home() {
   return (
     <main className="flex flex-col pb-24 md:pb-0">
+      <ScrollDepthTracker />
       <HeroSection />
       <ProblemSection />
       <BenefitsSection />

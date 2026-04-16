@@ -2,6 +2,7 @@
 
 import { ButtonLink } from '@/components/ui/Button';
 import { SectionHeading } from '@/components/ui/SectionHeading';
+import { trackEvent } from '@/lib/tracking';
 
 function scrollToSection(sectionId: string) {
   const section = document.getElementById(sectionId);
@@ -36,7 +37,10 @@ export function ThreePathsSection() {
             <button
               type="button"
               className="ds-button-primary mt-6 w-full"
-              onClick={() => scrollToSection('gift-campaign')}
+              onClick={() => {
+                trackEvent('final_cta_gift_click');
+                scrollToSection('gift-campaign');
+              }}
             >
               Kérem az ajándék dobozt
             </button>
@@ -53,7 +57,10 @@ export function ThreePathsSection() {
             <button
               type="button"
               className="ds-button-secondary mt-6 w-full"
-              onClick={() => scrollToSection('announcement-signup')}
+              onClick={() => {
+                trackEvent('final_cta_newsletter_click');
+                scrollToSection('announcement-signup');
+              }}
             >
               Értesítést kérek
             </button>
@@ -67,7 +74,12 @@ export function ThreePathsSection() {
             <p className="mt-3 flex-1 text-slate-700">
               Érdekel az Aquadrop Expert Pro partnerprogram és az együttműködés lehetősége.
             </p>
-            <ButtonLink href="/partner" className="mt-6 w-full text-center" variant="secondary">
+            <ButtonLink
+              href="/partner"
+              className="mt-6 w-full text-center"
+              variant="secondary"
+              onClick={() => trackEvent('final_cta_partner_click')}
+            >
               Partner oldal megnyitása
             </ButtonLink>
           </article>

@@ -1,6 +1,7 @@
 'use client';
 
 import { Button, ButtonLink } from '@/components/ui/Button';
+import { trackEvent } from '@/lib/tracking';
 
 const miniTrustItems = ['4 az 1-ben hatás', 'Magas koncentráció', 'Prémium illat'];
 
@@ -33,7 +34,10 @@ export function HeroSection() {
               <Button
                 id="hero-cta-primary"
                 className="w-full shadow-lg shadow-brand-primary/25 sm:w-auto"
-                onClick={() => scrollToSection('gift-campaign')}
+                onClick={() => {
+                  trackEvent('hero_primary_cta_click');
+                  scrollToSection('gift-campaign');
+                }}
               >
                 Kérem az ajándék dobozt
               </Button>
@@ -42,6 +46,7 @@ export function HeroSection() {
                 href="/partner"
                 variant="secondary"
                 className="inline-flex w-full justify-center border-2 border-brand-primary/40 font-semibold sm:w-auto"
+                onClick={() => trackEvent('hero_secondary_cta_click')}
               >
                 Viszonteladó vagyok
               </ButtonLink>
