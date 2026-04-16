@@ -18,11 +18,10 @@ export default function Home() {
   return (
     <main className="relative isolate flex flex-col overflow-hidden pb-24 md:pb-0">
       <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-b from-sky-50/6 via-white to-cyan-50/5" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(186,230,253,0.07)_0%,_rgba(255,255,255,0)_55%)]" />
-        <div className="absolute -left-24 top-20 h-72 w-72 rounded-full bg-sky-300/8 blur-3xl md:h-96 md:w-96" />
-        <div className="absolute right-[-8%] top-[35%] h-80 w-80 rounded-full bg-cyan-300/7 blur-3xl md:h-[28rem] md:w-[28rem]" />
-        <div className="absolute bottom-[-8rem] left-1/3 h-72 w-72 rounded-full bg-blue-200/7 blur-3xl md:h-[24rem] md:w-[24rem]" />
+        <div className="absolute -left-28 -top-24 h-[24rem] w-[24rem] rounded-full bg-[rgba(125,211,252,0.14)] blur-[110px] md:h-[34rem] md:w-[34rem]" />
+        <div className="absolute -right-24 top-8 h-[22rem] w-[22rem] rounded-full bg-[rgba(34,211,238,0.16)] blur-[120px] md:h-[32rem] md:w-[32rem]" />
+        <div className="absolute -left-16 top-[44%] h-[20rem] w-[20rem] rounded-full bg-[rgba(147,197,253,0.1)] blur-[100px] md:h-[30rem] md:w-[30rem]" />
+        <div className="absolute -bottom-40 left-1/2 h-[26rem] w-[40rem] -translate-x-1/2 rounded-full bg-[rgba(186,230,253,0.12)] blur-[120px] md:h-[30rem] md:w-[56rem]" />
       </div>
       <ScrollDepthTracker />
       <HeroSection />
