@@ -141,8 +141,7 @@ export function GiftSection() {
             </p>
             <h2 className="mt-4 text-3xl leading-tight md:text-5xl">Vásárolj 2 dobozt – mi adunk egy harmadikat</h2>
             <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-slate-700">
-              Vásárolj 2 doboz Aquadrop Expert Pro kapszulát, töltsd fel a blokkot, és mi elküldjük a 3. dobozt
-              ajándékba.
+              Vásárolj 2 doboz Aquadrop Expert Pro terméket, töltsd fel a blokkot, és a 3. dobozt mi küldjük ajándékba.
             </p>
           </div>
 

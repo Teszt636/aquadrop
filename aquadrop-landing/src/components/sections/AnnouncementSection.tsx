@@ -72,7 +72,7 @@ export function AnnouncementSection() {
           <div className="text-center">
             <h2 className="text-3xl leading-tight md:text-4xl">Hamarosan valami teljesen új érkezik</h2>
             <p className="mx-auto mt-4 max-w-2xl text-lg leading-8 text-slate-700">
-              Az Aquadrop Expert Pro nem csak egy termékben gondolkodik. Iratkozz fel, és elsőként értesülsz.
+              Az Aquadrop Expert Pro mögött nem egyetlen termékötlet áll. Iratkozz fel, és elsőként értesülsz az újdonságokról.
             </p>
           </div>
 
