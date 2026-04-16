@@ -36,7 +36,19 @@ body {
   }
 
   .ds-section {
-    @apply py-14 md:py-20;
+    @apply py-12 md:py-20;
+  }
+
+  .ds-section-quiet {
+    @apply border-y border-slate-200/70 bg-slate-50;
+  }
+
+  .ds-section-heading-wrap {
+    @apply mx-auto max-w-3xl text-center;
+  }
+
+  .ds-section-heading {
+    @apply text-balance text-3xl font-extrabold tracking-tight leading-tight md:text-4xl md:leading-tight;
   }
 
   .ds-card {

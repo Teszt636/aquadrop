@@ -1,3 +1,5 @@
+import { SectionHeading } from '@/components/ui';
+
 const technologyItems = [
   { title: 'Mikrokapszula illat technológia', icon: '🫧' },
   { title: 'Enzim alapú tisztítás', icon: '🧪' },
@@ -7,10 +9,10 @@ const technologyItems = [
 
 export function TechnologySection() {
   return (
-    <section className="ds-section bg-slate-50">
+    <section className="ds-section ds-section-quiet">
       <div className="ds-container">
-        <div className="mx-auto max-w-3xl text-center">
-          <h2 className="text-3xl md:text-4xl">Nem egy átlagos mosókapszula</h2>
+        <div className="ds-section-heading-wrap">
+          <SectionHeading>Nem egy átlagos mosókapszula</SectionHeading>
         </div>
 
         <div className="mt-10 grid gap-5 md:grid-cols-2">

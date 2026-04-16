@@ -4,6 +4,7 @@ import { type FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/Button';
+import { SectionHeading } from '@/components/ui/SectionHeading';
 import { insertIntoTable } from '@/lib/supabase';
 
 type FormState = {
@@ -66,11 +67,11 @@ export function AnnouncementSection() {
   };
 
   return (
-    <section className="ds-section bg-slate-50">
+    <section className="ds-section ds-section-quiet">
       <div className="ds-container">
         <div className="mx-auto max-w-3xl rounded-3xl border border-slate-200 bg-white p-8 shadow-card md:p-12">
           <div className="text-center">
-            <h2 className="text-3xl leading-tight md:text-4xl">Hamarosan valami teljesen új érkezik</h2>
+            <SectionHeading>Hamarosan valami teljesen új érkezik</SectionHeading>
             <p className="mx-auto mt-4 max-w-2xl text-lg leading-8 text-slate-700">
               Az Aquadrop Expert Pro mögött nem egyetlen termékötlet áll. Iratkozz fel, és elsőként értesülsz az újdonságokról.
             </p>

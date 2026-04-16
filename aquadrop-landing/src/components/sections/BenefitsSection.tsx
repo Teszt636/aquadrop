@@ -1,3 +1,5 @@
+import { SectionHeading } from '@/components/ui';
+
 const benefits = [
   { title: 'Magas koncentráció', icon: '💧' },
   { title: 'Gyors oldódás', icon: '⚡' },
@@ -9,8 +11,8 @@ export function BenefitsSection() {
   return (
     <section className="ds-section bg-white">
       <div className="ds-container">
-        <div className="mx-auto max-w-3xl text-center">
-          <h2 className="text-3xl md:text-4xl">Amit minden mosásnál tapasztalni fogsz</h2>
+        <div className="ds-section-heading-wrap">
+          <SectionHeading>Amit minden mosásnál tapasztalni fogsz</SectionHeading>
         </div>
 
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
