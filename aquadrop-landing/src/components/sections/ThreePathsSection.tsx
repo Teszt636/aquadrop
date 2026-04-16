@@ -42,7 +42,7 @@ export function ThreePathsSection() {
                 scrollToSection('gift-campaign');
               }}
             >
-              Kérem az ajándék dobozt
+              Kérem a 3. dobozt ajándékba
             </button>
           </article>
 

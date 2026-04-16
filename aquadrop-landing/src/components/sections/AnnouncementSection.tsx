@@ -65,9 +65,9 @@ export function AnnouncementSection() {
       <div className="ds-container">
         <div className="mx-auto max-w-3xl rounded-3xl border border-slate-200 bg-white p-8 shadow-card md:p-12">
           <div className="text-center">
-            <SectionHeading>Hamarosan valami teljesen új érkezik</SectionHeading>
+            <SectionHeading>Értesülj elsőként az új Aquadrop Expert Pro ajánlatokról</SectionHeading>
             <SectionDescription className="mx-auto">
-              Az Aquadrop Expert Pro mögött nem egyetlen termékötlet áll. Iratkozz fel, és elsőként értesülsz az újdonságokról.
+              Iratkozz fel, és elsőként értesülsz az újdonságokról, kampányokról és bevezető ajánlatokról.
             </SectionDescription>
           </div>
 

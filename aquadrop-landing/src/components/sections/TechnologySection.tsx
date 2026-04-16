@@ -3,10 +3,10 @@ import Image from 'next/image';
 import { SectionHeading } from '@/components/ui';
 
 const technologyItems = [
-  { title: 'Mikrokapszula illat technológia', icon: '🫧' },
+  { title: 'Mikrokapszulás illat', icon: '🫧' },
   { title: 'Enzim alapú tisztítás', icon: '🧪' },
   { title: 'Szagsemlegesítés', icon: '🌬️' },
-  { title: 'Hosszan tartó illat', icon: '🌸' }
+  { title: 'Tartós illat', icon: '🌸' }
 ];
 
 export function TechnologySection() {
