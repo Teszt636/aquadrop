@@ -6,7 +6,7 @@ const legalLinks = [
 
 export function FooterSection() {
   return (
-    <footer className="border-t border-slate-200 bg-white py-10">
+    <footer className="border-t border-slate-200 bg-white/75 py-10 backdrop-blur-[2px]">
       <div className="ds-container">
         <div className="grid gap-10 text-center md:grid-cols-3 md:text-left">
           <div>
