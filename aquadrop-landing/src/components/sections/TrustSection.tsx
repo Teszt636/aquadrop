@@ -1,3 +1,5 @@
+import { SectionHeading } from '@/components/ui';
+
 const trustItems = [
   'EU REACH megfelelőség',
   'Foszfátmentes formula',
@@ -11,8 +13,8 @@ export function TrustSection() {
   return (
     <section className="ds-section bg-white">
       <div className="ds-container">
-        <div className="mx-auto max-w-3xl text-center">
-          <h2 className="text-3xl md:text-4xl">Miért bízhatsz az Aquadrop Expert Pro minőségében?</h2>
+        <div className="ds-section-heading-wrap">
+          <SectionHeading>Miért bízhatsz az Aquadrop Expert Pro minőségében?</SectionHeading>
         </div>
 
         <div className="mx-auto mt-10 grid max-w-4xl gap-4 sm:grid-cols-2">
