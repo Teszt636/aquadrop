@@ -9,6 +9,7 @@ import {
   TrustSection,
   ThreePathsSection,
   MobileStickyCTA,
+  B2BBridgeSection
   SocialProofSection
 } from '@/components/sections';
 
@@ -24,6 +25,7 @@ export default function Home() {
       <GiftSection />
       <SocialProofSection />
       <AnnouncementSection />
+      <B2BBridgeSection />
       <FooterSection />
       <MobileStickyCTA />
     </main>
