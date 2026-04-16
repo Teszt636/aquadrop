@@ -4,6 +4,7 @@ export const TRACKING_EVENT_NAMES = [
   'gift_form_submit',
   'newsletter_form_submit',
   'partner_cta_click',
+  'partner_form_submit',
   'final_cta_gift_click',
   'final_cta_newsletter_click',
   'final_cta_partner_click',

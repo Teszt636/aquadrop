@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { SectionDescription, SectionHeading } from '@/components/ui/SectionHeading';
 import { insertIntoTable } from '@/lib/supabase';
-import { trackEvent } from '@/lib/tracking';
+import { captureLeadForAutomation } from '@/lib/lead-automation';
 
 type FormState = {
   name: string;
@@ -52,7 +52,18 @@ export function AnnouncementSection() {
         consent: formState.consent
       });
 
-      trackEvent('newsletter_form_submit');
+      captureLeadForAutomation(
+        'newsletter_form_submit',
+        { form_id: 'announcement-signup' },
+        {
+          lead_type: 'newsletter_signup',
+          email: trimmedEmail,
+          phone: trimmedPhone || null,
+          full_name: trimmedName,
+          source: 'landing_announcement_section',
+          metadata: { consent: formState.consent }
+        }
+      );
       router.push('/koszonjuk/feliratkozas');
     } catch {
       setErrorMessage('Hiba történt a feliratkozás során. Kérlek, próbáld újra.');
