@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+
 import { Button, ButtonLink } from '@/components/ui/Button';
 import { trackEvent } from '@/lib/tracking';
 
@@ -19,7 +21,7 @@ export function HeroSection() {
   return (
     <section className="ds-section bg-gradient-to-b from-slate-50 via-white to-white">
       <div className="ds-container">
-        <div className="grid items-center gap-10 rounded-3xl border border-slate-200/80 bg-white p-8 shadow-card md:grid-cols-2 md:p-12">
+        <div className="grid items-center gap-10 rounded-3xl border border-slate-200/80 bg-white p-8 shadow-card md:grid-cols-2 md:gap-12 md:p-12">
           <div>
             <p className="inline-flex rounded-full border border-brand-primary/20 bg-brand-light px-3 py-1 text-sm font-semibold text-brand-primary">
               Aquadrop Expert Pro kapszula
@@ -53,14 +55,17 @@ export function HeroSection() {
             </div>
           </div>
 
-          <div className="relative">
+          <div className="relative order-first md:order-last">
             <div className="absolute -inset-4 -z-10 rounded-[2rem] bg-gradient-to-br from-brand-primary/15 via-brand-light to-success-green/10 blur-2xl" />
-            <div className="flex aspect-[4/5] items-center justify-center rounded-[2rem] border border-slate-200 bg-gradient-to-br from-white via-slate-50 to-brand-light p-8 shadow-inner">
-              <div className="w-full rounded-2xl border-2 border-dashed border-slate-300 bg-white/80 p-10 text-center">
-                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">Product Image</p>
-                <p className="mt-3 text-xl font-bold text-slate-700">Aquadrop Expert Pro</p>
-                <p className="mt-2 text-sm text-slate-500">Helyőrző kép a termékfotó számára</p>
-              </div>
+            <div className="relative aspect-[5/4] overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-3 shadow-inner md:p-4">
+              <Image
+                src="/images/hero-washing-machine.svg"
+                alt="Aquadrop Expert Pro mosókapszula modern mosógép mellett"
+                fill
+                className="object-contain"
+                sizes="(max-width: 767px) 100vw, 50vw"
+                priority
+              />
             </div>
           </div>
         </div>
