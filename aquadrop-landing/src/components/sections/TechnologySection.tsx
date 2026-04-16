@@ -21,7 +21,7 @@ export function TechnologySection() {
           <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-4 shadow-card sm:p-5 lg:sticky lg:top-24">
             <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-slate-50">
               <Image
-                src="/images/product-box-photo.svg"
+                src="/aquadrop-product.jpg"
                 alt="Aquadrop Expert Pro mosókapszula dobozos kiszerelésben"
                 fill
                 className="object-cover"
