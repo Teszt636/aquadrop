@@ -3,6 +3,7 @@
 import { type FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
+import { captureLeadForAutomation } from '@/lib/lead-automation';
 import { insertIntoTable } from '@/lib/supabase';
 
 const channelOptions = ['bolt', 'webshop', 'nagyker'] as const;
@@ -71,6 +72,24 @@ export function ResellerSection() {
         message: trimmedMessage || null
       });
 
+      captureLeadForAutomation(
+        'partner_form_submit',
+        {
+          form_id: 'reseller-application-form',
+          sales_channel: formState.sales_channel
+        },
+        {
+          lead_type: 'reseller_application',
+          email: trimmedEmail,
+          phone: trimmedPhone,
+          full_name: trimmedContactName,
+          source: 'partner_page_reseller_form',
+          metadata: {
+            company_name: trimmedCompanyName,
+            sales_channel: formState.sales_channel
+          }
+        }
+      );
       router.push('/koszonjuk/viszontelado');
     } catch {
       setErrorMessage('Hiba történt a jelentkezés elküldése közben. Kérlek, próbáld újra.');
@@ -103,6 +122,7 @@ export function ResellerSection() {
           </div>
 
           <form
+            id="reseller-application-form"
             onSubmit={handleSubmit}
             noValidate
             className="rounded-2xl border border-white/10 bg-white/5 p-6 shadow-2xl shadow-cyan-900/20 backdrop-blur"

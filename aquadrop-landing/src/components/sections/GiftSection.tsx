@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/Button';
 import { SectionDescription, SectionEyebrow, SectionHeading } from '@/components/ui/SectionHeading';
 import { insertIntoTable } from '@/lib/supabase';
 import { uploadGiftReceipt } from '@/lib/supabase-storage';
-import { trackEvent } from '@/lib/tracking';
+import { captureLeadForAutomation } from '@/lib/lead-automation';
 
 type GiftFormState = {
   full_name: string;
@@ -123,7 +123,24 @@ export function GiftSection() {
         status: 'uj'
       });
 
-      trackEvent('gift_form_submit');
+      captureLeadForAutomation(
+        'gift_form_submit',
+        {
+          form_id: 'gift-claim-form',
+          purchase_location: payload.purchase_location
+        },
+        {
+          lead_type: 'gift_campaign',
+          email: payload.email,
+          phone: payload.phone,
+          full_name: payload.full_name,
+          source: 'landing_gift_section',
+          metadata: {
+            purchase_location: payload.purchase_location,
+            purchase_date: payload.purchase_date
+          }
+        }
+      );
       router.push('/koszonjuk/ajandek');
     } catch {
       setErrorMessage('Hiba történt a blokk feltöltése vagy az igénylés elküldése közben. Kérlek, próbáld újra.');
