@@ -19,7 +19,12 @@ export function HeroSection() {
   };
 
   return (
-    <section className="ds-section bg-gradient-to-b from-slate-50 via-white to-white">
+    <section className="ds-section relative overflow-hidden bg-gradient-to-b from-slate-50 via-white to-white">
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute -top-20 -left-24 h-64 w-64 rounded-full bg-cyan-300/10 blur-3xl md:h-80 md:w-80" />
+        <div className="absolute top-1/3 -right-20 h-72 w-72 rounded-full bg-sky-300/10 blur-3xl md:h-96 md:w-96" />
+        <div className="absolute -bottom-24 left-1/3 h-56 w-56 rounded-full bg-blue-200/10 blur-3xl md:h-72 md:w-72" />
+      </div>
       <div className="ds-container">
         <div className="grid items-center gap-10 rounded-3xl border border-slate-200/80 bg-white p-8 shadow-card md:grid-cols-2 md:gap-12 md:p-12">
           <div>
@@ -72,7 +77,7 @@ export function HeroSection() {
           </div>
         </div>
 
-        <div className="mt-6 grid gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-4 shadow-sm sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <div className="mt-6 grid gap-3 rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50 px-4 py-4 shadow-md sm:grid-cols-3 sm:gap-4 sm:px-6">
           {miniTrustItems.map((item) => (
             <p
               key={item}
