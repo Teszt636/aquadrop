@@ -15,7 +15,7 @@ export function BenefitsSection() {
 
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {benefits.map((benefit) => (
-            <article className="ds-card flex h-full flex-col items-start gap-4" key={benefit.title}>
+            <article className="ds-card flex h-full flex-col items-center justify-center gap-4 text-center" key={benefit.title}>
               <span
                 aria-hidden="true"
                 className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-brand-light text-2xl"

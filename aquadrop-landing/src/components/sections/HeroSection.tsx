@@ -14,14 +14,14 @@ export function HeroSection() {
         <div className="grid items-center gap-10 rounded-3xl border border-slate-200/80 bg-white p-8 shadow-card md:grid-cols-2 md:p-12">
           <div>
             <p className="inline-flex rounded-full border border-brand-primary/20 bg-brand-light px-3 py-1 text-sm font-semibold text-brand-primary">
-              Aquadrop Expert Pro Capsules
+              Aquadrop Expert Pro
             </p>
             <h1 className="mt-4 text-4xl leading-tight md:text-5xl">
               Prémium mosókapszula – valódi teljesítménnyel
             </h1>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-700">
-              Az Aquadrop Expert Pro Capsules egy magas koncentrációjú, modern mosókapszula, amely nemcsak tisztít,
-              hanem új szintre emeli a mindennapi mosást.
+              Az Aquadrop Expert Pro egy magas koncentrációjú, modern mosókapszula, amely nemcsak tisztít, hanem új
+              szintre emeli a mindennapi mosást.
             </p>
 
             <ul className="mt-7 space-y-3">

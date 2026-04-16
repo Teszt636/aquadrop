@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import { ThankYouPage } from '@/components/thank-you';
 
 export const metadata: Metadata = {
-  title: 'Köszönjük a jelentkezést! | Aquadrop',
-  description: 'Viszonteladói jelentkezés visszaigazolása az Aquadrop oldalon.'
+  title: 'Köszönjük a jelentkezést! | Aquadrop Expert Pro',
+  description: 'Viszonteladói jelentkezés visszaigazolása az Aquadrop Expert Pro oldalon.'
 };
 
 export default function ResellerThankYouPage() {

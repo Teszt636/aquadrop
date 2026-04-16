@@ -4,7 +4,6 @@ import {
   FooterSection,
   GiftSection,
   HeroSection,
-  ResellerSection,
   TechnologySection,
   TrustSection
 } from '@/components/sections';
@@ -18,7 +17,6 @@ export default function Home() {
       <TrustSection />
       <GiftSection />
       <AnnouncementSection />
-      <ResellerSection />
       <FooterSection />
     </main>
   );
