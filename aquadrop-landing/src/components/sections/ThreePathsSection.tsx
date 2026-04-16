@@ -18,8 +18,8 @@ export function ThreePathsSection() {
   return (
     <section className="ds-section bg-slate-50/60" aria-labelledby="three-paths-heading">
       <div className="ds-container">
-        <div className="ds-section-heading-wrap">
-          <SectionHeading id="three-paths-heading">Válaszd ki, mi érdekel most</SectionHeading>
+        <div id="three-paths-heading" className="ds-section-heading-wrap">
+          <SectionHeading>Válaszd ki, mi érdekel most</SectionHeading>
         </div>
 
         <div className="mt-8 grid gap-5 md:grid-cols-3 md:items-stretch">
