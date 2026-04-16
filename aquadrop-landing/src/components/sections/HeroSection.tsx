@@ -19,7 +19,7 @@ export function HeroSection() {
   };
 
   return (
-    <section className="ds-section relative overflow-hidden bg-gradient-to-b from-slate-50 via-white to-white">
+    <section className="ds-section relative overflow-hidden bg-gradient-to-b from-white/75 via-white/45 to-transparent">
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(103,232,249,0.12),transparent_38%),radial-gradient(circle_at_85%_35%,rgba(125,211,252,0.1),transparent_42%),radial-gradient(circle_at_45%_92%,rgba(147,197,253,0.08),transparent_38%)]" />
         <div className="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-cyan-300/12 blur-3xl md:h-96 md:w-96" />

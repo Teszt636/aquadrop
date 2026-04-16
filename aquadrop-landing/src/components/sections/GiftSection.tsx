@@ -132,7 +132,7 @@ export function GiftSection() {
   };
 
   return (
-    <section className="ds-section bg-white" id="gift-campaign">
+    <section className="ds-section bg-transparent" id="gift-campaign">
       <div className="ds-container">
         <div className="relative overflow-hidden rounded-3xl border-2 border-brand-primary/35 bg-gradient-to-br from-brand-light via-white to-success-green/10 p-8 shadow-[0_18px_55px_-26px_rgba(20,38,64,0.55)] md:p-12">
           <div className="pointer-events-none absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-brand-primary/80 via-success-green/70 to-brand-primary/80" />
