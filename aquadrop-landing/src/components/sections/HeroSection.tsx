@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@/components/ui/Button';
 
 const heroBullets = [
@@ -8,6 +10,16 @@ const heroBullets = [
 ];
 
 export function HeroSection() {
+  const scrollToSection = (sectionId: string) => {
+    const section = document.getElementById(sectionId);
+
+    if (!section) {
+      return;
+    }
+
+    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   return (
     <section className="ds-section bg-gradient-to-b from-slate-50 via-white to-white">
       <div className="ds-container">
@@ -35,9 +47,11 @@ export function HeroSection() {
               ))}
             </ul>
 
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Button>Kérem az ajándék dobozt</Button>
-              <Button variant="secondary">Értesítést kérek</Button>
+            <div className="mt-8 flex flex-wrap justify-center gap-3 md:justify-start">
+              <Button onClick={() => scrollToSection('gift-campaign')}>Kérem az ajándék dobozt</Button>
+              <Button variant="secondary" onClick={() => scrollToSection('announcement-signup')}>
+                Értesítést kérek
+              </Button>
             </div>
           </div>
 
