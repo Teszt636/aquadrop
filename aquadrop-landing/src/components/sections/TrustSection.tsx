@@ -32,18 +32,18 @@ export function TrustSection() {
           ))}
         </div>
 
-        <div className="mx-auto mt-10 max-w-3xl rounded-2xl border border-success-green/30 bg-gradient-to-r from-success-green/10 via-white to-brand-light/40 p-6 shadow-card md:p-8">
-          <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:items-center sm:text-left">
+        <div className="mx-auto mt-10 max-w-3xl rounded-2xl border border-success-green/25 bg-slate-50/90 p-5 shadow-card md:p-6">
+          <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:items-center sm:gap-5 sm:text-left">
             <span
               aria-hidden="true"
-              className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-success-green/15 text-2xl text-success-green"
+              className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-success-green/25 bg-white text-2xl text-success-green shadow-sm"
             >
-              🛡️
+              ✅
             </span>
             <div>
-              <p className="text-xl font-extrabold text-slate-900 md:text-2xl">30 napos pénzvisszafizetési garancia</p>
-              <p className="mt-2 text-base leading-7 text-slate-700">
-                Nem vagy elégedett az Aquadrop Expert Pro teljesítményével? Jelezd nekünk, és visszafizetjük az árát.
+              <p className="text-xl font-extrabold text-slate-900 md:text-2xl">Kockázat nélkül kipróbálhatod</p>
+              <p className="mt-2 text-base leading-6 text-slate-700">
+                Ha nem vagy elégedett az Aquadrop Expert Pro teljesítményével, visszafizetjük az árát.
               </p>
             </div>
           </div>
