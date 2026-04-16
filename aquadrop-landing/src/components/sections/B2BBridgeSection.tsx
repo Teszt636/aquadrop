@@ -1,4 +1,7 @@
+'use client';
+
 import { ButtonLink } from '@/components/ui/Button';
+import { trackEvent } from '@/lib/tracking';
 
 export function B2BBridgeSection() {
   return (
@@ -14,7 +17,12 @@ export function B2BBridgeSection() {
               </p>
             </div>
 
-            <ButtonLink href="/partner" variant="secondary" className="w-full md:w-auto md:shrink-0">
+            <ButtonLink
+              href="/partner"
+              variant="secondary"
+              className="w-full md:w-auto md:shrink-0"
+              onClick={() => trackEvent('partner_cta_click')}
+            >
               Partner oldal megnyitása
             </ButtonLink>
           </div>

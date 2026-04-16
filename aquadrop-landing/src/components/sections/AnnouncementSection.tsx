@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { SectionDescription, SectionHeading } from '@/components/ui/SectionHeading';
 import { insertIntoTable } from '@/lib/supabase';
+import { trackEvent } from '@/lib/tracking';
 
 type FormState = {
   name: string;
@@ -29,18 +30,12 @@ export function AnnouncementSection() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log('[AnnouncementSection] Submit started');
 
     const trimmedName = formState.name.trim();
     const trimmedEmail = formState.email.trim();
     const trimmedPhone = formState.phone.trim();
 
     if (!trimmedName || !trimmedEmail || !formState.consent) {
-      console.log('[AnnouncementSection] Validation failed', {
-        hasName: Boolean(trimmedName),
-        hasEmail: Boolean(trimmedEmail),
-        consent: formState.consent
-      });
       setErrorMessage('Kérlek, töltsd ki a kötelező mezőket és fogadd el az adatkezelést.');
 
       return;
@@ -56,11 +51,10 @@ export function AnnouncementSection() {
         phone: trimmedPhone || null,
         consent: formState.consent
       });
-      console.log('[AnnouncementSection] Supabase insert success');
 
+      trackEvent('newsletter_form_submit');
       router.push('/koszonjuk/feliratkozas');
-    } catch (error) {
-      console.error('[AnnouncementSection] Supabase insert error', error);
+    } catch {
       setErrorMessage('Hiba történt a feliratkozás során. Kérlek, próbáld újra.');
       setIsSubmitting(false);
     }

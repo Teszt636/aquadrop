@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button';
 import { SectionDescription, SectionEyebrow, SectionHeading } from '@/components/ui/SectionHeading';
 import { insertIntoTable } from '@/lib/supabase';
 import { uploadGiftReceipt } from '@/lib/supabase-storage';
+import { trackEvent } from '@/lib/tracking';
 
 type GiftFormState = {
   full_name: string;
@@ -122,6 +123,7 @@ export function GiftSection() {
         status: 'uj'
       });
 
+      trackEvent('gift_form_submit');
       router.push('/koszonjuk/ajandek');
     } catch {
       setErrorMessage('Hiba történt a blokk feltöltése vagy az igénylés elküldése közben. Kérlek, próbáld újra.');
