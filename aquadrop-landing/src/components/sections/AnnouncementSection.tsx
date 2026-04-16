@@ -28,12 +28,18 @@ export function AnnouncementSection() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    console.log('[AnnouncementSection] Submit started');
 
     const trimmedName = formState.name.trim();
     const trimmedEmail = formState.email.trim();
     const trimmedPhone = formState.phone.trim();
 
     if (!trimmedName || !trimmedEmail || !formState.consent) {
+      console.log('[AnnouncementSection] Validation failed', {
+        hasName: Boolean(trimmedName),
+        hasEmail: Boolean(trimmedEmail),
+        consent: formState.consent
+      });
       setErrorMessage('Kérlek, töltsd ki a kötelező mezőket és fogadd el az adatkezelést.');
 
       return;
@@ -49,9 +55,11 @@ export function AnnouncementSection() {
         phone: trimmedPhone || null,
         consent: formState.consent
       });
+      console.log('[AnnouncementSection] Supabase insert success');
 
       router.push('/koszonjuk/feliratkozas');
-    } catch {
+    } catch (error) {
+      console.error('[AnnouncementSection] Supabase insert error', error);
       setErrorMessage('Hiba történt a feliratkozás során. Kérlek, próbáld újra.');
       setIsSubmitting(false);
     }
@@ -139,7 +147,7 @@ export function AnnouncementSection() {
 
             {errorMessage ? <p className="text-sm text-red-600">{errorMessage}</p> : null}
 
-            <Button className="w-full" disabled={isSubmitting}>
+            <Button className="w-full" type="submit" disabled={isSubmitting}>
               {isSubmitting ? 'Küldés...' : 'Elsőként szeretnék értesülni'}
             </Button>
           </form>
