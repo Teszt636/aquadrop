@@ -132,18 +132,22 @@ export function GiftSection() {
   return (
     <section className="ds-section bg-white" id="gift-campaign">
       <div className="ds-container">
-        <div className="relative overflow-hidden rounded-3xl border-2 border-brand-primary/30 bg-gradient-to-br from-brand-light via-white to-success-green/10 p-8 shadow-card md:p-12">
+        <div className="relative overflow-hidden rounded-3xl border-2 border-brand-primary/35 bg-gradient-to-br from-brand-light via-white to-success-green/10 p-8 shadow-[0_18px_55px_-26px_rgba(20,38,64,0.55)] md:p-12">
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-brand-primary/80 via-success-green/70 to-brand-primary/80" />
           <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-brand-primary/20 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-16 -left-12 h-48 w-48 rounded-full bg-success-green/20 blur-3xl" />
 
           <div className="relative z-10 mx-auto max-w-3xl text-center">
-            <SectionEyebrow className="inline-flex rounded-full border border-brand-primary/30 bg-white/80 px-3 py-1 text-xs font-bold tracking-[0.15em]">
+            <SectionEyebrow className="inline-flex rounded-full border border-brand-primary/35 bg-white px-3 py-1 text-xs font-bold tracking-[0.15em] shadow-sm">
               Kiemelt ajánlat
             </SectionEyebrow>
-            <SectionHeading className="mt-4">Vásárolj 2 dobozt – mi adunk egy harmadikat</SectionHeading>
+            <SectionHeading className="mt-4">Vásárolj 2 dobozt – mi adjuk a harmadikat</SectionHeading>
             <SectionDescription className="mx-auto mt-5">
-              Vásárolj 2 doboz Aquadrop Expert Pro terméket, töltsd fel a blokkot, és a 3. dobozt mi küldjük ajándékba.
+              Vásárolj 2 doboz Aquadrop Expert Pro kapszulát, töltsd fel a blokkot, és elküldjük a 3. dobozt ajándékba.
             </SectionDescription>
+            <p className="mx-auto mt-4 inline-flex rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-sm font-semibold text-amber-800">
+              Az ajándék kampány korlátozott ideig érhető el.
+            </p>
           </div>
 
           <form
@@ -157,6 +161,9 @@ export function GiftSection() {
             <h3 className="text-xl font-semibold text-slate-900">Ajándékdoboz igénylőlap</h3>
             <p className="mt-2 text-sm text-slate-600">
               Töltsd ki az alábbi mezőket magyarul, majd töltsd fel a vásárlási blokk képét.
+            </p>
+            <p className="mt-2 text-xs text-slate-500">
+              A beküldött adatokat kizárólag a kampány lebonyolításához használjuk fel.
             </p>
 
             <div className="mt-6 grid gap-4 md:grid-cols-2">
