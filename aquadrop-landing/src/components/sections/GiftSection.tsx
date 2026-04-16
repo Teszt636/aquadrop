@@ -245,8 +245,8 @@ export function GiftSection() {
                 />
               </label>
 
-              <label className="grid gap-1.5 text-sm font-semibold text-slate-700" htmlFor="gift-receipt-file">
-                Blokk feltöltése *
+              <div className="grid gap-1.5 text-sm font-semibold text-slate-700">
+                <span>Blokk feltöltése *</span>
                 <input
                   id="gift-receipt-file"
                   name="receipt_file"
@@ -255,9 +255,17 @@ export function GiftSection() {
                   accept="image/*"
                   onChange={handleReceiptChange}
                   disabled={isSubmitting}
-                  className="h-11 rounded-lg border border-slate-300 bg-white px-3 py-2 text-base text-slate-900 outline-none transition file:mr-3 file:rounded-md file:border-0 file:bg-brand-primary/10 file:px-3 file:py-1 file:text-sm file:font-semibold file:text-brand-primary hover:file:bg-brand-primary/20 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20"
+                  className="sr-only"
                 />
-              </label>
+                <label
+                  htmlFor="gift-receipt-file"
+                  className="group flex h-11 w-full cursor-pointer items-center rounded-lg border border-slate-300 bg-white px-3 text-base font-medium text-slate-700 outline-none transition hover:border-brand-primary/60 hover:bg-slate-50 focus-within:border-brand-primary focus-within:ring-2 focus-within:ring-brand-primary/20"
+                >
+                  <span className="w-full truncate overflow-hidden whitespace-nowrap">
+                    {receiptFile ? receiptFile.name : 'Blokk képének kiválasztása'}
+                  </span>
+                </label>
+              </div>
             </div>
 
             <div className="mt-5 space-y-3">
