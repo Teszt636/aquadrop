@@ -7,6 +7,7 @@ import {
   ProblemSection,
   TechnologySection,
   TrustSection,
+  ThreePathsSection,
   MobileStickyCTA
 } from '@/components/sections';
 
@@ -18,6 +19,7 @@ export default function Home() {
       <BenefitsSection />
       <TechnologySection />
       <TrustSection />
+      <ThreePathsSection />
       <GiftSection />
       <AnnouncementSection />
       <FooterSection />
