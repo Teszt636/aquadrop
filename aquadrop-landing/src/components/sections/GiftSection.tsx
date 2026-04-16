@@ -224,7 +224,7 @@ export function GiftSection() {
                   value={formState.purchase_location}
                   onChange={handleChange}
                   disabled={isSubmitting}
-                  placeholder="pl. Tesco, Budapest"
+                  placeholder="pl. Auchan"
                   className="h-11 rounded-lg border border-slate-300 bg-white px-3 text-base text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20"
                 />
               </label>
