@@ -39,7 +39,7 @@ export function FooterSection() {
             </ul>
           </div>
 
-          <div className="md:text-right">
+          <div className="md:text-center">
             <p className="text-sm font-semibold text-slate-800 md:uppercase md:tracking-wide md:text-slate-500">Partner link</p>
             <a
               className="mt-4 inline-flex rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:text-slate-900"
