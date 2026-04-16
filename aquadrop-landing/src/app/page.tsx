@@ -9,7 +9,8 @@ import {
   TrustSection,
   ThreePathsSection,
   MobileStickyCTA,
-  SocialProofSection
+  SocialProofSection,
+  FinalCTASection
 } from '@/components/sections';
 
 export default function Home() {
@@ -24,6 +25,7 @@ export default function Home() {
       <GiftSection />
       <SocialProofSection />
       <AnnouncementSection />
+      <FinalCTASection />
       <FooterSection />
       <MobileStickyCTA />
     </main>
