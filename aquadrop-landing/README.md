@@ -123,3 +123,21 @@ Planned but not yet implemented:
 
 - OCR pipeline for automated receipt parsing/validation,
 - Aquadrop Care system integration and related operational flows.
+
+## 10) Development checklist for every change
+
+For every code modification, follow this order before finishing work:
+
+1. run the linter (`npm run lint`),
+2. fix any TypeScript error found during checks/build,
+3. verify that existing forms still work end-to-end:
+   - newsletter signup form,
+   - reseller application form,
+   - gift claim form (including receipt upload path),
+4. review responsive behavior in mobile viewport as well.
+
+At the end of the task, summarize precisely:
+
+- which files were changed,
+- which new components were created,
+- which new anchor targets or routes were added.
