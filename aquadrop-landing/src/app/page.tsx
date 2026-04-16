@@ -1,16 +1,16 @@
 import {
   AnnouncementSection,
+  B2BBridgeSection,
   BenefitsSection,
   FooterSection,
   GiftSection,
   HeroSection,
-  ProblemSection,
-  TechnologySection,
-  TrustSection,
-  ThreePathsSection,
   MobileStickyCTA,
-  B2BBridgeSection
-  SocialProofSection
+  ProblemSection,
+  SocialProofSection,
+  TechnologySection,
+  ThreePathsSection,
+  TrustSection
 } from '@/components/sections';
 
 export default function Home() {
@@ -21,9 +21,9 @@ export default function Home() {
       <BenefitsSection />
       <TechnologySection />
       <TrustSection />
+      <SocialProofSection />
       <ThreePathsSection />
       <GiftSection />
-      <SocialProofSection />
       <AnnouncementSection />
       <B2BBridgeSection />
       <FooterSection />
