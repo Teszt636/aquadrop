@@ -4,7 +4,7 @@ import { type ChangeEvent, type FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/Button';
-import { SectionHeading } from '@/components/ui/SectionHeading';
+import { SectionDescription, SectionEyebrow, SectionHeading } from '@/components/ui/SectionHeading';
 import { insertIntoTable } from '@/lib/supabase';
 import { uploadGiftReceipt } from '@/lib/supabase-storage';
 
@@ -137,13 +137,13 @@ export function GiftSection() {
           <div className="pointer-events-none absolute -bottom-16 -left-12 h-48 w-48 rounded-full bg-success-green/20 blur-3xl" />
 
           <div className="relative z-10 mx-auto max-w-3xl text-center">
-            <p className="inline-flex rounded-full border border-brand-primary/30 bg-white/80 px-3 py-1 text-xs font-bold uppercase tracking-[0.15em] text-brand-primary">
+            <SectionEyebrow className="inline-flex rounded-full border border-brand-primary/30 bg-white/80 px-3 py-1 text-xs font-bold tracking-[0.15em]">
               Kiemelt ajánlat
-            </p>
+            </SectionEyebrow>
             <SectionHeading className="mt-4">Vásárolj 2 dobozt – mi adunk egy harmadikat</SectionHeading>
-            <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-slate-700">
+            <SectionDescription className="mx-auto mt-5">
               Vásárolj 2 doboz Aquadrop Expert Pro terméket, töltsd fel a blokkot, és a 3. dobozt mi küldjük ajándékba.
-            </p>
+            </SectionDescription>
           </div>
 
           <form

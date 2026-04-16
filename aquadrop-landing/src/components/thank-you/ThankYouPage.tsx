@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { ButtonLink } from '@/components/ui/Button';
 
 type ThankYouPageProps = {
   title: string;
@@ -21,9 +21,9 @@ export function ThankYouPage({ title, message }: ThankYouPageProps) {
           <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-slate-700">{message}</p>
 
           <div className="mt-8">
-            <Link className="ds-button-primary px-8 py-3 text-sm md:text-base" href="/">
+            <ButtonLink className="px-8 py-3 text-sm md:text-base" href="/">
               Vissza a főoldalra
-            </Link>
+            </ButtonLink>
           </div>
         </div>
       </section>

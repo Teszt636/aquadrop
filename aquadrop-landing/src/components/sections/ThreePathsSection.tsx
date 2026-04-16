@@ -1,7 +1,6 @@
 'use client';
 
-import Link from 'next/link';
-
+import { ButtonLink } from '@/components/ui/Button';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 
 function scrollToSection(sectionId: string) {
@@ -68,9 +67,9 @@ export function ThreePathsSection() {
             <p className="mt-3 flex-1 text-slate-700">
               Érdekel az Aquadrop Expert Pro partnerprogram és az együttműködés lehetősége.
             </p>
-            <Link href="/partner" className="ds-button-secondary mt-6 w-full text-center">
+            <ButtonLink href="/partner" className="mt-6 w-full text-center" variant="secondary">
               Partner oldal megnyitása
-            </Link>
+            </ButtonLink>
           </article>
         </div>
       </div>
