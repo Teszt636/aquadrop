@@ -90,7 +90,7 @@ export function ResellerSection() {
               Viszonteladóknak / Beszerzőknek
             </h2>
             <div className="space-y-3 text-lg text-slate-300">
-              <p>Szeretnéd árulni az Aquadrop termékeket?</p>
+              <p>Szeretnéd árulni az Aquadrop Expert Pro termékeket?</p>
               <p>Korlátozott számú partnerrel dolgozunk.</p>
             </div>
 

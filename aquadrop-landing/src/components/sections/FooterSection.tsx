@@ -1,7 +1,8 @@
 const legalLinks = [
   { href: '/adatkezelesi-tajekoztato', label: 'Adatkezelési tájékoztató' },
   { href: '/aszf', label: 'ÁSZF' },
-  { href: '/kapcsolat', label: 'Kapcsolat' }
+  { href: '/kapcsolat', label: 'Kapcsolat' },
+  { href: '/partner', label: 'Viszonteladóknak' }
 ];
 
 export function FooterSection() {
@@ -10,7 +11,7 @@ export function FooterSection() {
       <div className="ds-container">
         <div className="grid gap-8 md:grid-cols-2">
           <div>
-            <p className="text-lg font-bold text-slate-900">Aquadrop – tisztaság új szinten</p>
+            <p className="text-lg font-bold text-slate-900">Aquadrop Expert Pro – tisztaság új szinten</p>
             <address className="mt-4 not-italic text-sm leading-7 text-slate-600">
               <p>Email: info@aquadrop.hu</p>
               <p>Telefon: +36 30 123 4567</p>

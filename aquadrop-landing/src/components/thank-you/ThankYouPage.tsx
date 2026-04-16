@@ -15,7 +15,7 @@ export function ThankYouPage({ title, message }: ThankYouPageProps) {
       <section className="ds-container relative">
         <div className="mx-auto max-w-3xl rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-card md:p-12">
           <p className="inline-flex rounded-full border border-brand-primary/20 bg-brand-light/30 px-4 py-1 text-xs font-semibold uppercase tracking-[0.15em] text-brand-primary">
-            Aquadrop
+            Aquadrop Expert Pro
           </p>
           <h1 className="mt-6 text-3xl leading-tight md:text-5xl">{title}</h1>
           <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-slate-700">{message}</p>

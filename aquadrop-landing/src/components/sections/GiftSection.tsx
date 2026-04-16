@@ -141,7 +141,8 @@ export function GiftSection() {
             </p>
             <h2 className="mt-4 text-3xl leading-tight md:text-5xl">Vásárolj 2 dobozt – mi adunk egy harmadikat</h2>
             <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-slate-700">
-              Vásárolj 2 doboz Aquadrop kapszulát, töltsd fel a blokkot, és mi elküldjük a 3. dobozt ajándékba.
+              Vásárolj 2 doboz Aquadrop Expert Pro kapszulát, töltsd fel a blokkot, és mi elküldjük a 3. dobozt
+              ajándékba.
             </p>
           </div>
 
@@ -265,11 +266,11 @@ export function GiftSection() {
                     {receiptFile ? receiptFile.name : 'Blokk képének kiválasztása'}
                   </span>
                 </label>
-                <p className="text-xs font-normal leading-5 text-slate-500">
-                  Ha a 2 termék 2 külön blokkon szerepel, kérjük, a két blokkot egyetlen jól olvasható közös képen töltsd fel.
-                  Kérjük, ügyelj arra, hogy a vásárlás adatai jól olvashatók legyenek.
-                </p>
               </div>
+              <p className="text-xs font-normal leading-5 text-slate-500 md:col-span-2">
+                Ha a 2 termék 2 külön blokkon szerepel, kérjük, a két blokkot egyetlen jól olvasható közös képen töltsd
+                fel. Kérjük, ügyelj arra, hogy a vásárlás adatai jól olvashatók legyenek.
+              </p>
             </div>
 
             <div className="mt-5 space-y-3">

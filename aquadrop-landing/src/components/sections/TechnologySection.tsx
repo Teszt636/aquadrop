@@ -15,7 +15,7 @@ export function TechnologySection() {
 
         <div className="mt-10 grid gap-5 md:grid-cols-2">
           {technologyItems.map((item) => (
-            <article className="ds-card flex items-start gap-4" key={item.title}>
+            <article className="ds-card flex items-center gap-4" key={item.title}>
               <span
                 aria-hidden="true"
                 className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand-primary/10 text-2xl"
