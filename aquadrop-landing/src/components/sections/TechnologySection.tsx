@@ -11,7 +11,7 @@ const technologyItems = [
 
 export function TechnologySection() {
   return (
-    <section className="ds-section ds-section-quiet">
+    <section className="ds-section">
       <div className="ds-container">
         <div className="ds-section-heading-wrap">
           <SectionHeading>Nem egy átlagos mosókapszula</SectionHeading>

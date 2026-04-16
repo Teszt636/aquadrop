@@ -9,7 +9,7 @@ const problemPoints = [
 
 export function ProblemSection() {
   return (
-    <section className="ds-section ds-section-quiet">
+    <section className="ds-section">
       <div className="ds-container">
         <div className="ds-section-heading-wrap">
           <SectionHeading>Miért okoz csalódást sok mosókapszula?</SectionHeading>

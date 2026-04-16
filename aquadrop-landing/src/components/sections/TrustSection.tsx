@@ -11,7 +11,7 @@ const trustItems = [
 
 export function TrustSection() {
   return (
-    <section className="ds-section bg-white/70">
+    <section className="ds-section">
       <div className="ds-container">
         <div className="ds-section-heading-wrap">
           <SectionHeading>Miért bízhatsz az Aquadrop Expert Pro minőségében?</SectionHeading>

@@ -16,7 +16,7 @@ function scrollToSection(sectionId: string) {
 
 export function ThreePathsSection() {
   return (
-    <section className="ds-section bg-slate-50/60" aria-labelledby="three-paths-heading">
+    <section className="ds-section" aria-labelledby="three-paths-heading">
       <div className="ds-container">
         <div id="three-paths-heading" className="ds-section-heading-wrap">
           <SectionHeading>Válaszd ki, mi érdekel most</SectionHeading>

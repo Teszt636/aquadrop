@@ -8,7 +8,7 @@ const testimonials = [
 
 export function SocialProofSection() {
   return (
-    <section className="ds-section ds-section-quiet" aria-labelledby="social-proof-heading">
+    <section className="ds-section" aria-labelledby="social-proof-heading">
       <div className="ds-container">
         <div className="mx-auto max-w-3xl text-center">
           <SectionHeading id="social-proof-heading">Miért szeretik sokan az Aquadrop Expert Pro-t?</SectionHeading>
