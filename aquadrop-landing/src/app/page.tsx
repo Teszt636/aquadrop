@@ -5,12 +5,13 @@ import {
   GiftSection,
   HeroSection,
   TechnologySection,
-  TrustSection
+  TrustSection,
+  MobileStickyCTA
 } from '@/components/sections';
 
 export default function Home() {
   return (
-    <main className="flex flex-col">
+    <main className="flex flex-col pb-24 md:pb-0">
       <HeroSection />
       <BenefitsSection />
       <TechnologySection />
@@ -18,6 +19,7 @@ export default function Home() {
       <GiftSection />
       <AnnouncementSection />
       <FooterSection />
+      <MobileStickyCTA />
     </main>
   );
 }
