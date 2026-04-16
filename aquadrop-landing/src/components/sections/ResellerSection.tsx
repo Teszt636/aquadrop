@@ -84,21 +84,21 @@ export function ResellerSection() {
         <div className="grid gap-10 lg:grid-cols-[1.05fr_1fr] lg:items-start">
           <div className="space-y-6">
             <p className="inline-flex rounded-full border border-cyan-400/40 bg-cyan-400/10 px-4 py-1 text-sm font-medium text-cyan-200">
-              Partner program
+              Partneri jelentkezés
             </p>
             <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">
-              Viszonteladóknak / Beszerzőknek
+              Csatlakozz az Aquadrop Expert Pro viszonteladói hálózatához
             </h2>
             <div className="space-y-3 text-lg text-slate-300">
-              <p>Szeretnéd árulni az Aquadrop Expert Pro termékeket?</p>
-              <p>Korlátozott számú partnerrel dolgozunk.</p>
+              <p>Üzleti partnereink számára kiszámítható együttműködést és minőségi termékportfóliót biztosítunk.</p>
+              <p>A jelentkezéseket szakmai szempontok alapján értékeljük.</p>
             </div>
 
             <ul className="grid gap-3 pt-2 text-slate-200 sm:grid-cols-2">
-              <li className="rounded-xl border border-white/10 bg-white/5 px-4 py-3">magas árrés</li>
-              <li className="rounded-xl border border-white/10 bg-white/5 px-4 py-3">növekvő márka</li>
-              <li className="rounded-xl border border-white/10 bg-white/5 px-4 py-3">marketing támogatás</li>
               <li className="rounded-xl border border-white/10 bg-white/5 px-4 py-3">stabil ellátás</li>
+              <li className="rounded-xl border border-white/10 bg-white/5 px-4 py-3">marketing támogatás</li>
+              <li className="rounded-xl border border-white/10 bg-white/5 px-4 py-3">márkaépítési lehetőség</li>
+              <li className="rounded-xl border border-white/10 bg-white/5 px-4 py-3">szelektív partnerprogram</li>
             </ul>
           </div>
 
@@ -228,9 +228,9 @@ export function ResellerSection() {
                 disabled={isSubmitting}
                 className="mt-2 inline-flex h-12 items-center justify-center rounded-lg bg-cyan-400 px-6 text-base font-semibold text-slate-950 transition hover:bg-cyan-300 disabled:cursor-not-allowed disabled:bg-cyan-200"
               >
-                {isSubmitting ? 'Küldés...' : 'Viszonteladó szeretnék lenni'}
+                {isSubmitting ? 'Küldés...' : 'Partnerként jelentkezem'}
               </button>
-              <p className="text-sm text-slate-400">Nem minden jelentkezést fogadunk el.</p>
+              <p className="text-sm text-slate-400">A jelentkezéseket egyedileg bíráljuk el.</p>
             </div>
           </form>
         </div>

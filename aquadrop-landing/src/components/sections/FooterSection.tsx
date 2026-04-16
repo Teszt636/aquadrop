@@ -1,8 +1,7 @@
 const legalLinks = [
   { href: '/adatkezelesi-tajekoztato', label: 'Adatkezelési tájékoztató' },
   { href: '/aszf', label: 'ÁSZF' },
-  { href: '/kapcsolat', label: 'Kapcsolat' },
-  { href: '/partner', label: 'Viszonteladóknak' }
+  { href: '/kapcsolat', label: 'Kapcsolat' }
 ];
 
 export function FooterSection() {
@@ -20,7 +19,13 @@ export function FooterSection() {
           </div>
 
           <div>
-            <p className="text-sm font-semibold uppercase tracking-wide text-slate-500">Jogi információk</p>
+            <a
+              className="inline-flex rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:text-slate-900"
+              href="/partner"
+            >
+              Viszonteladóknak
+            </a>
+            <p className="mt-5 text-sm font-semibold uppercase tracking-wide text-slate-500">Jogi információk</p>
             <ul className="mt-4 space-y-2">
               {legalLinks.map((link) => (
                 <li key={link.href}>
