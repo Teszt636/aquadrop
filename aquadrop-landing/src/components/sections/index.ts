@@ -8,3 +8,4 @@ export * from './AnnouncementSection';
 export * from './ResellerSection';
 export * from './FooterSection';
 export * from './MobileStickyCTA';
+export * from './ThreePathsSection';
