@@ -40,7 +40,7 @@ body {
   }
 
   .ds-section-quiet {
-    @apply border-y border-slate-200/70 bg-slate-50;
+    @apply border-y border-slate-200/70 bg-slate-50/60;
   }
 
   .ds-section-heading-wrap {

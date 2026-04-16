@@ -9,7 +9,7 @@ const benefits = [
 
 export function BenefitsSection() {
   return (
-    <section className="ds-section bg-white">
+    <section className="ds-section bg-transparent">
       <div className="ds-container">
         <div className="ds-section-heading-wrap">
           <SectionHeading>Amit minden mosásnál tapasztalni fogsz</SectionHeading>
