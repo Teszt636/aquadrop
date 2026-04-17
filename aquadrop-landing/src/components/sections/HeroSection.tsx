@@ -40,7 +40,7 @@ export function HeroSection() {
                   scrollToSection('gift-campaign');
                 }}
               >
-                Kérem a 3. dobozt ajándékba
+                Ajándék termék igénylés
               </Button>
               <ButtonLink
                 id="hero-cta-secondary"
