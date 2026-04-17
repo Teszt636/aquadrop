@@ -40,7 +40,7 @@ export function HeroSection() {
           </div>
         </div>
 
-        <p className="mt-6 max-w-2xl text-center text-sm leading-6 text-slate-600 md:hidden">
+        <p className="text-center mt-10 max-w-2xl text-center text-sm leading-6 text-slate-600 md:hidden">
           Az oldalon közvetlen vásárlás nem lehetséges, a termék viszonteladó partnereinknél vásárolható meg.
         </p>
 
