@@ -80,40 +80,6 @@ export default function PartnerPage() {
                   ))}
                 </ul>
               </div>
-
-              <article className="rounded-3xl border border-white/15 bg-white/5 p-6 shadow-[0_16px_32px_-24px_rgba(15,23,42,0.8)] md:p-7 lg:mt-auto">
-                <div className="grid gap-6 sm:grid-cols-[1fr_auto] sm:items-start">
-                  <div className="space-y-4">
-                    <h2 className="text-2xl font-semibold leading-tight text-white md:text-[1.75rem]">
-                      Műszaki előnyök, amelyek értékesítéskor is számítanak
-                    </h2>
-                    <p className="text-base leading-relaxed text-slate-200">
-                      Az Aquadrop Expert Pro nemcsak látványos termék, hanem műszaki paramétereiben is erős ajánlat.
-                      Ezek az előnyök a végfelhasználói bizalom és az értékesíthetőség szempontjából is fontosak.
-                    </p>
-                    <ul className="space-y-2.5 text-sm text-slate-100 md:text-base">
-                      {PERFORMANCE_BULLETS.map((item) => (
-                        <li key={item} className="flex items-start gap-2.5">
-                          <span aria-hidden className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-300" />
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="mx-auto w-full max-w-[230px] sm:mx-0 sm:w-[210px] md:w-[230px]">
-                    <div className="overflow-hidden rounded-2xl border border-white/10 bg-slate-900/40 p-2">
-                      <Image
-                        src="/aquadrop-partner-performance.png"
-                        alt="Aquadrop Expert Pro teljesítmény és műszaki előnyök"
-                        width={460}
-                        height={460}
-                        className="h-auto w-full rounded-xl object-cover"
-                        sizes="(min-width: 1024px) 230px, (min-width: 640px) 210px, 60vw"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </article>
             </div>
 
             <div className="space-y-4">
@@ -134,6 +100,44 @@ export default function PartnerPage() {
               </p>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="bg-slate-950 py-12 text-slate-100 md:py-16">
+        <div className="mx-auto max-w-6xl px-6">
+          <article className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 shadow-[0_18px_36px_-28px_rgba(15,23,42,0.75)] md:p-8">
+            <div className="grid items-center gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:gap-10">
+              <div className="order-1">
+                <div className="mx-auto w-full max-w-md overflow-hidden rounded-2xl border border-white/10 bg-slate-900/40 p-2 lg:max-w-[430px]">
+                  <Image
+                    src="/aquadrop-partner-performance.png"
+                    alt="Aquadrop Expert Pro teljesítmény és műszaki előnyök"
+                    width={860}
+                    height={860}
+                    className="h-auto w-full rounded-xl object-cover"
+                    sizes="(min-width: 1024px) 38vw, (min-width: 768px) 55vw, 92vw"
+                  />
+                </div>
+              </div>
+              <div className="order-2 space-y-4 md:space-y-5">
+                <h2 className="text-2xl font-semibold leading-tight text-white md:text-3xl">
+                  Műszaki előnyök, amelyek értékesítéskor is számítanak
+                </h2>
+                <p className="text-base leading-relaxed text-slate-200 md:text-lg">
+                  Az Aquadrop Expert Pro nemcsak látványos termék, hanem műszaki paramétereiben is erős ajánlat.
+                  Ezek az előnyök a végfelhasználói bizalom és az értékesíthetőség szempontjából is fontosak.
+                </p>
+                <ul className="space-y-2.5 text-sm text-slate-100 md:text-base">
+                  {PERFORMANCE_BULLETS.map((item) => (
+                    <li key={item} className="flex items-start gap-2.5">
+                      <span aria-hidden className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-300" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </article>
         </div>
       </section>
 
