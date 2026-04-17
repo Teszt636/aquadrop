@@ -94,10 +94,10 @@ export function BeforeAfterSection() {
           </SectionDescription>
         </div>
 
-        <div className="mx-auto mt-10 max-w-5xl rounded-3xl border border-slate-200/90 bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(246,251,255,0.96)_100%)] p-4 shadow-[0_22px_60px_rgba(15,23,42,0.09)] sm:p-6 md:p-8">
+        <div className="mx-auto mt-8 w-full max-w-3xl rounded-3xl border border-slate-200/90 bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(246,251,255,0.96)_100%)] p-3 shadow-[0_20px_52px_rgba(15,23,42,0.09)] sm:p-4 md:p-5">
           <div
             ref={sliderRef}
-            className="group relative aspect-[16/10] w-full select-none overflow-hidden rounded-2xl border border-slate-200/90 bg-slate-100"
+            className="group relative aspect-[16/9] w-full select-none overflow-hidden rounded-2xl border border-slate-200/90 bg-slate-100"
             onPointerDown={handlePointerDown}
             onPointerMove={handlePointerMove}
             onPointerUp={stopDragging}
@@ -112,19 +112,19 @@ export function BeforeAfterSection() {
             onKeyDown={handleKeyDown}
             style={{ touchAction: 'none' }}
           >
-            <Image src="/shirt-before.jpg" alt="Koszos ing a tisztítás előtt" fill priority sizes="(max-width: 768px) 100vw, 960px" className="object-cover" />
+            <Image src="/shirt-after.jpg" alt="Tiszta ing a tisztítás után" fill priority sizes="(max-width: 768px) 100vw, 768px" className="object-cover" />
 
             <div
-              className="absolute inset-y-0 left-0 overflow-hidden border-r border-white/20"
-              style={{ width: `${position}%` }}
+              className="absolute inset-0 border-r border-white/20"
+              style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}
               aria-hidden="true"
             >
               <Image
-                src="/shirt-after.jpg"
-                alt="Tiszta ing a tisztítás után"
+                src="/shirt-before.jpg"
+                alt="Koszos ing a tisztítás előtt"
                 fill
                 priority
-                sizes="(max-width: 768px) 100vw, 960px"
+                sizes="(max-width: 768px) 100vw, 768px"
                 className="object-cover"
               />
             </div>
@@ -136,8 +136,8 @@ export function BeforeAfterSection() {
               Utána
             </span>
 
-            <div className="pointer-events-none absolute inset-y-0" style={{ left: `${position}%` }} aria-hidden="true">
-              <div className="absolute inset-y-0 -ml-px w-0.5 bg-white/85 shadow-[0_0_0_1px_rgba(15,23,42,0.08)]" />
+            <div className="pointer-events-none absolute inset-y-0 -translate-x-1/2" style={{ left: `${position}%` }} aria-hidden="true">
+              <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-0.5 bg-white/85 shadow-[0_0_0_1px_rgba(15,23,42,0.08)]" />
               <div className="absolute left-1/2 top-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200/80 bg-white/95 shadow-[0_10px_24px_rgba(15,23,42,0.22)] backdrop-blur-sm transition-transform duration-200 group-hover:scale-105">
                 <span className="text-[11px] tracking-[0.18em] text-slate-500">◀ ▶</span>
               </div>
