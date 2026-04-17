@@ -17,12 +17,6 @@ export function HeroSection() {
             <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-700">
               Az Aquadrop Expert Pro magas koncentrációjú formula, amely hatékony tisztítást, friss illatot és megbízható mindennapi teljesítményt ad.
             </p>
-
-            <p className="mt-8 hidden max-w-2xl text-sm leading-6 text-slate-600 md:block">
-              Az oldalon közvetlen vásárlás nem lehetséges, a termék viszonteladó partnereinknél vásárolható meg.
-            </p>
-          </div>
-
           <div className="relative mt-2 md:mt-0">
             <div className="absolute -inset-4 -z-10 rounded-[2rem] bg-gradient-to-br from-brand-primary/15 via-brand-light to-success-green/10 blur-2xl" />
             <div className="relative rounded-[2rem] border border-slate-200 bg-white p-4 shadow-inner">
