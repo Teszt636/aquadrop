@@ -11,3 +11,4 @@ export * from './MobileStickyCTA';
 export * from './ThreePathsSection';
 export * from './B2BBridgeSection';
 export * from './SocialProofSection';
+export * from './MicrocapsuleMagicSection';
