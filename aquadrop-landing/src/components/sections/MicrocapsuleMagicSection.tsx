@@ -26,9 +26,11 @@ export function MicrocapsuleMagicSection() {
     <section className="ds-section bg-gradient-to-r from-sky-50/90 via-cyan-50/70 to-indigo-50/80">
       <div className="ds-container">
         <div className="space-y-7">
-          <div className="max-w-3xl space-y-3">
+          <div className="mx-auto max-w-3xl space-y-3 text-center">
             <SectionHeading>
-              Mikrokapszula varázslat – az illat, ami újra és újra aktiválódik
+              Mikrokapszula varázslat
+              <br />
+              az illat, ami újra és újra aktiválódik
             </SectionHeading>
             <p className="text-lg font-semibold leading-relaxed text-brand-secondary md:text-xl">
               Nem csak illatosít: a mikrokapszulás technológia mozgás közben újra és újra
@@ -40,7 +42,7 @@ export function MicrocapsuleMagicSection() {
             {steps.map((step, index) => (
               <article
                 key={step.title}
-                className="group rounded-2xl border border-slate-200 bg-white/90 p-5 shadow-sm transition duration-300 ease-out hover:-translate-y-0.5 hover:shadow-md md:p-6"
+                className="group rounded-2xl border border-slate-200 bg-white/90 p-5 text-center shadow-sm transition duration-300 ease-out hover:-translate-y-0.5 hover:shadow-md md:p-6"
               >
                 <div className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-sky-200 bg-sky-50 text-sm font-bold text-brand-primary">
                   {index + 1}
@@ -51,15 +53,10 @@ export function MicrocapsuleMagicSection() {
             ))}
           </div>
 
-          <div className="rounded-2xl border border-sky-200/80 bg-white/85 p-4 shadow-sm md:p-5">
-            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-brand-primary">
-              Tech sor
-            </p>
-            <p className="mt-2 text-sm leading-6 text-slate-700 md:text-base">
-              A “Friction Brings Fragrance” elven működő technológia az illatot akkor szabadítja
-              fel, amikor a ruha mozgásba kerül.
-            </p>
-          </div>
+          <p className="text-center text-lg font-semibold leading-relaxed text-brand-secondary md:text-xl">
+            A “Friction Brings Fragrance” elven működő technológia az illatot akkor szabadítja fel,
+            amikor a ruha mozgásba kerül.
+          </p>
 
           <ul className="grid gap-3 sm:grid-cols-3">
             {benefits.map((benefit) => (
