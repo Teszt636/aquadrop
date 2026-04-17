@@ -19,7 +19,7 @@ export function ThreePathsSection() {
     <section className="ds-section" aria-labelledby="three-paths-heading">
       <div className="ds-container">
         <div id="three-paths-heading" className="ds-section-heading-wrap">
-          <SectionHeading>Válaszd ki, mi érdekel most</SectionHeading>
+          <SectionHeading>Válaszd ki a következő lépést</SectionHeading>
         </div>
 
         <div className="mt-8 grid gap-5 md:grid-cols-3 md:items-stretch">
@@ -27,9 +27,9 @@ export function ThreePathsSection() {
             <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-brand-primary/10 text-2xl">
               🎁
             </div>
-            <h3 className="text-2xl font-bold text-slate-900">Kipróbálnám</h3>
+            <h3 className="text-2xl font-bold text-slate-900">Ajándék mosókapszula</h3>
             <p className="mt-3 flex-1 text-slate-700">
-              Szeretnéd megtapasztalni, mit tud az Aquadrop Expert Pro a mindennapi mosásban?
+              Vásárolj 2 doboz Aquadrop Expert Pro kapszulát, töltsd fel a blokkot/blokkokat, és elküldjük a 3. dobozt ajándékba.
             </p>
             <button
               type="button"
@@ -39,7 +39,7 @@ export function ThreePathsSection() {
                 scrollToSection('gift-campaign');
               }}
             >
-              Kérem a 3. dobozt ajándékba
+              Ajándék terméket igénylek
             </button>
           </article>
 
