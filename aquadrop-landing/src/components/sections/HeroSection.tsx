@@ -34,10 +34,6 @@ export function HeroSection() {
           </div>
         </div>
 
-        <p className="text-center mt-10 max-w-2xl text-center text-sm leading-6 text-slate-600 md:hidden">
-          Az oldalon közvetlen vásárlás nem lehetséges, a termék viszonteladó partnereinknél vásárolható meg.
-        </p>
-
         <div className="mt-6 grid gap-3 rounded-2xl border border-slate-200/90 bg-gradient-to-b from-white to-slate-50 px-4 py-4 shadow-lg shadow-slate-900/10 ring-1 ring-slate-100 sm:grid-cols-3 sm:gap-4 sm:px-6">
           {miniTrustItems.map((item) => (
             <p
