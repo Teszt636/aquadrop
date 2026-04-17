@@ -4,10 +4,10 @@ import Image from 'next/image';
 import { FooterSection, ResellerSection } from '@/components/sections';
 
 const PARTNER_BENEFITS = [
-  'stabil ellátás',
-  'marketing támogatás',
-  'márkaépítési lehetőség',
-  'szelektív partnerprogram'
+  'Stabil ellátás',
+  'Marketing támogatás',
+  'Márkaépítési lehetőség',
+  'Szelektív partnerprogram'
 ] as const;
 
 const PARTNER_AUDIENCE = [
@@ -46,7 +46,7 @@ const PERFORMANCE_BULLETS = [
   '8× koncentrált tisztítóerő',
   'Környezetbarát formula',
   '600N nyomásállóság – ellenáll az összenyomásnak és rálépésnek',
-  'Gyorsan oldódó vízben oldódó fólia'
+  'Gyorsan oldódó PVA film – nem hagy maradványt.'
 ] as const;
 
 export const metadata: Metadata = {
