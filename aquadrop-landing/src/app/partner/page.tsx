@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 
 import { FooterSection, ResellerSection } from '@/components/sections';
 
@@ -40,6 +41,14 @@ const PARTNER_REASONS = [
   'Folyamatos termékfejlesztés és bővülő portfólió'
 ] as const;
 
+const PERFORMANCE_BULLETS = [
+  'Több mint 70% aktív hatóanyag-tartalom',
+  '8× koncentrált tisztítóerő',
+  'Környezetbarát formula',
+  '600N nyomásállóság – ellenáll az összenyomásnak és rálépésnek',
+  'Gyorsan oldódó vízben oldódó fólia'
+] as const;
+
 export const metadata: Metadata = {
   title: 'Viszonteladóknak | Aquadrop Expert Pro',
   description: 'Jelentkezés az Aquadrop Expert Pro viszonteladói programjába.'
@@ -50,25 +59,61 @@ export default function PartnerPage() {
     <main className="flex min-h-screen flex-col bg-slate-950">
       <section className="border-b border-white/10 bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 py-16 text-slate-100 md:py-20">
         <div className="mx-auto max-w-6xl px-6">
-          <div className="grid gap-10 lg:grid-cols-[1.05fr_1fr] lg:items-start">
-            <div className="space-y-6">
-              <p className="inline-flex rounded-full border border-cyan-300/50 bg-cyan-300/15 px-4 py-1 text-sm font-medium text-cyan-100">
-                Partner program
-              </p>
-              <h1 className="text-4xl font-semibold tracking-tight text-white md:text-5xl">
-                Legyél az Aquadrop Expert Pro viszonteladó partnere
-              </h1>
-              <p className="text-lg leading-relaxed text-slate-200 md:text-xl">
-                Ha olyan terméket keresel, amely mögött stabil márkaépítés és hosszú távú együttműködési
-                lehetőség áll, jelentkezz partnernek.
-              </p>
-              <ul className="grid gap-3 pt-2 text-slate-100 sm:grid-cols-2">
-                {PARTNER_BENEFITS.map((benefit) => (
-                  <li key={benefit} className="rounded-xl border border-white/15 bg-white/10 px-4 py-3">
-                    {benefit}
-                  </li>
-                ))}
-              </ul>
+          <div className="grid gap-10 lg:grid-cols-[1.05fr_1fr] lg:items-stretch">
+            <div className="flex flex-col gap-8">
+              <div className="space-y-6">
+                <p className="inline-flex rounded-full border border-cyan-300/50 bg-cyan-300/15 px-4 py-1 text-sm font-medium text-cyan-100">
+                  Partner program
+                </p>
+                <h1 className="text-4xl font-semibold tracking-tight text-white md:text-5xl">
+                  Legyél az Aquadrop Expert Pro viszonteladó partnere
+                </h1>
+                <p className="text-lg leading-relaxed text-slate-200 md:text-xl">
+                  Ha olyan terméket keresel, amely mögött stabil márkaépítés és hosszú távú együttműködési
+                  lehetőség áll, jelentkezz partnernek.
+                </p>
+                <ul className="grid gap-3 pt-2 text-slate-100 sm:grid-cols-2">
+                  {PARTNER_BENEFITS.map((benefit) => (
+                    <li key={benefit} className="rounded-xl border border-white/15 bg-white/10 px-4 py-3">
+                      {benefit}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <article className="rounded-3xl border border-white/15 bg-white/5 p-6 shadow-[0_16px_32px_-24px_rgba(15,23,42,0.8)] md:p-7 lg:mt-auto">
+                <div className="grid gap-6 sm:grid-cols-[1fr_auto] sm:items-start">
+                  <div className="space-y-4">
+                    <h2 className="text-2xl font-semibold leading-tight text-white md:text-[1.75rem]">
+                      Műszaki előnyök, amelyek értékesítéskor is számítanak
+                    </h2>
+                    <p className="text-base leading-relaxed text-slate-200">
+                      Az Aquadrop Expert Pro nemcsak látványos termék, hanem műszaki paramétereiben is erős ajánlat.
+                      Ezek az előnyök a végfelhasználói bizalom és az értékesíthetőség szempontjából is fontosak.
+                    </p>
+                    <ul className="space-y-2.5 text-sm text-slate-100 md:text-base">
+                      {PERFORMANCE_BULLETS.map((item) => (
+                        <li key={item} className="flex items-start gap-2.5">
+                          <span aria-hidden className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-300" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="mx-auto w-full max-w-[230px] sm:mx-0 sm:w-[210px] md:w-[230px]">
+                    <div className="overflow-hidden rounded-2xl border border-white/10 bg-slate-900/40 p-2">
+                      <Image
+                        src="/aquadrop-partner-performance.png"
+                        alt="Aquadrop Expert Pro teljesítmény és műszaki előnyök"
+                        width={460}
+                        height={460}
+                        className="h-auto w-full rounded-xl object-cover"
+                        sizes="(min-width: 1024px) 230px, (min-width: 640px) 210px, 60vw"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </article>
             </div>
 
             <div className="space-y-4">
