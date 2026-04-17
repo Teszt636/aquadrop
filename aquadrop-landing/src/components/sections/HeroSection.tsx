@@ -54,6 +54,9 @@ export function HeroSection() {
             </p>
           ))}
         </div>
+        <p className="text-center mt-10 max-w-2xl text-center text-sm leading-6 text-slate-600 md:hidden">
+          Az oldalon közvetlen vásárlás nem lehetséges, a termék viszonteladó partnereinknél vásárolható meg.
+        </p>
       </div>
     </section>
   );
