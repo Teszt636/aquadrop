@@ -23,26 +23,6 @@ export function ThreePathsSection() {
         </div>
 
         <div className="mt-8 grid gap-5 md:grid-cols-3 md:items-stretch">
-          <article className="group relative flex h-full flex-col items-center rounded-2xl border-2 border-brand-primary/35 bg-white p-6 text-center shadow-lg shadow-brand-primary/10 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl md:p-7">
-            <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-brand-primary/10 text-2xl">
-              🎁
-            </div>
-            <h3 className="text-2xl font-bold text-slate-900">Ajándék mosókapszula</h3>
-            <p className="mt-3 flex-1 text-slate-700">
-              Vásárolj 2 doboz Aquadrop Expert Pro kapszulát bármelyik üzletben, és elküldjük a 3. dobozt ajándékba.
-            </p>
-            <button
-              type="button"
-              className="ds-button-primary mt-6 w-full"
-              onClick={() => {
-                trackEvent('final_cta_gift_click');
-                scrollToSection('gift-campaign');
-              }}
-            >
-              Ajándék terméket igénylek
-            </button>
-          </article>
-
           <article className="group flex h-full flex-col items-center rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-lg md:p-7">
             <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 text-2xl">
               🔔
@@ -60,6 +40,26 @@ export function ThreePathsSection() {
               }}
             >
               Értesítést kérek
+            </button>
+          </article>
+
+          <article className="group relative flex h-full flex-col items-center rounded-2xl border-2 border-brand-primary/35 bg-white p-6 text-center shadow-lg shadow-brand-primary/10 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl md:p-7">
+            <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-brand-primary/10 text-2xl">
+              🎁
+            </div>
+            <h3 className="text-2xl font-bold text-slate-900">Ajándék mosókapszula</h3>
+            <p className="mt-3 flex-1 text-slate-700">
+              Vásárolj 2 doboz Aquadrop Expert Pro kapszulát bármelyik partner üzletben, és elküldjük a 3. dobozt ajándékba.
+            </p>
+            <button
+              type="button"
+              className="ds-button-primary mt-6 w-full"
+              onClick={() => {
+                trackEvent('final_cta_gift_click');
+                scrollToSection('gift-campaign');
+              }}
+            >
+              Ajándék terméket igénylek
             </button>
           </article>
 
