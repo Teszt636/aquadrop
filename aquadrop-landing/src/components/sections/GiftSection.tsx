@@ -162,7 +162,7 @@ export function GiftSection() {
             </SectionEyebrow>
             <SectionHeading className="mt-4">Vásárolj 2 dobozt – mi adjuk a harmadikat</SectionHeading>
             <SectionDescription className="mx-auto mt-5">
-              Vásárolj 2 doboz Aquadrop Expert Pro kapszulát, töltsd fel a blokkot, és elküldjük a 3. dobozt ajándékba.
+              Vásárolj 2 doboz Aquadrop Expert Pro mosókapszulát valamelyik partner üzletben, töltsd fel a blokkot, és elküldjük a 3. dobozt ajándékba.
             </SectionDescription>
             <p className="mx-auto mt-4 inline-flex rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-sm font-semibold text-amber-800">
               Az ajándék kampány korlátozott ideig érhető el.
@@ -179,7 +179,7 @@ export function GiftSection() {
           >
             <h3 className="text-xl font-semibold text-slate-900">Ajándék mosókapszula igénylőlap</h3>
             <p className="mt-2 text-sm text-slate-600">
-              Töltsd ki az alábbi mezőket magyarul, majd töltsd fel a vásárlási blokk képét.
+              Töltsd ki az alábbi mezőket, majd töltsd fel a vásárlási blokk képét.
             </p>
             <p className="mt-2 text-xs text-slate-500">
               A beküldött adatokat kizárólag a kampány lebonyolításához használjuk fel.
@@ -241,7 +241,7 @@ export function GiftSection() {
                   value={formState.purchase_location}
                   onChange={handleChange}
                   disabled={isSubmitting}
-                  placeholder="pl. Auchan"
+                  placeholder="pl. Auchan, Kecskemét"
                   className="h-11 rounded-lg border border-slate-300 bg-white px-3 text-base text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20"
                 />
               </label>
