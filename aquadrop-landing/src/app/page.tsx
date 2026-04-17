@@ -7,7 +7,6 @@ import {
   GiftSection,
   HeroSection,
   MicrocapsuleMagicSection,
-  MobileStickyCTA,
   ProblemSection,
   SocialProofSection,
   TechnologySection,
@@ -52,8 +51,6 @@ export default function Home() {
           <FooterSection />
         </main>
       </div>
-
-      <MobileStickyCTA />
     </>
   );
 }
