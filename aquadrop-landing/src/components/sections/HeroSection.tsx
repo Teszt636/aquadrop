@@ -19,7 +19,7 @@ export function HeroSection() {
             </p>
 
             <p className="mt-8 max-w-2xl text-sm leading-6 text-slate-600">
-              Az oldalon közvetlen vásárlás nem lehetéseg, a termék viszonteladó partnereinknél vásárolható meg.
+              Az oldalon közvetlen vásárlás nem lehetséges, a termék viszonteladó partnereinknél vásárolható meg.
             </p>
           </div>
 
