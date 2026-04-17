@@ -5,6 +5,7 @@ import {
   FooterSection,
   GiftSection,
   HeroSection,
+  MicrocapsuleMagicSection,
   MobileStickyCTA,
   ProblemSection,
   SocialProofSection,
@@ -38,6 +39,7 @@ export default function Home() {
         <ProblemSection />
         <BenefitsSection />
         <TechnologySection />
+        <MicrocapsuleMagicSection />
         <TrustSection />
         <SocialProofSection />
         <ThreePathsSection />
