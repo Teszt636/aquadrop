@@ -1,6 +1,7 @@
 import {
   AnnouncementSection,
   B2BBridgeSection,
+  BeforeAfterSection,
   BenefitsSection,
   FooterSection,
   GiftSection,
@@ -42,6 +43,7 @@ export default function Home() {
         <MicrocapsuleMagicSection />
         <TrustSection />
         <SocialProofSection />
+        <BeforeAfterSection />
         <ThreePathsSection />
         <GiftSection />
         <AnnouncementSection />
