@@ -2,22 +2,9 @@
 
 import Image from 'next/image';
 
-import { Button, ButtonLink } from '@/components/ui/Button';
-import { trackEvent } from '@/lib/tracking';
-
 const miniTrustItems = ['4 az 1-ben hatás', 'Magas koncentráció', 'Prémium illat'];
 
 export function HeroSection() {
-  const scrollToSection = (sectionId: string) => {
-    const section = document.getElementById(sectionId);
-
-    if (!section) {
-      return;
-    }
-
-    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
-
   return (
     <section className="ds-section bg-transparent">
       <div className="ds-container">
@@ -31,27 +18,9 @@ export function HeroSection() {
               Az Aquadrop Expert Pro magas koncentrációjú formula, amely hatékony tisztítást, friss illatot és megbízható mindennapi teljesítményt ad.
             </p>
 
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-              <Button
-                id="hero-cta-primary"
-                className="w-full shadow-lg shadow-brand-primary/25 sm:w-auto"
-                onClick={() => {
-                  trackEvent('hero_primary_cta_click');
-                  scrollToSection('gift-campaign');
-                }}
-              >
-                Ajándék mosókapszula
-              </Button>
-              <ButtonLink
-                id="hero-cta-secondary"
-                href="/partner"
-                variant="secondary"
-                className="inline-flex w-full justify-center border-2 border-brand-primary/40 font-semibold sm:w-auto"
-                onClick={() => trackEvent('hero_secondary_cta_click')}
-              >
-                Viszonteladó vagyok
-              </ButtonLink>
-            </div>
+            <p className="mt-8 max-w-2xl text-sm leading-6 text-slate-600">
+              Az oldalon közvetlen vásárlás nem lehetéseg, a termék viszonteladó partnereinknél vásárolható meg.
+            </p>
           </div>
 
           <div className="relative mt-2 md:mt-0">
