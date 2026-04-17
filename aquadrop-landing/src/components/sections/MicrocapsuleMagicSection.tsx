@@ -55,7 +55,7 @@ export function MicrocapsuleMagicSection() {
 
           <p className="text-center text-lg font-semibold leading-relaxed text-brand-secondary md:text-xl">
             A “Friction Brings Fragrance” elven működő technológia az illatot akkor szabadítja fel,
-            amikor a ruha mozgásba kerül.
+            amikor a ruha mozgásba kerül. A technológia lényege, hogy az illatanyagot mikroszkopikus polimer kapszulákba zárják. Amikor az anyag súrlódásnak, dörzsölésnek van kitéve, ezek a kapszulák széttörnek, és intenzív illatfelhőt bocsátanak ki.
           </p>
 
           <ul className="grid gap-3 sm:grid-cols-3">
