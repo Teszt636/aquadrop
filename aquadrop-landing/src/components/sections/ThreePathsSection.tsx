@@ -29,7 +29,7 @@ export function ThreePathsSection() {
             </div>
             <h3 className="text-2xl font-bold text-slate-900">Ajándék mosókapszula</h3>
             <p className="mt-3 flex-1 text-slate-700">
-              Vásárolj 2 doboz Aquadrop Expert Pro kapszulát, töltsd fel a blokkot/blokkokat, és elküldjük a 3. dobozt ajándékba.
+              Vásárolj 2 doboz Aquadrop Expert Pro kapszulát, és elküldjük 3. dobozt ajándékba.
             </p>
             <button
               type="button"
