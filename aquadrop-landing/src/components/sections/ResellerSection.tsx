@@ -106,7 +106,7 @@ export function ResellerSection() {
     >
       <div className="grid gap-4">
         <label className="grid gap-1.5 text-sm font-medium text-slate-100" htmlFor="reseller-company-name">
-          cégnév
+          Cégnév
           <input
             id="reseller-company-name"
             type="text"
@@ -120,7 +120,7 @@ export function ResellerSection() {
         </label>
 
         <label className="grid gap-1.5 text-sm font-medium text-slate-100" htmlFor="reseller-contact-name">
-          név
+          Név
           <input
             id="reseller-contact-name"
             type="text"
@@ -134,7 +134,7 @@ export function ResellerSection() {
         </label>
 
         <label className="grid gap-1.5 text-sm font-medium text-slate-100" htmlFor="reseller-email">
-          email
+          Email
           <input
             id="reseller-email"
             type="email"
@@ -148,7 +148,7 @@ export function ResellerSection() {
         </label>
 
         <label className="grid gap-1.5 text-sm font-medium text-slate-100" htmlFor="reseller-phone">
-          telefon
+          Telefon
           <input
             id="reseller-phone"
             type="tel"
@@ -162,7 +162,7 @@ export function ResellerSection() {
         </label>
 
         <label className="grid gap-1.5 text-sm font-medium text-slate-100" htmlFor="reseller-website">
-          weboldal (opcionális)
+          Weboldal (opcionális)
           <input
             id="reseller-website"
             type="url"
@@ -175,7 +175,7 @@ export function ResellerSection() {
         </label>
 
         <label className="grid gap-1.5 text-sm font-medium text-slate-100" htmlFor="reseller-sales-channel">
-          értékesítési csatorna
+          Értékesítési csatorna
           <select
             id="reseller-sales-channel"
             name="sales_channel"
@@ -202,7 +202,7 @@ export function ResellerSection() {
         </label>
 
         <label className="grid gap-1.5 text-sm font-medium text-slate-100" htmlFor="reseller-message">
-          üzenet (opcionális)
+          Üzenet (opcionális)
           <textarea
             id="reseller-message"
             name="message"
