@@ -23,7 +23,7 @@ export function MobileStickyCTA() {
         className="ds-button-primary h-12 w-full justify-center"
         aria-label="Ugrás az ajándékdoboz igénylőlaphoz"
       >
-        Kérem a 3. dobozt ajándékba
+        Ajándék mosókapszula
       </button>
     </div>
   );
