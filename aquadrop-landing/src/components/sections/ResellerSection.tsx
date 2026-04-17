@@ -216,6 +216,8 @@ export function ResellerSection() {
 
         {errorMessage ? <p className="text-sm text-red-200">{errorMessage}</p> : null}
 
+        <p className="text-sm text-cyan-100">2 munkanapon belül felvesszük veled a kapcsolatot.</p>
+
         <button
           type="submit"
           disabled={isSubmitting}
@@ -223,6 +225,8 @@ export function ResellerSection() {
         >
           {isSubmitting ? 'Küldés...' : 'Partnerként jelentkezem'}
         </button>
+
+        <p className="text-sm text-slate-300">A jelentkezés nem jár kötelezettséggel.</p>
       </div>
     </form>
   );

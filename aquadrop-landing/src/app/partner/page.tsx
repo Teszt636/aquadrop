@@ -33,6 +33,13 @@ const APPLICATION_STEPS = [
   'Egyeztetjük az együttműködés lehetőségét'
 ] as const;
 
+const PARTNER_REASONS = [
+  'Növekvő kereslet a prémium mosókapszulák iránt',
+  'Stabil ellátás és kiszámítható együttműködés',
+  'Marketing támogatás az értékesítéshez',
+  'Folyamatos termékfejlesztés és bővülő portfólió'
+] as const;
+
 export const metadata: Metadata = {
   title: 'Viszonteladóknak | Aquadrop Expert Pro',
   description: 'Jelentkezés az Aquadrop Expert Pro viszonteladói programjába.'
@@ -66,6 +73,17 @@ export default function PartnerPage() {
 
             <div className="space-y-4">
               <ResellerSection />
+              <article className="rounded-2xl border border-white/15 bg-white/5 p-5">
+                <h2 className="text-xl font-semibold text-white">Miért érdemes az Aquadrop partnerének lenni?</h2>
+                <ul className="mt-4 space-y-2 text-sm text-slate-200">
+                  {PARTNER_REASONS.map((reason) => (
+                    <li key={reason} className="flex items-start gap-2">
+                      <span aria-hidden className="mt-1 h-1.5 w-1.5 rounded-full bg-cyan-300" />
+                      <span>{reason}</span>
+                    </li>
+                  ))}
+                </ul>
+              </article>
               <p className="text-sm text-slate-300">
                 A jelentkezéseket szakmai szempontok alapján egyedileg bíráljuk el.
               </p>
@@ -77,7 +95,7 @@ export default function PartnerPage() {
       <section className="bg-slate-100 py-16 text-slate-900 md:py-20">
         <div className="mx-auto max-w-6xl px-6">
           <div className="space-y-10">
-            <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">Kinek lehet jó partnerprogramunk?</h2>
+            <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">Kinek ajánljuk partnerprogramunkat?</h2>
             <div className="grid gap-5 md:grid-cols-3">
               {PARTNER_AUDIENCE.map((item) => (
                 <article key={item.title} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
@@ -86,6 +104,9 @@ export default function PartnerPage() {
                 </article>
               ))}
             </div>
+            <p className="text-base text-slate-600">
+              Partnereink között megtalálhatók viszonteladók, webshopok és regionális beszállítók is.
+            </p>
           </div>
         </div>
       </section>
