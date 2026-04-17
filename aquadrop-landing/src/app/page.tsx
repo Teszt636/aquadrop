@@ -43,10 +43,10 @@ export default function Home() {
           <MicrocapsuleMagicSection />
           <TrustSection />
           <SocialProofSection />
-          <BeforeAfterSection />
           <ThreePathsSection />
           <GiftSection />
           <AnnouncementSection />
+          <BeforeAfterSection />
           <B2BBridgeSection />
           <FooterSection />
         </main>

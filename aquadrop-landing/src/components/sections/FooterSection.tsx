@@ -1,14 +1,22 @@
 const legalLinks = [
+  { href: '/kapcsolat', label: 'Kapcsolat' },
   { href: '/adatkezelesi-tajekoztato', label: 'Adatkezelési tájékoztató' },
-  { href: '/aszf', label: 'ÁSZF' },
-  { href: '/kapcsolat', label: 'Kapcsolat' }
+  { href: '/aszf', label: 'ÁSZF / Felhasználási feltételek' }
+];
+
+const quickLinks = [
+  { href: '/partner', label: 'Partneroldal' },
+  { href: '#gift-campaign', label: 'Ajándék promóció' }
 ];
 
 export function FooterSection() {
   return (
     <footer className="border-t border-slate-300 bg-[linear-gradient(180deg,#eaf3f7,#e1edf3)] py-10">
       <div className="ds-container">
-        <p className="mb-8 text-center text-lg font-bold text-slate-900 md:hidden">Aquadrop Expert Pro Capsules</p>
+        <p className="mb-2 text-center text-lg font-bold text-slate-900 md:hidden">Aquadrop Expert Pro Capsules</p>
+        <p className="mb-8 text-center text-sm text-slate-600">
+          Az oldalon közvetlen vásárlás nem lehetséges, a termék viszonteladó partnereinknél érhető el.
+        </p>
         <div className="grid gap-10 text-center md:grid-cols-3 md:text-left">
           <div>
             <p className="hidden text-lg font-bold text-slate-900 md:block">Aquadrop Expert Pro Capsules</p>
@@ -27,7 +35,7 @@ export function FooterSection() {
           </div>
 
           <div className="md:text-center">
-            <p className="text-sm font-semibold text-slate-800 md:uppercase md:tracking-wide md:text-slate-500">Jogi linkek</p>
+            <p className="text-sm font-semibold text-slate-800 md:uppercase md:tracking-wide md:text-slate-500">Jogi és kapcsolat</p>
             <ul className="mt-4 space-y-2 text-sm leading-7 text-slate-600">
               {legalLinks.map((link) => (
                 <li key={link.href}>
@@ -40,13 +48,21 @@ export function FooterSection() {
           </div>
 
           <div className="md:text-center">
-            <p className="text-sm font-semibold text-slate-800 md:uppercase md:tracking-wide md:text-slate-500">Partner link</p>
-            <a
-              className="mt-4 inline-flex rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:text-slate-900"
-              href="/partner"
-            >
-              Viszonteladóknak
-            </a>
+            <p className="text-sm font-semibold text-slate-800 md:uppercase md:tracking-wide md:text-slate-500">
+              Gyors elérés
+            </p>
+            <ul className="mt-4 space-y-2 text-sm leading-7 text-slate-600">
+              {quickLinks.map((link) => (
+                <li key={link.href}>
+                  <a
+                    className="inline-flex rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:text-slate-900"
+                    href={link.href}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
             <address className="mt-4 not-italic text-sm leading-7 text-slate-600 md:hidden">
               <p className="font-semibold text-slate-800">Magyarországi forgalmazó:</p>
               <p>Aquadrop Hungary Kft</p>

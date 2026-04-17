@@ -14,17 +14,17 @@ const PARTNER_AUDIENCE = [
   {
     title: 'Viszonteladóknak',
     description:
-      'Olyan partnereknek, akik saját ügyfélkörüknek szeretnének minőségi terméket kínálni.'
+      'Olyan B2B partnereknek, akik saját ügyfélkörüknek szeretnének minőségi terméket kínálni.'
   },
   {
     title: 'Webshopoknak',
     description:
-      'Online értékesítési csatornával rendelkező partnerek számára is nyitott az együttműködés.'
+      'Online értékesítési csatornával rendelkező B2B partnerek számára is nyitott az együttműködés.'
   },
   {
     title: 'Beszerzőknek',
     description:
-      'Ha termékbővítésben gondolkodsz, partneroldalunkon megismerheted a lehetőségeket.'
+      'Ha termékbővítésben gondolkodsz, partneroldalunkon megismerheted az együttműködési lehetőségeket.'
   }
 ] as const;
 
@@ -35,7 +35,7 @@ const APPLICATION_STEPS = [
 ] as const;
 
 const PARTNER_REASONS = [
-  'Növekvő kereslet a prémium mosókapszulák iránt',
+  'Növekvő kereslet a prémium mosókapszulák iránt a végfelhasználói piacon',
   'Stabil ellátás és kiszámítható együttműködés',
   'Marketing támogatás az értékesítéshez',
   'Folyamatos termékfejlesztés és bővülő portfólió'
@@ -51,7 +51,7 @@ const PERFORMANCE_BULLETS = [
 
 export const metadata: Metadata = {
   title: 'Viszonteladóknak | Aquadrop Expert Pro',
-  description: 'Jelentkezés az Aquadrop Expert Pro viszonteladói programjába.'
+  description: 'B2B jelentkezés az Aquadrop Expert Pro viszonteladói programjába.'
 };
 
 export default function PartnerPage() {
@@ -66,11 +66,12 @@ export default function PartnerPage() {
                   Partner program
                 </p>
                 <h1 className="text-4xl font-semibold tracking-tight text-white md:text-5xl">
-                  Legyél az Aquadrop Expert Pro viszonteladó partnere
+                  Legyél az Aquadrop Expert Pro B2B viszonteladó partnere
                 </h1>
                 <p className="text-lg leading-relaxed text-slate-200 md:text-xl">
-                  Ha olyan terméket keresel, amely mögött stabil márkaépítés és hosszú távú együttműködési
-                  lehetőség áll, jelentkezz partnernek.
+                  Ha olyan terméket keresel, amely mögött stabil márkaépítés és hosszú távú B2B együttműködési
+                  lehetőség áll, jelentkezz partnernek. Ez az oldal viszonteladói kapcsolatfelvételre szolgál,
+                  nem végfelhasználói vásárlásra.
                 </p>
                 <ul className="grid gap-3 pt-2 text-slate-100 sm:grid-cols-2">
                   {PARTNER_BENEFITS.map((benefit) => (
@@ -96,7 +97,7 @@ export default function PartnerPage() {
                 </ul>
               </article>
               <p className="text-sm text-slate-300">
-                A jelentkezéseket szakmai szempontok alapján egyedileg bíráljuk el.
+                A jelentkezéseket szakmai és partneri szempontok alapján egyedileg bíráljuk el.
               </p>
             </div>
           </div>
@@ -154,7 +155,7 @@ export default function PartnerPage() {
               ))}
             </div>
             <p className="text-base text-slate-600">
-              Partnereink között megtalálhatók viszonteladók, webshopok és regionális beszállítók is.
+              Partnereink között megtalálhatók viszonteladók, webshopok és regionális beszállítók is; ez a felület kifejezetten B2B együttműködésre készült.
             </p>
           </div>
         </div>

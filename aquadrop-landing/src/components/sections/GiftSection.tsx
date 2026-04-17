@@ -31,6 +31,19 @@ const INITIAL_FORM_STATE: GiftFormState = {
   purchase_declaration: false
 };
 
+const CAMPAIGN_STEPS = [
+  'Vásárolj 2 doboz Aquadrop Expert Pro mosókapszulát egy viszonteladó partnernél',
+  'Töltsd fel a blokkot ezen az oldalon',
+  'Ellenőrizzük a vásárlást',
+  'Jóváhagyás után megkapod az ajándék terméket'
+] as const;
+
+const IMPORTANT_NOTES = [
+  'Az oldalon közvetlen vásárlás nem lehetséges.',
+  'Csak partnernél történt vásárlással vehető igénybe a promóció.',
+  'A blokk feltöltése önmagában nem jelent automatikus jogosultságot, az igénylést ellenőrizzük.'
+] as const;
+
 export function GiftSection() {
   const router = useRouter();
   const [formState, setFormState] = useState<GiftFormState>(INITIAL_FORM_STATE);
@@ -46,8 +59,6 @@ export function GiftSection() {
       [name]: type === 'checkbox' ? (event.target as HTMLInputElement).checked : value
     }));
   };
-
-
 
   const handleReceiptChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] ?? null;
@@ -158,15 +169,36 @@ export function GiftSection() {
 
           <div className="relative z-10 mx-auto max-w-3xl text-center">
             <SectionEyebrow className="inline-flex rounded-full border border-brand-primary/35 bg-white px-3 py-1 text-xs font-bold tracking-[0.15em] shadow-sm">
-              Kiemelt ajánlat
+              2+1 ajándék promóció
             </SectionEyebrow>
-            <SectionHeading className="mt-4">Vásárolj 2 dobozt – mi adjuk a harmadikat</SectionHeading>
+            <SectionHeading className="mt-4">Vásárolj 2 dobozt partnernél, és jelentkezz blokkfeltöltéssel</SectionHeading>
             <SectionDescription className="mx-auto mt-5">
-              Vásárolj 2 doboz Aquadrop Expert Pro kapszulát, töltsd fel a blokkot, és elküldjük a 3. dobozt ajándékba.
+              A promócióban azok vehetnek részt, akik viszonteladó partnernél vásároltak 2 doboz Aquadrop Expert Pro
+              mosókapszulát, majd ezen az oldalon feltöltik a blokkot ellenőrzésre.
             </SectionDescription>
-            <p className="mx-auto mt-4 inline-flex rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-sm font-semibold text-amber-800">
-              Az ajándék kampány korlátozott ideig érhető el.
-            </p>
+          </div>
+
+          <div className="relative z-10 mx-auto mt-8 max-w-4xl rounded-2xl border border-slate-200 bg-white/90 p-5 md:p-6">
+            <h3 className="text-lg font-semibold text-slate-900">Hogyan működik?</h3>
+            <ol className="mt-4 grid gap-3 md:grid-cols-2">
+              {CAMPAIGN_STEPS.map((step, index) => (
+                <li key={step} className="rounded-xl border border-slate-200 bg-white p-4 text-sm text-slate-700">
+                  <p className="text-xs font-bold uppercase tracking-wide text-brand-primary">{index + 1}. lépés</p>
+                  <p className="mt-1 font-medium">{step}</p>
+                </li>
+              ))}
+            </ol>
+          </div>
+
+          <div className="relative z-10 mx-auto mt-6 max-w-4xl rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4">
+            <ul className="space-y-2 text-sm font-medium text-amber-900">
+              {IMPORTANT_NOTES.map((note) => (
+                <li key={note} className="flex items-start gap-2">
+                  <span aria-hidden className="mt-1 h-1.5 w-1.5 rounded-full bg-amber-500" />
+                  <span>{note}</span>
+                </li>
+              ))}
+            </ul>
           </div>
 
           <form
@@ -177,12 +209,12 @@ export function GiftSection() {
             noValidate
             className="relative z-10 mx-auto mt-10 max-w-3xl scroll-mt-6 rounded-2xl border border-brand-primary/15 bg-white/85 p-6 shadow-xl backdrop-blur-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/30 md:p-8"
           >
-            <h3 className="text-xl font-semibold text-slate-900">Ajándék mosókapszula igénylőlap</h3>
+            <h3 className="text-xl font-semibold text-slate-900">Blokkfeltöltéses jelentkezés az ajándék termékre</h3>
             <p className="mt-2 text-sm text-slate-600">
-              Töltsd ki az alábbi mezőket magyarul, majd töltsd fel a vásárlási blokk képét.
+              Töltsd ki az alábbi mezőket magyarul, majd töltsd fel a partnernél történt vásárlás blokkjának képét.
             </p>
             <p className="mt-2 text-xs text-slate-500">
-              A beküldött adatokat kizárólag a kampány lebonyolításához használjuk fel.
+              A beküldött adatokat kizárólag a promóció ellenőrzéséhez és lebonyolításához használjuk fel.
             </p>
 
             <div className="mt-6 grid gap-4 md:grid-cols-2">
@@ -335,7 +367,7 @@ export function GiftSection() {
             <div className="mt-6 flex flex-col items-start gap-3 md:flex-row md:items-center md:justify-between">
               <p className="text-xs text-slate-500">* Kötelező mezők</p>
               <Button type="submit" className="px-8 py-3 text-base" disabled={isSubmitting}>
-                {isSubmitting ? 'Küldés...' : 'Kérem a 3. dobozt ajándékba'}
+                {isSubmitting ? 'Küldés...' : 'Blokk beküldése ajándék jóváhagyáshoz'}
               </Button>
             </div>
           </form>

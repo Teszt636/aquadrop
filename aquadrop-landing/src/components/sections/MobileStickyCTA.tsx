@@ -21,9 +21,9 @@ export function MobileStickyCTA() {
         type="button"
         onClick={handleClick}
         className="ds-button-primary h-12 w-full justify-center"
-        aria-label="Ugrás az ajándékdoboz igénylőlaphoz"
+        aria-label="Ugrás az ajándék promóció blokkfeltöltő űrlapjához"
       >
-        Kérem az ajándék dobozt
+        Blokkot töltök fel
       </button>
     </div>
   );

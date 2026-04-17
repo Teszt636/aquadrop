@@ -22,6 +22,8 @@ const INITIAL_FORM_STATE: FormState = {
   consent: false
 };
 
+const TRUST_COPY = ['Nincs kötelezettség.', 'Nincs spam.', 'Csak releváns értesítések.'] as const;
+
 export function AnnouncementSection() {
   const router = useRouter();
   const [formState, setFormState] = useState<FormState>(INITIAL_FORM_STATE);
@@ -76,9 +78,10 @@ export function AnnouncementSection() {
       <div className="ds-container">
         <div className="mx-auto max-w-3xl rounded-3xl border border-slate-200 bg-white p-8 shadow-card md:p-12">
           <div className="text-center">
-            <SectionHeading>Értesülj elsőként az új Aquadrop Expert Pro ajánlatokról</SectionHeading>
+            <SectionHeading>Értesülj elsőként arról, hol kapható az Aquadrop Expert Pro</SectionHeading>
             <SectionDescription className="mx-auto">
-              Iratkozz fel, és elsőként értesülsz az újdonságokról, kampányokról és bevezető ajánlatokról.
+              Add meg az elérhetőséged, és tájékoztatunk a partnerhálózatról, az elérhetőségről, kampányokról és
+              újdonságokról. Az oldalon közvetlen rendelés nem lehetséges.
             </SectionDescription>
           </div>
 
@@ -151,10 +154,16 @@ export function AnnouncementSection() {
               <span>Elfogadom az adatkezelési tájékoztatót és hozzájárulok az adataim kezeléséhez.</span>
             </label>
 
+            <div className="grid gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
+              {TRUST_COPY.map((item) => (
+                <p key={item}>{item}</p>
+              ))}
+            </div>
+
             {errorMessage ? <p className="text-sm text-red-600">{errorMessage}</p> : null}
 
             <Button className="w-full" type="submit" disabled={isSubmitting}>
-              {isSubmitting ? 'Küldés...' : 'Elsőként szeretnék értesülni'}
+              {isSubmitting ? 'Küldés...' : 'Értesítést kérek'}
             </Button>
           </form>
         </div>
