@@ -16,17 +16,15 @@ export function MobileStickyCTA() {
   };
 
   return (
-    <div className="fixed inset-x-4 bottom-[calc(12px+env(safe-area-inset-bottom))] z-50 md:hidden">
-      <div className="rounded-2xl border border-brand-primary/20 bg-white/95 p-3 shadow-[0_10px_30px_rgba(15,23,42,0.18)]">
-        <button
-          type="button"
-          onClick={handleClick}
-          className="ds-button-primary h-12 w-full justify-center"
-          aria-label="Ugrás az ajándékdoboz igénylőlaphoz"
-        >
-          Ajándék mosókapszula
-        </button>
-      </div>
+    <div className="fixed inset-x-0 bottom-0 z-40 border-t border-brand-primary/20 bg-white/95 px-4 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] pt-3 shadow-[0_-8px_24px_rgba(15,23,42,0.12)] backdrop-blur md:hidden">
+      <button
+        type="button"
+        onClick={handleClick}
+        className="ds-button-primary h-12 w-full justify-center"
+        aria-label="Ugrás az ajándékdoboz igénylőlaphoz"
+      >
+        Kérem az ajándék dobozt
+      </button>
     </div>
   );
 }
