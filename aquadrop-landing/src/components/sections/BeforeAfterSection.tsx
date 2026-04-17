@@ -112,7 +112,23 @@ export function BeforeAfterSection() {
             onKeyDown={handleKeyDown}
             style={{ touchAction: 'none' }}
           >
-            <Image src="/shirt-after.jpg" alt="Tiszta ing a tisztítás után" fill priority sizes="(max-width: 768px) 100vw, 768px" className="object-cover" />
+            <div
+              className="absolute inset-0"
+              style={{ clipPath: `inset(0 0 0 ${position}%)` }}
+              aria-hidden="true"
+            >
+              <Image
+                src="/shirt-after.jpg"
+                alt="Tiszta ing a tisztítás után"
+                fill
+                priority
+                sizes="(max-width: 768px) 100vw, 768px"
+                className="object-cover"
+              />
+              <span className="absolute right-4 top-4 rounded-full border border-sky-200/70 bg-sky-50/90 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-sky-700 shadow-sm backdrop-blur">
+                Utána
+              </span>
+            </div>
 
             <div
               className="absolute inset-0 border-r border-white/20"
@@ -127,14 +143,10 @@ export function BeforeAfterSection() {
                 sizes="(max-width: 768px) 100vw, 768px"
                 className="object-cover"
               />
+              <span className="absolute left-4 top-4 rounded-full border border-slate-200/80 bg-white/85 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-slate-600 shadow-sm backdrop-blur">
+                Előtte
+              </span>
             </div>
-
-            <span className="absolute left-4 top-4 rounded-full border border-slate-200/80 bg-white/85 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-slate-600 shadow-sm backdrop-blur">
-              Előtte
-            </span>
-            <span className="absolute right-4 top-4 rounded-full border border-sky-200/70 bg-sky-50/90 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-sky-700 shadow-sm backdrop-blur">
-              Utána
-            </span>
 
             <div className="pointer-events-none absolute inset-y-0 -translate-x-1/2" style={{ left: `${position}%` }} aria-hidden="true">
               <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-0.5 bg-white/85 shadow-[0_0_0_1px_rgba(15,23,42,0.08)]" />
@@ -146,9 +158,11 @@ export function BeforeAfterSection() {
 
           <ul className="mt-5 grid gap-2 text-sm text-slate-700 sm:grid-cols-3 sm:gap-3 sm:text-[15px]">
             {featureBullets.map((bullet) => (
-              <li key={bullet} className="flex items-center gap-2 rounded-full bg-white/70 px-4 py-2 shadow-sm ring-1 ring-slate-100">
-                <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-sky-500" />
-                <span className="font-medium">{bullet}</span>
+              <li
+                key={bullet}
+                className="flex min-h-12 items-center justify-center rounded-2xl bg-white/80 px-4 py-3 text-center shadow-sm ring-1 ring-slate-100"
+              >
+                <span className="font-medium leading-snug">{bullet}</span>
               </li>
             ))}
           </ul>
