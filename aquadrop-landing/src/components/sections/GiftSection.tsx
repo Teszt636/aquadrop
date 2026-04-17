@@ -151,7 +151,7 @@ export function GiftSection() {
   return (
     <section className="ds-section bg-transparent" id="gift-campaign">
       <div className="ds-container">
-        <div className="relative overflow-hidden rounded-3xl border-2 border-brand-primary/35 bg-gradient-to-br from-brand-light via-white to-success-green/10 p-8 shadow-[0_18px_55px_-26px_rgba(20,38,64,0.55)] md:p-12">
+        <div className="relative overflow-x-hidden rounded-3xl border-2 border-brand-primary/35 bg-gradient-to-br from-brand-light via-white to-success-green/10 px-4 py-6 shadow-[0_18px_55px_-26px_rgba(20,38,64,0.55)] sm:px-6 sm:py-8 md:px-8 md:py-12">
           <div className="pointer-events-none absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-brand-primary/80 via-success-green/70 to-brand-primary/80" />
           <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-brand-primary/20 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-16 -left-12 h-48 w-48 rounded-full bg-success-green/20 blur-3xl" />
@@ -175,18 +175,18 @@ export function GiftSection() {
             aria-label="Ajándék mosókapszula igénylőlap"
             onSubmit={handleSubmit}
             noValidate
-            className="relative z-10 mx-auto mt-10 max-w-3xl scroll-mt-6 rounded-2xl border border-brand-primary/15 bg-white/85 p-6 shadow-xl backdrop-blur-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/30 md:p-8"
+            className="relative z-10 mx-auto mt-8 max-w-3xl scroll-mt-6 rounded-2xl border border-brand-primary/15 bg-white/85 p-4 shadow-xl backdrop-blur-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/30 sm:p-6 md:mt-10 md:p-8"
           >
             <h3 className="text-xl font-semibold text-slate-900">Ajándék mosókapszula igénylőlap</h3>
-            <p className="mt-2 text-sm text-slate-600">
+            <p className="mt-2 text-sm leading-tight text-slate-600">
               Töltsd ki az alábbi mezőket, majd töltsd fel a vásárlási blokk képét.
             </p>
-            <p className="mt-2 text-xs text-slate-500">
+            <p className="mt-2 text-xs leading-tight text-slate-500 md:text-sm">
               A beküldött adatokat kizárólag a kampány lebonyolításához használjuk fel.
             </p>
 
-            <div className="mt-6 grid gap-4 md:grid-cols-2">
-              <label className="grid gap-1.5 text-sm font-semibold text-slate-700" htmlFor="gift-full-name">
+            <div className="mt-5 grid grid-cols-1 gap-3 md:mt-6 md:grid-cols-2 md:gap-6">
+              <label className="mb-3 grid gap-1 text-sm font-semibold text-slate-700 md:mb-5" htmlFor="gift-full-name">
                 Teljes név *
                 <input
                   id="gift-full-name"
@@ -197,11 +197,11 @@ export function GiftSection() {
                   onChange={handleChange}
                   disabled={isSubmitting}
                   placeholder="pl. Kovács Péter"
-                  className="h-11 rounded-lg border border-slate-300 bg-white px-3 text-base text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20"
+                  className="h-10 w-full max-w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:h-11 md:px-4 md:py-3 md:text-base"
                 />
               </label>
 
-              <label className="grid gap-1.5 text-sm font-semibold text-slate-700" htmlFor="gift-email">
+              <label className="mb-3 grid gap-1 text-sm font-semibold text-slate-700 md:mb-5" htmlFor="gift-email">
                 E-mail cím *
                 <input
                   id="gift-email"
@@ -212,11 +212,11 @@ export function GiftSection() {
                   onChange={handleChange}
                   disabled={isSubmitting}
                   placeholder="pl. te@pelda.hu"
-                  className="h-11 rounded-lg border border-slate-300 bg-white px-3 text-base text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20"
+                  className="h-10 w-full max-w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:h-11 md:px-4 md:py-3 md:text-base"
                 />
               </label>
 
-              <label className="grid gap-1.5 text-sm font-semibold text-slate-700" htmlFor="gift-phone">
+              <label className="mb-3 grid gap-1 text-sm font-semibold text-slate-700 md:mb-5" htmlFor="gift-phone">
                 Telefonszám *
                 <input
                   id="gift-phone"
@@ -227,11 +227,11 @@ export function GiftSection() {
                   onChange={handleChange}
                   disabled={isSubmitting}
                   placeholder="pl. +36 30 123 4567"
-                  className="h-11 rounded-lg border border-slate-300 bg-white px-3 text-base text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20"
+                  className="h-10 w-full max-w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:h-11 md:px-4 md:py-3 md:text-base"
                 />
               </label>
 
-              <label className="grid gap-1.5 text-sm font-semibold text-slate-700" htmlFor="gift-purchase-location">
+              <label className="mb-3 grid gap-1 text-sm font-semibold text-slate-700 md:mb-5" htmlFor="gift-purchase-location">
                 Vásárlás helye *
                 <input
                   id="gift-purchase-location"
@@ -242,11 +242,11 @@ export function GiftSection() {
                   onChange={handleChange}
                   disabled={isSubmitting}
                   placeholder="pl. Auchan, Kecskemét"
-                  className="h-11 rounded-lg border border-slate-300 bg-white px-3 text-base text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20"
+                  className="h-10 w-full max-w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:h-11 md:px-4 md:py-3 md:text-base"
                 />
               </label>
 
-              <label className="grid gap-1.5 text-sm font-semibold text-slate-700 md:col-span-2" htmlFor="gift-shipping-address">
+              <label className="mb-3 grid gap-1 text-sm font-semibold text-slate-700 md:col-span-2 md:mb-5" htmlFor="gift-shipping-address">
                 Szállítási cím *
                 <input
                   id="gift-shipping-address"
@@ -256,12 +256,12 @@ export function GiftSection() {
                   value={formState.shipping_address}
                   onChange={handleChange}
                   disabled={isSubmitting}
-                  placeholder="pl. 1111 Budapest, Példa utca 1."
-                  className="h-11 rounded-lg border border-slate-300 bg-white px-3 text-base text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20"
+                  placeholder="pl. Budapest, Példa utca 1."
+                  className="h-10 w-full max-w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:h-11 md:px-4 md:py-3 md:text-base"
                 />
               </label>
 
-              <label className="grid gap-1.5 text-sm font-semibold text-slate-700" htmlFor="gift-purchase-date">
+              <label className="mb-3 grid gap-1 text-sm font-semibold text-slate-700 md:mb-5" htmlFor="gift-purchase-date">
                 Vásárlás dátuma *
                 <input
                   id="gift-purchase-date"
@@ -271,11 +271,11 @@ export function GiftSection() {
                   value={formState.purchase_date}
                   onChange={handleChange}
                   disabled={isSubmitting}
-                  className="h-11 rounded-lg border border-slate-300 bg-white px-3 text-base text-slate-900 outline-none transition focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20"
+                  className="h-10 w-full max-w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:h-11 md:px-4 md:py-3 md:text-base"
                 />
               </label>
 
-              <div className="grid gap-1.5 text-sm font-semibold text-slate-700">
+              <div className="mb-3 grid max-w-full gap-1 text-sm font-semibold text-slate-700 md:mb-5">
                 <span>Blokk feltöltése *</span>
                 <input
                   id="gift-receipt-file"
@@ -289,14 +289,14 @@ export function GiftSection() {
                 />
                 <label
                   htmlFor="gift-receipt-file"
-                  className="group flex h-11 w-full cursor-pointer items-center rounded-lg border border-slate-300 bg-white px-3 text-base font-medium text-slate-700 outline-none transition hover:border-brand-primary/60 hover:bg-slate-50 focus-within:border-brand-primary focus-within:ring-2 focus-within:ring-brand-primary/20"
+                  className="group flex h-10 w-full max-w-full cursor-pointer items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 outline-none transition hover:border-brand-primary/60 hover:bg-slate-50 focus-within:border-brand-primary focus-within:ring-2 focus-within:ring-brand-primary/20 md:h-11 md:px-4 md:py-3 md:text-base"
                 >
                   <span className="w-full truncate overflow-hidden whitespace-nowrap">
                     {receiptFile ? receiptFile.name : 'Blokk képének kiválasztása'}
                   </span>
                 </label>
               </div>
-              <p className="text-xs font-normal leading-5 text-slate-500 md:col-span-2">
+              <p className="max-w-full text-xs font-normal leading-tight text-slate-500 md:col-span-2 md:text-sm">
                 Ha a 2 termék 2 külön blokkon szerepel, kérjük, a két blokkot egyetlen jól olvasható közös képen töltsd
                 fel. Kérjük, ügyelj arra, hogy a vásárlás adatai jól olvashatók legyenek.
               </p>
