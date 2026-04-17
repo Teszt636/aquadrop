@@ -6,7 +6,7 @@ const technologyItems = [
   { title: 'Mikrokapszula varázslat', icon: '🫧' },
   { title: 'Enzim alapú tisztítás', icon: '🧪' },
   { title: 'Szagsemlegesítés', icon: '🌬️' },
-  { title: 'Tartós illat', icon: '🌸' }
+  { title: 'Tartós, prémium illat', icon: '🌸' }
 ];
 
 export function TechnologySection() {
