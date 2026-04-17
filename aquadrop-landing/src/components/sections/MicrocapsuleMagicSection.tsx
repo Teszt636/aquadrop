@@ -54,7 +54,7 @@ export function MicrocapsuleMagicSection() {
           </div>
 
           <p className="text-center text-lg font-semibold leading-relaxed text-brand-secondary md:text-xl">
-            A “Friction Brings Fragrance” elven működő technológiával az illatanyagokat mikroszkopikus kapszulák zárják magukba, amelyek a textilszálakhoz tapadnak. Amikor az anyag súrlódik – például viselés közben –, ezek a kapszulák felnyílnak és friss illatot szabadítanak fel.
+            A “Friction Brings Fragrance” elven működő technológiával az illatanyagokat mikroszkopikus kapszulák zárják magukba, amelyek a textilszálakhoz tapadnak. Amikor az anyag súrlódik, ezek a kapszulák felnyílnak és friss illatot szabadítanak fel.
           </p>
 
           <ul className="grid gap-3 sm:grid-cols-3">
