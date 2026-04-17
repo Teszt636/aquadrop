@@ -172,12 +172,12 @@ export function GiftSection() {
           <form
             id="gift-claim-form"
             tabIndex={-1}
-            aria-label="Ajándékdoboz igénylőlap"
+            aria-label="Ajándék mosókapszula igénylőlap"
             onSubmit={handleSubmit}
             noValidate
             className="relative z-10 mx-auto mt-10 max-w-3xl scroll-mt-6 rounded-2xl border border-brand-primary/15 bg-white/85 p-6 shadow-xl backdrop-blur-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/30 md:p-8"
           >
-            <h3 className="text-xl font-semibold text-slate-900">Ajándékdoboz igénylőlap</h3>
+            <h3 className="text-xl font-semibold text-slate-900">Ajándék mosókapszula igénylőlap</h3>
             <p className="mt-2 text-sm text-slate-600">
               Töltsd ki az alábbi mezőket magyarul, majd töltsd fel a vásárlási blokk képét.
             </p>
