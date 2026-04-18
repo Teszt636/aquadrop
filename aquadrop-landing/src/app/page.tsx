@@ -34,7 +34,7 @@ export default function Home() {
           <div className="absolute -bottom-32 left-1/2 h-[28rem] w-[42rem] -translate-x-1/2 rounded-full bg-[rgba(186,230,253,0.12)] blur-[130px] md:h-[34rem] md:w-[62rem]" />
         </div>
 
-        <main className="relative isolate flex w-full flex-col pb-24 md:pb-0">
+        <main className="relative isolate flex w-full flex-col">
           <ScrollDepthTracker />
           <HeroSection />
           <ProblemSection />
