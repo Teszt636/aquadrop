@@ -18,7 +18,7 @@ import { ScrollDepthTracker } from '@/components/analytics';
 export default function Home() {
   return (
     <>
-      <div className="relative overflow-hidden">
+      <div className="relative">
         <div className="pointer-events-none absolute inset-0 -z-10">
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.9)_0%,rgba(248,252,255,0.8)_38%,rgba(244,249,255,0.86)_100%)]" />
 
