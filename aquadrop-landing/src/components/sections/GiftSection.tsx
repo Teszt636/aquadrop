@@ -1,6 +1,6 @@
 'use client';
 
-import { type ChangeEvent, type FormEvent, useState } from 'react';
+import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/Button';
@@ -37,13 +37,20 @@ export function GiftSection() {
   const [receiptFile, setReceiptFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [maxPurchaseDate, setMaxPurchaseDate] = useState('');
+
+  useEffect(() => {
+    const now = new Date();
+    const localDate = new Date(now.getTime() - now.getTimezoneOffset() * 60_000).toISOString().slice(0, 10);
+    setMaxPurchaseDate(localDate);
+  }, []);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = event.target;
 
     setFormState((previous) => ({
       ...previous,
-      [name]: type === 'checkbox' ? (event.target as HTMLInputElement).checked : value
+      [name]: type === 'checkbox' ? (event.target as HTMLInputElement).checked : value ?? ''
     }));
   };
 
@@ -192,7 +199,7 @@ export function GiftSection() {
                   name="full_name"
                   type="text"
                   required
-                  value={formState.full_name}
+                  value={formState.full_name ?? ''}
                   onChange={handleChange}
                   disabled={isSubmitting}
                   placeholder="pl. Kovács Péter"
@@ -207,7 +214,7 @@ export function GiftSection() {
                   name="email"
                   type="email"
                   required
-                  value={formState.email}
+                  value={formState.email ?? ''}
                   onChange={handleChange}
                   disabled={isSubmitting}
                   placeholder="pl. te@pelda.hu"
@@ -222,7 +229,7 @@ export function GiftSection() {
                   name="phone"
                   type="tel"
                   required
-                  value={formState.phone}
+                  value={formState.phone ?? ''}
                   onChange={handleChange}
                   disabled={isSubmitting}
                   placeholder="pl. +36 30 123 4567"
@@ -237,7 +244,7 @@ export function GiftSection() {
                   name="purchase_location"
                   type="text"
                   required
-                  value={formState.purchase_location}
+                  value={formState.purchase_location ?? ''}
                   onChange={handleChange}
                   disabled={isSubmitting}
                   placeholder="pl. Auchan, Kecskemét"
@@ -252,7 +259,7 @@ export function GiftSection() {
                   name="shipping_address"
                   type="text"
                   required
-                  value={formState.shipping_address}
+                  value={formState.shipping_address ?? ''}
                   onChange={handleChange}
                   disabled={isSubmitting}
                   placeholder="pl. Budapest, Példa utca 1."
@@ -267,7 +274,8 @@ export function GiftSection() {
                   name="purchase_date"
                   type="date"
                   required
-                  value={formState.purchase_date}
+                  value={formState.purchase_date ?? ''}
+                  max={maxPurchaseDate}
                   onChange={handleChange}
                   disabled={isSubmitting}
                   className="gift-date-input min-h-10 h-10 min-w-0 w-full max-w-full appearance-none rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 outline-none transition focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:min-h-11 md:h-11 md:px-4 md:text-base"
