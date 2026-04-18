@@ -43,7 +43,7 @@ export function ThreePathsSection() {
             </button>
           </article>
 
-          <article className="group relative flex h-full flex-col items-center rounded-2xl border-2 border-brand-primary/35 bg-white p-6 text-center shadow-lg shadow-brand-primary/10 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl md:p-7">
+          <article className="group relative flex h-full flex-col items-center rounded-2xl border-2 border-brand-primary/35 bg-white p-6 pb-24 text-center shadow-lg shadow-brand-primary/10 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl md:p-7 md:pb-24">
             <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-brand-primary/10 text-2xl">
               🎁
             </div>
@@ -53,7 +53,7 @@ export function ThreePathsSection() {
             </p>
             <button
               type="button"
-              className="ds-button-primary mt-6 w-full"
+              className="ds-button-primary absolute bottom-6 right-6 md:bottom-7 md:right-7"
               onClick={() => {
                 trackEvent('final_cta_gift_click');
                 scrollToSection('gift-campaign');
