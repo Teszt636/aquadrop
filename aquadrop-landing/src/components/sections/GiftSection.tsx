@@ -125,7 +125,7 @@ await insertIntoTable('gift_claims', {
 });
 
 captureLeadForAutomation(
-  'form_submit',
+  'gift_form_submit',
   {
     form_name: 'gift_claim',
     source: 'gift_claim',
@@ -143,7 +143,6 @@ captureLeadForAutomation(
     }
   }
 );
-
       setFormState(INITIAL_FORM_STATE);
       setReceiptFile(null);
 
