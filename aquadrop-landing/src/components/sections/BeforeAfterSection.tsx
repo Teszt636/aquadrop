@@ -102,7 +102,6 @@ export function BeforeAfterSection() {
             onPointerMove={handlePointerMove}
             onPointerUp={stopDragging}
             onPointerCancel={stopDragging}
-            onPointerLeave={stopDragging}
             role="slider"
             aria-label="Előtte és utána összehasonlító csúszka"
             aria-valuemin={0}
