@@ -185,86 +185,85 @@ captureLeadForAutomation(
               A beküldött adatokat kizárólag a kampány lebonyolításához használjuk fel.
             </p>
 
-            <div className="mt-5 grid grid-cols-1 gap-x-4 gap-y-3 md:mt-6 md:grid-cols-2 md:gap-x-6 md:gap-y-5">
-              <label className="grid gap-1 text-sm font-semibold text-slate-700" htmlFor="gift-full-name">
-                Teljes név *
-                <input
-                  id="gift-full-name"
-                  name="full_name"
-                  type="text"
-                  required
-                  value={formState.full_name ?? ''}
-                  onChange={handleChange}
-                  disabled={isSubmitting}
-                  placeholder="pl. Kovács Péter"
-                  className="h-10 w-full max-w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:h-11 md:px-4 md:py-3 md:text-base"
-                />
-              </label>
+            <div className="mt-5 grid grid-cols-1 gap-y-4 md:mt-6 md:grid-cols-2 md:gap-x-6 md:gap-y-5">
+              <div className="grid gap-y-3 md:gap-y-5">
+                <label className="grid gap-1 text-sm font-semibold text-slate-700" htmlFor="gift-full-name">
+                  Teljes név *
+                  <input
+                    id="gift-full-name"
+                    name="full_name"
+                    type="text"
+                    required
+                    value={formState.full_name ?? ''}
+                    onChange={handleChange}
+                    disabled={isSubmitting}
+                    placeholder="pl. Kovács Péter"
+                    className="h-10 w-full max-w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:h-11 md:px-4 md:py-3 md:text-base"
+                  />
+                </label>
 
-              <label className="grid gap-1 text-sm font-semibold text-slate-700" htmlFor="gift-email">
-                E-mail cím *
-                <input
-                  id="gift-email"
-                  name="email"
-                  type="email"
-                  required
-                  value={formState.email ?? ''}
-                  onChange={handleChange}
-                  disabled={isSubmitting}
-                  placeholder="pl. te@pelda.hu"
-                  className="h-10 w-full max-w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:h-11 md:px-4 md:py-3 md:text-base"
-                />
-              </label>
+                <label className="grid gap-1 text-sm font-semibold text-slate-700" htmlFor="gift-email">
+                  E-mail cím *
+                  <input
+                    id="gift-email"
+                    name="email"
+                    type="email"
+                    required
+                    value={formState.email ?? ''}
+                    onChange={handleChange}
+                    disabled={isSubmitting}
+                    placeholder="pl. te@pelda.hu"
+                    className="h-10 w-full max-w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:h-11 md:px-4 md:py-3 md:text-base"
+                  />
+                </label>
 
-              <label className="grid gap-1 text-sm font-semibold text-slate-700" htmlFor="gift-phone">
-                Telefonszám *
-                <input
-                  id="gift-phone"
-                  name="phone"
-                  type="tel"
-                  required
-                  value={formState.phone ?? ''}
-                  onChange={handleChange}
-                  disabled={isSubmitting}
-                  placeholder="pl. +36 30 123 4567"
-                  className="h-10 w-full max-w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:h-11 md:px-4 md:py-3 md:text-base"
-                />
-              </label>
+                <label className="grid gap-1 text-sm font-semibold text-slate-700" htmlFor="gift-phone">
+                  Telefonszám *
+                  <input
+                    id="gift-phone"
+                    name="phone"
+                    type="tel"
+                    required
+                    value={formState.phone ?? ''}
+                    onChange={handleChange}
+                    disabled={isSubmitting}
+                    placeholder="pl. +36 30 123 4567"
+                    className="h-10 w-full max-w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:h-11 md:px-4 md:py-3 md:text-base"
+                  />
+                </label>
 
-              <label className="grid gap-1 text-sm font-semibold text-slate-700" htmlFor="gift-purchase-location">
-                Vásárlás helye *
-                <input
-                  id="gift-purchase-location"
-                  name="purchase_location"
-                  type="text"
-                  required
-                  value={formState.purchase_location ?? ''}
-                  onChange={handleChange}
-                  disabled={isSubmitting}
-                  placeholder="pl. Auchan, Kecskemét"
-                  className="h-10 w-full max-w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:h-11 md:px-4 md:py-3 md:text-base"
-                />
-              </label>
+                <label className="grid gap-1 text-sm font-semibold text-slate-700" htmlFor="gift-purchase-location">
+                  Vásárlás helye *
+                  <input
+                    id="gift-purchase-location"
+                    name="purchase_location"
+                    type="text"
+                    required
+                    value={formState.purchase_location ?? ''}
+                    onChange={handleChange}
+                    disabled={isSubmitting}
+                    placeholder="pl. Auchan, Kecskemét"
+                    className="h-10 w-full max-w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:h-11 md:px-4 md:py-3 md:text-base"
+                  />
+                </label>
 
-              <label
-                className="grid gap-1 text-sm font-semibold text-slate-700 md:col-span-2"
-                htmlFor="gift-shipping-address"
-              >
-                Szállítási cím *
-                <input
-                  id="gift-shipping-address"
-                  name="shipping_address"
-                  type="text"
-                  required
-                  value={formState.shipping_address ?? ''}
-                  onChange={handleChange}
-                  disabled={isSubmitting}
-                  placeholder="pl. Budapest, Példa utca 1."
-                  className="h-10 w-full max-w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:h-11 md:px-4 md:py-3 md:text-base"
-                />
-              </label>
+                <label className="grid gap-1 text-sm font-semibold text-slate-700" htmlFor="gift-shipping-address">
+                  Szállítási cím *
+                  <input
+                    id="gift-shipping-address"
+                    name="shipping_address"
+                    type="text"
+                    required
+                    value={formState.shipping_address ?? ''}
+                    onChange={handleChange}
+                    disabled={isSubmitting}
+                    placeholder="pl. Budapest, Példa utca 1."
+                    className="h-10 w-full max-w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:h-11 md:px-4 md:py-3 md:text-base"
+                  />
+                </label>
+              </div>
 
-              <div className="grid gap-3 md:col-span-2 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] md:items-end">
+              <div className="grid content-start gap-y-3 md:gap-y-4">
                 <label className="grid gap-1 text-sm font-semibold text-slate-700" htmlFor="gift-purchase-date">
                   Vásárlás dátuma *
                   <input
@@ -304,16 +303,16 @@ captureLeadForAutomation(
                   </label>
                 </div>
 
-                <Button type="submit" disabled={isSubmitting} className="h-10 w-full md:h-11 md:w-auto">
+                <Button type="submit" disabled={isSubmitting} className="h-10 w-full md:h-11 md:w-auto md:justify-self-end">
                   {isSubmitting ? 'Beküldés folyamatban...' : 'Ajándék igénylés beküldése'}
                 </Button>
-              </div>
 
-              <p className="text-xs font-normal leading-tight text-slate-500 md:col-span-2 md:text-sm">
-                Ha a 2 termék 2 külön blokkon szerepel, kérjük, a két blokkot egyetlen jól olvasható
-                közös képen töltsd fel. Kérjük, ügyelj arra, hogy a vásárlás adatai jól olvashatók
-                legyenek.
-              </p>
+                <p className="text-xs font-normal leading-tight text-slate-500 md:text-sm">
+                  Ha a 2 termék 2 külön blokkon szerepel, kérjük, a két blokkot egyetlen jól olvasható
+                  közös képen töltsd fel. Kérjük, ügyelj arra, hogy a vásárlás adatai jól olvashatók
+                  legyenek.
+                </p>
+              </div>
             </div>
 
             <div className="mt-5 space-y-3">
