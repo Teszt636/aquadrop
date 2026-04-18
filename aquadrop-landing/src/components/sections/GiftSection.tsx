@@ -31,13 +31,6 @@ const INITIAL_FORM_STATE: GiftFormState = {
   purchase_declaration: false
 };
 
-const steps = [
-  'Vásárolj 2 doboz Aquadrop Expert Pro mosókapszulát egy viszonteladó partnernél',
-  'Töltsd fel a blokkot ezen az oldalon',
-  'Ellenőrizzük a vásárlást',
-  'Jóváhagyás után megkapod az ajándék terméket'
-];
-
 export function GiftSection() {
   const router = useRouter();
 
@@ -158,46 +151,18 @@ captureLeadForAutomation(
   return (
     <section id="gift-campaign" className="ds-section">
       <div className="ds-container">
-        <div className="relative rounded-3xl border border-brand-primary/20 bg-[linear-gradient(180deg,#eff6ff_0%,#f8fbff_100%)] px-4 py-8 sm:px-6 sm:py-10 md:px-10 md:py-12">
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-brand-primary/20" />
+        <div className="relative rounded-[24px] border border-[#7696e8]/50 bg-[linear-gradient(180deg,#f3f7ff_0%,#effaf6_100%)] px-4 py-8 shadow-[0_24px_64px_-40px_rgba(45,76,183,0.55)] sm:px-6 sm:py-10 md:px-10 md:py-12">
 
           <div className="relative z-10 mx-auto max-w-4xl text-center">
             <SectionEyebrow>Kiemelt ajánlat</SectionEyebrow>
-            <SectionHeading className="mt-3">Vásárolj 2 dobozt – mi adjuk a harmadikat</SectionHeading>
-            <SectionDescription className="mx-auto mt-4 max-w-3xl">
+            <SectionHeading className="mt-4">Vásárolj 2 dobozt – mi adjuk a harmadikat</SectionHeading>
+            <SectionDescription className="mx-auto mt-5 max-w-3xl">
               Vásárolj 2 doboz Aquadrop Expert Pro mosókapszulát valamelyik partner üzletben,
               töltsd fel a blokkot, és elküldjük a 3. dobozt ajándékba.
             </SectionDescription>
 
-            <div className="mt-5 inline-flex rounded-full border border-amber-300 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-800">
+            <div className="mt-4 inline-flex rounded-full border border-amber-300 bg-amber-50/90 px-4 py-2 text-sm font-semibold text-amber-800">
               Az ajándék kampány korlátozott ideig érhető el.
-            </div>
-          </div>
-
-          <div className="relative z-10 mx-auto mt-8 max-w-4xl rounded-2xl border border-slate-200 bg-white/80 p-4 shadow-sm backdrop-blur-sm sm:p-5 md:mt-10 md:p-6">
-            <h3 className="text-lg font-bold text-slate-900 md:text-xl">Hogyan működik?</h3>
-
-            <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
-              {steps.map((step, index) => (
-                <div
-                  key={step}
-                  className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700"
-                >
-                  <span className="mb-1 block text-xs font-bold uppercase tracking-wide text-brand-primary">
-                    {index + 1}. lépés
-                  </span>
-                  <span className="block leading-6">{step}</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">
-              <p>Az oldalon közvetlen vásárlás nem lehetséges.</p>
-              <p>Csak partnernél történt vásárlással vehető igénybe a promóció.</p>
-              <p>
-                A blokk feltöltése önmagában nem jelent automatikus jogosultságot, az igénylést
-                ellenőrizzük.
-              </p>
             </div>
           </div>
 
@@ -207,7 +172,7 @@ captureLeadForAutomation(
             aria-label="Ajándék mosókapszula igénylőlap"
             onSubmit={handleSubmit}
             noValidate
-            className="relative z-10 mx-auto mt-8 max-w-3xl scroll-mt-6 overflow-visible rounded-2xl border border-brand-primary/15 bg-white/85 p-4 shadow-xl backdrop-blur-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/30 sm:p-5 md:mt-10 md:p-8"
+            className="relative z-10 mx-auto mt-8 max-w-3xl scroll-mt-6 overflow-visible rounded-2xl border border-slate-300/90 bg-white/90 p-4 shadow-[0_28px_64px_-40px_rgba(15,23,42,0.45)] backdrop-blur-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/30 sm:p-5 md:mt-10 md:p-8"
           >
             <h3 className="text-xl font-semibold text-slate-900">Ajándék mosókapszula igénylőlap</h3>
 
@@ -345,7 +310,7 @@ captureLeadForAutomation(
             </div>
 
             <div className="mt-5 space-y-3">
-              <label className="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+              <label className="flex items-start gap-3 rounded-lg border border-slate-300 bg-slate-50/70 px-4 py-3">
                 <input
                   type="checkbox"
                   name="consent"
@@ -359,7 +324,7 @@ captureLeadForAutomation(
                 </span>
               </label>
 
-              <label className="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+              <label className="flex items-start gap-3 rounded-lg border border-slate-300 bg-slate-50/70 px-4 py-3">
                 <input
                   type="checkbox"
                   name="purchase_declaration"
@@ -368,10 +333,7 @@ captureLeadForAutomation(
                   disabled={isSubmitting}
                   className="mt-1 h-5 w-5 rounded border-slate-300 text-brand-primary focus:ring-brand-primary"
                 />
-                <span className="text-sm leading-6 text-slate-700">
-                  Kijelentem, hogy a megadott adatok valósak, és a vásárlás a promóció feltételeinek
-                  megfelelően történt.
-                </span>
+                <span className="text-sm leading-6 text-slate-700">Kijelentem, hogy a megadott vásárlási adatok valósak.</span>
               </label>
             </div>
 
@@ -381,9 +343,9 @@ captureLeadForAutomation(
               </div>
             ) : null}
 
-            <div className="mt-6">
+            <div className="mt-6 flex items-center justify-end">
               <Button type="submit" disabled={isSubmitting} className="w-full md:w-auto">
-                {isSubmitting ? 'Beküldés folyamatban...' : 'Ajándék igénylés beküldése'}
+                {isSubmitting ? 'Beküldés folyamatban...' : 'Kérem a 3. dobozt ajándékba'}
               </Button>
             </div>
           </form>
