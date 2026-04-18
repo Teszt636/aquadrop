@@ -31,13 +31,6 @@ const INITIAL_FORM_STATE: GiftFormState = {
   purchase_declaration: false
 };
 
-const steps = [
-  'Vásárolj 2 doboz Aquadrop Expert Pro mosókapszulát egy viszonteladó partnernél',
-  'Töltsd fel a blokkot ezen az oldalon',
-  'Ellenőrizzük a vásárlást',
-  'Jóváhagyás után megkapod az ajándék terméket'
-];
-
 export function GiftSection() {
   const router = useRouter();
 
@@ -174,33 +167,6 @@ captureLeadForAutomation(
             </div>
           </div>
 
-          <div className="relative z-10 mx-auto mt-8 max-w-4xl rounded-2xl border border-slate-200 bg-white/80 p-4 shadow-sm backdrop-blur-sm sm:p-5 md:mt-10 md:p-6">
-            <h3 className="text-lg font-bold text-slate-900 md:text-xl">Hogyan működik?</h3>
-
-            <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
-              {steps.map((step, index) => (
-                <div
-                  key={step}
-                  className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700"
-                >
-                  <span className="mb-1 block text-xs font-bold uppercase tracking-wide text-brand-primary">
-                    {index + 1}. lépés
-                  </span>
-                  <span className="block leading-6">{step}</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">
-              <p>Az oldalon közvetlen vásárlás nem lehetséges.</p>
-              <p>Csak partnernél történt vásárlással vehető igénybe a promóció.</p>
-              <p>
-                A blokk feltöltése önmagában nem jelent automatikus jogosultságot, az igénylést
-                ellenőrizzük.
-              </p>
-            </div>
-          </div>
-
           <form
             id="gift-claim-form"
             tabIndex={-1}
@@ -298,50 +264,56 @@ captureLeadForAutomation(
                 />
               </label>
 
-              <label className="grid gap-1 text-sm font-semibold text-slate-700" htmlFor="gift-purchase-date">
-                Vásárlás dátuma *
-                <input
-                  id="gift-purchase-date"
-                  name="purchase_date"
-                  type="date"
-                  required
-                  value={formState.purchase_date ?? ''}
-                  max={maxPurchaseDate}
-                  onChange={handleChange}
-                  disabled={isSubmitting}
-                  className="gift-date-input h-10 w-full min-w-0 max-w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 outline-none transition focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:h-11 md:px-4 md:text-base"
-                />
-              </label>
-
-              <div className="grid max-w-full gap-1 text-sm font-semibold text-slate-700">
-                <span>Blokk feltöltése *</span>
-
-                <input
-                  id="gift-receipt-file"
-                  name="receipt_file"
-                  type="file"
-                  required
-                  accept="image/*"
-                  onChange={handleReceiptChange}
-                  disabled={isSubmitting}
-                  className="sr-only"
-                />
-
-                <label
-                  htmlFor="gift-receipt-file"
-                  className="group flex h-10 w-full max-w-full cursor-pointer items-center rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 outline-none transition hover:border-brand-primary/60 hover:bg-slate-50 focus-within:border-brand-primary focus-within:ring-2 focus-within:ring-brand-primary/20 md:h-11 md:px-4 md:py-3 md:text-base"
-                >
-                  <span className="w-full truncate overflow-hidden whitespace-nowrap">
-                    {receiptFile ? receiptFile.name : 'Blokk képének kiválasztása'}
-                  </span>
+              <div className="grid gap-3 md:col-span-2 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] md:items-end">
+                <label className="grid gap-1 text-sm font-semibold text-slate-700" htmlFor="gift-purchase-date">
+                  Vásárlás dátuma *
+                  <input
+                    id="gift-purchase-date"
+                    name="purchase_date"
+                    type="date"
+                    required
+                    value={formState.purchase_date ?? ''}
+                    max={maxPurchaseDate}
+                    onChange={handleChange}
+                    disabled={isSubmitting}
+                    className="gift-date-input h-10 w-full min-w-0 max-w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 outline-none transition focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:h-11 md:px-4 md:text-base"
+                  />
                 </label>
 
-                <p className="mt-1 text-xs font-normal leading-tight text-slate-500 md:text-sm">
-                  Ha a 2 termék 2 külön blokkon szerepel, kérjük, a két blokkot egyetlen jól
-                  olvasható közös képen töltsd fel. Kérjük, ügyelj arra, hogy a vásárlás adatai jól
-                  olvashatók legyenek.
-                </p>
+                <div className="grid max-w-full gap-1 text-sm font-semibold text-slate-700">
+                  <span>Blokk feltöltése *</span>
+
+                  <input
+                    id="gift-receipt-file"
+                    name="receipt_file"
+                    type="file"
+                    required
+                    accept="image/*"
+                    onChange={handleReceiptChange}
+                    disabled={isSubmitting}
+                    className="sr-only"
+                  />
+
+                  <label
+                    htmlFor="gift-receipt-file"
+                    className="group flex h-10 w-full max-w-full cursor-pointer items-center rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 outline-none transition hover:border-brand-primary/60 hover:bg-slate-50 focus-within:border-brand-primary focus-within:ring-2 focus-within:ring-brand-primary/20 md:h-11 md:px-4 md:py-3 md:text-base"
+                  >
+                    <span className="w-full truncate overflow-hidden whitespace-nowrap">
+                      {receiptFile ? receiptFile.name : 'Blokk képének kiválasztása'}
+                    </span>
+                  </label>
+                </div>
+
+                <Button type="submit" disabled={isSubmitting} className="h-10 w-full md:h-11 md:w-auto">
+                  {isSubmitting ? 'Beküldés folyamatban...' : 'Ajándék igénylés beküldése'}
+                </Button>
               </div>
+
+              <p className="text-xs font-normal leading-tight text-slate-500 md:col-span-2 md:text-sm">
+                Ha a 2 termék 2 külön blokkon szerepel, kérjük, a két blokkot egyetlen jól olvasható
+                közös képen töltsd fel. Kérjük, ügyelj arra, hogy a vásárlás adatai jól olvashatók
+                legyenek.
+              </p>
             </div>
 
             <div className="mt-5 space-y-3">
@@ -381,11 +353,7 @@ captureLeadForAutomation(
               </div>
             ) : null}
 
-            <div className="mt-6">
-              <Button type="submit" disabled={isSubmitting} className="w-full md:w-auto">
-                {isSubmitting ? 'Beküldés folyamatban...' : 'Ajándék igénylés beküldése'}
-              </Button>
-            </div>
+            <p className="mt-6 text-xs lowercase tracking-wide text-slate-500">* kötelező mező</p>
           </form>
         </div>
       </div>
