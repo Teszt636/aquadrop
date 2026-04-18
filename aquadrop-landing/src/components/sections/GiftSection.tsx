@@ -264,49 +264,43 @@ captureLeadForAutomation(
                 />
               </label>
 
-              <div className="grid gap-3 md:col-span-2 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] md:items-end">
-                <label className="grid gap-1 text-sm font-semibold text-slate-700" htmlFor="gift-purchase-date">
-                  Vásárlás dátuma *
-                  <input
-                    id="gift-purchase-date"
-                    name="purchase_date"
-                    type="date"
-                    required
-                    value={formState.purchase_date ?? ''}
-                    max={maxPurchaseDate}
-                    onChange={handleChange}
-                    disabled={isSubmitting}
-                    className="gift-date-input h-10 w-full min-w-0 max-w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 outline-none transition focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:h-11 md:px-4 md:text-base"
-                  />
+              <label className="grid gap-1 text-sm font-semibold text-slate-700" htmlFor="gift-purchase-date">
+                Vásárlás dátuma *
+                <input
+                  id="gift-purchase-date"
+                  name="purchase_date"
+                  type="date"
+                  required
+                  value={formState.purchase_date ?? ''}
+                  max={maxPurchaseDate}
+                  onChange={handleChange}
+                  disabled={isSubmitting}
+                  className="gift-date-input h-10 w-full min-w-0 max-w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 outline-none transition focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:h-11 md:px-4 md:text-base"
+                />
+              </label>
+
+              <div className="grid max-w-full gap-1 text-sm font-semibold text-slate-700">
+                <span>Blokk feltöltése *</span>
+
+                <input
+                  id="gift-receipt-file"
+                  name="receipt_file"
+                  type="file"
+                  required
+                  accept="image/*"
+                  onChange={handleReceiptChange}
+                  disabled={isSubmitting}
+                  className="sr-only"
+                />
+
+                <label
+                  htmlFor="gift-receipt-file"
+                  className="group flex h-10 w-full max-w-full cursor-pointer items-center rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 outline-none transition hover:border-brand-primary/60 hover:bg-slate-50 focus-within:border-brand-primary focus-within:ring-2 focus-within:ring-brand-primary/20 md:h-11 md:px-4 md:py-3 md:text-base"
+                >
+                  <span className="w-full truncate overflow-hidden whitespace-nowrap">
+                    {receiptFile ? receiptFile.name : 'Blokk képének kiválasztása'}
+                  </span>
                 </label>
-
-                <div className="grid max-w-full gap-1 text-sm font-semibold text-slate-700">
-                  <span>Blokk feltöltése *</span>
-
-                  <input
-                    id="gift-receipt-file"
-                    name="receipt_file"
-                    type="file"
-                    required
-                    accept="image/*"
-                    onChange={handleReceiptChange}
-                    disabled={isSubmitting}
-                    className="sr-only"
-                  />
-
-                  <label
-                    htmlFor="gift-receipt-file"
-                    className="group flex h-10 w-full max-w-full cursor-pointer items-center rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 outline-none transition hover:border-brand-primary/60 hover:bg-slate-50 focus-within:border-brand-primary focus-within:ring-2 focus-within:ring-brand-primary/20 md:h-11 md:px-4 md:py-3 md:text-base"
-                  >
-                    <span className="w-full truncate overflow-hidden whitespace-nowrap">
-                      {receiptFile ? receiptFile.name : 'Blokk képének kiválasztása'}
-                    </span>
-                  </label>
-                </div>
-
-                <Button type="submit" disabled={isSubmitting} className="h-10 w-full md:h-11 md:w-auto">
-                  {isSubmitting ? 'Beküldés folyamatban...' : 'Ajándék igénylés beküldése'}
-                </Button>
               </div>
 
               <p className="text-xs font-normal leading-tight text-slate-500 md:col-span-2 md:text-sm">
@@ -314,10 +308,8 @@ captureLeadForAutomation(
                 közös képen töltsd fel. Kérjük, ügyelj arra, hogy a vásárlás adatai jól olvashatók
                 legyenek.
               </p>
-            </div>
 
-            <div className="mt-5 space-y-3">
-              <label className="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+              <label className="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 md:col-span-2">
                 <input
                   type="checkbox"
                   name="consent"
@@ -331,7 +323,7 @@ captureLeadForAutomation(
                 </span>
               </label>
 
-              <label className="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+              <label className="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 md:col-span-2">
                 <input
                   type="checkbox"
                   name="purchase_declaration"
@@ -345,15 +337,21 @@ captureLeadForAutomation(
                   megfelelően történt.
                 </span>
               </label>
-            </div>
 
-            {errorMessage ? (
-              <div className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-                {errorMessage}
+              {errorMessage ? (
+                <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 md:col-span-2">
+                  {errorMessage}
+                </div>
+              ) : null}
+
+              <div className="flex flex-col gap-3 md:col-span-2 md:flex-row md:items-center md:justify-between">
+                <p className="text-xs lowercase tracking-wide text-slate-500">* kötelező mező</p>
+
+                <Button type="submit" disabled={isSubmitting} className="h-10 w-full md:h-11 md:w-auto">
+                  {isSubmitting ? 'Beküldés folyamatban...' : 'Ajándék igénylés beküldése'}
+                </Button>
               </div>
-            ) : null}
-
-            <p className="mt-6 text-xs lowercase tracking-wide text-slate-500">* kötelező mező</p>
+            </div>
           </form>
         </div>
       </div>
