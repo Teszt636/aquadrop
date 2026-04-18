@@ -71,4 +71,24 @@ body {
   .ds-button-secondary {
     @apply ds-button border-2 border-brand-primary bg-white text-brand-primary hover:bg-brand-light focus-visible:ring-brand-primary;
   }
+
+  .gift-date-input {
+    -webkit-appearance: auto;
+    appearance: auto;
+    color: #0f172a;
+    line-height: 1.25rem;
+  }
+
+  .gift-date-input::-webkit-datetime-edit {
+    padding: 0;
+  }
+
+  .gift-date-input::-webkit-date-and-time-value {
+    min-height: 1.25rem;
+    text-align: left;
+  }
+
+  .gift-date-input::-webkit-calendar-picker-indicator {
+    opacity: 1;
+  }
 }
