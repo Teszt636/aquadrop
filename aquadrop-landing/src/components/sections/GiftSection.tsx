@@ -270,7 +270,7 @@ export function GiftSection() {
                   value={formState.purchase_date}
                   onChange={handleChange}
                   disabled={isSubmitting}
-                  className="gift-date-input min-h-10 h-10 w-full max-w-full rounded-lg border border-slate-300 bg-white px-3 text-sm leading-5 text-slate-900 outline-none transition focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:min-h-11 md:h-11 md:px-4 md:text-base"
+                  className="gift-date-input min-h-10 h-10 min-w-0 w-full max-w-full appearance-none rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 outline-none transition focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:min-h-11 md:h-11 md:px-4 md:text-base"
                 />
               </label>
 
