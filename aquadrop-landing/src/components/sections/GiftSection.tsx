@@ -152,8 +152,6 @@ captureLeadForAutomation(
     <section id="gift-campaign" className="ds-section">
       <div className="ds-container">
         <div className="relative rounded-3xl border-2 border-blue-300 bg-gradient-to-br from-blue-50 via-sky-50 to-emerald-50 px-4 py-8 shadow-xl sm:px-6 sm:py-10 md:px-10 md:py-12">
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-brand-primary/20" />
-
           <div className="relative z-10 mx-auto max-w-4xl text-center">
             <SectionEyebrow>Kiemelt ajánlat</SectionEyebrow>
             <SectionHeading className="mt-3">Vásárolj 2 dobozt – mi adjuk a harmadikat</SectionHeading>
@@ -275,7 +273,7 @@ captureLeadForAutomation(
                   max={maxPurchaseDate}
                   onChange={handleChange}
                   disabled={isSubmitting}
-                  className="gift-date-input h-10 w-full min-w-0 max-w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 outline-none transition focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:h-11 md:px-4 md:text-base"
+                  className="h-10 w-full min-w-0 max-w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 outline-none transition focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:h-11 md:px-4 md:text-base"
                 />
               </label>
 
@@ -295,9 +293,9 @@ captureLeadForAutomation(
 
                 <label
                   htmlFor="gift-receipt-file"
-                  className="group flex h-10 w-full max-w-full cursor-pointer items-center rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 outline-none transition hover:border-brand-primary/60 hover:bg-slate-50 focus-within:border-brand-primary focus-within:ring-2 focus-within:ring-brand-primary/20 md:h-11 md:px-4 md:py-3 md:text-base"
+                  className="group flex h-10 w-full min-w-0 max-w-full cursor-pointer items-center overflow-hidden rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 outline-none transition hover:border-brand-primary/60 hover:bg-slate-50 focus-within:border-brand-primary focus-within:ring-2 focus-within:ring-brand-primary/20 md:h-11 md:px-4 md:py-3 md:text-base"
                 >
-                  <span className="w-full truncate overflow-hidden whitespace-nowrap">
+                  <span className="block w-full min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">
                     {receiptFile ? receiptFile.name : 'Blokk képének kiválasztása'}
                   </span>
                 </label>
@@ -333,8 +331,7 @@ captureLeadForAutomation(
                   className="mt-1 h-5 w-5 rounded border-slate-300 text-brand-primary focus:ring-brand-primary"
                 />
                 <span className="text-sm leading-6 text-slate-700">
-                  Kijelentem, hogy a megadott adatok valósak, és a vásárlás a promóció feltételeinek
-                  megfelelően történt.
+                  Kijelentem, hogy a megadott adatok valósak.
                 </span>
               </label>
 
