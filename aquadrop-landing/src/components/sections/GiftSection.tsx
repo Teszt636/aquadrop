@@ -124,16 +124,24 @@ export function GiftSection() {
         receipt_path: receiptUpload?.path ?? null
       });
 
-      await captureLeadForAutomation({
-        source: 'gift_claim',
-        name: formState.full_name.trim(),
-        email: formState.email.trim(),
-        phone: formState.phone.trim(),
-        metadata: {
-          purchase_location: formState.purchase_location.trim(),
-          purchase_date: formState.purchase_date
+      captureLeadForAutomation(
+        'gift_form_submit',
+        {
+          source: 'gift_claim',
+          email: formState.email.trim()
+        },
+        {
+          lead_type: 'gift_campaign',
+          source: 'gift_claim',
+          full_name: formState.full_name.trim(),
+          email: formState.email.trim(),
+          phone: formState.phone.trim(),
+          metadata: {
+            purchase_location: formState.purchase_location.trim(),
+            purchase_date: formState.purchase_date
+          }
         }
-      });
+      );
 
       setFormState(INITIAL_FORM_STATE);
       setReceiptFile(null);
