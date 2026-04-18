@@ -27,23 +27,30 @@ function createStorageAuthHeaders(contentType: string): HeadersInit {
   };
 }
 
-export async function uploadGiftReceipt(file: File): Promise<string> {
+export type GiftReceiptUploadResult = {
+  path: string;
+  publicUrl: string;
+};
+
+export async function uploadGiftReceipt(file: File): Promise<GiftReceiptUploadResult> {
   const objectPath = buildReceiptObjectPath(file.name);
   const uploadUrl = `${supabaseConfig.storageUrl}/object/${RECEIPT_UPLOAD_BUCKET}/${objectPath}`;
 
   const uploadResponse = await fetch(uploadUrl, {
     method: 'POST',
-    headers: createStorageAuthHeaders(file.type),
+    headers: createStorageAuthHeaders(file.type || 'application/octet-stream'),
     body: file
   });
 
   if (!uploadResponse.ok) {
     const errorText = await uploadResponse.text();
-
     throw new Error(`Receipt upload failed (${uploadResponse.status}): ${errorText}`);
   }
 
-  return `${supabaseConfig.storageUrl}/object/public/${RECEIPT_UPLOAD_BUCKET}/${objectPath}`;
+  return {
+    path: objectPath,
+    publicUrl: `${supabaseConfig.storageUrl}/object/public/${RECEIPT_UPLOAD_BUCKET}/${objectPath}`
+  };
 }
 
 export const storageBuckets = {
