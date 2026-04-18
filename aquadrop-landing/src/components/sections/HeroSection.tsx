@@ -10,12 +10,10 @@ export function HeroSection() {
       <div className="ds-container w-full">
         <div className="grid w-full items-center gap-8 rounded-3xl border border-slate-200/80 bg-white p-5 shadow-card sm:p-6 md:grid-cols-2 md:gap-12 md:p-12">
           <div className="min-w-0">
-            <p className="inline-flex rounded-full border border-brand-primary/20 bg-brand-light px-3 py-1 text-sm font-semibold text-brand-primary">
-              Aquadrop Expert Pro kapszula
-            </p>
 
             <h1 className="mt-4 break-words text-4xl leading-tight md:text-5xl">
-              Prémium mosókapszula, ami nemcsak illatosít, hanem tényleg tisztít
+              Aquadrop Expert Pro mosókapszula
+              Professzionális tisztaság otthonra
             </h1>
 
             <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-700">
