@@ -152,7 +152,6 @@ export function GiftSection() {
     <section className="ds-section bg-transparent" id="gift-campaign">
       <div className="ds-container">
         <div className="relative rounded-3xl border-2 border-brand-primary/35 bg-gradient-to-br from-brand-light via-white to-success-green/10 px-4 py-6 shadow-[0_18px_55px_-26px_rgba(20,38,64,0.55)] sm:px-6 sm:py-8 md:px-8 md:py-12">
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-brand-primary/80 via-success-green/70 to-brand-primary/80" />
           <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-brand-primary/20 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-16 -left-12 h-48 w-48 rounded-full bg-success-green/20 blur-3xl" />
 

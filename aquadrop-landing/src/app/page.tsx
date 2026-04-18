@@ -30,7 +30,7 @@ export default function Home() {
 
           <div className="absolute left-[12%] top-[66%] h-[24rem] w-[24rem] rounded-full bg-[rgba(125,211,252,0.11)] blur-[125px] md:h-[34rem] md:w-[34rem]" />
           <div className="absolute right-[6%] top-[78%] h-[24rem] w-[24rem] rounded-full bg-[rgba(56,189,248,0.1)] blur-[125px] md:h-[34rem] md:w-[34rem]" />
-
+          <div className="absolute -bottom-24 -right-20 h-[20rem] w-[20rem] rounded-full bg-[rgba(56,189,248,0.1)] blur-[110px] md:h-[28rem] md:w-[28rem]" />
           <div className="absolute -bottom-32 left-1/2 h-[28rem] w-[42rem] -translate-x-1/2 rounded-full bg-[rgba(186,230,253,0.12)] blur-[130px] md:h-[34rem] md:w-[62rem]" />
         </div>
 
