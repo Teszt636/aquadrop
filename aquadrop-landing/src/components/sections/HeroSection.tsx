@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 
-const miniTrustItems = ['4 az 1-ben hatás', 'Mikrokapszula varázslat', '8x tisztítóerő'];
+const miniTrustItems = ['8x tisztítóerő', 'Mikrokapszula varázslat', '4 az 1-ben hatás'];
 
 export function HeroSection() {
   return (
