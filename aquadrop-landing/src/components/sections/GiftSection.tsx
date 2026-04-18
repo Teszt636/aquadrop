@@ -120,8 +120,8 @@ export function GiftSection() {
         purchase_date: formState.purchase_date,
         consent: formState.consent,
         purchase_declaration: formState.purchase_declaration,
-        receipt_url: receiptUpload?.url ?? null,
-        receipt_path: receiptUpload?.path ?? null
+        receipt_url: receiptUpload,
+        receipt_path: null
       });
 
       await captureLeadForAutomation({
