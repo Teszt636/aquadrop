@@ -14,7 +14,7 @@ export function HeroSection() {
             <h1 className="mt-4 break-words text-4xl leading-tight md:text-5xl">
               Professzionális tisztaság otthonra
             </h1>
-            <h2 className="mt-4 break-words text-4xl leading-tight md:text-5xl">
+            <h2 className="mt-4 break-words text-3xl leading-tight md:text-4xl">
             Aquadrop Expert Pro mosókapszula
             </h2>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-700">
