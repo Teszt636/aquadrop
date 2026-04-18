@@ -111,29 +111,38 @@ export function GiftSection() {
 
       const receiptUpload = await uploadGiftReceipt(receiptFile);
 
-      await insertIntoTable('gift_claims', {
-        full_name: formState.full_name.trim(),
-        email: formState.email.trim(),
-        phone: formState.phone.trim(),
-        shipping_address: formState.shipping_address.trim(),
-        purchase_location: formState.purchase_location.trim(),
-        purchase_date: formState.purchase_date,
-        consent: formState.consent,
-        purchase_declaration: formState.purchase_declaration,
-        receipt_url: receiptUpload?.url ?? null,
-        receipt_path: receiptUpload?.path ?? null
-      });
+await insertIntoTable('gift_claims', {
+  full_name: formState.full_name.trim(),
+  email: formState.email.trim(),
+  phone: formState.phone.trim(),
+  shipping_address: formState.shipping_address.trim(),
+  purchase_location: formState.purchase_location.trim(),
+  purchase_date: formState.purchase_date,
+  consent: formState.consent,
+  purchase_declaration: formState.purchase_declaration,
+  receipt_url: receiptUpload ?? null,
+  receipt_path: null
+});
 
-      await captureLeadForAutomation({
-        source: 'gift_claim',
-        name: formState.full_name.trim(),
-        email: formState.email.trim(),
-        phone: formState.phone.trim(),
-        metadata: {
-          purchase_location: formState.purchase_location.trim(),
-          purchase_date: formState.purchase_date
-        }
-      });
+captureLeadForAutomation(
+  'form_submit',
+  {
+    form_name: 'gift_claim',
+    source: 'gift_claim',
+    email: formState.email.trim()
+  },
+  {
+    lead_type: 'gift_campaign',
+    full_name: formState.full_name.trim(),
+    email: formState.email.trim(),
+    phone: formState.phone.trim(),
+    source: 'gift_claim',
+    metadata: {
+      purchase_location: formState.purchase_location.trim(),
+      purchase_date: formState.purchase_date
+    }
+  }
+);
 
       setFormState(INITIAL_FORM_STATE);
       setReceiptFile(null);
