@@ -151,9 +151,7 @@ captureLeadForAutomation(
   return (
     <section id="gift-campaign" className="ds-section">
       <div className="ds-container">
-        <div className="relative rounded-3xl border border-brand-primary/20 bg-[linear-gradient(180deg,#eff6ff_0%,#f8fbff_100%)] px-4 py-8 sm:px-6 sm:py-10 md:px-10 md:py-12">
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-brand-primary/20" />
-
+        <div className="relative overflow-hidden rounded-3xl border-2 border-sky-300 bg-gradient-to-br from-blue-200 via-sky-100 to-emerald-200 px-4 py-8 shadow-[0_20px_60px_rgba(0,0,0,0.12)] sm:px-6 sm:py-10 md:px-10 md:py-12">
           <div className="relative z-10 mx-auto max-w-4xl text-center">
             <SectionEyebrow>Kiemelt ajánlat</SectionEyebrow>
             <SectionHeading className="mt-3">Vásárolj 2 dobozt – mi adjuk a harmadikat</SectionHeading>
@@ -173,7 +171,7 @@ captureLeadForAutomation(
             aria-label="Ajándék mosókapszula igénylőlap"
             onSubmit={handleSubmit}
             noValidate
-            className="relative z-10 mx-auto mt-8 max-w-3xl scroll-mt-6 overflow-visible rounded-2xl border border-brand-primary/15 bg-white/85 p-4 shadow-xl backdrop-blur-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/30 sm:p-5 md:mt-10 md:p-8"
+            className="relative z-10 mx-auto mt-8 max-w-3xl scroll-mt-6 overflow-visible rounded-2xl border border-brand-primary/15 bg-white p-4 shadow-lg backdrop-blur-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/30 sm:p-5 md:mt-10 md:p-8"
           >
             <h3 className="text-xl font-semibold text-slate-900">Ajándék mosókapszula igénylőlap</h3>
 
