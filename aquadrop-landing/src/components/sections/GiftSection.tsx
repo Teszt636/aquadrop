@@ -151,8 +151,8 @@ captureLeadForAutomation(
   return (
     <section id="gift-campaign" className="ds-section">
       <div className="ds-container">
-        <div className="relative rounded-3xl border border-brand-primary/20 bg-[linear-gradient(180deg,#eff6ff_0%,#f8fbff_100%)] px-4 py-8 sm:px-6 sm:py-10 md:px-10 md:py-12">
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-brand-primary/20" />
+        <div className="relative rounded-3xl border border-slate-200 bg-gradient-to-b from-slate-50 via-blue-50 to-slate-100 px-4 py-8 sm:px-6 sm:py-10 md:px-10 md:py-12">
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-slate-200/70" />
 
           <div className="relative z-10 mx-auto max-w-4xl text-center">
             <SectionEyebrow>Kiemelt ajánlat</SectionEyebrow>
@@ -162,7 +162,7 @@ captureLeadForAutomation(
               töltsd fel a blokkot, és elküldjük a 3. dobozt ajándékba.
             </SectionDescription>
 
-            <div className="mt-5 inline-flex rounded-full border border-amber-300 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-800">
+            <div className="mt-5 inline-flex rounded-full border border-amber-200 bg-amber-100 px-4 py-2 text-sm font-semibold text-amber-700">
               Az ajándék kampány korlátozott ideig érhető el.
             </div>
           </div>
@@ -173,7 +173,7 @@ captureLeadForAutomation(
             aria-label="Ajándék mosókapszula igénylőlap"
             onSubmit={handleSubmit}
             noValidate
-            className="relative z-10 mx-auto mt-8 max-w-3xl scroll-mt-6 overflow-visible rounded-2xl border border-brand-primary/15 bg-white/85 p-4 shadow-xl backdrop-blur-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/30 sm:p-5 md:mt-10 md:p-8"
+            className="relative z-10 mx-auto mt-8 max-w-3xl scroll-mt-6 overflow-visible rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_10px_30px_rgba(0,0,0,0.08)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-100 sm:p-5 md:mt-10 md:p-8"
           >
             <h3 className="text-xl font-semibold text-slate-900">Ajándék mosókapszula igénylőlap</h3>
 
@@ -197,7 +197,7 @@ captureLeadForAutomation(
                   onChange={handleChange}
                   disabled={isSubmitting}
                   placeholder="pl. Kovács Péter"
-                  className="h-10 w-full max-w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:h-11 md:px-4 md:py-3 md:text-base"
+                  className="h-10 w-full max-w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 md:h-11 md:px-4 md:py-3 md:text-base"
                 />
               </label>
 
@@ -212,7 +212,7 @@ captureLeadForAutomation(
                   onChange={handleChange}
                   disabled={isSubmitting}
                   placeholder="pl. te@pelda.hu"
-                  className="h-10 w-full max-w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:h-11 md:px-4 md:py-3 md:text-base"
+                  className="h-10 w-full max-w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 md:h-11 md:px-4 md:py-3 md:text-base"
                 />
               </label>
 
@@ -227,7 +227,7 @@ captureLeadForAutomation(
                   onChange={handleChange}
                   disabled={isSubmitting}
                   placeholder="pl. +36 30 123 4567"
-                  className="h-10 w-full max-w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:h-11 md:px-4 md:py-3 md:text-base"
+                  className="h-10 w-full max-w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 md:h-11 md:px-4 md:py-3 md:text-base"
                 />
               </label>
 
@@ -242,7 +242,7 @@ captureLeadForAutomation(
                   onChange={handleChange}
                   disabled={isSubmitting}
                   placeholder="pl. Auchan, Kecskemét"
-                  className="h-10 w-full max-w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:h-11 md:px-4 md:py-3 md:text-base"
+                  className="h-10 w-full max-w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 md:h-11 md:px-4 md:py-3 md:text-base"
                 />
               </label>
 
@@ -260,7 +260,7 @@ captureLeadForAutomation(
                   onChange={handleChange}
                   disabled={isSubmitting}
                   placeholder="pl. Budapest, Példa utca 1."
-                  className="h-10 w-full max-w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:h-11 md:px-4 md:py-3 md:text-base"
+                  className="h-10 w-full max-w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 md:h-11 md:px-4 md:py-3 md:text-base"
                 />
               </label>
 
@@ -275,7 +275,7 @@ captureLeadForAutomation(
                   max={maxPurchaseDate}
                   onChange={handleChange}
                   disabled={isSubmitting}
-                  className="gift-date-input h-10 w-full min-w-0 max-w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 outline-none transition focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:h-11 md:px-4 md:text-base"
+                  className="gift-date-input h-10 w-full min-w-0 max-w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 md:h-11 md:px-4 md:text-base"
                 />
               </label>
 
@@ -295,7 +295,7 @@ captureLeadForAutomation(
 
                 <label
                   htmlFor="gift-receipt-file"
-                  className="group flex h-10 w-full max-w-full cursor-pointer items-center rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 outline-none transition hover:border-brand-primary/60 hover:bg-slate-50 focus-within:border-brand-primary focus-within:ring-2 focus-within:ring-brand-primary/20 md:h-11 md:px-4 md:py-3 md:text-base"
+                  className="group flex h-10 w-full max-w-full cursor-pointer items-center rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 outline-none transition hover:bg-slate-50 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100 md:h-11 md:px-4 md:py-3 md:text-base"
                 >
                   <span className="w-full truncate overflow-hidden whitespace-nowrap">
                     {receiptFile ? receiptFile.name : 'Blokk képének kiválasztása'}
@@ -309,28 +309,28 @@ captureLeadForAutomation(
                 legyenek.
               </p>
 
-              <label className="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 md:col-span-2">
+              <label className="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 transition hover:bg-slate-100 md:col-span-2">
                 <input
                   type="checkbox"
                   name="consent"
                   checked={formState.consent}
                   onChange={handleChange}
                   disabled={isSubmitting}
-                  className="mt-1 h-5 w-5 rounded border-slate-300 text-brand-primary focus:ring-brand-primary"
+                  className="mt-1 h-5 w-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
                 />
                 <span className="text-sm leading-6 text-slate-700">
                   Elolvastam és elfogadom az adatkezelési tájékoztatót.
                 </span>
               </label>
 
-              <label className="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 md:col-span-2">
+              <label className="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 transition hover:bg-slate-100 md:col-span-2">
                 <input
                   type="checkbox"
                   name="purchase_declaration"
                   checked={formState.purchase_declaration}
                   onChange={handleChange}
                   disabled={isSubmitting}
-                  className="mt-1 h-5 w-5 rounded border-slate-300 text-brand-primary focus:ring-brand-primary"
+                  className="mt-1 h-5 w-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
                 />
                 <span className="text-sm leading-6 text-slate-700">
                   Kijelentem, hogy a megadott adatok valósak, és a vásárlás a promóció feltételeinek
@@ -347,7 +347,11 @@ captureLeadForAutomation(
               <div className="flex flex-col gap-3 md:col-span-2 md:flex-row md:items-center md:justify-between">
                 <p className="text-xs lowercase tracking-wide text-slate-500">* kötelező mező</p>
 
-                <Button type="submit" disabled={isSubmitting} className="h-10 w-full md:h-11 md:w-auto">
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="h-10 w-full rounded-lg bg-blue-600 text-white shadow-md hover:bg-blue-700 md:h-11 md:w-auto"
+                >
                   {isSubmitting ? 'Beküldés folyamatban...' : 'Ajándék igénylés beküldése'}
                 </Button>
               </div>
