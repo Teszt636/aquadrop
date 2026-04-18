@@ -1,6 +1,6 @@
 'use client';
 
-import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react';
+import { type ChangeEvent, type FormEvent, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/Button';
@@ -46,6 +46,7 @@ export function GiftSection() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [maxPurchaseDate, setMaxPurchaseDate] = useState('');
+  const receiptInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const now = new Date();
@@ -76,7 +77,9 @@ export function GiftSection() {
     if (!file.type.startsWith('image/')) {
       setReceiptFile(null);
       setErrorMessage('Kérlek, csak képfájlt tölts fel a blokkhoz.');
-      event.target.value = '';
+      if (receiptInputRef.current) {
+        receiptInputRef.current.value = '';
+      }
       return;
     }
 
@@ -145,6 +148,9 @@ captureLeadForAutomation(
 );
       setFormState(INITIAL_FORM_STATE);
       setReceiptFile(null);
+      if (receiptInputRef.current) {
+        receiptInputRef.current.value = '';
+      }
 
       router.push('/koszonjuk');
     } catch (error) {
@@ -318,25 +324,34 @@ captureLeadForAutomation(
 
                 <input
                   id="gift-receipt-file"
+                  ref={receiptInputRef}
                   name="receipt_file"
                   type="file"
                   required
                   accept="image/*"
                   onChange={handleReceiptChange}
                   disabled={isSubmitting}
-                  className="sr-only"
+                  aria-describedby="gift-receipt-file-name gift-receipt-file-help"
+                  className="peer sr-only"
                 />
 
                 <label
                   htmlFor="gift-receipt-file"
-                  className="group flex h-10 w-full max-w-full cursor-pointer items-center rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 outline-none transition hover:border-brand-primary/60 hover:bg-slate-50 focus-within:border-brand-primary focus-within:ring-2 focus-within:ring-brand-primary/20 md:h-11 md:px-4 md:py-3 md:text-base"
+                  className="group flex h-10 w-full max-w-full cursor-pointer items-center gap-2 overflow-hidden rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 outline-none transition hover:border-brand-primary/60 hover:bg-slate-50 peer-focus-visible:border-brand-primary peer-focus-visible:ring-2 peer-focus-visible:ring-brand-primary/20 peer-disabled:cursor-not-allowed peer-disabled:opacity-70 md:h-11 md:px-4 md:py-3 md:text-base"
                 >
-                  <span className="w-full truncate overflow-hidden whitespace-nowrap">
-                    {receiptFile ? receiptFile.name : 'Blokk képének kiválasztása'}
+                  <span
+                    id="gift-receipt-file-name"
+                    title={receiptFile?.name}
+                    className="min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap"
+                  >
+                    {receiptFile ? receiptFile.name : 'Blokk kiválasztása'}
                   </span>
                 </label>
 
-                <p className="mt-1 text-xs font-normal leading-tight text-slate-500 md:text-sm">
+                <p
+                  id="gift-receipt-file-help"
+                  className="mt-1 text-xs font-normal leading-tight text-slate-500 md:text-sm"
+                >
                   Ha a 2 termék 2 külön blokkon szerepel, kérjük, a két blokkot egyetlen jól
                   olvasható közös képen töltsd fel. Kérjük, ügyelj arra, hogy a vásárlás adatai jól
                   olvashatók legyenek.
