@@ -151,7 +151,7 @@ captureLeadForAutomation(
   return (
     <section id="gift-campaign" className="ds-section">
       <div className="ds-container">
-        <div className="relative rounded-3xl border border-brand-primary/20 bg-[linear-gradient(180deg,#eff6ff_0%,#f8fbff_100%)] px-4 py-8 sm:px-6 sm:py-10 md:px-10 md:py-12">
+        <div className="relative rounded-3xl border-2 border-blue-300 bg-gradient-to-br from-blue-50 via-sky-50 to-emerald-50 px-4 py-8 shadow-xl sm:px-6 sm:py-10 md:px-10 md:py-12">
           <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-brand-primary/20" />
 
           <div className="relative z-10 mx-auto max-w-4xl text-center">
