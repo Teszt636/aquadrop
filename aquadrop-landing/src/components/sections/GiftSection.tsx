@@ -1,6 +1,6 @@
 'use client';
 
-import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react';
+import { type ChangeEvent, type FocusEvent, type FormEvent, type MouseEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/Button';
@@ -82,6 +82,14 @@ export function GiftSection() {
 
     setErrorMessage(null);
     setReceiptFile(file);
+  };
+
+  const openPurchaseDatePicker = (
+    event: FocusEvent<HTMLInputElement> | MouseEvent<HTMLInputElement>
+  ) => {
+    const input = event.currentTarget as HTMLInputElement & { showPicker?: () => void };
+
+    input.showPicker?.();
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -308,6 +316,8 @@ captureLeadForAutomation(
                   value={formState.purchase_date ?? ''}
                   max={maxPurchaseDate}
                   onChange={handleChange}
+                  onFocus={openPurchaseDatePicker}
+                  onClick={openPurchaseDatePicker}
                   disabled={isSubmitting}
                   className="gift-date-input h-10 w-full min-w-0 max-w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 outline-none transition focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:h-11 md:px-4 md:text-base"
                 />

@@ -99,6 +99,17 @@ body {
     text-align: left;
   }
 
+  .gift-date-input:invalid::-webkit-datetime-edit {
+    color: transparent;
+  }
+
+  .gift-date-input::-webkit-datetime-edit-year-field:focus,
+  .gift-date-input::-webkit-datetime-edit-month-field:focus,
+  .gift-date-input::-webkit-datetime-edit-day-field:focus {
+    background: transparent;
+    color: #0f172a;
+  }
+
   .gift-date-input::-webkit-calendar-picker-indicator {
     opacity: 1;
     margin: 0;
