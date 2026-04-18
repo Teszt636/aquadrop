@@ -18,8 +18,8 @@ import { ScrollDepthTracker } from '@/components/analytics';
 export default function Home() {
   return (
     <>
-      <div className="relative">
-        <div className="pointer-events-none absolute inset-0 -z-10">
+      <div className="relative w-full overflow-x-clip">
+        <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.9)_0%,rgba(248,252,255,0.8)_38%,rgba(244,249,255,0.86)_100%)]" />
 
           <div className="absolute -left-28 -top-24 h-[26rem] w-[26rem] rounded-full bg-[rgba(125,211,252,0.16)] blur-[130px] md:h-[38rem] md:w-[38rem]" />
@@ -34,7 +34,7 @@ export default function Home() {
           <div className="absolute -bottom-32 left-1/2 h-[28rem] w-[42rem] -translate-x-1/2 rounded-full bg-[rgba(186,230,253,0.12)] blur-[130px] md:h-[34rem] md:w-[62rem]" />
         </div>
 
-        <main className="relative isolate flex flex-col pb-24 md:pb-0">
+        <main className="relative isolate flex w-full flex-col pb-24 md:pb-0">
           <ScrollDepthTracker />
           <HeroSection />
           <ProblemSection />
