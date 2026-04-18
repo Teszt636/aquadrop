@@ -35,19 +35,21 @@ export function TrustSection() {
           ))}
         </div>
 
-        <div className="relative mt-8 flex items-start gap-4 overflow-hidden rounded-2xl border border-green-200 bg-green-50 p-5 md:p-6">
-          <div className="flex-shrink-0 rounded-full bg-white p-3 shadow-sm">
-            <ShieldCheck className="h-6 w-6 text-green-600" />
-          </div>
+        <div className="mx-auto mt-10 max-w-3xl rounded-3xl border border-green-200 bg-green-50 p-5 shadow-sm sm:p-6 md:p-6">
+          <div className="flex items-start gap-4 sm:items-center sm:gap-5">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white shadow-sm ring-1 ring-green-100">
+              <ShieldCheck className="h-6 w-6 text-green-600" />
+            </div>
 
-          <div>
-            <p className="text-base font-semibold text-gray-900 md:text-lg">
-              Kockázatmentes kipróbálás – 100% pénzvisszafizetési garancia
-            </p>
+            <div>
+              <p className="text-lg font-semibold leading-6 text-gray-900 sm:text-xl">
+                100% pénzvisszafizetési garancia
+              </p>
 
-            <p className="mt-1 text-sm text-gray-600 md:text-base">
-              Ha nem vagy elégedett, egyszerűen visszaadjuk a pénzed. Kérdés nélkül.
-            </p>
+              <p className="mt-2 text-sm leading-6 text-gray-600 sm:text-base">
+                Próbáld ki kockázat nélkül. Ha nem vagy elégedett, visszaadjuk a pénzed.
+              </p>
+            </div>
           </div>
         </div>
       </div>
