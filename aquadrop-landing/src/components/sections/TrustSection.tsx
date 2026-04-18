@@ -1,3 +1,4 @@
+import { ShieldCheck } from 'lucide-react';
 import { SectionHeading } from '@/components/ui';
 
 const trustItems = [
@@ -34,25 +35,21 @@ export function TrustSection() {
           ))}
         </div>
 
-        <div className="relative overflow-hidden rounded-2xl border border-green-200 bg-green-50 p-5 md:p-6 flex gap-4 items-start">
+        <div className="relative mt-8 flex items-start gap-4 overflow-hidden rounded-2xl border border-green-200 bg-green-50 p-5 md:p-6">
+          <div className="flex-shrink-0 rounded-full bg-white p-3 shadow-sm">
+            <ShieldCheck className="h-6 w-6 text-green-600" />
+          </div>
 
-  {/* ICON */}
-  <div className="flex-shrink-0 bg-white rounded-full p-3 shadow-sm">
-    <ShieldCheck className="w-6 h-6 text-green-600" />
-  </div>
+          <div>
+            <p className="text-base font-semibold text-gray-900 md:text-lg">
+              Kockázatmentes kipróbálás – 100% pénzvisszafizetési garancia
+            </p>
 
-  {/* TEXT */}
-  <div>
-    <p className="font-semibold text-gray-900 text-base md:text-lg">
-      Kockázatmentes kipróbálás – 100% pénzvisszafizetési garancia
-    </p>
-
-    <p className="text-gray-600 mt-1 text-sm md:text-base">
-      Ha nem vagy elégedett, egyszerűen visszaadjuk a pénzed. Kérdés nélkül.
-    </p>
-  </div>
-
-</div>
+            <p className="mt-1 text-sm text-gray-600 md:text-base">
+              Ha nem vagy elégedett, egyszerűen visszaadjuk a pénzed. Kérdés nélkül.
+            </p>
+          </div>
+        </div>
       </div>
     </section>
   );
