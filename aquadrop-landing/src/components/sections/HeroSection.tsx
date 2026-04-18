@@ -29,7 +29,7 @@ export function HeroSection() {
             </p>
           </div>
 
-          <div className="relative mt-2 min-w-0 w-full md:mt-0">
+          <div className="relative mt-0 min-w-0 w-full md:mt-0">
             <div className="pointer-events-none absolute inset-0 -z-10 rounded-[2rem] bg-gradient-to-br from-brand-primary/15 via-brand-light to-success-green/10 blur-2xl" />
             <div className="relative w-full rounded-[2rem] border border-slate-200 bg-white p-4 shadow-inner">
               <div className="relative aspect-[5/4] overflow-hidden rounded-[1.5rem]">
