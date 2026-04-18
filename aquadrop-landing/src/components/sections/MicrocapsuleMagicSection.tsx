@@ -23,8 +23,18 @@ const benefits = [
 
 export function MicrocapsuleMagicSection() {
   return (
-    <section className="ds-section bg-gradient-to-r from-sky-50/90 via-cyan-50/70 to-indigo-50/80">
-      <div className="ds-container">
+    <section className="ds-section relative overflow-hidden bg-gradient-to-r from-sky-50/90 via-cyan-50/70 to-indigo-50/80">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center"
+      >
+        <img
+          src="/microcapsule.png"
+          alt=""
+          className="w-full max-w-[500px] object-contain opacity-10 blur-[2px] md:max-w-[700px]"
+        />
+      </div>
+      <div className="ds-container relative z-10">
         <div className="space-y-7">
           <div className="mx-auto max-w-3xl space-y-3 text-center">
             <SectionHeading>
