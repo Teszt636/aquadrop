@@ -8,13 +8,13 @@ export function HeroSection() {
   return (
     <section className="ds-section bg-transparent">
       <div className="ds-container">
-        <div className="grid items-center gap-10 rounded-3xl border border-slate-200/80 bg-white p-8 shadow-card md:grid-cols-2 md:gap-12 md:p-12">
-          <div>
+        <div className="grid items-center gap-8 rounded-3xl border border-slate-200/80 bg-white p-5 shadow-card sm:p-6 md:grid-cols-2 md:gap-12 md:p-12">
+          <div className="min-w-0">
             <p className="inline-flex rounded-full border border-brand-primary/20 bg-brand-light px-3 py-1 text-sm font-semibold text-brand-primary">
               Aquadrop Expert Pro kapszula
             </p>
 
-            <h1 className="mt-4 text-4xl leading-tight md:text-5xl">
+            <h1 className="mt-4 break-words text-4xl leading-tight md:text-5xl">
               Prémium mosókapszula, ami nemcsak illatosít, hanem tényleg tisztít
             </h1>
 
@@ -30,8 +30,8 @@ export function HeroSection() {
             </p>
           </div>
 
-          <div className="relative mt-2 md:mt-0">
-            <div className="absolute -inset-4 -z-10 rounded-[2rem] bg-gradient-to-br from-brand-primary/15 via-brand-light to-success-green/10 blur-2xl" />
+          <div className="relative mt-2 min-w-0 md:mt-0">
+            <div className="pointer-events-none absolute inset-0 -z-10 rounded-[2rem] bg-gradient-to-br from-brand-primary/15 via-brand-light to-success-green/10 blur-2xl" />
             <div className="relative rounded-[2rem] border border-slate-200 bg-white p-4 shadow-inner">
               <div className="relative aspect-[5/4] overflow-hidden rounded-[1.5rem]">
                 <Image
