@@ -73,22 +73,36 @@ body {
   }
 
   .gift-date-input {
-    -webkit-appearance: auto;
-    appearance: auto;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
     color: #0f172a;
-    line-height: 1.25rem;
+    line-height: normal;
   }
 
   .gift-date-input::-webkit-datetime-edit {
     padding: 0;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
   }
 
   .gift-date-input::-webkit-date-and-time-value {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
     min-height: 1.25rem;
+    line-height: normal;
     text-align: left;
   }
 
   .gift-date-input::-webkit-calendar-picker-indicator {
     opacity: 1;
+    margin: 0;
+    padding: 0;
+    flex-shrink: 0;
   }
 }
