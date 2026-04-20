@@ -28,12 +28,12 @@ export function MicrocapsuleMagicSection() {
         <div className="space-y-7">
           <div className="mx-auto max-w-3xl space-y-3 text-center">
             <SectionHeading>
-              <h1 className="text-center mt-4 break-words text-4xl leading-tight md:text-5xl">
-              Mikrokapszula varázslat
-              </h1>
-              <h2 className="text-center mt-4 break-words text-3xl leading-tight md:text-4xl">
-              az illat, ami újra és újra aktiválódik
-              </h2>
+              <span className="mt-4 block break-words text-center text-4xl leading-tight md:text-5xl">
+                Mikrokapszula varázslat
+              </span>
+              <span className="mt-4 block break-words text-center text-3xl leading-tight md:text-4xl">
+                az illat, ami újra és újra aktiválódik
+              </span>
             </SectionHeading>
             <p className="text-lg font-semibold leading-relaxed text-brand-secondary md:text-xl">
               Nem csak illatosít: a mikrokapszulás technológia mozgás közben újra és újra
