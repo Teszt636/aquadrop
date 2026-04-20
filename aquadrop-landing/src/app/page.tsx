@@ -12,7 +12,7 @@ import {
   ThreePathsSection,
   TrustSection
 } from '@/components/sections';
-import { ScrollDepthTracker } from '@/components/analytics';
+//import { ScrollDepthTracker } from '@/components/analytics';
 import { GiftSectionClientOnly } from '@/components/sections/GiftSectionClientOnly';
 
 export default function Home() {
@@ -35,7 +35,7 @@ export default function Home() {
         </div>
 
         <main className="relative isolate flex w-full flex-col">
-          <ScrollDepthTracker />
+          //<ScrollDepthTracker />
           <HeroSection />
           <ProblemSection />
           <BenefitsSection />
