@@ -54,9 +54,9 @@ export function buildAnnouncementUserEmail(name: string): EmailTemplate {
 
 export function buildAnnouncementAdminEmail(data: AnnouncementSignupEmailData): EmailTemplate {
   return {
-    subject: 'Új announcement signup érkezett',
+    subject: 'Új feliratkozó',
     html: wrapHtml(`
-      <h2>Új announcement signup érkezett</h2>
+      <h2>Új feliratkozó</h2>
       <p><strong>Név:</strong> ${data.name}</p>
       <p><strong>Email:</strong> ${data.email}</p>
       <p><strong>Telefon:</strong> ${formatOptional(data.phone)}</p>
@@ -79,9 +79,9 @@ export function buildGiftUserEmail(name: string): EmailTemplate {
 
 export function buildGiftAdminEmail(data: GiftClaimEmailData): EmailTemplate {
   return {
-    subject: 'Új gift claim érkezett',
+    subject: 'Új ajándékigénylés',
     html: wrapHtml(`
-      <h2>Új gift claim érkezett</h2>
+      <h2>Új ajándékigénylés</h2>
       <p><strong>Név:</strong> ${data.fullName}</p>
       <p><strong>Email:</strong> ${data.email}</p>
       <p><strong>Telefon:</strong> ${data.phone}</p>
@@ -108,9 +108,9 @@ export function buildResellerUserEmail(name: string): EmailTemplate {
 
 export function buildResellerAdminEmail(data: ResellerApplicationEmailData): EmailTemplate {
   return {
-    subject: 'Új reseller application érkezett',
+    subject: 'Új viszonteladó jelentkezett',
     html: wrapHtml(`
-      <h2>Új reseller application érkezett</h2>
+      <h2>Új viszonteladó jelentkezett</h2>
       <p><strong>Cégnév:</strong> ${data.companyName}</p>
       <p><strong>Kapcsolattartó:</strong> ${data.contactName}</p>
       <p><strong>Email:</strong> ${data.email}</p>

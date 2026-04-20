@@ -5,6 +5,7 @@ export type SendEmailInput = {
   to: string | string[];
   subject: string;
   html: string;
+  replyTo?: string;
 };
 
 export type ResendSendResponse = {
@@ -43,7 +44,8 @@ export async function sendEmailWithResend(input: SendEmailInput): Promise<Resend
       from: input.from,
       to: recipientList,
       subject: input.subject,
-      html: input.html
+      html: input.html,
+      reply_to: input.replyTo
     }),
     cache: 'no-store'
   });
