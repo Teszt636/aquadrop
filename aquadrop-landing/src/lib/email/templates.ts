@@ -134,6 +134,20 @@ export function buildAnnouncementUserEmail(name: string): EmailTemplate {
   });
 }
 
+export function buildAnnouncementAlreadyExistsUserEmail(name: string): EmailTemplate {
+  return buildUserEmailTemplate({
+    subject: '📩 Már feliratkoztál',
+    greetingName: name,
+    title: '📩 Már feliratkoztál',
+    paragraphs: [
+      'Már korábban feliratkoztál az Aquadrop értesítőre.',
+      'Hamarosan küldjük az újdonságokat és ajánlatokat.',
+      'Addig is megmutatjuk, mitől különleges az Aquadrop Expert Pro.'
+    ],
+    ctaText: 'Megnézem az Aquadropot'
+  });
+}
+
 export function buildAnnouncementAdminEmail(data: AnnouncementSignupEmailData): EmailTemplate {
   return {
     subject: 'Új feliratkozó',
@@ -159,6 +173,20 @@ export function buildGiftUserEmail(name: string): EmailTemplate {
       'Addig is megmutatjuk, miért működik ennyire hatékonyan az Aquadrop kapszula.'
     ],
     ctaText: 'Megnézem, mitől ilyen hatékony'
+  });
+}
+
+export function buildGiftAlreadyExistsUserEmail(name: string): EmailTemplate {
+  return buildUserEmailTemplate({
+    subject: '🎁 Ajándék – már igényelted',
+    greetingName: name,
+    title: '🎁 Ajándék – már igényelted',
+    paragraphs: [
+      'Úgy látjuk, hogy már korábban igényeltél Aquadrop ajándék csomagot.',
+      'Az akció keretében egy felhasználó egy alkalommal jogosult az ajándékra.',
+      'Ha kérdésed van vagy nem te adtad le a korábbi igénylést, válaszolj erre az emailre és segítünk.'
+    ],
+    ctaText: 'Megnézem a terméket'
   });
 }
 
@@ -188,6 +216,20 @@ export function buildResellerUserEmail(name: string): EmailTemplate {
       'Köszönjük, hogy érdeklődsz az Aquadrop Expert Pro viszonteladói lehetőség iránt.',
       'A jelentkezésed megérkezett, hamarosan felvesszük veled a kapcsolatot a részletekkel.',
       'Addig is érdemes megnézned, milyen termékkel dolgozol majd.'
+    ],
+    ctaText: 'Megnézem a terméket'
+  });
+}
+
+export function buildResellerAlreadyExistsUserEmail(name: string): EmailTemplate {
+  return buildUserEmailTemplate({
+    subject: 'Már jelentkeztél viszonteladónak',
+    greetingName: name,
+    title: 'Már jelentkeztél viszonteladónak',
+    paragraphs: [
+      'Korábban már elküldted a viszonteladói jelentkezésed.',
+      'Dolgozunk rajta és hamarosan jelentkezünk a részletekkel.',
+      'Köszönjük a türelmed!'
     ],
     ctaText: 'Megnézem a terméket'
   });

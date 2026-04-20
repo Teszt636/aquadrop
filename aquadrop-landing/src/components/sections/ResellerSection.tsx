@@ -4,7 +4,7 @@ import { type FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { captureLeadForAutomation } from '@/lib/lead-automation';
-import { insertIntoTable } from '@/lib/supabase';
+import { insertIntoTable, selectFromTable } from '@/lib/supabase';
 import { triggerFormNotification } from '@/lib/email/client';
 
 const channelOptions = ['bolt', 'webshop', 'nagyker'] as const;
@@ -63,6 +63,34 @@ export function ResellerSection() {
     setErrorMessage(null);
 
     try {
+      const existingApplicationQuery = new URLSearchParams({
+        select: 'id',
+        email: `eq.${trimmedEmail}`,
+        limit: '1'
+      });
+      const existingApplication = await selectFromTable<{ id: number }>(
+        'reseller_applications',
+        existingApplicationQuery
+      );
+
+      if (existingApplication.length > 0) {
+        console.info('[email][form][reseller] Existing application found, skipping insert');
+        await triggerFormNotification({
+          type: 'reseller_application_exists',
+          payload: {
+            companyName: trimmedCompanyName,
+            contactName: trimmedContactName,
+            email: trimmedEmail,
+            phone: trimmedPhone,
+            website: trimmedWebsite || null,
+            salesChannel: formState.sales_channel,
+            message: trimmedMessage || null
+          }
+        });
+        router.push('/koszonjuk/viszontelado');
+        return;
+      }
+
       await insertIntoTable('reseller_applications', {
         company_name: trimmedCompanyName,
         contact_name: trimmedContactName,

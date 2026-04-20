@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/Button';
 import { SectionDescription, SectionHeading } from '@/components/ui/SectionHeading';
-import { insertIntoTable } from '@/lib/supabase';
+import { insertIntoTable, selectFromTable } from '@/lib/supabase';
 import { captureLeadForAutomation } from '@/lib/lead-automation';
 import { triggerFormNotification } from '@/lib/email/client';
 
@@ -46,6 +46,27 @@ export function AnnouncementSection() {
     setErrorMessage(null);
 
     try {
+      const existingSignupQuery = new URLSearchParams({
+        select: 'id',
+        email: `eq.${trimmedEmail}`,
+        limit: '1'
+      });
+      const existingSignup = await selectFromTable<{ id: number }>('announcement_signups', existingSignupQuery);
+
+      if (existingSignup.length > 0) {
+        console.info('[email][form][announcement] Existing signup found, skipping insert');
+        await triggerFormNotification({
+          type: 'announcement_signup_exists',
+          payload: {
+            name: trimmedName,
+            email: trimmedEmail,
+            phone: trimmedPhone || null
+          }
+        });
+        router.push('/koszonjuk/feliratkozas');
+        return;
+      }
+
       await insertIntoTable('announcement_signups', {
         name: trimmedName,
         email: trimmedEmail,

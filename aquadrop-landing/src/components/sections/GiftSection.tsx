@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/Button';
 import { SectionDescription, SectionEyebrow, SectionHeading } from '@/components/ui/SectionHeading';
-import { insertIntoTable } from '@/lib/supabase';
+import { insertIntoTable, selectFromTable } from '@/lib/supabase';
 import { uploadGiftReceipt } from '@/lib/supabase-storage';
 import { captureLeadForAutomation } from '@/lib/lead-automation';
 import { triggerFormNotification } from '@/lib/email/client';
@@ -110,40 +110,66 @@ export function GiftSection() {
       const trimmedPhone = formState.phone.trim();
       const trimmedShippingAddress = formState.shipping_address.trim();
       const trimmedPurchaseLocation = formState.purchase_location.trim();
+      const existingClaimQuery = new URLSearchParams({
+        select: 'id',
+        or: `(email.eq.${trimmedEmail},phone.eq.${trimmedPhone})`,
+        limit: '1'
+      });
+      const existingClaim = await selectFromTable<{ id: number }>('gift_claims', existingClaimQuery);
+
+      if (existingClaim.length > 0) {
+        console.info('[email][form][gift] Existing gift claim found, skipping insert');
+        await triggerFormNotification({
+          type: 'gift_claim_exists',
+          payload: {
+            fullName: trimmedFullName,
+            email: trimmedEmail,
+            phone: trimmedPhone,
+            shippingAddress: trimmedShippingAddress,
+            purchaseLocation: trimmedPurchaseLocation,
+            purchaseDate: formState.purchase_date,
+            receiptUrl: null
+          }
+        });
+        hasRedirected = true;
+        router.push('/koszonjuk/ajandek');
+        return;
+      }
+
       const receiptUpload = await uploadGiftReceipt(receiptFile);
 
-await insertIntoTable('gift_claims', {
-  full_name: trimmedFullName,
-  email: trimmedEmail,
-  phone: trimmedPhone,
-  shipping_address: trimmedShippingAddress,
-  purchase_location: trimmedPurchaseLocation,
-  purchase_date: formState.purchase_date,
-  consent: formState.consent,
-  purchase_declaration: formState.purchase_declaration,
-  receipt_url: receiptUpload?.publicUrl ?? null,
-  receipt_path: receiptUpload?.path ?? null
-});
+      await insertIntoTable('gift_claims', {
+        full_name: trimmedFullName,
+        email: trimmedEmail,
+        phone: trimmedPhone,
+        shipping_address: trimmedShippingAddress,
+        purchase_location: trimmedPurchaseLocation,
+        purchase_date: formState.purchase_date,
+        consent: formState.consent,
+        purchase_declaration: formState.purchase_declaration,
+        receipt_url: receiptUpload?.publicUrl ?? null,
+        receipt_path: receiptUpload?.path ?? null
+      });
 
-captureLeadForAutomation(
-  'gift_form_submit',
-  {
-    form_name: 'gift_claim',
-    source: 'gift_claim',
-    email: trimmedEmail
-  },
-  {
-    lead_type: 'gift_campaign',
-    full_name: trimmedFullName,
-    email: trimmedEmail,
-    phone: trimmedPhone,
-    source: 'gift_claim',
-    metadata: {
-      purchase_location: trimmedPurchaseLocation,
-      purchase_date: formState.purchase_date
-    }
-  }
-);
+      captureLeadForAutomation(
+        'gift_form_submit',
+        {
+          form_name: 'gift_claim',
+          source: 'gift_claim',
+          email: trimmedEmail
+        },
+        {
+          lead_type: 'gift_campaign',
+          full_name: trimmedFullName,
+          email: trimmedEmail,
+          phone: trimmedPhone,
+          source: 'gift_claim',
+          metadata: {
+            purchase_location: trimmedPurchaseLocation,
+            purchase_date: formState.purchase_date
+          }
+        }
+      );
       console.info('[email][form][gift] Triggering notification after successful submit');
       await triggerFormNotification({
         type: 'gift_claim',
