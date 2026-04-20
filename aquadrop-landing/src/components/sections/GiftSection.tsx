@@ -147,7 +147,7 @@ captureLeadForAutomation(
       setFormState(INITIAL_FORM_STATE);
       setReceiptFile(null);
 
-      router.push('/koszonjuk');
+      router.push('/koszonjuk/ajandek');
     } catch (error) {
       console.error(error);
       setErrorMessage('Hiba történt a beküldés során. Kérlek, próbáld újra.');
