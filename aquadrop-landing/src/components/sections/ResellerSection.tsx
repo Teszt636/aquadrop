@@ -42,7 +42,7 @@ export function ResellerSection() {
 
     const trimmedCompanyName = formState.company_name.trim();
     const trimmedContactName = formState.contact_name.trim();
-    const trimmedEmail = formState.email.trim();
+    const normalizedEmail = formState.email.trim().toLowerCase();
     const trimmedPhone = formState.phone.trim();
     const trimmedWebsite = formState.website.trim();
     const trimmedMessage = formState.message.trim();
@@ -50,7 +50,7 @@ export function ResellerSection() {
     if (
       !trimmedCompanyName ||
       !trimmedContactName ||
-      !trimmedEmail ||
+      !normalizedEmail ||
       !trimmedPhone ||
       !formState.sales_channel
     ) {
@@ -65,22 +65,35 @@ export function ResellerSection() {
     try {
       const existingApplicationQuery = new URLSearchParams({
         select: 'id',
-        email: `eq.${trimmedEmail}`,
+        email: `eq.${normalizedEmail}`,
         limit: '1'
       });
       const existingApplication = await selectFromTable<{ id: number }>(
         'reseller_applications',
         existingApplicationQuery
       );
+      const duplicateCount = existingApplication.length;
+      const duplicateDetected = duplicateCount > 0;
 
-      if (existingApplication.length > 0) {
-        console.info('[email][form][reseller] Existing application found, skipping insert');
+      console.info('[email][form][reseller] Duplicate check completed', {
+        normalizedEmail,
+        duplicateCount,
+        duplicateDetected
+      });
+
+      if (duplicateDetected) {
+        const notificationType = 'reseller_application_exists';
+        console.info('[email][form][reseller] Existing application found, skipping insert', {
+          normalizedEmail,
+          chosenNotificationType: notificationType,
+          insertSkipped: true
+        });
         await triggerFormNotification({
-          type: 'reseller_application_exists',
+          type: notificationType,
           payload: {
             companyName: trimmedCompanyName,
             contactName: trimmedContactName,
-            email: trimmedEmail,
+            email: normalizedEmail,
             phone: trimmedPhone,
             website: trimmedWebsite || null,
             salesChannel: formState.sales_channel,
@@ -94,11 +107,19 @@ export function ResellerSection() {
       await insertIntoTable('reseller_applications', {
         company_name: trimmedCompanyName,
         contact_name: trimmedContactName,
-        email: trimmedEmail,
+        email: normalizedEmail,
         phone: trimmedPhone,
         website: trimmedWebsite || null,
         sales_channel: formState.sales_channel,
         message: trimmedMessage || null
+      });
+
+      const notificationType = 'reseller_application';
+
+      console.info('[email][form][reseller] Proceeding with new application insert', {
+        normalizedEmail,
+        chosenNotificationType: notificationType,
+        insertSkipped: false
       });
 
       captureLeadForAutomation(
@@ -109,7 +130,7 @@ export function ResellerSection() {
         },
         {
           lead_type: 'reseller_application',
-          email: trimmedEmail,
+          email: normalizedEmail,
           phone: trimmedPhone,
           full_name: trimmedContactName,
           source: 'partner_page_reseller_form',
@@ -120,13 +141,16 @@ export function ResellerSection() {
         }
       );
 
-      console.info('[email][form][reseller] Triggering notification after successful submit');
+      console.info('[email][form][reseller] Triggering notification after successful submit', {
+        normalizedEmail,
+        chosenNotificationType: notificationType
+      });
       await triggerFormNotification({
-        type: 'reseller_application',
+        type: notificationType,
         payload: {
           companyName: trimmedCompanyName,
           contactName: trimmedContactName,
-          email: trimmedEmail,
+          email: normalizedEmail,
           phone: trimmedPhone,
           website: trimmedWebsite || null,
           salesChannel: formState.sales_channel,
