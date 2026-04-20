@@ -5,9 +5,8 @@ import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/Button';
 import { SectionDescription, SectionHeading } from '@/components/ui/SectionHeading';
-import { insertIntoTable, selectFromTable } from '@/lib/supabase';
+import { submitFormToServer } from '@/lib/forms/client';
 import { captureLeadForAutomation } from '@/lib/lead-automation';
-import { triggerFormNotification } from '@/lib/email/client';
 
 type FormState = {
   name: string;
@@ -46,57 +45,31 @@ export function AnnouncementSection() {
     setErrorMessage(null);
 
     try {
-      const existingSignupQuery = new URLSearchParams({
-        select: 'id',
-        email: `eq.${trimmedEmail}`,
-        limit: '1'
-      });
-      const existingSignup = await selectFromTable<{ id: number }>('announcement_signups', existingSignupQuery);
-
-      if (existingSignup.length > 0) {
-        console.info('[email][form][announcement] Existing signup found, skipping insert');
-        await triggerFormNotification({
-          type: 'announcement_signup_exists',
-          payload: {
-            name: trimmedName,
-            email: trimmedEmail,
-            phone: trimmedPhone || null
-          }
-        });
-        router.push('/koszonjuk/feliratkozas');
-        return;
-      }
-
-      await insertIntoTable('announcement_signups', {
-        name: trimmedName,
-        email: trimmedEmail,
-        phone: trimmedPhone || null,
-        consent: formState.consent
-      });
-
-      captureLeadForAutomation(
-        'newsletter_form_submit',
-        { form_id: 'announcement-signup' },
-        {
-          lead_type: 'newsletter_signup',
-          email: trimmedEmail,
-          phone: trimmedPhone || null,
-          full_name: trimmedName,
-          source: 'landing_announcement_section',
-          metadata: { consent: formState.consent }
-        }
-      );
-
-      console.info('[email][form][announcement] Triggering notification after successful submit');
-      await triggerFormNotification({
-        type: 'announcement_signup',
+      const submitResult = await submitFormToServer({
+        formType: 'announcement_signup',
         payload: {
           name: trimmedName,
           email: trimmedEmail,
-          phone: trimmedPhone || null
+          phone: trimmedPhone || null,
+          consent: formState.consent
         }
       });
-      console.info('[email][form][announcement] Notification trigger completed');
+
+      if (!submitResult.isDuplicate) {
+        captureLeadForAutomation(
+          'newsletter_form_submit',
+          { form_id: 'announcement-signup' },
+          {
+            lead_type: 'newsletter_signup',
+            email: trimmedEmail,
+            phone: trimmedPhone || null,
+            full_name: trimmedName,
+            source: 'landing_announcement_section',
+            metadata: { consent: formState.consent }
+          }
+        );
+      }
+
       router.push('/koszonjuk/feliratkozas');
     } catch {
       setErrorMessage('Hiba történt a feliratkozás során. Kérlek, próbáld újra.');

@@ -4,12 +4,9 @@ import { type FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { captureLeadForAutomation } from '@/lib/lead-automation';
-import { insertIntoTable, selectFromTable } from '@/lib/supabase';
-import { triggerFormNotification } from '@/lib/email/client';
+import { submitFormToServer } from '@/lib/forms/client';
+import { type SalesChannel, salesChannelOptions } from '@/lib/forms/types';
 
-const channelOptions = ['bolt', 'webshop', 'nagyker'] as const;
-
-type SalesChannel = (typeof channelOptions)[number];
 
 type FormState = {
   company_name: string;
@@ -63,77 +60,39 @@ export function ResellerSection() {
     setErrorMessage(null);
 
     try {
-      const existingApplicationQuery = new URLSearchParams({
-        select: 'id',
-        email: `eq.${trimmedEmail}`,
-        limit: '1'
-      });
-      const existingApplication = await selectFromTable<{ id: number }>(
-        'reseller_applications',
-        existingApplicationQuery
-      );
-
-      if (existingApplication.length > 0) {
-        console.info('[email][form][reseller] Existing application found, skipping insert');
-        await triggerFormNotification({
-          type: 'reseller_application_exists',
-          payload: {
-            companyName: trimmedCompanyName,
-            contactName: trimmedContactName,
-            email: trimmedEmail,
-            phone: trimmedPhone,
-            website: trimmedWebsite || null,
-            salesChannel: formState.sales_channel,
-            message: trimmedMessage || null
-          }
-        });
-        router.push('/koszonjuk/viszontelado');
-        return;
-      }
-
-      await insertIntoTable('reseller_applications', {
-        company_name: trimmedCompanyName,
-        contact_name: trimmedContactName,
-        email: trimmedEmail,
-        phone: trimmedPhone,
-        website: trimmedWebsite || null,
-        sales_channel: formState.sales_channel,
-        message: trimmedMessage || null
-      });
-
-      captureLeadForAutomation(
-        'partner_form_submit',
-        {
-          form_id: 'reseller-application-form',
-          sales_channel: formState.sales_channel
-        },
-        {
-          lead_type: 'reseller_application',
-          email: trimmedEmail,
-          phone: trimmedPhone,
-          full_name: trimmedContactName,
-          source: 'partner_page_reseller_form',
-          metadata: {
-            company_name: trimmedCompanyName,
-            sales_channel: formState.sales_channel
-          }
-        }
-      );
-
-      console.info('[email][form][reseller] Triggering notification after successful submit');
-      await triggerFormNotification({
-        type: 'reseller_application',
+      const submitResult = await submitFormToServer({
+        formType: 'reseller_application',
         payload: {
-          companyName: trimmedCompanyName,
-          contactName: trimmedContactName,
+          company_name: trimmedCompanyName,
+          contact_name: trimmedContactName,
           email: trimmedEmail,
           phone: trimmedPhone,
           website: trimmedWebsite || null,
-          salesChannel: formState.sales_channel,
+          sales_channel: formState.sales_channel,
           message: trimmedMessage || null
         }
       });
-      console.info('[email][form][reseller] Notification trigger completed');
+
+      if (!submitResult.isDuplicate) {
+        captureLeadForAutomation(
+          'partner_form_submit',
+          {
+            form_id: 'reseller-application-form',
+            sales_channel: formState.sales_channel
+          },
+          {
+            lead_type: 'reseller_application',
+            email: trimmedEmail,
+            phone: trimmedPhone,
+            full_name: trimmedContactName,
+            source: 'partner_page_reseller_form',
+            metadata: {
+              company_name: trimmedCompanyName,
+              sales_channel: formState.sales_channel
+            }
+          }
+        );
+      }
       router.push('/koszonjuk/viszontelado');
     } catch {
       setErrorMessage('Hiba történt a jelentkezés elküldése közben. Kérlek, próbáld újra.');
@@ -237,7 +196,7 @@ export function ResellerSection() {
             <option value="" disabled>
               Válassz csatornát
             </option>
-            {channelOptions.map((option) => (
+            {salesChannelOptions.map((option) => (
               <option key={option} value={option}>
                 {option}
               </option>
