@@ -37,7 +37,7 @@ export async function insertIntoTable<TResponse = unknown>(
 ): Promise<TResponse | null> {
   const response = await fetch(`${supabaseConfig.restUrl}/${table}`, {
     method: 'POST',
-    headers: getSupabaseHeaders({ Prefer: 'return=representation' }),
+    headers: getSupabaseHeaders({ Prefer: 'return=minimal' }),
     body: JSON.stringify(payload)
   });
 
