@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 
 import { captureLeadForAutomation } from '@/lib/lead-automation';
 import { insertIntoTable } from '@/lib/supabase';
+import { triggerFormNotification } from '@/lib/email/client';
 
 const channelOptions = ['bolt', 'webshop', 'nagyker'] as const;
 
@@ -90,6 +91,19 @@ export function ResellerSection() {
           }
         }
       );
+
+      await triggerFormNotification({
+        type: 'reseller_application',
+        payload: {
+          companyName: trimmedCompanyName,
+          contactName: trimmedContactName,
+          email: trimmedEmail,
+          phone: trimmedPhone,
+          website: trimmedWebsite || null,
+          salesChannel: formState.sales_channel,
+          message: trimmedMessage || null
+        }
+      });
       router.push('/koszonjuk/viszontelado');
     } catch {
       setErrorMessage('Hiba történt a jelentkezés elküldése közben. Kérlek, próbáld újra.');
