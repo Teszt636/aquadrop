@@ -1,6 +1,6 @@
 'use client';
 
-import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react';
+import { type ChangeEvent, type FormEvent, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/Button';
@@ -33,6 +33,8 @@ const INITIAL_FORM_STATE: GiftFormState = {
 
 export function GiftSection() {
   const router = useRouter();
+  const isMountedRef = useRef(true);
+  const hasRedirectedRef = useRef(false);
 
   const [formState, setFormState] = useState<GiftFormState>(INITIAL_FORM_STATE);
   const [receiptFile, setReceiptFile] = useState<File | null>(null);
@@ -47,6 +49,10 @@ export function GiftSection() {
       .slice(0, 10);
 
     setMaxPurchaseDate(localDate);
+
+    return () => {
+      isMountedRef.current = false;
+    };
   }, []);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -99,7 +105,7 @@ export function GiftSection() {
       return;
     }
 
-    let hasRedirected = false;
+    hasRedirectedRef.current = false;
 
     try {
       setIsSubmitting(true);
@@ -138,13 +144,15 @@ captureLeadForAutomation(
     }
   }
 );
-      hasRedirected = true;
+      hasRedirectedRef.current = true;
       router.push('/koszonjuk/ajandek');
     } catch (error) {
       console.error(error);
-      setErrorMessage('Hiba történt a beküldés során. Kérlek, próbáld újra.');
+      if (isMountedRef.current && !hasRedirectedRef.current) {
+        setErrorMessage('Hiba történt a beküldés során. Kérlek, próbáld újra.');
+      }
     } finally {
-      if (!hasRedirected) {
+      if (isMountedRef.current && !hasRedirectedRef.current) {
         setIsSubmitting(false);
       }
     }
