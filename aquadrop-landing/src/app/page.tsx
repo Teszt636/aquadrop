@@ -4,7 +4,6 @@ import {
   BeforeAfterSection,
   BenefitsSection,
   FooterSection,
-  GiftSection,
   HeroSection,
   MicrocapsuleMagicSection,
   ProblemSection,
@@ -14,6 +13,11 @@ import {
   TrustSection
 } from '@/components/sections';
 import { ScrollDepthTracker } from '@/components/analytics';
+import dynamic from 'next/dynamic';
+
+const GiftSection = dynamic(() => import('@/components/sections/GiftSection').then((module) => module.GiftSection), {
+  ssr: false
+});
 
 export default function Home() {
   return (
