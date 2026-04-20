@@ -15,6 +15,13 @@ import {
 import { ScrollDepthTracker } from '@/components/analytics';
 import { GiftSectionClientOnly } from '@/components/sections/GiftSectionClientOnly';
 
+const ISOLATION_FLAGS = {
+  // #418 izoláció: legerősebb gyanú az invalid heading nesting miatt ebben a szekcióban
+  microcapsuleMagicSection: false,
+  // Következő körben kapcsolható ki, ha a hiba még fennáll
+  scrollDepthTracker: true
+} as const;
+
 export default function Home() {
   return (
     <>
@@ -35,12 +42,12 @@ export default function Home() {
         </div>
 
         <main className="relative isolate flex w-full flex-col">
-          <ScrollDepthTracker />
+          {ISOLATION_FLAGS.scrollDepthTracker ? <ScrollDepthTracker /> : null}
           <HeroSection />
           <ProblemSection />
           <BenefitsSection />
           <TechnologySection />
-          <MicrocapsuleMagicSection />
+          {ISOLATION_FLAGS.microcapsuleMagicSection ? <MicrocapsuleMagicSection /> : null}
           <TrustSection />
           <SocialProofSection />
           <BeforeAfterSection />
