@@ -8,6 +8,7 @@ import { SectionDescription, SectionEyebrow, SectionHeading } from '@/components
 import { insertIntoTable } from '@/lib/supabase';
 import { uploadGiftReceipt } from '@/lib/supabase-storage';
 import { captureLeadForAutomation } from '@/lib/lead-automation';
+import { triggerFormNotification } from '@/lib/email/client';
 
 type GiftFormState = {
   full_name: string;
@@ -104,14 +105,19 @@ export function GiftSection() {
     try {
       setIsSubmitting(true);
 
+      const trimmedFullName = formState.full_name.trim();
+      const trimmedEmail = formState.email.trim();
+      const trimmedPhone = formState.phone.trim();
+      const trimmedShippingAddress = formState.shipping_address.trim();
+      const trimmedPurchaseLocation = formState.purchase_location.trim();
       const receiptUpload = await uploadGiftReceipt(receiptFile);
 
 await insertIntoTable('gift_claims', {
-  full_name: formState.full_name.trim(),
-  email: formState.email.trim(),
-  phone: formState.phone.trim(),
-  shipping_address: formState.shipping_address.trim(),
-  purchase_location: formState.purchase_location.trim(),
+  full_name: trimmedFullName,
+  email: trimmedEmail,
+  phone: trimmedPhone,
+  shipping_address: trimmedShippingAddress,
+  purchase_location: trimmedPurchaseLocation,
   purchase_date: formState.purchase_date,
   consent: formState.consent,
   purchase_declaration: formState.purchase_declaration,
@@ -124,20 +130,32 @@ captureLeadForAutomation(
   {
     form_name: 'gift_claim',
     source: 'gift_claim',
-    email: formState.email.trim()
+    email: trimmedEmail
   },
   {
     lead_type: 'gift_campaign',
-    full_name: formState.full_name.trim(),
-    email: formState.email.trim(),
-    phone: formState.phone.trim(),
+    full_name: trimmedFullName,
+    email: trimmedEmail,
+    phone: trimmedPhone,
     source: 'gift_claim',
     metadata: {
-      purchase_location: formState.purchase_location.trim(),
+      purchase_location: trimmedPurchaseLocation,
       purchase_date: formState.purchase_date
     }
   }
 );
+      await triggerFormNotification({
+        type: 'gift_claim',
+        payload: {
+          fullName: trimmedFullName,
+          email: trimmedEmail,
+          phone: trimmedPhone,
+          shippingAddress: trimmedShippingAddress,
+          purchaseLocation: trimmedPurchaseLocation,
+          purchaseDate: formState.purchase_date,
+          receiptUrl: receiptUpload ?? null
+        }
+      });
       hasRedirected = true;
       router.push('/koszonjuk/ajandek');
     } catch (error) {
