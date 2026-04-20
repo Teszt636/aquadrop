@@ -105,4 +105,12 @@ body {
     padding: 0;
     flex-shrink: 0;
   }
+
+  .gift-date-input.is-empty {
+    color: transparent;
+  }
+
+  .gift-date-input.is-empty::-webkit-datetime-edit {
+    color: transparent;
+  }
 }
