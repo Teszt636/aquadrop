@@ -12,15 +12,27 @@ import { type EmailNotificationRequest } from '@/lib/email/types';
 const DEFAULT_SENDER = 'Aquadrop <noreply@aquadrop.hu>';
 
 function getSenderEmail(): string {
-  return process.env.EMAIL_FROM ?? DEFAULT_SENDER;
+  const senderEmail = process.env.EMAIL_FROM ?? DEFAULT_SENDER;
+
+  console.info('[email][notifications] Sender email resolved', {
+    from: senderEmail,
+    source: process.env.EMAIL_FROM ? 'EMAIL_FROM' : 'DEFAULT_SENDER'
+  });
+
+  return senderEmail;
 }
 
 function getAdminEmail(): string {
   const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL;
 
   if (!adminEmail) {
+    console.error('[email][notifications] Missing ADMIN_NOTIFICATION_EMAIL');
     throw new Error('Missing required server environment variable: ADMIN_NOTIFICATION_EMAIL');
   }
+
+  console.info('[email][notifications] Admin recipient resolved', {
+    adminEmail
+  });
 
   return adminEmail;
 }
@@ -42,12 +54,22 @@ export async function sendFormNotifications(request: EmailNotificationRequest): 
   const adminEmail = getAdminEmail();
   const submittedAt = getSubmittedAt();
 
+  console.info('[email][notifications] Preparing form notifications', {
+    type: request.type,
+    recipientEmail: request.payload.email,
+    adminEmail,
+    from
+  });
+
   switch (request.type) {
     case 'announcement_signup': {
+      if (!request.payload.name || !request.payload.email) {
+        console.error('[email][notifications] Invalid announcement_signup payload', request.payload);
+      }
       const userEmail = buildAnnouncementUserEmail(request.payload.name);
       const adminTemplate = buildAnnouncementAdminEmail({ ...request.payload, submittedAt });
 
-      await Promise.all([
+      const [userResponse, adminResponse] = await Promise.all([
         sendEmailWithResend({
           from,
           to: request.payload.email,
@@ -61,14 +83,28 @@ export async function sendFormNotifications(request: EmailNotificationRequest): 
           html: adminTemplate.html
         })
       ]);
+      console.info('[email][notifications] announcement_signup emails sent', {
+        userEmailId: userResponse.id,
+        adminEmailId: adminResponse.id
+      });
       return;
     }
 
     case 'gift_claim': {
+      if (
+        !request.payload.fullName ||
+        !request.payload.email ||
+        !request.payload.phone ||
+        !request.payload.shippingAddress ||
+        !request.payload.purchaseLocation ||
+        !request.payload.purchaseDate
+      ) {
+        console.error('[email][notifications] Invalid gift_claim payload', request.payload);
+      }
       const userEmail = buildGiftUserEmail(request.payload.fullName);
       const adminTemplate = buildGiftAdminEmail({ ...request.payload, submittedAt });
 
-      await Promise.all([
+      const [userResponse, adminResponse] = await Promise.all([
         sendEmailWithResend({
           from,
           to: request.payload.email,
@@ -82,14 +118,27 @@ export async function sendFormNotifications(request: EmailNotificationRequest): 
           html: adminTemplate.html
         })
       ]);
+      console.info('[email][notifications] gift_claim emails sent', {
+        userEmailId: userResponse.id,
+        adminEmailId: adminResponse.id
+      });
       return;
     }
 
     case 'reseller_application': {
+      if (
+        !request.payload.companyName ||
+        !request.payload.contactName ||
+        !request.payload.email ||
+        !request.payload.phone ||
+        !request.payload.salesChannel
+      ) {
+        console.error('[email][notifications] Invalid reseller_application payload', request.payload);
+      }
       const userEmail = buildResellerUserEmail(request.payload.contactName);
       const adminTemplate = buildResellerAdminEmail({ ...request.payload, submittedAt });
 
-      await Promise.all([
+      const [userResponse, adminResponse] = await Promise.all([
         sendEmailWithResend({
           from,
           to: request.payload.email,
@@ -103,6 +152,10 @@ export async function sendFormNotifications(request: EmailNotificationRequest): 
           html: adminTemplate.html
         })
       ]);
+      console.info('[email][notifications] reseller_application emails sent', {
+        userEmailId: userResponse.id,
+        adminEmailId: adminResponse.id
+      });
       return;
     }
 

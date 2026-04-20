@@ -66,6 +66,7 @@ export function AnnouncementSection() {
         }
       );
 
+      console.info('[email][form][announcement] Triggering notification after successful submit');
       await triggerFormNotification({
         type: 'announcement_signup',
         payload: {
@@ -74,6 +75,7 @@ export function AnnouncementSection() {
           phone: trimmedPhone || null
         }
       });
+      console.info('[email][form][announcement] Notification trigger completed');
       router.push('/koszonjuk/feliratkozas');
     } catch {
       setErrorMessage('Hiba történt a feliratkozás során. Kérlek, próbáld újra.');

@@ -92,6 +92,7 @@ export function ResellerSection() {
         }
       );
 
+      console.info('[email][form][reseller] Triggering notification after successful submit');
       await triggerFormNotification({
         type: 'reseller_application',
         payload: {
@@ -104,6 +105,7 @@ export function ResellerSection() {
           message: trimmedMessage || null
         }
       });
+      console.info('[email][form][reseller] Notification trigger completed');
       router.push('/koszonjuk/viszontelado');
     } catch {
       setErrorMessage('Hiba történt a jelentkezés elküldése közben. Kérlek, próbáld újra.');

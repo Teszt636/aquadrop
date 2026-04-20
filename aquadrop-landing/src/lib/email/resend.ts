@@ -7,18 +7,31 @@ export type SendEmailInput = {
   html: string;
 };
 
+export type ResendSendResponse = {
+  id?: string;
+  [key: string]: unknown;
+};
+
 function requireServerEnv(name: string): string {
   const value = process.env[name];
 
   if (!value) {
+    console.error('[email][resend] Missing required environment variable', { name });
     throw new Error(`Missing required server environment variable: ${name}`);
   }
 
   return value;
 }
 
-export async function sendEmailWithResend(input: SendEmailInput): Promise<void> {
+export async function sendEmailWithResend(input: SendEmailInput): Promise<ResendSendResponse> {
   const apiKey = requireServerEnv('RESEND_API_KEY');
+  const recipientList = Array.isArray(input.to) ? input.to : [input.to];
+
+  console.info('[email][resend] Sending email request', {
+    from: input.from,
+    to: recipientList,
+    subject: input.subject
+  });
 
   const response = await fetch(RESEND_API_URL, {
     method: 'POST',
@@ -28,16 +41,41 @@ export async function sendEmailWithResend(input: SendEmailInput): Promise<void> 
     },
     body: JSON.stringify({
       from: input.from,
-      to: Array.isArray(input.to) ? input.to : [input.to],
+      to: recipientList,
       subject: input.subject,
       html: input.html
     }),
     cache: 'no-store'
   });
 
+  const responseText = await response.text();
+
   if (!response.ok) {
-    const responseText = await response.text();
+    console.error('[email][resend] Resend API request failed', {
+      status: response.status,
+      statusText: response.statusText,
+      body: responseText,
+      from: input.from,
+      to: recipientList
+    });
 
     throw new Error(`Resend API request failed (${response.status}): ${responseText}`);
   }
+
+  let parsed: ResendSendResponse = {};
+
+  if (responseText) {
+    try {
+      parsed = JSON.parse(responseText) as ResendSendResponse;
+    } catch {
+      parsed = { raw: responseText };
+    }
+  }
+
+  console.info('[email][resend] Resend API request succeeded', {
+    id: parsed.id,
+    response: parsed
+  });
+
+  return parsed;
 }

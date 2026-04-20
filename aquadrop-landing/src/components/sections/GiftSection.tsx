@@ -144,6 +144,7 @@ captureLeadForAutomation(
     }
   }
 );
+      console.info('[email][form][gift] Triggering notification after successful submit');
       await triggerFormNotification({
         type: 'gift_claim',
         payload: {
@@ -153,9 +154,10 @@ captureLeadForAutomation(
           shippingAddress: trimmedShippingAddress,
           purchaseLocation: trimmedPurchaseLocation,
           purchaseDate: formState.purchase_date,
-          receiptUrl: receiptUpload ?? null
+          receiptUrl: receiptUpload?.publicUrl ?? null
         }
       });
+      console.info('[email][form][gift] Notification trigger completed');
       hasRedirected = true;
       router.push('/koszonjuk/ajandek');
     } catch (error) {
