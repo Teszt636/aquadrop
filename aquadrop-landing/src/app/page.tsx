@@ -4,7 +4,6 @@ import {
   BeforeAfterSection,
   BenefitsSection,
   FooterSection,
-  GiftSection,
   HeroSection,
   MicrocapsuleMagicSection,
   ProblemSection,
@@ -14,6 +13,7 @@ import {
   TrustSection
 } from '@/components/sections';
 import { ScrollDepthTracker } from '@/components/analytics';
+import { GiftSectionClientOnly } from '@/components/sections/GiftSectionClientOnly';
 
 export default function Home() {
   return (
@@ -45,7 +45,7 @@ export default function Home() {
           <SocialProofSection />
           <BeforeAfterSection />
           <ThreePathsSection />
-          <GiftSection />
+          <GiftSectionClientOnly />
           <AnnouncementSection />
           <B2BBridgeSection />
           <FooterSection />
