@@ -45,6 +45,7 @@ function buildUserEmailTemplate(params: {
   greetingName: string;
   title: string;
   paragraphs: string[];
+  ctaText: string;
 }): EmailTemplate {
   const bodyParagraphs = params.paragraphs
     .map(
@@ -95,7 +96,7 @@ function buildUserEmailTemplate(params: {
                         <tr>
                           <td bgcolor="#2563eb" style="border-radius: 10px; text-align: center;">
                             <a href="https://aquadrop.hu" target="_blank" style="display: inline-block; padding: 13px 24px; font-size: 15px; line-height: 1; font-weight: 700; color: #ffffff; text-decoration: none;">
-                              Vissza a főoldalra
+                              ${params.ctaText}
                             </a>
                           </td>
                         </tr>
@@ -121,13 +122,15 @@ function buildUserEmailTemplate(params: {
 
 export function buildAnnouncementUserEmail(name: string): EmailTemplate {
   return buildUserEmailTemplate({
-    subject: 'Sikeres feliratkozás – elsők között értesítünk',
+    subject: '👉 Sikeres feliratkozás',
     greetingName: name,
-    title: 'Sikeres feliratkozás',
+    title: '👉 Sikeres feliratkozás',
     paragraphs: [
-      'Köszönjük, hogy feliratkoztál az Aquadrop nagy bejelentésére.',
-      'Hamarosan az elsők között küldjük az újdonságokat és ajánlatokat.'
-    ]
+      'Köszönjük, hogy feliratkoztál az Aquadrop értesítőre.',
+      'Elsők között fogsz értesülni az új termékekről, ajánlatokról és induló akciókról.',
+      'Addig is mutatunk egy rövid áttekintést arról, miért választják egyre többen az Aquadropot.'
+    ],
+    ctaText: 'Megnézem az Aquadrop Expert Prot'
   });
 }
 
@@ -146,13 +149,16 @@ export function buildAnnouncementAdminEmail(data: AnnouncementSignupEmailData): 
 
 export function buildGiftUserEmail(name: string): EmailTemplate {
   return buildUserEmailTemplate({
-    subject: 'Megkaptuk az ajándék igénylésed',
+    subject: '👉 Megkaptuk az ajándék mosókapszula igénylésed 🎁',
     greetingName: name,
-    title: 'Megkaptuk az igénylésed',
+    title: '👉 Megkaptuk az ajándék mosókapszula igénylésed 🎁',
     paragraphs: [
-      'Megkaptuk az ajándék igénylésedet.',
-      'Az igénylést feldolgozzuk, és hamarosan jelentkezünk a részletekkel.'
-    ]
+      'Köszönjük, hogy igényelted az Aquadrop ajándék mosókapszulát.',
+      'Az igénylésed rendben megérkezett, jelenleg feldolgozás alatt van.',
+      'Hamarosan jelentkezünk a részletekkel és a következő lépésekkel.',
+      'Addig is megmutatjuk, miért működik ennyire hatékonyan az Aquadrop kapszula.'
+    ],
+    ctaText: 'Megnézem, mitől ilyen hatékony'
   });
 }
 
@@ -175,13 +181,15 @@ export function buildGiftAdminEmail(data: GiftClaimEmailData): EmailTemplate {
 
 export function buildResellerUserEmail(name: string): EmailTemplate {
   return buildUserEmailTemplate({
-    subject: 'Köszönjük partner jelentkezésed',
+    subject: '👉 Köszönjük a jelentkezésed viszonteladó partnerként',
     greetingName: name,
-    title: 'Köszönjük a jelentkezésed',
+    title: '👉 Köszönjük a jelentkezésed viszonteladó partnerként',
     paragraphs: [
-      'Köszönjük a partner jelentkezésedet.',
-      'Hamarosan felvesszük veled a kapcsolatot a következő lépésekkel.'
-    ]
+      'Köszönjük, hogy érdeklődsz az Aquadrop Expert Pro viszonteladói lehetőség iránt.',
+      'A jelentkezésed megérkezett, hamarosan felvesszük veled a kapcsolatot a részletekkel.',
+      'Addig is érdemes megnézned, milyen termékkel dolgozol majd.'
+    ],
+    ctaText: 'Megnézem a terméket'
   });
 }
 
