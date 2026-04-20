@@ -115,8 +115,8 @@ await insertIntoTable('gift_claims', {
   purchase_date: formState.purchase_date,
   consent: formState.consent,
   purchase_declaration: formState.purchase_declaration,
-  receipt_url: receiptUpload ?? null,
-  receipt_path: null
+  receipt_url: receiptUpload?.publicUrl ?? null,
+  receipt_path: receiptUpload?.path ?? null
 });
 
 captureLeadForAutomation(
