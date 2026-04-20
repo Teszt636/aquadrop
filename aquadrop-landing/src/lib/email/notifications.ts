@@ -9,17 +9,25 @@ import {
 import { sendEmailWithResend } from '@/lib/email/resend';
 import { type EmailNotificationRequest } from '@/lib/email/types';
 
-const DEFAULT_SENDER = 'Aquadrop <noreply@aquadrop.hu>';
+const SENDER_EMAIL = 'Aquadrop Ügyfélszolgálat <noreply@aquadrop.hu>';
+const REPLY_TO_EMAIL = 'hello@aquadrop.hu';
 
 function getSenderEmail(): string {
-  const senderEmail = process.env.EMAIL_FROM ?? DEFAULT_SENDER;
-
   console.info('[email][notifications] Sender email resolved', {
-    from: senderEmail,
-    source: process.env.EMAIL_FROM ? 'EMAIL_FROM' : 'DEFAULT_SENDER'
+    from: SENDER_EMAIL,
+    source: 'STATIC'
   });
 
-  return senderEmail;
+  return SENDER_EMAIL;
+}
+
+function getReplyToEmail(): string {
+  console.info('[email][notifications] Reply-to email resolved', {
+    replyTo: REPLY_TO_EMAIL,
+    source: 'STATIC'
+  });
+
+  return REPLY_TO_EMAIL;
 }
 
 function getAdminEmail(): string {
@@ -52,13 +60,15 @@ function getSubmittedAt(): string {
 export async function sendFormNotifications(request: EmailNotificationRequest): Promise<void> {
   const from = getSenderEmail();
   const adminEmail = getAdminEmail();
+  const replyTo = getReplyToEmail();
   const submittedAt = getSubmittedAt();
 
   console.info('[email][notifications] Preparing form notifications', {
     type: request.type,
     recipientEmail: request.payload.email,
     adminEmail,
-    from
+    from,
+    replyTo
   });
 
   switch (request.type) {
@@ -74,13 +84,15 @@ export async function sendFormNotifications(request: EmailNotificationRequest): 
           from,
           to: request.payload.email,
           subject: userEmail.subject,
-          html: userEmail.html
+          html: userEmail.html,
+          replyTo
         }),
         sendEmailWithResend({
           from,
           to: adminEmail,
           subject: adminTemplate.subject,
-          html: adminTemplate.html
+          html: adminTemplate.html,
+          replyTo
         })
       ]);
       console.info('[email][notifications] announcement_signup emails sent', {
@@ -109,13 +121,15 @@ export async function sendFormNotifications(request: EmailNotificationRequest): 
           from,
           to: request.payload.email,
           subject: userEmail.subject,
-          html: userEmail.html
+          html: userEmail.html,
+          replyTo
         }),
         sendEmailWithResend({
           from,
           to: adminEmail,
           subject: adminTemplate.subject,
-          html: adminTemplate.html
+          html: adminTemplate.html,
+          replyTo
         })
       ]);
       console.info('[email][notifications] gift_claim emails sent', {
@@ -143,13 +157,15 @@ export async function sendFormNotifications(request: EmailNotificationRequest): 
           from,
           to: request.payload.email,
           subject: userEmail.subject,
-          html: userEmail.html
+          html: userEmail.html,
+          replyTo
         }),
         sendEmailWithResend({
           from,
           to: adminEmail,
           subject: adminTemplate.subject,
-          html: adminTemplate.html
+          html: adminTemplate.html,
+          replyTo
         })
       ]);
       console.info('[email][notifications] reseller_application emails sent', {
