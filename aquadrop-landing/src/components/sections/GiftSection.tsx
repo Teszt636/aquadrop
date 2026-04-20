@@ -1,6 +1,6 @@
 'use client';
 
-import { type ChangeEvent, type FormEvent, type FocusEvent, type MouseEvent, useEffect, useState } from 'react';
+import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/Button';
@@ -77,14 +77,6 @@ export function GiftSection() {
     setReceiptFile(file);
   };
 
-  const openNativeDatePicker = (event: FocusEvent<HTMLInputElement> | MouseEvent<HTMLInputElement>) => {
-    const input = event.currentTarget as HTMLInputElement & { showPicker?: () => void };
-
-    if (typeof input.showPicker === 'function') {
-      input.showPicker();
-    }
-  };
-
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -106,6 +98,8 @@ export function GiftSection() {
       setErrorMessage('A nyilatkozat elfogadása kötelező.');
       return;
     }
+
+    let hasRedirected = false;
 
     try {
       setIsSubmitting(true);
@@ -144,15 +138,15 @@ captureLeadForAutomation(
     }
   }
 );
-      setFormState(INITIAL_FORM_STATE);
-      setReceiptFile(null);
-
+      hasRedirected = true;
       router.push('/koszonjuk/ajandek');
     } catch (error) {
       console.error(error);
       setErrorMessage('Hiba történt a beküldés során. Kérlek, próbáld újra.');
     } finally {
-      setIsSubmitting(false);
+      if (!hasRedirected) {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -280,8 +274,6 @@ captureLeadForAutomation(
                   value={formState.purchase_date ?? ''}
                   max={maxPurchaseDate}
                   onChange={handleChange}
-                  onFocus={openNativeDatePicker}
-                  onClick={openNativeDatePicker}
                   disabled={isSubmitting}
                   className={`gift-date-input h-10 w-full min-w-0 max-w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 outline-none transition focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:h-11 md:px-4 md:text-base ${
                     !formState.purchase_date ? 'is-empty' : ''
