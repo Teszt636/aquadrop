@@ -56,6 +56,24 @@ export async function insertIntoTable<TResponse = unknown>(
   return JSON.parse(text) as TResponse;
 }
 
+export async function selectFromTable<TResponse = unknown>(
+  table: string,
+  queryParams: URLSearchParams
+): Promise<TResponse[]> {
+  const response = await fetch(`${supabaseConfig.restUrl}/${table}?${queryParams.toString()}`, {
+    method: 'GET',
+    headers: getSupabaseHeaders()
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+
+    throw new Error(`Supabase select failed (${response.status}): ${errorText}`);
+  }
+
+  return (await response.json()) as TResponse[];
+}
+
 export function getStorageUploadUrl(bucket: string, objectPath: string): string {
   return `${supabaseConfig.storageUrl}/object/${bucket}/${objectPath}`;
 }

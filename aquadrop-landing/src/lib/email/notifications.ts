@@ -1,8 +1,11 @@
 import {
+  buildAnnouncementAlreadyExistsUserEmail,
   buildAnnouncementAdminEmail,
   buildAnnouncementUserEmail,
+  buildGiftAlreadyExistsUserEmail,
   buildGiftAdminEmail,
   buildGiftUserEmail,
+  buildResellerAlreadyExistsUserEmail,
   buildResellerAdminEmail,
   buildResellerUserEmail
 } from '@/lib/email/templates';
@@ -102,6 +105,22 @@ export async function sendFormNotifications(request: EmailNotificationRequest): 
       return;
     }
 
+    case 'announcement_signup_exists': {
+      const userEmail = buildAnnouncementAlreadyExistsUserEmail(request.payload.name);
+      const userResponse = await sendEmailWithResend({
+        from,
+        to: request.payload.email,
+        subject: userEmail.subject,
+        html: userEmail.html,
+        replyTo
+      });
+
+      console.info('[email][notifications] announcement_signup_exists email sent', {
+        userEmailId: userResponse.id
+      });
+      return;
+    }
+
     case 'gift_claim': {
       if (
         !request.payload.fullName ||
@@ -139,6 +158,22 @@ export async function sendFormNotifications(request: EmailNotificationRequest): 
       return;
     }
 
+    case 'gift_claim_exists': {
+      const userEmail = buildGiftAlreadyExistsUserEmail(request.payload.fullName);
+      const userResponse = await sendEmailWithResend({
+        from,
+        to: request.payload.email,
+        subject: userEmail.subject,
+        html: userEmail.html,
+        replyTo
+      });
+
+      console.info('[email][notifications] gift_claim_exists email sent', {
+        userEmailId: userResponse.id
+      });
+      return;
+    }
+
     case 'reseller_application': {
       if (
         !request.payload.companyName ||
@@ -171,6 +206,22 @@ export async function sendFormNotifications(request: EmailNotificationRequest): 
       console.info('[email][notifications] reseller_application emails sent', {
         userEmailId: userResponse.id,
         adminEmailId: adminResponse.id
+      });
+      return;
+    }
+
+    case 'reseller_application_exists': {
+      const userEmail = buildResellerAlreadyExistsUserEmail(request.payload.contactName);
+      const userResponse = await sendEmailWithResend({
+        from,
+        to: request.payload.email,
+        subject: userEmail.subject,
+        html: userEmail.html,
+        replyTo
+      });
+
+      console.info('[email][notifications] reseller_application_exists email sent', {
+        userEmailId: userResponse.id
       });
       return;
     }
