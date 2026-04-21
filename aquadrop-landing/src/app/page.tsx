@@ -71,6 +71,42 @@ export default function Home() {
         <main className="relative isolate flex w-full flex-col">
           <ScrollDepthTracker />
           <HeroSection />
+          <section className="bg-gray-50 py-16">
+            <div className="max-w-4xl mx-auto px-4 text-center">
+              <h2 className="text-3xl font-bold text-gray-900 md:text-4xl">
+                Vásárolj 2 dobozt, és kapsz egyet AJÁNDÉKBA
+              </h2>
+              <p className="mt-4 text-lg text-gray-600">
+                Csak töltsd fel a blokkot, és mi házhoz küldjük az ajándék terméket.
+              </p>
+
+              <div className="mt-10 grid gap-4 md:grid-cols-3">
+                <div className="rounded bg-white p-4 shadow">
+                  <h3 className="text-lg font-semibold text-gray-900">1. Vásárolj</h3>
+                  <p className="mt-2 text-gray-600">
+                    Vásárolj Aquadrop kapszulát bármely partnerünknél.
+                  </p>
+                </div>
+                <div className="rounded bg-white p-4 shadow">
+                  <h3 className="text-lg font-semibold text-gray-900">2. Fotózd le</h3>
+                  <p className="mt-2 text-gray-600">Készíts egy fotót a blokkodról.</p>
+                </div>
+                <div className="rounded bg-white p-4 shadow">
+                  <h3 className="text-lg font-semibold text-gray-900">3. Töltsd fel</h3>
+                  <p className="mt-2 text-gray-600">
+                    Töltsd fel, és megkapod az ajándék dobozt.
+                  </p>
+                </div>
+              </div>
+
+              <a
+                href="#gift-form"
+                className="mt-10 inline-flex rounded-lg bg-blue-600 px-8 py-4 text-lg font-semibold text-white transition hover:bg-blue-700"
+              >
+                AJÁNDÉK IGÉNYLÉSE
+              </a>
+            </div>
+          </section>
           <DubaiSection />
           <GiftSection />
           <ProblemSection />
