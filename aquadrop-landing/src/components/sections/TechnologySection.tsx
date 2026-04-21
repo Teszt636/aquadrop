@@ -14,7 +14,7 @@ export function TechnologySection() {
     <section className="ds-section">
       <div className="ds-container">
         <div className="ds-section-heading-wrap">
-          <SectionHeading>Nem egy átlagos mosókapszula</SectionHeading>
+          <SectionHeading>Mosókapszula különleges tulajdonságokkal</SectionHeading>
         </div>
 
         <div className="mt-10 grid items-center gap-6 lg:grid-cols-[minmax(320px,420px)_1fr] lg:gap-10">
