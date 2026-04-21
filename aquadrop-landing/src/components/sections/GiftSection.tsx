@@ -166,15 +166,17 @@ export function GiftSection() {
   };
 
   return (
-    <section id="gift-campaign" className="ds-section">
+    <section id="gift-campaign" className="bg-gradient-to-b from-white to-blue-50 py-20">
       <div className="ds-container">
-        <div className="relative rounded-3xl border-2 border-blue-300 bg-gradient-to-br from-blue-50 via-sky-50 to-emerald-50 px-4 py-8 shadow-xl sm:px-6 sm:py-10 md:px-10 md:py-12">
-          <div className="relative z-10 mx-auto max-w-4xl text-center">
+        <div className="mx-auto max-w-5xl">
+          <div className="relative z-10 mx-auto text-center">
             <SectionEyebrow className="inline-flex rounded-full border border-cyan-300/50 bg-cyan-300/15 px-4 py-1 text-sm font-medium normal-case tracking-normal text-cyan-900">
               Kiemelt ajánlat
             </SectionEyebrow>
-            <SectionHeading className="mt-3">Vásárolj 2 dobozt – mi adjuk a harmadikat</SectionHeading>
-            <SectionDescription className="mx-auto mt-4 max-w-3xl">
+            <SectionHeading className="mb-3 mt-3 text-4xl md:text-5xl">
+              Vásárolj 2 dobozt – mi adjuk a harmadikat
+            </SectionHeading>
+            <SectionDescription className="mx-auto mt-4 max-w-2xl text-lg text-gray-600">
               Vásárolj 2 doboz Aquadrop Expert Pro mosókapszulát valamelyik partner üzletben,
               töltsd fel a blokkot, és elküldjük a 3. dobozt ajándékba.
             </SectionDescription>
@@ -182,6 +184,30 @@ export function GiftSection() {
             <div className="mt-5 inline-flex rounded-full border border-amber-300 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-800">
               Az ajándék kampány korlátozott ideig érhető el.
             </div>
+          </div>
+
+          <div className="mt-8 grid gap-6 md:grid-cols-3">
+            <article className="rounded-2xl bg-white p-6 text-center shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+              <div className="mb-3 text-3xl">🛒</div>
+              <h3 className="text-lg font-semibold text-slate-900">Vásárolj 2 dobozt</h3>
+            </article>
+            <article className="rounded-2xl bg-white p-6 text-center shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+              <div className="mb-3 text-3xl">📸</div>
+              <h3 className="text-lg font-semibold text-slate-900">Töltsd fel a blokkot</h3>
+            </article>
+            <article className="rounded-2xl bg-white p-6 text-center shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+              <div className="mb-3 text-3xl">🎁</div>
+              <h3 className="text-lg font-semibold text-slate-900">Kapd meg az ajándékot</h3>
+            </article>
+          </div>
+
+          <div className="mt-10 text-center">
+            <a
+              href="#gift-claim-form"
+              className="inline-flex rounded-xl bg-blue-600 px-6 py-3 text-white shadow-lg transition hover:scale-105 hover:bg-blue-700"
+            >
+              Ajándék terméket igénylek
+            </a>
           </div>
 
           <form
