@@ -1,3 +1,11 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Mosókapszula – Aquadrop Expert Pro',
+  description:
+    'Prémium mosókapszula Dubai gyártói háttérrel. Vásárolj 2 dobozt, a 3.-at ajándékba adjuk. Erős tisztítás, modern formula, kényelmes használat.',
+};
+
 import {
   AnnouncementSection,
   B2BBridgeSection,
