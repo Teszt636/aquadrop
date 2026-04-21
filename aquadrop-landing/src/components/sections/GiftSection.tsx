@@ -166,48 +166,52 @@ export function GiftSection() {
   };
 
   return (
-    <section className="bg-gradient-to-b from-blue-50 to-white py-20">
-      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div className="grid items-start gap-8 lg:grid-cols-[1fr_1.15fr] lg:gap-10">
-          <div className="rounded-3xl border border-blue-100 bg-white/70 p-6 shadow-lg backdrop-blur-sm sm:p-8">
-            <SectionEyebrow className="inline-flex rounded-full border border-blue-200 bg-blue-100/70 px-4 py-1 text-sm font-medium normal-case tracking-normal text-blue-900">
+    <section className="bg-gradient-to-b from-slate-50 via-blue-50/60 to-white py-24">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="relative">
+          <div className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[rgba(125,211,252,0.22)] blur-[90px]" />
+
+          <div className="rounded-[32px] border border-slate-200/80 bg-white/70 p-4 shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur-sm md:p-6 lg:p-8">
+            <div className="grid items-stretch gap-6 lg:grid-cols-[0.95fr_1.15fr] lg:gap-8">
+              <div className="h-full rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-50 to-blue-50 p-8 md:p-10">
+                <SectionEyebrow className="inline-flex rounded-full border border-slate-200 bg-white/75 px-4 py-1 text-xs font-medium normal-case tracking-normal text-slate-700 sm:text-sm">
               Ajándék kampány
             </SectionEyebrow>
-            <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+                <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
               Ajándék mosókapszula igénylés
             </h2>
-            <p className="mt-4 text-base leading-7 text-slate-700">
+                <p className="mt-4 text-base leading-7 text-slate-700">
               Az alábbi űrlap kitöltésével és a vásárlási blokk feltöltésével egyszerűen
               igényelheted az ajándék mosókapszulát.
             </p>
 
-            <ul className="mt-6 space-y-3 text-sm font-medium text-slate-700 sm:text-base">
-              <li className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
+                <ul className="mt-6 space-y-3 text-sm font-medium text-slate-700 sm:text-base">
+                  <li className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white/80 px-4 py-4">
                 <span className="mt-0.5 text-blue-600">✓</span>
                 <span>Vásárolj 2 dobozt</span>
               </li>
-              <li className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
+                  <li className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white/80 px-4 py-4">
                 <span className="mt-0.5 text-blue-600">✓</span>
                 <span>Töltsd fel a blokkot</span>
               </li>
-              <li className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
+                  <li className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white/80 px-4 py-4">
                 <span className="mt-0.5 text-blue-600">✓</span>
                 <span>Mi elküldjük az ajándékot</span>
               </li>
-            </ul>
+                </ul>
 
-            <p className="mt-6 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs leading-6 text-slate-600 sm:text-sm">
+                <p className="mt-6 text-xs leading-6 text-slate-500 sm:text-sm">
               A beküldött adatokat kizárólag a kampány lebonyolításához használjuk fel.
             </p>
-          </div>
+              </div>
 
-          <form
+              <form
             id="gift-form"
             tabIndex={-1}
             aria-label="Ajándék mosókapszula igénylőlap"
             onSubmit={handleSubmit}
             noValidate
-            className="relative z-10 w-full scroll-mt-6 overflow-visible rounded-3xl border border-slate-200 bg-white p-6 shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 sm:p-8"
+                className="relative z-10 h-full w-full scroll-mt-6 overflow-visible rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_16px_40px_rgba(15,23,42,0.10)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 md:p-8"
           >
             <h3 className="text-xl font-semibold text-slate-900">Ajándék mosókapszula igénylőlap</h3>
 
@@ -389,7 +393,9 @@ export function GiftSection() {
                 </Button>
               </div>
             </div>
-          </form>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </section>
