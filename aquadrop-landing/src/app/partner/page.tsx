@@ -147,9 +147,6 @@ export default function PartnerPage() {
                 </article>
               ))}
             </div>
-            <p className="text-base text-slate-600">
-              Partnereink között megtalálhatók viszonteladók, webshopok és regionális beszállítók is.
-            </p>
           </div>
         </div>
       </section>
