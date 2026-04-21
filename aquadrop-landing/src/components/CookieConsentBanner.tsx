@@ -31,12 +31,14 @@ export default function CookieConsentBanner() {
           <p className="text-sm leading-relaxed text-slate-700 md:text-base">
             Ez a weboldal sütiket használ a működéshez és statisztikai célokra. A statisztikai sütik csak az Ön hozzájárulása után töltődnek be.
           </p>
-          <a
-            className="inline-flex text-sm font-medium text-brand-primary underline-offset-2 transition hover:underline"
-            href="/adatvedelmi-tajekoztato"
-          >
-            Adatkezelési tájékoztató
-          </a>
+          <div className="flex flex-col gap-2 text-sm font-medium text-brand-primary sm:flex-row sm:items-center sm:gap-4">
+            <a className="inline-flex underline-offset-2 transition hover:underline" href="/adatvedelmi-tajekoztato">
+              Adatvédelmi tájékoztató
+            </a>
+            <a className="inline-flex underline-offset-2 transition hover:underline" href="/suti-tajekoztato">
+              Süti tájékoztató
+            </a>
+          </div>
         </div>
         <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
           <button
