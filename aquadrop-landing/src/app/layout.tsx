@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
+import CookieConsentBanner from '@/components/CookieConsentBanner';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -27,6 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="hu">
       <body>
         {children}
+        <CookieConsentBanner />
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-KE6Z8CCYL4"
           strategy="afterInteractive"
