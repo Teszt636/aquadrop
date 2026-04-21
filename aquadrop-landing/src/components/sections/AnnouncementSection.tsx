@@ -5,9 +5,6 @@ import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/Button';
 import { SectionDescription, SectionHeading } from '@/components/ui/SectionHeading';
-import { insertIntoTable, selectFromTable } from '@/lib/supabase';
-import { captureLeadForAutomation } from '@/lib/lead-automation';
-import { triggerFormNotification } from '@/lib/email/client';
 
 type FormState = {
   name: string;
@@ -46,57 +43,31 @@ export function AnnouncementSection() {
     setErrorMessage(null);
 
     try {
-      const existingSignupQuery = new URLSearchParams({
-        select: 'id',
-        email: `eq.${trimmedEmail}`,
-        limit: '1'
-      });
-      const existingSignup = await selectFromTable<{ id: number }>('announcement_signups', existingSignupQuery);
-
-      if (existingSignup.length > 0) {
-        console.info('[email][form][announcement] Existing signup found, skipping insert');
-        await triggerFormNotification({
-          type: 'announcement_signup_exists',
+      const response = await fetch('/api/forms/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          formType: 'announcement_signup',
           payload: {
             name: trimmedName,
             email: trimmedEmail,
-            phone: trimmedPhone || null
+            phone: trimmedPhone || null,
+            consent: formState.consent
           }
-        });
-        router.push('/koszonjuk/feliratkozas');
-        return;
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Submit route returned status ${response.status}`);
+      }
+      const result = (await response.json()) as { success?: boolean };
+
+      if (!result.success) {
+        throw new Error('Submit route returned unsuccessful response.');
       }
 
-      await insertIntoTable('announcement_signups', {
-        name: trimmedName,
-        email: trimmedEmail,
-        phone: trimmedPhone || null,
-        consent: formState.consent
-      });
-
-      captureLeadForAutomation(
-        'newsletter_form_submit',
-        { form_id: 'announcement-signup' },
-        {
-          lead_type: 'newsletter_signup',
-          email: trimmedEmail,
-          phone: trimmedPhone || null,
-          full_name: trimmedName,
-          source: 'landing_announcement_section',
-          metadata: { consent: formState.consent }
-        }
-      );
-
-      console.info('[email][form][announcement] Triggering notification after successful submit');
-      await triggerFormNotification({
-        type: 'announcement_signup',
-        payload: {
-          name: trimmedName,
-          email: trimmedEmail,
-          phone: trimmedPhone || null
-        }
-      });
-      console.info('[email][form][announcement] Notification trigger completed');
       router.push('/koszonjuk/feliratkozas');
     } catch {
       setErrorMessage('Hiba történt a feliratkozás során. Kérlek, próbáld újra.');

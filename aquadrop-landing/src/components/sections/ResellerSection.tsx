@@ -3,10 +3,6 @@
 import { type FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { captureLeadForAutomation } from '@/lib/lead-automation';
-import { insertIntoTable, selectFromTable } from '@/lib/supabase';
-import { triggerFormNotification } from '@/lib/email/client';
-
 const channelOptions = ['bolt', 'webshop', 'nagyker'] as const;
 
 type SalesChannel = (typeof channelOptions)[number];
@@ -63,101 +59,34 @@ export function ResellerSection() {
     setErrorMessage(null);
 
     try {
-      const existingApplicationQuery = new URLSearchParams({
-        select: 'id',
-        email: `eq.${normalizedEmail}`,
-        limit: '1'
-      });
-      const existingApplication = await selectFromTable<{ id: number }>(
-        'reseller_applications',
-        existingApplicationQuery
-      );
-      const duplicateCount = existingApplication.length;
-      const duplicateDetected = duplicateCount > 0;
-
-      console.info('[email][form][reseller] Duplicate check completed', {
-        normalizedEmail,
-        duplicateCount,
-        duplicateDetected
-      });
-
-      if (duplicateDetected) {
-        const notificationType = 'reseller_application_exists';
-        console.info('[email][form][reseller] Existing application found, skipping insert', {
-          normalizedEmail,
-          chosenNotificationType: notificationType,
-          insertSkipped: true
-        });
-        await triggerFormNotification({
-          type: notificationType,
+      const response = await fetch('/api/forms/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          formType: 'reseller_application',
           payload: {
-            companyName: trimmedCompanyName,
-            contactName: trimmedContactName,
+            company_name: trimmedCompanyName,
+            contact_name: trimmedContactName,
             email: normalizedEmail,
             phone: trimmedPhone,
             website: trimmedWebsite || null,
-            salesChannel: formState.sales_channel,
+            sales_channel: formState.sales_channel,
             message: trimmedMessage || null
           }
-        });
-        router.push('/koszonjuk/viszontelado');
-        return;
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Submit route returned status ${response.status}`);
+      }
+      const result = (await response.json()) as { success?: boolean };
+
+      if (!result.success) {
+        throw new Error('Submit route returned unsuccessful response.');
       }
 
-      await insertIntoTable('reseller_applications', {
-        company_name: trimmedCompanyName,
-        contact_name: trimmedContactName,
-        email: normalizedEmail,
-        phone: trimmedPhone,
-        website: trimmedWebsite || null,
-        sales_channel: formState.sales_channel,
-        message: trimmedMessage || null
-      });
-
-      const notificationType = 'reseller_application';
-
-      console.info('[email][form][reseller] Proceeding with new application insert', {
-        normalizedEmail,
-        chosenNotificationType: notificationType,
-        insertSkipped: false
-      });
-
-      captureLeadForAutomation(
-        'partner_form_submit',
-        {
-          form_id: 'reseller-application-form',
-          sales_channel: formState.sales_channel
-        },
-        {
-          lead_type: 'reseller_application',
-          email: normalizedEmail,
-          phone: trimmedPhone,
-          full_name: trimmedContactName,
-          source: 'partner_page_reseller_form',
-          metadata: {
-            company_name: trimmedCompanyName,
-            sales_channel: formState.sales_channel
-          }
-        }
-      );
-
-      console.info('[email][form][reseller] Triggering notification after successful submit', {
-        normalizedEmail,
-        chosenNotificationType: notificationType
-      });
-      await triggerFormNotification({
-        type: notificationType,
-        payload: {
-          companyName: trimmedCompanyName,
-          contactName: trimmedContactName,
-          email: normalizedEmail,
-          phone: trimmedPhone,
-          website: trimmedWebsite || null,
-          salesChannel: formState.sales_channel,
-          message: trimmedMessage || null
-        }
-      });
-      console.info('[email][form][reseller] Notification trigger completed');
       router.push('/koszonjuk/viszontelado');
     } catch {
       setErrorMessage('Hiba történt a jelentkezés elküldése közben. Kérlek, próbáld újra.');
