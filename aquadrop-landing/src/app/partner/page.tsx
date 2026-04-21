@@ -1,4 +1,3 @@
-import type { Metadata } from 'next';
 import Image from 'next/image';
 
 import { FooterSection, ResellerSection } from '@/components/sections';
@@ -48,11 +47,6 @@ const PERFORMANCE_BULLETS = [
   '600N nyomásállóság – ellenáll az összenyomásnak és rálépésnek',
   'Gyorsan oldódó PVA film – nem hagy maradványt.'
 ] as const;
-
-export const metadata: Metadata = {
-  title: 'Viszonteladóknak | Aquadrop Expert Pro',
-  description: 'Jelentkezés az Aquadrop Expert Pro viszonteladói programjába.'
-};
 
 export default function PartnerPage() {
   return (
