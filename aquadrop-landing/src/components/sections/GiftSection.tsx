@@ -1,6 +1,6 @@
 'use client';
 
-import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react';
+import { type ChangeEvent, type FormEvent, type PointerEvent, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/Button';
@@ -31,6 +31,7 @@ const INITIAL_FORM_STATE: GiftFormState = {
 
 export function GiftSection() {
   const router = useRouter();
+  const purchaseDateInputRef = useRef<HTMLInputElement | null>(null);
 
   const [formState, setFormState] = useState<GiftFormState>(INITIAL_FORM_STATE);
   const [receiptFile, setReceiptFile] = useState<File | null>(null);
@@ -152,12 +153,26 @@ export function GiftSection() {
     }
   };
 
+  const handlePurchaseDatePointerDown = (event: PointerEvent<HTMLInputElement>) => {
+    if (event.pointerType !== 'mouse') return;
+    if (typeof window === 'undefined') return;
+
+    const input = purchaseDateInputRef.current;
+
+    if (!input || !('showPicker' in input)) return;
+
+    event.preventDefault();
+    input.showPicker();
+  };
+
   return (
     <section id="gift-campaign" className="ds-section">
       <div className="ds-container">
         <div className="relative rounded-3xl border-2 border-blue-300 bg-gradient-to-br from-blue-50 via-sky-50 to-emerald-50 px-4 py-8 shadow-xl sm:px-6 sm:py-10 md:px-10 md:py-12">
           <div className="relative z-10 mx-auto max-w-4xl text-center">
-            <SectionEyebrow>Kiemelt ajánlat</SectionEyebrow>
+            <SectionEyebrow className="inline-flex rounded-full border border-cyan-300/50 bg-cyan-300/15 px-4 py-1 text-sm font-medium normal-case tracking-normal text-cyan-900">
+              Kiemelt ajánlat
+            </SectionEyebrow>
             <SectionHeading className="mt-3">Vásárolj 2 dobozt – mi adjuk a harmadikat</SectionHeading>
             <SectionDescription className="mx-auto mt-4 max-w-3xl">
               Vásárolj 2 doboz Aquadrop Expert Pro mosókapszulát valamelyik partner üzletben,
@@ -270,12 +285,14 @@ export function GiftSection() {
                 Vásárlás dátuma *
                 <input
                   id="gift-purchase-date"
+                  ref={purchaseDateInputRef}
                   name="purchase_date"
                   type="date"
                   required
                   value={formState.purchase_date ?? ''}
                   max={maxPurchaseDate}
                   onChange={handleChange}
+                  onPointerDown={handlePurchaseDatePointerDown}
                   disabled={isSubmitting}
                   className={`gift-date-input h-10 w-full min-w-0 max-w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 outline-none transition focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:h-11 md:px-4 md:text-base ${
                     !formState.purchase_date ? 'is-empty' : ''
