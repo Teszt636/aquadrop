@@ -166,16 +166,48 @@ export function GiftSection() {
   };
 
   return (
-    <section className="bg-gradient-to-b from-white to-blue-50 py-20">
-      <div className="ds-container">
-        <div className="mx-auto max-w-5xl">
+    <section className="bg-gradient-to-b from-blue-50 to-white py-20">
+      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div className="grid items-start gap-8 lg:grid-cols-[1fr_1.15fr] lg:gap-10">
+          <div className="rounded-3xl border border-blue-100 bg-white/70 p-6 shadow-lg backdrop-blur-sm sm:p-8">
+            <SectionEyebrow className="inline-flex rounded-full border border-blue-200 bg-blue-100/70 px-4 py-1 text-sm font-medium normal-case tracking-normal text-blue-900">
+              Ajándék kampány
+            </SectionEyebrow>
+            <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+              Ajándék mosókapszula igénylés
+            </h2>
+            <p className="mt-4 text-base leading-7 text-slate-700">
+              Az alábbi űrlap kitöltésével és a vásárlási blokk feltöltésével egyszerűen
+              igényelheted az ajándék mosókapszulát.
+            </p>
+
+            <ul className="mt-6 space-y-3 text-sm font-medium text-slate-700 sm:text-base">
+              <li className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
+                <span className="mt-0.5 text-blue-600">✓</span>
+                <span>Vásárolj 2 dobozt</span>
+              </li>
+              <li className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
+                <span className="mt-0.5 text-blue-600">✓</span>
+                <span>Töltsd fel a blokkot</span>
+              </li>
+              <li className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
+                <span className="mt-0.5 text-blue-600">✓</span>
+                <span>Mi elküldjük az ajándékot</span>
+              </li>
+            </ul>
+
+            <p className="mt-6 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs leading-6 text-slate-600 sm:text-sm">
+              A beküldött adatokat kizárólag a kampány lebonyolításához használjuk fel.
+            </p>
+          </div>
+
           <form
-            id="gift-claim-form"
+            id="gift-form"
             tabIndex={-1}
             aria-label="Ajándék mosókapszula igénylőlap"
             onSubmit={handleSubmit}
             noValidate
-            className="relative z-10 mx-auto mt-8 max-w-3xl scroll-mt-6 overflow-visible rounded-2xl border border-brand-primary/15 bg-white/85 p-4 shadow-xl backdrop-blur-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/30 sm:p-5 md:mt-10 md:p-8"
+            className="relative z-10 w-full scroll-mt-6 overflow-visible rounded-3xl border border-slate-200 bg-white p-6 shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 sm:p-8"
           >
             <h3 className="text-xl font-semibold text-slate-900">Ajándék mosókapszula igénylőlap</h3>
 
@@ -183,11 +215,7 @@ export function GiftSection() {
               Töltsd ki az alábbi mezőket, majd töltsd fel a vásárlási blokk képét.
             </p>
 
-            <p className="mt-2 text-xs leading-tight text-slate-500 md:text-sm">
-              A beküldött adatokat kizárólag a kampány lebonyolításához használjuk fel.
-            </p>
-
-            <div className="mt-5 grid grid-cols-1 gap-x-4 gap-y-3 md:mt-6 md:grid-cols-2 md:gap-x-6 md:gap-y-5">
+            <div className="mt-6 grid grid-cols-1 gap-x-4 gap-y-4 md:grid-cols-2 md:gap-x-6 md:gap-y-5">
               <label className="grid gap-1 text-sm font-semibold text-slate-700" htmlFor="gift-full-name">
                 Teljes név *
                 <input
@@ -199,7 +227,7 @@ export function GiftSection() {
                   onChange={handleChange}
                   disabled={isSubmitting}
                   placeholder="pl. Kovács Péter"
-                  className="h-10 w-full max-w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:h-11 md:px-4 md:py-3 md:text-base"
+                  className="h-11 w-full max-w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 md:text-base"
                 />
               </label>
 
@@ -214,7 +242,7 @@ export function GiftSection() {
                   onChange={handleChange}
                   disabled={isSubmitting}
                   placeholder="pl. te@pelda.hu"
-                  className="h-10 w-full max-w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:h-11 md:px-4 md:py-3 md:text-base"
+                  className="h-11 w-full max-w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 md:text-base"
                 />
               </label>
 
@@ -229,7 +257,7 @@ export function GiftSection() {
                   onChange={handleChange}
                   disabled={isSubmitting}
                   placeholder="pl. +36 30 123 4567"
-                  className="h-10 w-full max-w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:h-11 md:px-4 md:py-3 md:text-base"
+                  className="h-11 w-full max-w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 md:text-base"
                 />
               </label>
 
@@ -244,7 +272,7 @@ export function GiftSection() {
                   onChange={handleChange}
                   disabled={isSubmitting}
                   placeholder="pl. Auchan, Kecskemét"
-                  className="h-10 w-full max-w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:h-11 md:px-4 md:py-3 md:text-base"
+                  className="h-11 w-full max-w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 md:text-base"
                 />
               </label>
 
@@ -262,7 +290,7 @@ export function GiftSection() {
                   onChange={handleChange}
                   disabled={isSubmitting}
                   placeholder="pl. Budapest, Példa utca 1."
-                  className="h-10 w-full max-w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:h-11 md:px-4 md:py-3 md:text-base"
+                  className="h-11 w-full max-w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 md:text-base"
                 />
               </label>
 
@@ -279,7 +307,7 @@ export function GiftSection() {
                   onChange={handleChange}
                   onPointerDown={handlePurchaseDatePointerDown}
                   disabled={isSubmitting}
-                  className={`gift-date-input h-10 w-full min-w-0 max-w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 outline-none transition focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 md:h-11 md:px-4 md:text-base ${
+                  className={`gift-date-input h-11 w-full min-w-0 max-w-full rounded-xl border border-slate-300 bg-white px-4 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 md:text-base ${
                     !formState.purchase_date ? 'is-empty' : ''
                   }`}
                 />
@@ -301,7 +329,7 @@ export function GiftSection() {
 
                 <label
                   htmlFor="gift-receipt-file"
-                  className="group flex h-10 w-full min-w-0 max-w-full cursor-pointer items-center overflow-hidden rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 outline-none transition hover:border-brand-primary/60 hover:bg-slate-50 focus-within:border-brand-primary focus-within:ring-2 focus-within:ring-brand-primary/20 md:h-11 md:px-4 md:py-3 md:text-base"
+                  className="group flex h-11 w-full min-w-0 max-w-full cursor-pointer items-center overflow-hidden rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 outline-none transition hover:border-blue-400 hover:bg-slate-50 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20 md:text-base"
                 >
                   <span className="block w-full min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">
                     {receiptFile ? receiptFile.name : 'Blokk képének kiválasztása'}
@@ -322,7 +350,7 @@ export function GiftSection() {
                   checked={formState.consent}
                   onChange={handleChange}
                   disabled={isSubmitting}
-                  className="mt-1 h-5 w-5 rounded border-slate-300 text-brand-primary focus:ring-brand-primary"
+                  className="mt-1 h-5 w-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
                 />
                 <span className="text-sm leading-6 text-slate-700">
                   Elolvastam és elfogadom az adatkezelési tájékoztatót.
@@ -336,7 +364,7 @@ export function GiftSection() {
                   checked={formState.purchase_declaration}
                   onChange={handleChange}
                   disabled={isSubmitting}
-                  className="mt-1 h-5 w-5 rounded border-slate-300 text-brand-primary focus:ring-brand-primary"
+                  className="mt-1 h-5 w-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
                 />
                 <span className="text-sm leading-6 text-slate-700">
                   Kijelentem, hogy a megadott adatok valósak.
@@ -352,7 +380,11 @@ export function GiftSection() {
               <div className="flex flex-col gap-3 md:col-span-2 md:flex-row md:items-center md:justify-between">
                 <p className="text-xs lowercase tracking-wide text-slate-500">* kötelező mező</p>
 
-                <Button type="submit" disabled={isSubmitting} className="h-10 w-full md:h-11 md:w-auto">
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="h-11 w-full rounded-xl bg-blue-600 text-white shadow-md hover:bg-blue-700 md:w-full"
+                >
                   {isSubmitting ? 'Beküldés folyamatban...' : 'Ajándék igénylés beküldése'}
                 </Button>
               </div>
@@ -403,7 +435,7 @@ export function GiftConversionSection() {
 
           <div className="mt-10 text-center">
             <a
-              href="#gift-claim-form"
+              href="#gift-form"
               className="inline-flex rounded-xl bg-blue-600 px-6 py-3 text-white shadow-lg transition hover:scale-105 hover:bg-blue-700"
             >
               Ajándék terméket igénylek
