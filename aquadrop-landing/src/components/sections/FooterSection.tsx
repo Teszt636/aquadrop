@@ -1,6 +1,6 @@
 const legalLinks = [
-  { href: '/adatkezelesi-tajekoztato', label: 'Adatkezelési tájékoztató' },
-  { href: '/aszf', label: 'ÁSZF' }
+  { href: '/adatvedelmi-tajekoztato', label: 'Adatvédelmi tájékoztató' },
+  { href: '/suti-tajekoztato', label: 'Süti tájékoztató' }
 ];
 
 export function FooterSection() {
