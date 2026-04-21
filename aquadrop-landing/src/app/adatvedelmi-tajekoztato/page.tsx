@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { ButtonLink } from '@/components/ui/Button';
 
 export const metadata: Metadata = {
   title: 'Adatvédelmi tájékoztató | Aquadrop',
@@ -229,6 +230,12 @@ export default function PrivacyPolicyPage() {
               <h2 className="text-2xl font-semibold text-slate-950">15. Hatálybalépés</h2>
               <p className="text-base font-medium text-slate-800">Hatályos: 2026.03.01-től</p>
             </section>
+
+            <div className="pt-2 text-center">
+              <ButtonLink href="/" className="px-8 py-3 text-sm md:text-base">
+                Vissza a főoldalra
+              </ButtonLink>
+            </div>
           </div>
         </article>
       </div>
