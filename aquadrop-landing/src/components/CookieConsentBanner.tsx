@@ -25,10 +25,10 @@ export default function CookieConsentBanner() {
   }
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-50 border-t border-slate-300 bg-white/95 backdrop-blur">
-      <div className="ds-container flex flex-col items-center gap-4 py-4 text-center md:flex-row md:items-center md:justify-between md:text-left">
-        <div className="space-y-2">
-          <p className="text-sm text-slate-700">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/35 p-4 backdrop-blur-[2px]">
+      <div className="w-full max-w-2xl rounded-3xl border border-slate-200 bg-white p-6 text-center shadow-[0_30px_90px_-30px_rgba(15,23,42,0.65)] md:p-8 md:text-left">
+        <div className="space-y-3">
+          <p className="text-sm leading-relaxed text-slate-700 md:text-base">
             Ez a weboldal sütiket használ a működéshez és statisztikai célokra. A statisztikai sütik csak az Ön hozzájárulása után töltődnek be.
           </p>
           <a
@@ -38,16 +38,16 @@ export default function CookieConsentBanner() {
             Adatkezelési tájékoztató
           </a>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
           <button
-            className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:text-slate-900"
+            className="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:text-slate-900"
             onClick={() => handleChoice('rejected')}
             type="button"
           >
             Elutasítom
           </button>
           <button
-            className="rounded-lg bg-brand-primary px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90"
+            className="rounded-xl bg-brand-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:opacity-90"
             onClick={() => handleChoice('accepted')}
             type="button"
           >
