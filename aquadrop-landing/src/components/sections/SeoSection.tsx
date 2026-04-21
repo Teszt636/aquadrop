@@ -1,6 +1,5 @@
-import Link from 'next/link';
-
 import { SectionHeading } from '@/components/ui/SectionHeading';
+import { ButtonLink } from '@/components/ui/Button';
 
 export function SeoSection() {
   return (
@@ -72,13 +71,11 @@ export function SeoSection() {
               <p className="mt-3">
                 Ha egy megbízható, könnyen használható és korszerű megoldást keresel, érdemes kipróbálni.
               </p>
-              <p className="mt-4 font-medium text-slate-900">👉 (Ide mehet CTA, a link címe a GiftSection)</p>
-              <Link
-                href="#gift-campaign"
-                className="mt-3 inline-flex text-base font-semibold text-brand-primary transition hover:text-brand-primary/80"
-              >
-                Próbáld ki most – 2 doboz vásárlása esetén adunk plusz egyet ajándékba
-              </Link>
+              <div className="mt-4 flex justify-center">
+                <ButtonLink href="#gift-campaign">
+                  Próbáld ki most – 2 doboz vásárlása esetén adunk plusz egyet ajándékba
+                </ButtonLink>
+              </div>
             </article>
           </div>
         </div>
