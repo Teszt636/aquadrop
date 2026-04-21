@@ -11,12 +11,15 @@ export function HeroSection() {
         <div className="grid w-full items-center gap-8 rounded-3xl border border-slate-200/80 bg-white p-5 shadow-card sm:p-6 md:grid-cols-2 md:gap-12 md:p-12">
           <div className="min-w-0">
 
-            <h1 className="mt-4 break-words text-4xl leading-tight md:text-5xl">
-              Professzionális tisztaság otthonra
+            <h1 className="mt-4 text-sm font-semibold uppercase tracking-[0.08em] text-slate-600">
+              Aquadrop Expert Pro mosókapszula
             </h1>
-            <h2 className="mt-4 break-words text-3xl leading-tight md:text-4xl">
-            Aquadrop Expert Pro mosókapszula
+            <h2 className="mt-3 break-words text-4xl leading-tight md:text-5xl">
+              Professzionális tisztaság otthonra
             </h2>
+            <p className="mt-4 break-words text-3xl leading-tight md:text-4xl">
+              Aquadrop Expert Pro mosókapszula
+            </p>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-700">
               Az Aquadrop Expert Pro magas koncentrációjú formula, amely hatékony tisztítást,
               friss illatot és megbízható mindennapi teljesítményt ad.
