@@ -166,43 +166,39 @@ export function GiftSection() {
   };
 
   return (
-    <section className="bg-gradient-to-b from-blue-50 to-white py-20">
-      <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8">
-        <div className="grid items-start gap-8 lg:grid-cols-2 lg:gap-10">
-          <div className="rounded-3xl border border-blue-100 bg-white/70 p-6 shadow-lg backdrop-blur-sm sm:p-8">
-            <SectionEyebrow className="inline-flex rounded-full border border-blue-200 bg-blue-100/70 px-4 py-1 text-sm font-medium normal-case tracking-normal text-blue-900">
+    <section className="bg-[#eef4ff] py-20">
+      <div className="mx-auto w-full max-w-5xl rounded-[28px] border border-slate-200 bg-white/60 p-5 shadow-[0_18px_50px_rgba(15,23,42,0.08)] backdrop-blur-sm sm:px-6 md:p-6 lg:p-7">
+        <div className="grid items-start gap-5 lg:grid-cols-[0.9fr_1.1fr] lg:gap-6">
+          <div className="rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-6 md:p-7">
+            <SectionEyebrow className="mx-auto inline-flex rounded-full border border-blue-200 bg-blue-100/70 px-3 py-1 text-xs font-medium normal-case tracking-normal text-blue-900">
               Ajándék kampány
             </SectionEyebrow>
-            <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+            <h2 className="mt-4 text-center text-3xl font-bold tracking-tight text-slate-900 md:text-4xl lg:text-left">
               Ajándék mosókapszula igénylés
             </h2>
-            <p className="mt-4 text-base leading-7 text-slate-700">
+            <p className="mx-auto mt-4 max-w-xl text-center text-base leading-6 text-slate-700 lg:mx-0 lg:text-left">
               Az alábbi űrlap kitöltésével és a vásárlási blokk feltöltésével egyszerűen
               igényelheted az ajándék mosókapszulát.
             </p>
 
-            <ul className="mt-6 space-y-3 text-sm font-medium text-slate-700 sm:text-base">
-              <li className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white px-4 py-4">
+            <ul className="mt-5 space-y-2.5 text-sm font-medium text-slate-700 md:text-base">
+              <li className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3">
                 <span className="mt-0.5 text-blue-600">✓</span>
-                <span className="leading-6">
+                <span className="leading-snug">
                   Vásárolj 2 doboz Aquadrop Expert Pro mosókapszulát
                 </span>
               </li>
-              <li className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white px-4 py-4">
+              <li className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3">
                 <span className="mt-0.5 text-blue-600">✓</span>
-                <span className="leading-6">
-                  Töltsd fel a blokk vagy blokkok képeit, ha 2 vásárlásból származnak
-                </span>
+                <span className="leading-snug">Töltsd fel a blokk vagy blokkok képeit</span>
               </li>
-              <li className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white px-4 py-4">
+              <li className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3">
                 <span className="mt-0.5 text-blue-600">✓</span>
-                <span className="leading-6">
-                  Mi házhoz küldjük az ajándék mosókapszulát futárszolgálattal
-                </span>
+                <span className="leading-snug">Küldjük az ajándék mosókapszulát</span>
               </li>
             </ul>
 
-            <p className="mt-6 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs leading-6 text-slate-600 sm:text-sm">
+            <p className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs text-slate-600 md:text-sm">
               A beküldött adatokat kizárólag a kampány lebonyolításához használjuk fel.
             </p>
           </div>
@@ -213,15 +209,15 @@ export function GiftSection() {
             aria-label="Ajándék mosókapszula igénylőlap"
             onSubmit={handleSubmit}
             noValidate
-            className="relative z-10 w-full scroll-mt-6 overflow-visible rounded-3xl border border-slate-200 bg-white p-6 shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 sm:p-8"
+            className="relative z-10 w-full scroll-mt-6 overflow-visible rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_14px_35px_rgba(15,23,42,0.10)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 md:p-7"
           >
-            <h3 className="text-xl font-semibold text-slate-900">Ajándék mosókapszula igénylőlap</h3>
+            <h3 className="text-xl font-semibold text-slate-900 md:text-2xl">Ajándék mosókapszula igénylőlap</h3>
 
-            <p className="mt-2 text-sm leading-tight text-slate-600">
+            <p className="mt-2 text-sm leading-snug text-slate-600">
               Töltsd ki az alábbi mezőket, majd töltsd fel a vásárlási blokk képét.
             </p>
 
-            <div className="mt-6 grid grid-cols-1 gap-x-4 gap-y-4 md:grid-cols-2 md:gap-x-6 md:gap-y-5">
+            <div className="mt-6 grid grid-cols-1 gap-x-5 gap-y-4 md:grid-cols-2 md:gap-x-6 md:gap-y-5">
               <label className="grid gap-1 text-sm font-semibold text-slate-700" htmlFor="gift-full-name">
                 Teljes név *
                 <input
@@ -233,7 +229,7 @@ export function GiftSection() {
                   onChange={handleChange}
                   disabled={isSubmitting}
                   placeholder="pl. Kovács Péter"
-                  className="h-11 w-full max-w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 md:text-base"
+                  className="h-12 w-full max-w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 md:text-base"
                 />
               </label>
 
@@ -248,7 +244,7 @@ export function GiftSection() {
                   onChange={handleChange}
                   disabled={isSubmitting}
                   placeholder="pl. te@pelda.hu"
-                  className="h-11 w-full max-w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 md:text-base"
+                  className="h-12 w-full max-w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 md:text-base"
                 />
               </label>
 
@@ -263,7 +259,7 @@ export function GiftSection() {
                   onChange={handleChange}
                   disabled={isSubmitting}
                   placeholder="pl. +36 30 123 4567"
-                  className="h-11 w-full max-w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 md:text-base"
+                  className="h-12 w-full max-w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 md:text-base"
                 />
               </label>
 
@@ -278,7 +274,7 @@ export function GiftSection() {
                   onChange={handleChange}
                   disabled={isSubmitting}
                   placeholder="pl. Auchan, Kecskemét"
-                  className="h-11 w-full max-w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 md:text-base"
+                  className="h-12 w-full max-w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 md:text-base"
                 />
               </label>
 
@@ -296,7 +292,7 @@ export function GiftSection() {
                   onChange={handleChange}
                   disabled={isSubmitting}
                   placeholder="pl. Budapest, Példa utca 1."
-                  className="h-11 w-full max-w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 md:text-base"
+                  className="h-12 w-full max-w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 md:text-base"
                 />
               </label>
 
@@ -313,7 +309,7 @@ export function GiftSection() {
                   onChange={handleChange}
                   onPointerDown={handlePurchaseDatePointerDown}
                   disabled={isSubmitting}
-                  className={`gift-date-input h-11 w-full min-w-0 max-w-full rounded-xl border border-slate-300 bg-white px-4 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 md:text-base ${
+                  className={`gift-date-input h-12 w-full min-w-0 max-w-full rounded-xl border border-slate-300 bg-white px-4 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 md:text-base ${
                     !formState.purchase_date ? 'is-empty' : ''
                   }`}
                 />
@@ -335,7 +331,7 @@ export function GiftSection() {
 
                 <label
                   htmlFor="gift-receipt-file"
-                  className="group flex h-11 w-full min-w-0 max-w-full cursor-pointer items-center overflow-hidden rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 outline-none transition hover:border-blue-400 hover:bg-slate-50 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20 md:text-base"
+                  className="group flex h-12 w-full min-w-0 max-w-full cursor-pointer items-center overflow-hidden rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 outline-none transition hover:border-blue-400 hover:bg-slate-50 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20 md:text-base"
                 >
                   <span className="block w-full min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">
                     {receiptFile ? receiptFile.name : 'Blokk képének kiválasztása'}
@@ -358,7 +354,7 @@ export function GiftSection() {
                   disabled={isSubmitting}
                   className="mt-1 h-5 w-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
                 />
-                <span className="text-sm leading-6 text-slate-700">
+                <span className="text-sm leading-snug text-slate-700">
                   Elolvastam és elfogadom az adatkezelési tájékoztatót.
                 </span>
               </label>
@@ -372,7 +368,7 @@ export function GiftSection() {
                   disabled={isSubmitting}
                   className="mt-1 h-5 w-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
                 />
-                <span className="text-sm leading-6 text-slate-700">
+                <span className="text-sm leading-snug text-slate-700">
                   Kijelentem, hogy a megadott adatok valósak.
                 </span>
               </label>
@@ -391,7 +387,7 @@ export function GiftSection() {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="h-11 w-full rounded-xl bg-blue-600 px-6 text-white shadow-md hover:bg-blue-700 md:w-auto md:min-w-[17rem]"
+                  className="h-12 w-full rounded-xl bg-blue-600 px-6 text-white shadow-md hover:bg-blue-700 md:w-auto md:px-8 md:min-w-[17rem]"
                 >
                   {isSubmitting ? 'Beküldés folyamatban...' : 'Ajándék igénylés beküldése'}
                 </Button>
