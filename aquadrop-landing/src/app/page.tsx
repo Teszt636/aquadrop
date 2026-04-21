@@ -3,6 +3,7 @@ import {
   B2BBridgeSection,
   BeforeAfterSection,
   BenefitsSection,
+  DubaiPositioningSection,
   FooterSection,
   GiftSection,
   HeroSection,
@@ -11,7 +12,8 @@ import {
   SocialProofSection,
   TechnologySection,
   ThreePathsSection,
-  TrustSection
+  TrustSection,
+  SeoInfoSection
 } from '@/components/sections';
 import { ScrollDepthTracker } from '@/components/analytics';
 
@@ -37,6 +39,7 @@ export default function Home() {
         <main className="relative isolate flex w-full flex-col">
           <ScrollDepthTracker />
           <HeroSection />
+          <DubaiPositioningSection />
           <ProblemSection />
           <BenefitsSection />
           <TechnologySection />
@@ -48,6 +51,7 @@ export default function Home() {
           <GiftSection />
           <AnnouncementSection />
           <B2BBridgeSection />
+          <SeoInfoSection />
           <FooterSection />
         </main>
       </div>

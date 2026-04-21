@@ -3,8 +3,8 @@ import Script from 'next/script';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Aquadrop Expert Pro',
-  description: 'Aquadrop Expert Pro landing oldal és jelentkezési felületek.',
+  title: 'Mosókapszula – Aquadrop Expert Pro | 2+1 ajándék akció',
+  description: 'Prémium mosókapszula Dubai gyártói háttérrel. Vásárolj 2 dobozt, a 3.-at ajándékba adjuk. Erős tisztítás, modern formula, kényelmes használat.',
   icons: {
     icon: '/favicon.ico',
   },

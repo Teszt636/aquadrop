@@ -12,7 +12,7 @@ export function HeroSection() {
           <div className="min-w-0">
 
             <h1 className="mt-4 break-words text-4xl leading-tight md:text-5xl">
-              Professzionális tisztaság otthonra
+              Mosókapszula, ami valóban működik – Aquadrop Expert Pro
             </h1>
             <h2 className="mt-4 break-words text-3xl leading-tight md:text-4xl">
             Aquadrop Expert Pro mosókapszula

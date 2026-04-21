@@ -13,3 +13,5 @@ export * from './B2BBridgeSection';
 export * from './SocialProofSection';
 export * from './MicrocapsuleMagicSection';
 export * from './BeforeAfterSection';
+export * from './DubaiPositioningSection';
+export * from './SeoInfoSection';
