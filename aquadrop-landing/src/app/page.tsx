@@ -37,6 +37,7 @@ import {
   BenefitsSection,
   DubaiSection,
   FooterSection,
+  GiftConversionSection,
   GiftSection,
   HeroSection,
   MicrocapsuleMagicSection,
@@ -71,6 +72,7 @@ export default function Home() {
         <main className="relative isolate flex w-full flex-col">
           <ScrollDepthTracker />
           <HeroSection />
+          <GiftConversionSection />
           <DubaiSection />
           <GiftSection />
           <ProblemSection />
