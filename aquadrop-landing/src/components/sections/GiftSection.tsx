@@ -167,8 +167,8 @@ export function GiftSection() {
 
   return (
     <section className="bg-gradient-to-b from-blue-50 to-white py-20">
-      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div className="grid items-start gap-8 lg:grid-cols-[1fr_1.15fr] lg:gap-10">
+      <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8">
+        <div className="grid items-start gap-8 lg:grid-cols-2 lg:gap-10">
           <div className="rounded-3xl border border-blue-100 bg-white/70 p-6 shadow-lg backdrop-blur-sm sm:p-8">
             <SectionEyebrow className="inline-flex rounded-full border border-blue-200 bg-blue-100/70 px-4 py-1 text-sm font-medium normal-case tracking-normal text-blue-900">
               Ajándék kampány
@@ -182,17 +182,23 @@ export function GiftSection() {
             </p>
 
             <ul className="mt-6 space-y-3 text-sm font-medium text-slate-700 sm:text-base">
-              <li className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
+              <li className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white px-4 py-4">
                 <span className="mt-0.5 text-blue-600">✓</span>
-                <span>Vásárolj 2 dobozt</span>
+                <span className="leading-6">
+                  Vásárolj 2 doboz Aquadrop Expert Pro mosókapszulát
+                </span>
               </li>
-              <li className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
+              <li className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white px-4 py-4">
                 <span className="mt-0.5 text-blue-600">✓</span>
-                <span>Töltsd fel a blokkot</span>
+                <span className="leading-6">
+                  Töltsd fel a blokk vagy blokkok képeit, ha 2 vásárlásból származnak
+                </span>
               </li>
-              <li className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
+              <li className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white px-4 py-4">
                 <span className="mt-0.5 text-blue-600">✓</span>
-                <span>Mi elküldjük az ajándékot</span>
+                <span className="leading-6">
+                  Mi házhoz küldjük az ajándék mosókapszulát futárszolgálattal
+                </span>
               </li>
             </ul>
 
@@ -378,12 +384,14 @@ export function GiftSection() {
               ) : null}
 
               <div className="flex flex-col gap-3 md:col-span-2 md:flex-row md:items-center md:justify-between">
-                <p className="text-xs lowercase tracking-wide text-slate-500">* kötelező mező</p>
+                <p className="whitespace-nowrap text-xs lowercase tracking-wide text-slate-500">
+                  * kötelező mező
+                </p>
 
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="h-11 w-full rounded-xl bg-blue-600 text-white shadow-md hover:bg-blue-700 md:w-full"
+                  className="h-11 w-full rounded-xl bg-blue-600 px-6 text-white shadow-md hover:bg-blue-700 md:w-auto md:min-w-[17rem]"
                 >
                   {isSubmitting ? 'Beküldés folyamatban...' : 'Ajándék igénylés beküldése'}
                 </Button>
