@@ -3,11 +3,13 @@ import {
   B2BBridgeSection,
   BeforeAfterSection,
   BenefitsSection,
+  DubaiSection,
   FooterSection,
   GiftSection,
   HeroSection,
   MicrocapsuleMagicSection,
   ProblemSection,
+  SeoSection,
   SocialProofSection,
   TechnologySection,
   ThreePathsSection,
@@ -37,6 +39,8 @@ export default function Home() {
         <main className="relative isolate flex w-full flex-col">
           <ScrollDepthTracker />
           <HeroSection />
+          <DubaiSection />
+          <GiftSection />
           <ProblemSection />
           <BenefitsSection />
           <TechnologySection />
@@ -45,9 +49,9 @@ export default function Home() {
           <SocialProofSection />
           <BeforeAfterSection />
           <ThreePathsSection />
-          <GiftSection />
           <AnnouncementSection />
           <B2BBridgeSection />
+          <SeoSection />
           <FooterSection />
         </main>
       </div>
