@@ -3,6 +3,20 @@ import Script from 'next/script';
 import './globals.css';
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://www.aquadrop.hu'),
+  title: {
+    default: 'Mosókapszula – Aquadrop Expert Pro | 2+1 ajándék kapszula',
+    template: '%s | Aquadrop Expert Pro',
+  },
+  description:
+    'Prémium mosókapszula Dubai gyártói háttérrel. Vásárolj 2 dobozt, a 3.-at ajándékba adjuk. Erős tisztítás, tartós illat, modern formula.',
+  alternates: {
+    canonical: '/',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
   icons: {
     icon: '/favicon.ico',
   },
