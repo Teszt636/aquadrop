@@ -5,7 +5,7 @@ const legalLinks = [
 
 export function FooterSection() {
   return (
-    <footer className="border-t border-slate-300 bg-[linear-gradient(180deg,#eaf3f7,#e1edf3)] py-10">
+    <footer className="border-t border-slate-300 py-10">
       <div className="ds-container">
         <p className="mb-8 text-center text-lg font-bold text-slate-900 md:hidden">Aquadrop Expert Pro Capsules</p>
         <div className="grid gap-10 text-center md:grid-cols-3 md:text-left">
