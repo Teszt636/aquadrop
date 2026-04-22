@@ -8,7 +8,7 @@ export function HeroSection() {
   return (
     <section className="ds-section bg-transparent">
       <div className="ds-container w-full">
-        <div className="ds-floating-panel grid w-full items-center gap-8 p-5 sm:p-6 md:grid-cols-2 md:gap-12 md:p-12">
+        <div className="grid w-full items-center gap-8 rounded-3xl border border-white/40 bg-white/75 p-5 shadow-[0_20px_60px_rgba(15,23,42,0.10)] backdrop-blur-sm sm:p-6 md:grid-cols-2 md:gap-12 md:p-12">
           <div className="min-w-0">
 
             <h1 className="mt-4 text-sm font-semibold uppercase tracking-[0.08em] text-slate-600">
@@ -49,7 +49,7 @@ export function HeroSection() {
           </div>
         </div>
 
-        <div className="mt-6 grid w-full gap-3 rounded-3xl border border-white/40 bg-white/55 px-4 py-4 shadow-[0_18px_50px_rgba(15,23,42,0.08)] backdrop-blur-sm sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <div className="mt-6 grid w-full gap-3 rounded-3xl border border-white/35 bg-white/60 px-4 py-4 shadow-[0_16px_45px_rgba(15,23,42,0.08)] backdrop-blur-sm sm:grid-cols-3 sm:gap-4 sm:px-6">
           {miniTrustItems.map((item) => (
             <p
               key={item}
