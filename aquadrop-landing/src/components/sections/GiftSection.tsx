@@ -200,7 +200,7 @@ export function GiftSection() {
               </ul>
             </div>
 
-            <p className="mt-auto rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs text-slate-600 md:text-sm">
+            <p className="mt-4 md:mt-auto rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs text-slate-600 md:text-sm">
               A beküldött adatokat kizárólag a kampány lebonyolításához használjuk fel.
             </p>
           </div>
