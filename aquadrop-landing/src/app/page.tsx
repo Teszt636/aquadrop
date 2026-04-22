@@ -40,6 +40,7 @@ import {
   BenefitsSection,
   DubaiSection,
   FooterSection,
+  FaqSection,
   GiftConversionSection,
   GiftSection,
   HeroSection,
@@ -54,6 +55,39 @@ import {
 import { ScrollDepthTracker } from '@/components/analytics';
 
 export default function Home() {
+
+  const faqItems = [
+    {
+      question: 'Hogyan kell használni az Aquadrop Expert Pro mosókapszulát?',
+      answer:
+        'A kapszulát közvetlenül a mosógép dobjába érdemes helyezni, még a ruhák behelyezése előtt. A kapszulás megoldás egyszerűbbé és tisztábbá teszi az adagolást.'
+    },
+    {
+      question: 'Miben különbözik az Aquadrop Expert Pro a hagyományos mosószerektől?',
+      answer:
+        'Az Aquadrop Expert Pro egy koncentrált, előreadagolt mosókapszula, amely kényelmesebb használatot, gyors adagolást és egyszerűbb mindennapi mosást kínál.'
+    },
+    {
+      question: 'Hogyan igényelhető az ajándék mosókapszula?',
+      answer:
+        'Az ajándék igényléséhez 2 doboz Aquadrop Expert Pro terméket kell vásárolni valamely partnernél, majd a vásárlást igazoló blokk képét fel kell tölteni az oldalon található űrlapon.'
+    },
+    {
+      question: 'Mi történik, ha a két doboz két külön blokkon szerepel?',
+      answer:
+        'Ebben az esetben a két blokkot egy jól olvasható, közös képen érdemes feltölteni, hogy az adatok egyértelműen ellenőrizhetők legyenek.'
+    },
+    {
+      question: 'Mennyire biztonságos a csomagolás gyermekek mellett?',
+      answer:
+        'A gyermekek védelmében különös figyelmet fordítottunk a gyerekzáras csomagolásra. A doboz erős kialakításának köszönhetően akkor sem törik szét könnyen, ha a gyermek lerántja vagy eldobja, stabil nyitási technikája pedig segít megakadályozni a kapszulákhoz való hozzáférést.'
+    },
+    {
+      question: 'Hol lehet megvásárolni az Aquadrop Expert Pro mosókapszulát?',
+      answer: 'Az Aquadrop Expert Pro jelenleg viszonteladó partnereken keresztül érhető el.'
+    }
+  ];
+
   const homeStructuredData = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -85,6 +119,18 @@ export default function Home() {
           name: 'Aquadrop Expert Pro'
         },
         category: 'Laundry Detergent Pods'
+      },
+      {
+        '@type': 'FAQPage',
+        '@id': 'https://www.aquadrop.hu/#faq',
+        mainEntity: faqItems.map((item) => ({
+          '@type': 'Question',
+          name: item.question,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: item.answer
+          }
+        }))
       }
     ]
   };
@@ -137,6 +183,7 @@ export default function Home() {
           <AnnouncementSection />
           <B2BBridgeSection />
           <SeoSection />
+          <FaqSection items={faqItems} />
           <FooterSection />
         </main>
       </div>
