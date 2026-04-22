@@ -5,7 +5,7 @@ import { SectionHeading } from '@/components/ui';
 const technologyItems = [
   { title: 'Mikrokapszula varázslat', icon: '🫧' },
   { title: 'Enzim alapú tisztítás', icon: '🧪' },
-  { title: 'Szagsemlegesítés', icon: '🌬️' },
+  { title: 'Szagok semlegesítése', icon: '🌬️' },
   { title: 'Tartós, prémium illat', icon: '🌸' }
 ];
 
