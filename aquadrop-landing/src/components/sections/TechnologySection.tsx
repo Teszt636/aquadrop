@@ -76,7 +76,7 @@ export function TechnologySection() {
         </div>
       </section>
 
-      <section className="ds-section bg-green-50/40">
+      <section className="ds-section">
         <div className="ds-container text-center">
           <h2 className="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
             Környezetbarát választás a mindennapokra

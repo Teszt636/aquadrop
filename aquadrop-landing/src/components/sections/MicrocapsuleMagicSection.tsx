@@ -23,7 +23,7 @@ const benefits = [
 
 export function MicrocapsuleMagicSection() {
   return (
-    <section className="ds-section bg-gradient-to-r from-sky-50/90 via-cyan-50/70 to-indigo-50/80">
+    <section className="ds-section">
       <div className="ds-container">
         <div className="space-y-7">
           <div className="mx-auto max-w-3xl space-y-3 text-center">

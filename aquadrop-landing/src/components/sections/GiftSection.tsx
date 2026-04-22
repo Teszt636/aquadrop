@@ -166,7 +166,7 @@ export function GiftSection() {
   };
 
   return (
-    <section className="bg-[#eef4ff] py-20">
+    <section className="py-20">
       <div
         id="gift-form"
         className="mx-auto w-full max-w-5xl scroll-mt-8 rounded-[28px] border border-slate-200 bg-white/60 p-5 shadow-[0_18px_50px_rgba(15,23,42,0.08)] backdrop-blur-sm sm:px-6 md:scroll-mt-28 md:p-6 lg:scroll-mt-12 lg:p-7"
@@ -408,7 +408,7 @@ export function GiftSection() {
 
 export function GiftConversionSection() {
   return (
-    <section id="gift-campaign" className="bg-gradient-to-b from-white to-blue-50 py-20">
+    <section id="gift-campaign" className="py-20">
       <div className="ds-container">
         <div className="mx-auto max-w-5xl">
           <div className="relative z-10 mx-auto text-center">
