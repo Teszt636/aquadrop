@@ -17,7 +17,9 @@ export function SeoSection() {
               </p>
               <p className="mt-3">
                 Az elmúlt években egyre többen váltanak kapszulás megoldásra, mert gyorsabb, kényelmesebb és sok
-                esetben hatékonyabb is, mint a hagyományos por vagy folyékony mosószerek.
+                esetben hatékonyabb is, mint a hagyományos por vagy folyékony mosószerek. A modern mosókapszulák
+                célja, hogy a tisztítóerőt, az egyszerű használatot és a megbízható eredményt egyetlen lépésben
+                biztosítsák.
               </p>
             </article>
 
@@ -31,7 +33,9 @@ export function SeoSection() {
               </p>
               <p className="mt-3">
                 A koncentrált formula gyorsan oldódik, és már alacsonyabb hőfokon is hatékonyan működik. Ez
-                energiatakarékosabb mosást is lehetővé tesz.
+                energiatakarékosabb mosást is lehetővé tesz, miközben a ruhák tiszták és frissek maradnak. A
+                kapszulás megoldás különösen praktikus a rohanó hétköznapokban, amikor fontos a gyors és egyszerű
+                használat.
               </p>
             </article>
 
@@ -45,8 +49,9 @@ export function SeoSection() {
                 <li>gyors oldódás</li>
               </ul>
               <p className="mt-3">
-                Az Aquadrop Expert Pro ilyen szempontból egy modern, koncentrált megoldás, amely a mindennapi
-                használat során is stabil teljesítményt nyújt.
+                Egy korszerű formula esetében az is fontos, hogy a kapszula ne hagyjon maradványt a ruhákon, és
+                egyenletesen oldódjon fel a mosás során. Az Aquadrop Expert Pro ilyen szempontból egy modern,
+                koncentrált megoldás, amely a mindennapi használat során is stabil teljesítményt nyújt.
               </p>
             </article>
 
@@ -59,14 +64,23 @@ export function SeoSection() {
                 <li>ha szeretnéd elkerülni a mosószer pazarlását</li>
                 <li>ha egységes, megbízható eredményt szeretnél</li>
               </ul>
+              <p className="mt-3">
+                A mosókapszulák különösen jól használhatók mindennapi ruhák mosásához, amikor fontos a kiszámítható
+                eredmény és a praktikus használat.
+              </p>
             </article>
 
             <article>
               <h3 className="text-xl font-semibold text-slate-900">Hogyan illeszkedik ebbe az Aquadrop Expert Pro?</h3>
               <p className="mt-3">
-                Az Aquadrop Expert Pro egy olyan mosókapszula, amely a modern elvárásokhoz igazodik. A Dubai gyártói
-                háttér, a koncentrált formula és a felhasználóbarát kialakítás együtt biztosítják, hogy a mosás
-                egyszerűbb és hatékonyabb legyen.
+                Az Aquadrop Expert Pro egy olyan mosókapszula, amely a modern elvárásokhoz igazodik. A koncentrált
+                formula, a gyors oldódás és a felhasználóbarát kialakítás együtt biztosítják, hogy a mosás egyszerűbb
+                és hatékonyabb legyen.
+              </p>
+              <p className="mt-3">
+                A termék kialakításánál a praktikum mellett a biztonság is fontos szerepet kapott. A gyerekzáras
+                csomagolás és a stabil dobozszerkezet segít csökkenteni a véletlen hozzáférés kockázatát, így a
+                kapszulák biztonságosabban tárolhatók a háztartásban.
               </p>
               <p className="mt-3">
                 Ha egy megbízható, könnyen használható és korszerű megoldást keresel, érdemes kipróbálni.
