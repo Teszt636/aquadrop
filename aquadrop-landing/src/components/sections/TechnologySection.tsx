@@ -76,25 +76,27 @@ export function TechnologySection() {
         </div>
       </section>
 
-      <section className="py-16 bg-green-50/40">
-        <div className="max-w-5xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Környezetbarát választás a mindennapokra</h2>
-          <p className="text-gray-600 mb-10 max-w-2xl mx-auto">
+      <section className="ds-section bg-green-50/40">
+        <div className="ds-container text-center">
+          <h2 className="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
+            Környezetbarát választás a mindennapokra
+          </h2>
+          <p className="mx-auto mt-4 max-w-3xl text-base leading-relaxed text-slate-600 md:text-lg">
             Az Aquadrop Expert Pro nemcsak hatékony, hanem környezettudatos megoldás is, amely a modern
             háztartások igényeihez igazodik.
           </p>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {ecoItems.map((item) => (
               <article
                 key={item.title}
                 className="bg-white rounded-2xl border border-slate-200 p-5 text-center shadow-sm"
               >
-                <div className="text-3xl mb-3" aria-hidden="true">
+                <div className="mb-3 text-2xl" aria-hidden="true">
                   {item.icon}
                 </div>
-                <h3 className="font-semibold mb-2">{item.title}</h3>
-                <p className="text-sm text-gray-600">{item.description}</p>
+                <h3 className="mb-2 text-lg font-semibold text-slate-900">{item.title}</h3>
+                <p className="text-sm leading-6 text-slate-600 md:text-[15px]">{item.description}</p>
               </article>
             ))}
           </div>
