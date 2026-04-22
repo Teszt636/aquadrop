@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 
 const DOMAIN = 'https://www.aquadrop.hu';
 
-const basePaths = ['/', '/mosokapszula-hasznalata', '/adatvedelmi-tajekoztato', '/suti-tajekoztato', '/partner'] as const;
+const basePaths = ['/', '/mosokapszula-hasznalata', '/mosokapszula-nem-oldodik-fel', '/adatvedelmi-tajekoztato', '/suti-tajekoztato', '/partner'] as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return basePaths.map((path) => ({
