@@ -17,6 +17,9 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      'max-image-preview': 'large',
+    },
   },
   icons: {
     icon: '/favicon.ico',
