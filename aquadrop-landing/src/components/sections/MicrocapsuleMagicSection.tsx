@@ -25,7 +25,7 @@ export function MicrocapsuleMagicSection() {
   return (
     <section className="ds-section">
       <div className="ds-container">
-        <div className="space-y-7">
+        <div className="ds-floating-panel space-y-7 px-5 py-7 sm:px-7 md:px-10 md:py-10">
           <div className="mx-auto max-w-3xl space-y-3 text-center">
             <SectionHeading>
               <span className="mt-4 block break-words text-center text-4xl leading-tight md:text-5xl">
@@ -45,7 +45,7 @@ export function MicrocapsuleMagicSection() {
             {steps.map((step, index) => (
               <article
                 key={step.title}
-                className="group rounded-2xl border border-slate-200 bg-white/90 p-5 text-center shadow-sm transition duration-300 ease-out hover:-translate-y-0.5 hover:shadow-md md:p-6"
+                className="group rounded-2xl border border-slate-200 bg-white/80 p-5 text-center shadow-sm transition duration-300 ease-out hover:-translate-y-0.5 hover:shadow-md md:p-6"
               >
                 <div className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-sky-200 bg-sky-50 text-sm font-bold text-brand-primary">
                   {index + 1}
@@ -64,7 +64,7 @@ export function MicrocapsuleMagicSection() {
             {benefits.map((benefit) => (
               <li
                 key={benefit}
-                className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white/90 px-4 py-3 text-sm font-semibold text-slate-800 shadow-sm"
+                className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white/80 px-4 py-3 text-sm font-semibold text-slate-800 shadow-sm"
               >
                 <span
                   aria-hidden="true"

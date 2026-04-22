@@ -5,7 +5,7 @@ export function SeoSection() {
   return (
     <section className="ds-section pt-10">
       <div className="ds-container">
-        <div className="rounded-3xl border border-slate-200 bg-white px-6 py-8 shadow-card md:px-10 md:py-12">
+        <div className="ds-floating-panel px-6 py-8 md:px-10 md:py-12">
           <SectionHeading>Mosókapszula – amit érdemes tudni választás előtt</SectionHeading>
 
           <div className="mt-8 space-y-8 text-base leading-7 text-slate-700">
