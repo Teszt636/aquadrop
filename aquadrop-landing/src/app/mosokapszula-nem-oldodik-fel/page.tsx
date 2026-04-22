@@ -61,7 +61,8 @@ export default function MosokapszulaNemOldodikFelPage() {
     image: 'https://www.aquadrop.hu/og-image.png',
     author: {
       '@type': 'Organization',
-      name: 'Aquadrop'
+      name: 'Aquadrop',
+      url: 'https://www.aquadrop.hu/'
     },
     publisher: {
       '@type': 'Organization',
