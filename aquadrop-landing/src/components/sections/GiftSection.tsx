@@ -171,7 +171,7 @@ export function GiftSection() {
         <div className="grid items-stretch gap-5 lg:grid-cols-[0.9fr_1.1fr] lg:gap-6">
           <div className="flex h-full flex-col rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-6 md:p-7">
             <div>
-              <SectionEyebrow className="mx-auto inline-flex rounded-full border border-blue-200 bg-blue-100/70 px-3 py-1 text-xs font-medium normal-case tracking-normal text-blue-900">
+              <SectionEyebrow className="mx-auto inline-flex rounded-full border border-blue-200 bg-blue-100/70 text-center px-3 py-1 text-xs font-medium normal-case tracking-normal text-blue-900">
                 Ajándék kampány
               </SectionEyebrow>
               <h2 className="mt-4 text-center text-3xl font-bold tracking-tight text-slate-900 md:text-4xl lg:text-left">
