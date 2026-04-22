@@ -51,16 +51,15 @@ export function ThreePathsSection() {
             <p className="mt-3 flex-1 text-slate-700">
               Vásárolj 2 doboz Aquadrop Expert Pro kapszulát bármelyik partner üzletben, és elküldjük a 3. dobozt ajándékba.
             </p>
-            <button
-              type="button"
-              className="ds-button-primary mt-6 w-full"
+            <ButtonLink
+              href="#gift-form"
+              className="mt-6 w-full text-center"
               onClick={() => {
                 trackEvent('final_cta_gift_click');
-                scrollToSection('gift-campaign');
               }}
             >
               Ajándék terméket igénylek
-            </button>
+            </ButtonLink>
           </article>
 
           <article className="group flex h-full flex-col items-center rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-lg md:p-7">
