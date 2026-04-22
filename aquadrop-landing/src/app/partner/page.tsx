@@ -59,9 +59,41 @@ export const metadata: Metadata = {
 };
 
 export default function PartnerPage() {
+  const partnerStructuredData = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Organization',
+        '@id': 'https://www.aquadrop.hu/#organization',
+        name: 'Aquadrop Expert Pro',
+        url: 'https://www.aquadrop.hu',
+        logo: 'https://www.aquadrop.hu/logo.png'
+      },
+      {
+        '@type': 'WebPage',
+        '@id': 'https://www.aquadrop.hu/partner/#webpage',
+        url: 'https://www.aquadrop.hu/partner',
+        name: 'Partner program | Aquadrop',
+        description:
+          'Viszonteladói jelentkezési oldal stabil ellátással, marketing támogatással és prémium termékportfólióval.',
+        isPartOf: {
+          '@id': 'https://www.aquadrop.hu/#website'
+        },
+        about: {
+          '@id': 'https://www.aquadrop.hu/#organization'
+        }
+      }
+    ]
+  };
+
   return (
-    <main className="flex min-h-screen flex-col bg-slate-950">
-      <section className="relative overflow-hidden border-b border-white/10 bg-gradient-to-b from-slate-950 via-slate-900 to-[#08162b] py-16 text-slate-100 md:py-20">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(partnerStructuredData) }}
+      />
+      <main className="flex min-h-screen flex-col bg-slate-950">
+        <section className="relative overflow-hidden border-b border-white/10 bg-gradient-to-b from-slate-950 via-slate-900 to-[#08162b] py-16 text-slate-100 md:py-20">
         <div className="pointer-events-none absolute inset-0">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(34,211,238,0.12),transparent_45%),radial-gradient(circle_at_88%_12%,rgba(56,189,248,0.14),transparent_42%),radial-gradient(circle_at_52%_88%,rgba(59,130,246,0.12),transparent_48%)]" />
           <div className="absolute -left-20 top-[-16%] h-[21rem] w-[21rem] rounded-full bg-cyan-400/15 blur-[110px]" />
@@ -113,9 +145,9 @@ export default function PartnerPage() {
             </div>
           </div>
         </div>
-      </section>
+        </section>
 
-      <section className="relative bg-gradient-to-b from-[#08162b] via-slate-900 to-slate-950 py-12 text-slate-100 md:py-16">
+        <section className="relative bg-gradient-to-b from-[#08162b] via-slate-900 to-slate-950 py-12 text-slate-100 md:py-16">
         <div className="mx-auto max-w-6xl px-6">
           <article className="rounded-3xl border border-white/15 bg-gradient-to-br from-slate-900/85 via-slate-900/70 to-slate-950/85 p-6 shadow-[0_26px_70px_-45px_rgba(8,145,178,0.45)] backdrop-blur-sm md:p-8">
             <div className="grid items-center gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:gap-10">
@@ -151,9 +183,9 @@ export default function PartnerPage() {
             </div>
           </article>
         </div>
-      </section>
+        </section>
 
-      <section className="bg-slate-100 py-16 text-slate-900 md:py-20">
+        <section className="bg-slate-100 py-16 text-slate-900 md:py-20">
         <div className="mx-auto max-w-6xl px-6">
           <div className="space-y-10 rounded-3xl border border-slate-200/70 bg-white/80 p-7 shadow-[0_18px_50px_rgba(15,23,42,0.08)] backdrop-blur-sm md:p-10">
             <h2 className="text-3xl font-semibold tracking-tight text-slate-900 md:text-4xl">
@@ -172,9 +204,9 @@ export default function PartnerPage() {
             </div>
           </div>
         </div>
-      </section>
+        </section>
 
-      <section className="bg-white py-14 text-slate-900 md:py-16">
+        <section className="bg-white py-14 text-slate-900 md:py-16">
         <div className="mx-auto max-w-6xl px-6">
           <div className="rounded-3xl border border-slate-200/70 bg-white/70 p-7 shadow-[0_18px_50px_rgba(15,23,42,0.08)] backdrop-blur-sm md:p-10">
             <h2 className="text-3xl font-semibold tracking-tight text-slate-900 md:text-4xl">Hogyan zajlik a jelentkezés?</h2>
@@ -191,9 +223,10 @@ export default function PartnerPage() {
             </ol>
           </div>
         </div>
-      </section>
+        </section>
 
-      <FooterSection />
-    </main>
+        <FooterSection />
+      </main>
+    </>
   );
 }

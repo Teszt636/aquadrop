@@ -54,8 +54,47 @@ import {
 import { ScrollDepthTracker } from '@/components/analytics';
 
 export default function Home() {
+  const homeStructuredData = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Organization',
+        '@id': 'https://www.aquadrop.hu/#organization',
+        name: 'Aquadrop Expert Pro',
+        url: 'https://www.aquadrop.hu',
+        logo: 'https://www.aquadrop.hu/logo.png'
+      },
+      {
+        '@type': 'WebSite',
+        '@id': 'https://www.aquadrop.hu/#website',
+        url: 'https://www.aquadrop.hu',
+        name: 'Aquadrop Expert Pro',
+        publisher: {
+          '@id': 'https://www.aquadrop.hu/#organization'
+        }
+      },
+      {
+        '@type': 'Product',
+        '@id': 'https://www.aquadrop.hu/#product',
+        name: 'Aquadrop Expert Pro mosókapszula',
+        description:
+          'Prémium mosókapszula erős tisztítóerővel, tartós illattal és modern formulával, Dubai gyártói háttérrel.',
+        image: 'https://www.aquadrop.hu/og-image.png',
+        brand: {
+          '@type': 'Brand',
+          name: 'Aquadrop Expert Pro'
+        },
+        category: 'Laundry Detergent Pods'
+      }
+    ]
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homeStructuredData) }}
+      />
       <div className="relative w-full overflow-x-clip bg-gradient-to-b from-cyan-50 via-sky-50 to-teal-50">
         <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(245,255,255,0.92)_0%,rgba(232,250,252,0.9)_50%,rgba(225,247,246,0.94)_100%)]" />
