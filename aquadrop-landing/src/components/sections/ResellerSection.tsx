@@ -99,7 +99,7 @@ export function ResellerSection() {
       id="reseller-application-form"
       onSubmit={handleSubmit}
       noValidate
-      className="rounded-2xl border border-white/15 bg-white/10 p-6 shadow-2xl shadow-cyan-900/20 backdrop-blur"
+      className="rounded-2xl border border-cyan-200/25 bg-gradient-to-br from-slate-900/90 via-slate-900/80 to-slate-950/85 p-6 shadow-[0_30px_70px_-42px_rgba(8,145,178,0.65)] backdrop-blur-md"
     >
       <div className="grid gap-4">
         <label className="grid gap-1.5 text-sm font-medium text-slate-100" htmlFor="reseller-company-name">
@@ -112,7 +112,7 @@ export function ResellerSection() {
             value={formState.company_name}
             onChange={(event) => setFormState((previous) => ({ ...previous, company_name: event.target.value }))}
             disabled={isSubmitting}
-            className="h-11 rounded-lg border border-white/15 bg-slate-900/65 px-3 text-base text-slate-100 outline-none transition placeholder:text-slate-400 focus:border-cyan-300"
+            className="h-11 rounded-xl border border-white/20 bg-slate-950/70 px-3 text-base text-slate-100 outline-none transition placeholder:text-slate-400 focus:border-cyan-300 focus:ring-2 focus:ring-cyan-300/40"
           />
         </label>
 
@@ -126,7 +126,7 @@ export function ResellerSection() {
             value={formState.contact_name}
             onChange={(event) => setFormState((previous) => ({ ...previous, contact_name: event.target.value }))}
             disabled={isSubmitting}
-            className="h-11 rounded-lg border border-white/15 bg-slate-900/65 px-3 text-base text-slate-100 outline-none transition placeholder:text-slate-400 focus:border-cyan-300"
+            className="h-11 rounded-xl border border-white/20 bg-slate-950/70 px-3 text-base text-slate-100 outline-none transition placeholder:text-slate-400 focus:border-cyan-300 focus:ring-2 focus:ring-cyan-300/40"
           />
         </label>
 
@@ -140,7 +140,7 @@ export function ResellerSection() {
             value={formState.email}
             onChange={(event) => setFormState((previous) => ({ ...previous, email: event.target.value }))}
             disabled={isSubmitting}
-            className="h-11 rounded-lg border border-white/15 bg-slate-900/65 px-3 text-base text-slate-100 outline-none transition placeholder:text-slate-400 focus:border-cyan-300"
+            className="h-11 rounded-xl border border-white/20 bg-slate-950/70 px-3 text-base text-slate-100 outline-none transition placeholder:text-slate-400 focus:border-cyan-300 focus:ring-2 focus:ring-cyan-300/40"
           />
         </label>
 
@@ -154,7 +154,7 @@ export function ResellerSection() {
             value={formState.phone}
             onChange={(event) => setFormState((previous) => ({ ...previous, phone: event.target.value }))}
             disabled={isSubmitting}
-            className="h-11 rounded-lg border border-white/15 bg-slate-900/65 px-3 text-base text-slate-100 outline-none transition placeholder:text-slate-400 focus:border-cyan-300"
+            className="h-11 rounded-xl border border-white/20 bg-slate-950/70 px-3 text-base text-slate-100 outline-none transition placeholder:text-slate-400 focus:border-cyan-300 focus:ring-2 focus:ring-cyan-300/40"
           />
         </label>
 
@@ -167,7 +167,7 @@ export function ResellerSection() {
             value={formState.website}
             onChange={(event) => setFormState((previous) => ({ ...previous, website: event.target.value }))}
             disabled={isSubmitting}
-            className="h-11 rounded-lg border border-white/15 bg-slate-900/65 px-3 text-base text-slate-100 outline-none transition placeholder:text-slate-400 focus:border-cyan-300"
+            className="h-11 rounded-xl border border-white/20 bg-slate-950/70 px-3 text-base text-slate-100 outline-none transition placeholder:text-slate-400 focus:border-cyan-300 focus:ring-2 focus:ring-cyan-300/40"
           />
         </label>
 
@@ -185,7 +185,7 @@ export function ResellerSection() {
               }))
             }
             disabled={isSubmitting}
-            className="h-11 rounded-lg border border-white/15 bg-slate-900/65 px-3 text-base text-slate-100 outline-none transition focus:border-cyan-300"
+            className="h-11 rounded-xl border border-white/20 bg-slate-950/70 px-3 text-base text-slate-100 outline-none transition focus:border-cyan-300 focus:ring-2 focus:ring-cyan-300/40"
           >
             <option value="" disabled>
               Válassz csatornát
@@ -207,7 +207,7 @@ export function ResellerSection() {
             value={formState.message}
             onChange={(event) => setFormState((previous) => ({ ...previous, message: event.target.value }))}
             disabled={isSubmitting}
-            className="rounded-lg border border-white/15 bg-slate-900/65 px-3 py-2 text-base text-slate-100 outline-none transition placeholder:text-slate-400 focus:border-cyan-300"
+            className="rounded-xl border border-white/20 bg-slate-950/70 px-3 py-2 text-base text-slate-100 outline-none transition placeholder:text-slate-400 focus:border-cyan-300 focus:ring-2 focus:ring-cyan-300/40"
           />
         </label>
 
@@ -218,7 +218,7 @@ export function ResellerSection() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="mt-2 inline-flex h-12 items-center justify-center rounded-lg bg-cyan-400 px-6 text-base font-semibold text-slate-950 transition hover:bg-cyan-300 disabled:cursor-not-allowed disabled:bg-cyan-200"
+          className="mt-2 inline-flex h-12 items-center justify-center rounded-xl bg-gradient-to-r from-cyan-300 via-cyan-400 to-sky-400 px-6 text-base font-semibold text-slate-950 shadow-[0_12px_24px_-14px_rgba(34,211,238,0.95)] transition hover:from-cyan-200 hover:via-cyan-300 hover:to-sky-300 disabled:cursor-not-allowed disabled:from-cyan-200 disabled:to-cyan-200"
         >
           {isSubmitting ? 'Küldés...' : 'Partnerként jelentkezem'}
         </button>
