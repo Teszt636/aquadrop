@@ -78,7 +78,7 @@ export function TechnologySection() {
 
       <section className="py-16 bg-green-50/40">
         <div className="max-w-5xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-semibold mb-4">Környezetbarát választás a mindennapokra</h2>
+          <h2 className="text-3xl md:text-3xl font-bold mb-4">Környezetbarát választás a mindennapokra</h2>
           <p className="text-gray-600 mb-10 max-w-2xl mx-auto">
             Az Aquadrop Expert Pro nemcsak hatékony, hanem környezettudatos megoldás is, amely a modern
             háztartások igényeihez igazodik.
