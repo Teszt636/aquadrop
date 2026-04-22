@@ -37,40 +37,42 @@ export function TechnologySection() {
     <>
       <section className="ds-section">
         <div className="ds-container">
-          <div className="ds-section-heading-wrap">
-            <SectionHeading>Mosókapszula különleges tulajdonságokkal</SectionHeading>
-          </div>
-
-          <div className="mt-10 grid items-center gap-6 lg:grid-cols-[minmax(320px,420px)_1fr] lg:gap-10">
-            <div className="relative mx-auto w-full max-w-[420px] overflow-hidden rounded-3xl border border-slate-200 bg-white p-4 shadow-card sm:p-5">
-              <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-slate-50">
-                <Image
-                  src="/aquadrop-product.jpg"
-                  alt="Aquadrop Expert Pro mosókapszula dobozos kiszerelésben"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 1023px) 100vw, 420px"
-                />
-              </div>
+          <div className="ds-floating-panel px-5 py-7 sm:px-7 md:px-10 md:py-10">
+            <div className="ds-section-heading-wrap">
+              <SectionHeading>Mosókapszula különleges tulajdonságokkal</SectionHeading>
             </div>
 
-            <div className="grid gap-5 sm:grid-cols-2">
-              {technologyItems.map((item) => (
-                <article
-                  className="flex min-h-[132px] h-full items-center gap-4 rounded-[1.75rem] border border-slate-200 bg-white px-6 py-5 shadow-sm"
-                  key={item.title}
-                >
-                  <span
-                    aria-hidden="true"
-                    className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand-primary/10 text-2xl"
+            <div className="mt-10 grid items-center gap-6 lg:grid-cols-[minmax(320px,420px)_1fr] lg:gap-10">
+              <div className="relative mx-auto w-full max-w-[420px] overflow-hidden rounded-3xl border border-slate-200/80 bg-white/80 p-4 shadow-card sm:p-5">
+                <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-slate-50">
+                  <Image
+                    src="/aquadrop-product.jpg"
+                    alt="Aquadrop Expert Pro mosókapszula dobozos kiszerelésben"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 1023px) 100vw, 420px"
+                  />
+                </div>
+              </div>
+
+              <div className="grid gap-5 sm:grid-cols-2">
+                {technologyItems.map((item) => (
+                  <article
+                    className="flex min-h-[132px] h-full items-center gap-4 rounded-[1.75rem] border border-slate-200 bg-white/80 px-6 py-5 shadow-sm"
+                    key={item.title}
                   >
-                    {item.icon}
-                  </span>
-                  <div className="min-w-0">
-                    <h3 className="max-w-[19ch] text-lg font-semibold leading-snug md:text-xl">{item.title}</h3>
-                  </div>
-                </article>
-              ))}
+                    <span
+                      aria-hidden="true"
+                      className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand-primary/10 text-2xl"
+                    >
+                      {item.icon}
+                    </span>
+                    <div className="min-w-0">
+                      <h3 className="max-w-[19ch] text-lg font-semibold leading-snug md:text-xl">{item.title}</h3>
+                    </div>
+                  </article>
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -78,27 +80,29 @@ export function TechnologySection() {
 
       <section className="ds-section">
         <div className="ds-container text-center">
-          <h2 className="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
-            Környezetbarát választás a mindennapokra
-          </h2>
-          <p className="mx-auto mt-4 max-w-3xl text-base leading-relaxed text-slate-600 md:text-lg">
-            Az Aquadrop Expert Pro nemcsak hatékony, hanem környezettudatos megoldás is, amely a modern
-            háztartások igényeihez igazodik.
-          </p>
+          <div className="ds-floating-panel px-5 py-7 sm:px-7 md:px-10 md:py-10">
+            <h2 className="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
+              Környezetbarát választás a mindennapokra
+            </h2>
+            <p className="mx-auto mt-4 max-w-3xl text-base leading-relaxed text-slate-600 md:text-lg">
+              Az Aquadrop Expert Pro nemcsak hatékony, hanem környezettudatos megoldás is, amely a modern
+              háztartások igényeihez igazodik.
+            </p>
 
-          <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {ecoItems.map((item) => (
-              <article
-                key={item.title}
-                className="bg-white rounded-2xl border border-slate-200 p-5 text-center shadow-sm"
-              >
-                <div className="mb-3 text-2xl" aria-hidden="true">
-                  {item.icon}
-                </div>
-                <h3 className="mb-2 text-lg font-semibold text-slate-900">{item.title}</h3>
-                <p className="text-sm leading-6 text-slate-600 md:text-[15px]">{item.description}</p>
-              </article>
-            ))}
+            <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+              {ecoItems.map((item) => (
+                <article
+                  key={item.title}
+                  className="rounded-2xl border border-slate-200 bg-white/80 p-5 text-center shadow-sm"
+                >
+                  <div className="mb-3 text-2xl" aria-hidden="true">
+                    {item.icon}
+                  </div>
+                  <h3 className="mb-2 text-lg font-semibold text-slate-900">{item.title}</h3>
+                  <p className="text-sm leading-6 text-slate-600 md:text-[15px]">{item.description}</p>
+                </article>
+              ))}
+            </div>
           </div>
         </div>
       </section>

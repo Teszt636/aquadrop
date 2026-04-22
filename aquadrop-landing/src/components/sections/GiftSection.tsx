@@ -169,7 +169,7 @@ export function GiftSection() {
     <section className="py-20">
       <div
         id="gift-form"
-        className="mx-auto w-full max-w-5xl scroll-mt-8 rounded-[28px] border border-slate-200 bg-white/60 p-5 shadow-[0_18px_50px_rgba(15,23,42,0.08)] backdrop-blur-sm sm:px-6 md:scroll-mt-28 md:p-6 lg:scroll-mt-12 lg:p-7"
+        className="ds-floating-panel-strong mx-auto w-full max-w-5xl scroll-mt-8 p-5 sm:px-6 md:scroll-mt-28 md:p-6 lg:scroll-mt-12 lg:p-7"
       >
         <div className="grid items-stretch gap-5 lg:grid-cols-[0.9fr_1.1fr] lg:gap-6">
           <div className="flex h-full flex-col rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-6 md:p-7">

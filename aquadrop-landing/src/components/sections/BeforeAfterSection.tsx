@@ -94,7 +94,7 @@ export function BeforeAfterSection() {
           </SectionDescription>
         </div>
 
-        <div className="mx-auto mt-8 w-full max-w-3xl rounded-3xl border border-slate-200/90 bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(246,251,255,0.96)_100%)] p-3 shadow-[0_20px_52px_rgba(15,23,42,0.09)] sm:p-4 md:p-5">
+        <div className="ds-floating-panel mx-auto mt-8 w-full max-w-3xl p-3 sm:p-4 md:p-5">
           <div
             ref={sliderRef}
             className="group relative aspect-[16/9] w-full select-none overflow-hidden rounded-2xl border border-slate-200/90 bg-slate-100"

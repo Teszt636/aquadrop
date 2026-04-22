@@ -22,7 +22,7 @@ export function ThreePathsSection() {
           <SectionHeading>Válaszd ki a következő lépést</SectionHeading>
         </div>
 
-        <div className="mt-8 grid gap-5 md:grid-cols-3 md:items-stretch">
+        <div className="ds-floating-panel mt-8 grid gap-5 px-5 py-6 sm:px-7 md:grid-cols-3 md:items-stretch md:px-8 md:py-8">
           <article className="group flex h-full flex-col items-center rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-lg md:p-7">
             <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 text-2xl">
               🔔
