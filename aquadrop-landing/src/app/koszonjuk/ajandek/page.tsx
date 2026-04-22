@@ -1,4 +1,12 @@
+import type { Metadata } from 'next';
 import { ThankYouPage } from '@/components/thank-you';
+
+export const metadata: Metadata = {
+  title: 'Köszönjük az igénylést | Aquadrop',
+  alternates: {
+    canonical: '/koszonjuk/ajandek',
+  }
+};
 
 export default function GiftThankYouPage() {
   return (

@@ -95,7 +95,7 @@ function buildUserEmailTemplate(params: {
                       <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center">
                         <tr>
                           <td bgcolor="#2563eb" style="border-radius: 10px; text-align: center;">
-                            <a href="https://aquadrop.hu" target="_blank" style="display: inline-block; padding: 13px 24px; font-size: 15px; line-height: 1; font-weight: 700; color: #ffffff; text-decoration: none;">
+                            <a href="https://www.aquadrop.hu" target="_blank" style="display: inline-block; padding: 13px 24px; font-size: 15px; line-height: 1; font-weight: 700; color: #ffffff; text-decoration: none;">
                               ${params.ctaText}
                             </a>
                           </td>
