@@ -108,17 +108,16 @@ export default function Home() {
         }
       },
       {
-        '@type': 'Product',
-        '@id': 'https://www.aquadrop.hu/#product',
-        name: 'Aquadrop Expert Pro mosókapszula',
-        description:
-          'Prémium mosókapszula erős tisztítóerővel, tartós illattal és modern formulával, Dubai gyártói háttérrel.',
-        image: 'https://www.aquadrop.hu/og-image.png',
-        brand: {
-          '@type': 'Brand',
-          name: 'Aquadrop Expert Pro'
+        '@type': 'WebPage',
+        '@id': 'https://www.aquadrop.hu/#webpage',
+        url: 'https://www.aquadrop.hu/',
+        name: 'Mosókapszula – Aquadrop Expert Pro | 2+1 ajándék kapszula',
+        isPartOf: {
+          '@id': 'https://www.aquadrop.hu/#website'
         },
-        category: 'Laundry Detergent Pods'
+        about: {
+          '@id': 'https://www.aquadrop.hu/#organization'
+        }
       },
       {
         '@type': 'FAQPage',
