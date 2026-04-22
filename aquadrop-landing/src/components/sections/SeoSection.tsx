@@ -72,7 +72,7 @@ export function SeoSection() {
                 Ha egy megbízható, könnyen használható és korszerű megoldást keresel, érdemes kipróbálni.
               </p>
               <div className="mt-4 flex justify-center">
-                <ButtonLink href="#gift-campaign">
+                <ButtonLink href="#gift-form">
                   Próbáld ki most – 2 doboz vásárlása esetén adunk plusz egyet ajándékba
                 </ButtonLink>
               </div>
