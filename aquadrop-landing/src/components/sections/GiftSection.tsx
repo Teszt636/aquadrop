@@ -213,7 +213,7 @@ export function GiftSection() {
             aria-label="Ajándék mosókapszula igénylőlap"
             onSubmit={handleSubmit}
             noValidate
-            className="relative z-10 w-full scroll-mt-12 overflow-visible rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_14px_35px_rgba(15,23,42,0.10)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 md:p-7"
+            className="relative z-10 w-full scroll-mt-24 overflow-visible rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_14px_35px_rgba(15,23,42,0.10)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 md:p-7"
           >
             <h3 className="text-xl font-semibold text-slate-900 md:text-2xl">Ajándék mosókapszula igénylőlap</h3>
 
