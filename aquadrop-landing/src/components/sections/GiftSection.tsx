@@ -168,37 +168,39 @@ export function GiftSection() {
   return (
     <section className="bg-[#eef4ff] py-20">
       <div className="mx-auto w-full max-w-5xl rounded-[28px] border border-slate-200 bg-white/60 p-5 shadow-[0_18px_50px_rgba(15,23,42,0.08)] backdrop-blur-sm sm:px-6 md:p-6 lg:p-7">
-        <div className="grid items-start gap-5 lg:grid-cols-[0.9fr_1.1fr] lg:gap-6">
-          <div className="rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-6 md:p-7">
-            <SectionEyebrow className="mx-auto inline-flex rounded-full border border-blue-200 bg-blue-100/70 px-3 py-1 text-xs font-medium normal-case tracking-normal text-blue-900">
-              Ajándék kampány
-            </SectionEyebrow>
-            <h2 className="mt-4 text-center text-3xl font-bold tracking-tight text-slate-900 md:text-4xl lg:text-left">
-              Ajándék mosókapszula igénylés
-            </h2>
-            <p className="mx-auto mt-4 max-w-xl text-center text-base leading-6 text-slate-700 lg:mx-0 lg:text-left">
-              Az alábbi űrlap kitöltésével és a vásárlási blokk feltöltésével egyszerűen
-              igényelheted az ajándék mosókapszulát.
-            </p>
+        <div className="grid items-stretch gap-5 lg:grid-cols-[0.9fr_1.1fr] lg:gap-6">
+          <div className="flex h-full flex-col rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-6 md:p-7">
+            <div>
+              <SectionEyebrow className="mx-auto inline-flex rounded-full border border-blue-200 bg-blue-100/70 px-3 py-1 text-xs font-medium normal-case tracking-normal text-blue-900">
+                Ajándék kampány
+              </SectionEyebrow>
+              <h2 className="mt-4 text-center text-3xl font-bold tracking-tight text-slate-900 md:text-4xl lg:text-left">
+                Ajándék mosókapszula igénylés
+              </h2>
+              <p className="mx-auto mt-4 max-w-xl text-center text-base leading-6 text-slate-700 lg:mx-0 lg:text-left">
+                Az alábbi űrlap kitöltésével és a vásárlási blokk feltöltésével egyszerűen
+                igényelheted az ajándék mosókapszulát.
+              </p>
 
-            <ul className="mt-5 space-y-2.5 text-sm font-medium text-slate-700 md:text-base">
-              <li className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3">
-                <span className="mt-0.5 text-blue-600">✓</span>
-                <span className="leading-snug">
-                  Vásárolj 2 doboz Aquadrop Expert Pro mosókapszulát
-                </span>
-              </li>
-              <li className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3">
-                <span className="mt-0.5 text-blue-600">✓</span>
-                <span className="leading-snug">Töltsd fel a blokk vagy blokkok képeit</span>
-              </li>
-              <li className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3">
-                <span className="mt-0.5 text-blue-600">✓</span>
-                <span className="leading-snug">Küldjük az ajándék mosókapszulát</span>
-              </li>
-            </ul>
+              <ul className="mt-5 space-y-2.5 text-sm font-medium text-slate-700 md:text-base">
+                <li className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3">
+                  <span className="mt-0.5 text-blue-600">✓</span>
+                  <span className="leading-snug">
+                    Vásárolj 2 doboz Aquadrop Expert Pro mosókapszulát
+                  </span>
+                </li>
+                <li className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3">
+                  <span className="mt-0.5 text-blue-600">✓</span>
+                  <span className="leading-snug">Töltsd fel a blokk vagy blokkok képeit</span>
+                </li>
+                <li className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3">
+                  <span className="mt-0.5 text-blue-600">✓</span>
+                  <span className="leading-snug">Küldjük az ajándék mosókapszulát</span>
+                </li>
+              </ul>
+            </div>
 
-            <p className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs text-slate-600 md:text-sm">
+            <p className="mt-auto rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs text-slate-600 md:text-sm">
               A beküldött adatokat kizárólag a kampány lebonyolításához használjuk fel.
             </p>
           </div>
