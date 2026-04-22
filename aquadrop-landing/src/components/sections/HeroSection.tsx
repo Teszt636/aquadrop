@@ -34,7 +34,7 @@ export function HeroSection() {
 
           <div className="relative mt-0 min-w-0 w-full md:mt-0">
             <div className="pointer-events-none absolute inset-0 -z-10 rounded-[2rem] bg-gradient-to-br from-brand-primary/15 via-brand-light to-success-green/10 blur-2xl" />
-            <div className="relative w-full rounded-[2rem] border border-slate-200 bg-white p-4 shadow-inner">
+            <div className="relative w-full rounded-[2rem] border border-white/40 bg-white/70 p-4 shadow-[0_20px_60px_rgba(15,23,42,0.10)] backdrop-blur-sm">
               <div className="relative aspect-[5/4] overflow-hidden rounded-[1.5rem]">
                 <Image
                   src="/hero-aquadrop.png"

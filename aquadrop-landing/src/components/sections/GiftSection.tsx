@@ -172,7 +172,7 @@ export function GiftSection() {
         className="ds-floating-panel-strong mx-auto w-full max-w-5xl scroll-mt-8 p-5 sm:px-6 md:scroll-mt-28 md:p-6 lg:scroll-mt-12 lg:p-7"
       >
         <div className="grid items-stretch gap-5 lg:grid-cols-[0.9fr_1.1fr] lg:gap-6">
-          <div className="flex h-full flex-col rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-6 md:p-7">
+          <div className="flex h-full flex-col rounded-3xl border border-white/40 bg-white/80 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.10)] backdrop-blur-sm md:p-7">
             <div>
               <div className="text-center md:text-left">
                 <SectionEyebrow className="inline-flex rounded-full border border-blue-200 bg-blue-100/70 text-center px-3 py-1 text-xs font-medium normal-case tracking-normal text-blue-900">
@@ -215,7 +215,7 @@ export function GiftSection() {
             aria-label="Ajándék mosókapszula igénylőlap"
             onSubmit={handleSubmit}
             noValidate
-            className="relative z-10 w-full overflow-visible rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_14px_35px_rgba(15,23,42,0.10)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 md:p-7"
+            className="relative z-10 w-full overflow-visible rounded-3xl border border-white/40 bg-white/80 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.10)] backdrop-blur-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 md:p-7"
           >
             <h3 className="text-xl font-semibold text-slate-900 md:text-2xl">Ajándék mosókapszula igénylőlap</h3>
 
