@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="hu">
+    <html lang="hu" data-scroll-behavior="smooth">
       <body>
         {children}
         <CookieConsentBanner />
