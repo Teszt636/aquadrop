@@ -4,6 +4,9 @@ export const metadata: Metadata = {
   title: 'Mosókapszula – Aquadrop Expert Pro | 2+1 ajándék kapszula',
   description:
     'Prémium mosókapszula Dubai gyártói háttérrel. Vásárolj 2 dobozt, a 3.-at ajándékba adjuk. Erős tisztítás, tartós illat, modern formula.',
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
     title: 'Mosókapszula – Aquadrop Expert Pro | 2+1 ajándék kapszula',
     description:

@@ -1,4 +1,12 @@
+import type { Metadata } from 'next';
 import { ThankYouPage } from '@/components/thank-you';
+
+export const metadata: Metadata = {
+  title: 'Köszönjük a feliratkozást | Aquadrop',
+  alternates: {
+    canonical: '/koszonjuk/feliratkozas',
+  }
+};
 
 export default function SubscriptionThankYouPage() {
   return (
