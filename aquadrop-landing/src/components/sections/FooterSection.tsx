@@ -21,14 +21,14 @@ export function FooterSection() {
             <p className="hidden text-lg font-bold text-slate-100 md:block">Aquadrop Expert Pro Capsules</p>
             <address className="mt-4 not-italic text-sm leading-7 text-slate-200">
               <p className="font-semibold text-slate-100">Ügyfélszolgálat:</p>
-              <p className="font-semibold text-slate-300">hello@aquadrop.hu</p>
-              <p className="font-semibold text-slate-300">+36 21 201 0808</p>
+              <p className="font-semibold text-slate-400">hello@aquadrop.hu</p>
+              <p className="font-semibold text-slate-400">+36 21 201 0808</p>
 
               <div className="mt-4 hidden md:block">
                 <p className="font-semibold text-slate-100">Magyarországi forgalmazó:</p>
-                <p className="font-semibold text-slate-300">Aquadrop Hungary Kft</p>
-                <p className="font-semibold text-slate-300">6781 Domaszék, Béke utca 16/B</p>
-                <p className="font-semibold text-slate-300">32864883-2-06</p>
+                <p className="font-semibold text-slate-400">Aquadrop Hungary Kft</p>
+                <p className="font-semibold text-slate-400">6781 Domaszék, Béke utca 16/B</p>
+                <p className="font-semibold text-slate-400">32864883-2-06</p>
               </div>
             </address>
           </div>
@@ -58,7 +58,7 @@ export function FooterSection() {
             <p className="text-sm font-semibold text-slate-100 md:uppercase md:tracking-wide md:text-slate-100">
               Mosókapszula tudástár
             </p>
-            <p className="mt-3 text-sm leading-6 text-slate-300">
+            <p className="mt-3 text-sm leading-6 text-slate-400">
               Hasznos tudnivalók a mosókapszulák használatáról és a helyes választásról.
             </p>
             <ul className="mt-4 space-y-2 text-sm leading-7 text-slate-200">
@@ -72,9 +72,9 @@ export function FooterSection() {
             </ul>
             <address className="mt-4 not-italic text-sm leading-7 text-slate-200 md:hidden">
               <p className="font-semibold text-slate-100">Magyarországi forgalmazó:</p>
-              <p className="font-semibold text-slate-300">Aquadrop Hungary Kft</p>
-              <p className="font-semibold text-slate-300">6781 Domaszék, Béke utca 16/B</p>
-              <p className="font-semibold text-slate-300">32864883-2-06</p>
+              <p className="font-semibold text-slate-400">Aquadrop Hungary Kft</p>
+              <p className="font-semibold text-slate-400">6781 Domaszék, Béke utca 16/B</p>
+              <p className="font-semibold text-slate-400">32864883-2-06</p>
             </address>
           </div>
         </div>
