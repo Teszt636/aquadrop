@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next';
 
-const DOMAIN = 'https://www.aquadrop.hu';
+import { PRIMARY_ORIGIN } from '@/lib/site';
 
 const basePaths = [
   '/',
@@ -17,7 +17,7 @@ const basePaths = [
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return basePaths.map((path) => ({
-    url: `${DOMAIN}${path}`,
+    url: `${PRIMARY_ORIGIN}${path}`,
     lastModified: new Date(),
     changeFrequency: 'weekly',
     priority: path === '/' ? 1 : 0.7,
