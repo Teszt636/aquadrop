@@ -8,6 +8,7 @@ const basePaths = [
   '/mosokapszula-hasznalata',
   '/mosokapszula-nem-oldodik-fel',
   '/mosokapszula-vagy-folyekony-mososzer',
+  '/hogyan-mossunk-20-fokon',
   '/adatvedelmi-tajekoztato',
   '/suti-tajekoztato',
   '/partner'
