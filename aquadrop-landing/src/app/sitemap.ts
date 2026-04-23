@@ -4,6 +4,7 @@ const DOMAIN = 'https://www.aquadrop.hu';
 
 const basePaths = [
   '/',
+  '/energiatakarekos-mosas',
   '/mosokapszula-hasznalata',
   '/mosokapszula-nem-oldodik-fel',
   '/mosokapszula-vagy-folyekony-mososzer',
