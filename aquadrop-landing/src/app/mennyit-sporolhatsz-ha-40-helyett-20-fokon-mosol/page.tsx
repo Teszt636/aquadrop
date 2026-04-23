@@ -159,7 +159,7 @@ export default function MennyitSporolhatsz20FokonPage() {
 
       <ArticleLayout
         category="Energiatudatos mosás"
-        readingTime="kb. 16 perc olvasás"
+        readingTime="kb. 8 perc olvasás"
         title={articleTitle}
         intro="Egyre többen keresik, hogyan csökkenthető a háztartási energiafelhasználás anélkül, hogy a tisztaságérzetből engedni kellene. A mosás hőfoka ebben kulcstényező: a 40 helyett 20 fokon történő mosás érzékelhetően alacsonyabb energiaigényt jelenthet, ha a programhossz, a töltet és a mosási megoldás is megfelelően van megválasztva."
         cta={
@@ -295,7 +295,7 @@ export default function MennyitSporolhatsz20FokonPage() {
         <h2>Gyakori kérdések</h2>
         <div className="space-y-4">
           {faqItems.map((item) => (
-            <section className="rounded-2xl border border-cyan-100 bg-cyan-50/45 p-5 md:p-6" key={item.question}>
+            <section className="rounded-2xl border border-cyan-100 bg-cyan-50/45 px-5 pb-5 pt-1 md:px-6 md:pb-6 md:pt-4" key={item.question}>
               <h3 className="mt-0 text-lg md:text-xl">{item.question}</h3>
               <p className="mt-3 text-slate-700">{item.answer}</p>
             </section>
