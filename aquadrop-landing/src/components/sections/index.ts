@@ -18,3 +18,5 @@ export * from './BeforeAfterSection';
 export * from './SeoSection';
 
 export * from './FaqSection';
+
+export * from './EnergySavingsSection';
