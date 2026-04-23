@@ -1,0 +1,261 @@
+import { CheckCircle2, CircleAlert, Compass, Gem, Handshake, LineChart, Megaphone, ShieldCheck } from 'lucide-react';
+
+import { ResellerSection } from '@/components/sections';
+
+const HERO_BULLETS = [
+  'Kevesebb ügyfélszolgálati terhelés a visszatérő panaszok csökkentésével.',
+  'Prémium termékpozíció, amely jobb kosárértéket és stabilabb árrést támogat.',
+  'Gyors bevezetés kész értékesítési és edukációs anyagokkal.'
+] as const;
+
+const PROBLEM_POINTS = [
+  {
+    title: 'Nem oldódó kapszula',
+    description:
+      'A vásárlók gyakori panasza, hogy hideg vagy rövid programnál a kapszula maradványt hagy.'
+  },
+  {
+    title: 'Foltos ruhák és visszahozott termék',
+    description:
+      'A nem megfelelő oldódásból adódó foltok reklamációhoz, cseréhez és veszteséges ügykezeléshez vezetnek.'
+  },
+  {
+    title: 'Bizalomvesztés a polcnál',
+    description:
+      'Ha egy termékkel rossz tapasztalat társul, a vevő nemcsak márkát, hanem boltot is vált.'
+  }
+] as const;
+
+const DISSOLUTION_RESULTS = [
+  { water: '30°C', time: '~4.5 perc' },
+  { water: '20°C', time: '~8 perc' },
+  { water: '4°C', time: '~12 perc' }
+] as const;
+
+const BUSINESS_BENEFITS = [
+  'Kevesebb reklamációs eset és alacsonyabb utókezelési költség.',
+  'Magasabb vevői elégedettség és jobb újravásárlási arány.',
+  'Könnyebb értékesítési párbeszéd: mérhető műszaki előnyökkel érvelhetsz.',
+  'Prémium pozicionálás, ami védi az árrést és csökkenti az árverseny-kitettséget.',
+  'Stabil, üzleti fókuszú partneri együttműködés hosszú távra.'
+] as const;
+
+const SALES_SUPPORT = [
+  {
+    title: 'Marketing anyagok',
+    description: 'Kész kreatívok, termékelőny-kivonatok és POS üzenetek online és offline használatra.',
+    icon: Megaphone
+  },
+  {
+    title: 'Edukációs tartalmak',
+    description: 'Hideg vizes mosásról, helyes használatról és kapszulaoldódásról kész, közérthető anyagok.',
+    icon: Compass
+  },
+  {
+    title: 'Megtérülési kalkulátor',
+    description: 'Egyszerűen kommunikálható költség/érték logika a vásárlói döntés gyorsítására.',
+    icon: LineChart
+  },
+  {
+    title: 'Online jelenlét támogatása',
+    description: 'SEO-kompatibilis termékszövegek, strukturált ajánlati blokkok és konverziós javaslatok.',
+    icon: Handshake
+  }
+] as const;
+
+const TRUST_POINTS = [
+  'Szelektív partnerprogram és szakmai alapú onboarding.',
+  'Egyértelmű, adat-alapú termékkommunikáció.',
+  'Kiszámítható együttműködés, emberi támogatással.'
+] as const;
+
+export function PartnerLanding() {
+  return (
+    <main className="bg-slate-950 text-slate-100">
+      <section className="relative overflow-hidden border-b border-white/10 px-5 pb-14 pt-12 sm:px-6 md:px-10 md:pb-20 md:pt-20">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_12%,rgba(34,211,238,0.18),transparent_36%),radial-gradient(circle_at_85%_8%,rgba(59,130,246,0.22),transparent_34%),radial-gradient(circle_at_50%_100%,rgba(15,23,42,0.8),transparent_65%)]" />
+          <div className="absolute -left-10 top-16 h-52 w-52 rounded-full bg-cyan-400/20 blur-[110px] md:h-72 md:w-72" />
+          <div className="absolute -right-16 top-5 h-56 w-56 rounded-full bg-blue-500/20 blur-[120px] md:h-80 md:w-80" />
+        </div>
+
+        <div className="relative mx-auto grid w-full max-w-6xl gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10">
+          <div className="space-y-6 md:space-y-8">
+            <p className="inline-flex rounded-full border border-cyan-200/40 bg-cyan-200/10 px-4 py-1 text-sm text-cyan-100 backdrop-blur-md">
+              Aquadrop B2B partnerprogram
+            </p>
+            <div className="space-y-4">
+              <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl">
+                Kevesebb reklamáció. Elégedettebb vevők. Könnyebb értékesítés.
+              </h1>
+              <p className="max-w-2xl text-base leading-relaxed text-slate-200 sm:text-lg md:text-xl">
+                Az Aquadrop partneroldala nem általános márkaígéretre épül, hanem egy konkrét üzleti problémára ad választ:
+                hogyan csökkenthető a kapszulás mosószereknél megjelenő panasz és hogyan fordítható ez mérhető üzleti előnnyé.
+              </p>
+            </div>
+
+            <ul className="grid gap-3 sm:grid-cols-2">
+              {HERO_BULLETS.map((bullet) => (
+                <li
+                  key={bullet}
+                  className="rounded-2xl border border-white/15 bg-white/10 p-4 text-sm text-slate-100 shadow-[0_20px_30px_-24px_rgba(14,116,144,0.85)] backdrop-blur-lg"
+                >
+                  {bullet}
+                </li>
+              ))}
+            </ul>
+
+            <a
+              href="#jelentkezes"
+              className="inline-flex h-12 items-center justify-center rounded-xl bg-gradient-to-r from-cyan-300 via-cyan-400 to-sky-400 px-6 text-sm font-semibold text-slate-950 shadow-[0_16px_26px_-16px_rgba(34,211,238,0.95)] transition hover:from-cyan-200 hover:to-sky-300"
+            >
+              Partneri egyeztetést kérek
+            </a>
+          </div>
+
+          <article className="rounded-3xl border border-white/15 bg-white/10 p-6 shadow-[0_35px_65px_-45px_rgba(6,182,212,0.65)] backdrop-blur-xl md:p-7">
+            <h2 className="text-xl font-semibold text-white md:text-2xl">Üzleti fókusz, nem zajos sales kommunikáció</h2>
+            <p className="mt-3 text-sm leading-relaxed text-slate-200 md:text-base">
+              A partnerprogram célja, hogy prémium, alacsony reklamációs kockázatú terméket adj a vásárlóidnak úgy, hogy közben
+              egyszerűbb legyen az értékesítés és erősebb a bizalom.
+            </p>
+            <ul className="mt-6 space-y-3 text-sm text-slate-100 md:text-base">
+              <li className="flex items-start gap-2.5">
+                <CheckCircle2 className="mt-0.5 h-4 w-4 text-cyan-300" />
+                Kifejezetten viszonteladók és webshopok napi problémáira tervezve.
+              </li>
+              <li className="flex items-start gap-2.5">
+                <CheckCircle2 className="mt-0.5 h-4 w-4 text-cyan-300" />
+                Nem árharc, hanem érték-alapú, prémium kategóriás pozicionálás.
+              </li>
+              <li className="flex items-start gap-2.5">
+                <CheckCircle2 className="mt-0.5 h-4 w-4 text-cyan-300" />
+                Támogatott bevezetés marketinggel, edukációval és gyakorlati eszközökkel.
+              </li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section className="px-5 py-14 sm:px-6 md:px-10 md:py-20">
+        <div className="mx-auto w-full max-w-6xl">
+          <article className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-lg md:p-10">
+            <h2 className="text-2xl font-semibold text-white md:text-4xl">A probléma, amit a végén mindig a viszonteladó fizet meg</h2>
+            <div className="mt-8 grid gap-4 md:grid-cols-3">
+              {PROBLEM_POINTS.map((item) => (
+                <div key={item.title} className="rounded-2xl border border-red-200/20 bg-slate-950/50 p-5">
+                  <p className="inline-flex items-center gap-2 text-sm font-medium text-red-200">
+                    <CircleAlert className="h-4 w-4" />
+                    {item.title}
+                  </p>
+                  <p className="mt-3 text-sm leading-relaxed text-slate-300 md:text-base">{item.description}</p>
+                </div>
+              ))}
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section className="border-y border-white/10 bg-slate-900/70 px-5 py-14 sm:px-6 md:px-10 md:py-20">
+        <div className="mx-auto grid w-full max-w-6xl gap-6 md:gap-8 lg:grid-cols-[1fr_1fr]">
+          <article className="rounded-3xl border border-white/10 bg-white/10 p-6 shadow-[0_32px_56px_-44px_rgba(14,116,144,0.95)] backdrop-blur-xl md:p-8">
+            <p className="text-sm font-medium uppercase tracking-wide text-cyan-200">Megoldás</p>
+            <h2 className="mt-2 text-2xl font-semibold text-white md:text-3xl">4 kamrás technológia, kiszámítható oldódási viselkedéssel</h2>
+            <p className="mt-4 text-sm leading-relaxed text-slate-200 md:text-base">
+              A labor- és használati tesztek alapján az oldódás hőmérséklet és programidő függvényében jól előrejelezhető.
+              Ez lehetővé teszi a pontos vásárlói edukációt és a panaszforrások csökkentését.
+            </p>
+            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+              {DISSOLUTION_RESULTS.map((result) => (
+                <div key={result.water} className="rounded-2xl border border-cyan-100/30 bg-cyan-100/10 p-4 text-center">
+                  <p className="text-lg font-semibold text-cyan-100">{result.water}</p>
+                  <p className="mt-1 text-sm text-slate-200">{result.time}</p>
+                </div>
+              ))}
+            </div>
+            <p className="mt-6 rounded-2xl border border-emerald-200/25 bg-emerald-200/10 p-4 text-sm font-medium text-emerald-100 md:text-base">
+              Következtetés: legalább 20°C és legalább 18 perc programidő mellett maradék nélküli oldódás érhető el.
+            </p>
+          </article>
+
+          <article className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-lg md:p-8">
+            <p className="text-sm font-medium uppercase tracking-wide text-cyan-200">Üzleti előnyök</p>
+            <h3 className="mt-2 text-2xl font-semibold text-white md:text-3xl">Mérhető nyereség a napi működésben</h3>
+            <ul className="mt-6 space-y-3">
+              {BUSINESS_BENEFITS.map((item) => (
+                <li key={item} className="flex items-start gap-2.5 text-sm text-slate-200 md:text-base">
+                  <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-cyan-300" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section className="px-5 py-14 sm:px-6 md:px-10 md:py-20">
+        <div className="mx-auto w-full max-w-6xl">
+          <article className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 via-white/5 to-slate-900/50 p-6 backdrop-blur-xl md:p-10">
+            <p className="text-sm font-medium uppercase tracking-wide text-cyan-200">Termékpozicionálás</p>
+            <h2 className="mt-2 text-2xl font-semibold text-white md:text-4xl">Prémium kategória, racionális ár/érték üzenettel</h2>
+            <p className="mt-4 max-w-4xl text-sm leading-relaxed text-slate-200 md:text-lg">
+              Az Aquadrop nem diszkont alternatíva. A termékpozíció lényege, hogy a végfelhasználó magasabb minőséget,
+              kiszámíthatóbb teljesítményt és kevesebb kellemetlenséget kapjon — a partner pedig stabilabb értékesítést és
+              erősebb márkakapcsolatot építsen.
+            </p>
+            <div className="mt-6 grid gap-4 md:grid-cols-3">
+              <div className="rounded-2xl border border-white/15 bg-slate-950/50 p-5">
+                <Gem className="h-5 w-5 text-cyan-300" />
+                <p className="mt-3 text-base font-medium text-white">Magas érzékelt érték</p>
+              </div>
+              <div className="rounded-2xl border border-white/15 bg-slate-950/50 p-5">
+                <LineChart className="h-5 w-5 text-cyan-300" />
+                <p className="mt-3 text-base font-medium text-white">Fenntartható árrés</p>
+              </div>
+              <div className="rounded-2xl border border-white/15 bg-slate-950/50 p-5">
+                <Handshake className="h-5 w-5 text-cyan-300" />
+                <p className="mt-3 text-base font-medium text-white">Hosszú távú partnerérték</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section className="border-y border-white/10 bg-slate-900/70 px-5 py-14 sm:px-6 md:px-10 md:py-20">
+        <div className="mx-auto w-full max-w-6xl">
+          <h2 className="text-2xl font-semibold text-white md:text-4xl">Értékesítési támogatás, ami tényleg használható</h2>
+          <div className="mt-8 grid gap-4 md:grid-cols-2">
+            {SALES_SUPPORT.map(({ title, description, icon: Icon }) => (
+              <article key={title} className="rounded-2xl border border-white/10 bg-white/10 p-5 backdrop-blur-lg md:p-6">
+                <Icon className="h-5 w-5 text-cyan-300" />
+                <h3 className="mt-3 text-lg font-semibold text-white">{title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-200 md:text-base">{description}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="px-5 py-14 sm:px-6 md:px-10 md:py-20">
+        <div className="mx-auto grid w-full max-w-6xl gap-8 lg:grid-cols-[1fr_1fr]">
+          <article className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl md:p-8">
+            <p className="text-sm font-medium uppercase tracking-wide text-cyan-200">Bizalom blokk</p>
+            <h2 className="mt-2 text-2xl font-semibold text-white md:text-3xl">Kiszámítható szakmai partnerkapcsolat</h2>
+            <ul className="mt-5 space-y-3">
+              {TRUST_POINTS.map((item) => (
+                <li key={item} className="flex items-start gap-2.5 text-sm text-slate-200 md:text-base">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-cyan-300" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </article>
+
+          <div id="jelentkezes" className="scroll-mt-24">
+            <ResellerSection />
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}
