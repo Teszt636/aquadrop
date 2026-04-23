@@ -117,26 +117,37 @@ export function PartnerLanding() {
             </div>
           </div>
 
-          <article className="rounded-3xl border border-white/15 bg-white/10 p-6 shadow-[0_26px_48px_-40px_rgba(6,182,212,0.5)] backdrop-blur-xl md:p-7">
-            <h2 className="text-xl font-semibold text-white md:text-2xl">Üzleti fókusz, nem zajos sales kommunikáció</h2>
-            <p className="mt-3 text-sm leading-relaxed text-slate-200 md:text-base">
-              A partnerprogram célja, hogy prémium, alacsony reklamációs kockázatú terméket adj a vásárlóidnak úgy, hogy közben
-              egyszerűbb legyen az értékesítés és erősebb a bizalom.
-            </p>
-            <ul className="mt-6 space-y-3 text-sm text-slate-100 md:text-base">
-              <li className="flex items-start gap-2.5">
-                <CheckCircle2 className="mt-0.5 h-4 w-4 text-cyan-300" />
-                Kifejezetten viszonteladók és webshopok napi problémáira tervezve.
-              </li>
-              <li className="flex items-start gap-2.5">
-                <CheckCircle2 className="mt-0.5 h-4 w-4 text-cyan-300" />
-                Nem árharc, hanem érték-alapú, prémium kategóriás pozicionálás.
-              </li>
-              <li className="flex items-start gap-2.5">
-                <CheckCircle2 className="mt-0.5 h-4 w-4 text-cyan-300" />
-                Támogatott bevezetés marketinggel, edukációval és gyakorlati eszközökkel.
-              </li>
-            </ul>
+          <article className="flex h-full flex-col rounded-3xl border border-white/15 bg-white/10 p-6 shadow-[0_26px_48px_-40px_rgba(6,182,212,0.5)] backdrop-blur-xl md:p-7">
+            <div>
+              <h2 className="text-xl font-semibold text-white md:text-2xl">Üzleti fókusz, nem zajos sales kommunikáció</h2>
+              <p className="mt-3 text-sm leading-relaxed text-slate-200 md:text-base">
+                Prémium termék, kevesebb panasz és egyszerűbb értékesítési üzenet a napi partneri működéshez.
+                Több bizalom a vásárlónál, stabilabb teljesítmény az értékesítésben.
+              </p>
+              <ul className="mt-6 space-y-4 text-sm text-slate-100 md:text-base">
+                <li className="flex items-start gap-2.5">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 text-cyan-300" />
+                  Webshopokra és bolti viszonteladásra optimalizálva.
+                </li>
+                <li className="flex items-start gap-2.5">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 text-cyan-300" />
+                  Értékalapú prémium pozicionálás, árharc nélkül.
+                </li>
+                <li className="flex items-start gap-2.5">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 text-cyan-300" />
+                  Bevezetési támogatás kész marketing és edukációs anyagokkal.
+                </li>
+              </ul>
+            </div>
+
+            <div className="mt-auto rounded-xl border border-white/10 bg-white/[0.06] p-4 md:p-5">
+              <p className="text-sm font-semibold text-white md:text-base">Miért könnyebb eladni?</p>
+              <ul className="mt-3 space-y-2 text-xs leading-relaxed text-slate-200 md:text-sm">
+                <li>Kevesebb reklamáció → kevesebb ügyfélszolgálati terhelés</li>
+                <li>Egyszerűen kommunikálható előny (20–30°C működés)</li>
+                <li>Prémium érzet → magasabb kosárérték</li>
+              </ul>
+            </div>
           </article>
         </div>
       </section>
