@@ -5,10 +5,29 @@ const legalLinks = [
   { href: '/suti-tajekoztato', label: 'Süti tájékoztató' }
 ];
 
-const knowledgeLinks = [
-  { href: '/mosokapszula-hasznalata', label: 'Mosókapszula használata' },
-  { href: '/mosokapszula-nem-oldodik-fel', label: 'Miért nem oldódik fel a mosókapszula?' },
-  { href: '/mosokapszula-vagy-folyekony-mososzer', label: 'Mosókapszula vagy folyékony mosószer' }
+const knowledgeGroups = [
+  {
+    title: 'ALAPOK',
+    links: [
+      { href: '/mosokapszula-hasznalata', label: 'Mosókapszula használata' },
+      { href: '/mosokapszula-nem-oldodik-fel', label: 'Miért nem oldódik fel a mosókapszula?' }
+    ]
+  },
+  {
+    title: 'ÖSSZEHASONLÍTÁS',
+    links: [{ href: '/mosokapszula-vagy-folyekony-mososzer', label: 'Mosókapszula vagy folyékony mosószer' }]
+  },
+  {
+    title: 'ENERGIATAKARÉKOSSÁG',
+    links: [
+      { href: '/hogyan-mossunk-20-fokon', label: 'Hogyan mossunk 20 fokon' },
+      { href: '/energiatakarekos-mosas', label: 'Energiatakarékos mosás' },
+      {
+        href: '/mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol',
+        label: 'Mennyit spórolhatsz 20 fokos mosással'
+      }
+    ]
+  }
 ];
 
 export function FooterSection() {
@@ -58,18 +77,22 @@ export function FooterSection() {
             <p className="text-sm font-semibold text-slate-100 md:uppercase md:tracking-wide md:text-slate-100">
               Mosókapszula tudástár
             </p>
-            <p className="mt-3 text-sm leading-6 text-slate-400">
-              Hasznos tudnivalók a mosókapszulák használatáról és a helyes választásról.
-            </p>
-            <ul className="mt-4 space-y-2 text-sm leading-7 text-slate-200">
-              {knowledgeLinks.map((link) => (
-                <li key={link.href}>
-                  <Link className="font-medium text-slate-200 transition-colors hover:text-cyan-300" href={link.href}>
-                    {link.label}
-                  </Link>
-                </li>
+            <div className="mt-4 text-sm leading-7 text-slate-200">
+              {knowledgeGroups.map((group, index) => (
+                <div className={index === 0 ? '' : 'mt-4'} key={group.title}>
+                  <p className="text-xs font-semibold tracking-wide text-slate-300">{group.title}</p>
+                  <ul className="mt-2 space-y-2">
+                    {group.links.map((link) => (
+                      <li key={link.href}>
+                        <Link className="font-medium text-slate-200 transition-colors hover:text-cyan-300" href={link.href}>
+                          {link.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               ))}
-            </ul>
+            </div>
             <address className="mt-4 not-italic text-sm leading-7 text-slate-200 md:hidden">
               <p className="font-semibold text-slate-100">Magyarországi forgalmazó:</p>
               <p className="font-semibold text-slate-400">Aquadrop Hungary Kft</p>
