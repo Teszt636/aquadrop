@@ -39,6 +39,7 @@ import {
   BeforeAfterSection,
   BenefitsSection,
   DubaiSection,
+  EnergySavingsSection,
   FooterSection,
   FaqSection,
   GiftConversionSection,
@@ -169,6 +170,7 @@ export default function Home() {
           <ScrollDepthTracker />
           <HeroSection />
           <GiftConversionSection />
+          <EnergySavingsSection />
           <DubaiSection />
           <GiftSection />
           <ProblemSection />
