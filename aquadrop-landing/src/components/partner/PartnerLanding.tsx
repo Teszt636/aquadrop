@@ -107,12 +107,14 @@ export function PartnerLanding() {
               ))}
             </ul>
 
-            <a
-              href="#jelentkezes"
-              className="mx-auto inline-flex h-12 items-center justify-center rounded-xl bg-gradient-to-r from-cyan-300 via-cyan-400 to-sky-400 px-6 text-sm font-semibold text-slate-950 shadow-[0_12px_22px_-16px_rgba(34,211,238,0.74)] transition hover:from-cyan-200 hover:to-sky-300 md:mx-0"
-            >
-              Partneri egyeztetést kérek
-            </a>
+            <div className="flex justify-center text-center md:justify-start md:text-left">
+              <a
+                href="#jelentkezes"
+                className="inline-flex h-12 items-center justify-center rounded-xl bg-gradient-to-r from-cyan-300 via-cyan-400 to-sky-400 px-6 text-sm font-semibold text-slate-950 shadow-[0_12px_22px_-16px_rgba(34,211,238,0.74)] transition hover:from-cyan-200 hover:to-sky-300"
+              >
+                Partneri egyeztetést kérek
+              </a>
+            </div>
           </div>
 
           <article className="rounded-3xl border border-white/15 bg-white/10 p-6 shadow-[0_26px_48px_-40px_rgba(6,182,212,0.5)] backdrop-blur-xl md:p-7">
@@ -250,31 +252,88 @@ export function PartnerLanding() {
       <section className="px-5 py-14 sm:px-6 md:px-10 md:py-20">
         <div className="mx-auto grid w-full max-w-6xl gap-8 lg:grid-cols-[1.15fr_0.85fr]">
           <article className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 via-white/5 to-slate-950/55 p-6 shadow-[0_24px_42px_-36px_rgba(14,116,144,0.58)] backdrop-blur-xl md:p-8">
-            <p className="text-sm font-medium uppercase tracking-wide text-cyan-200">Teljesítmény blokk</p>
+            <p className="text-sm font-medium uppercase tracking-wide text-cyan-200">Teljesítmény</p>
             <h2 className="mt-2 text-2xl font-semibold text-white md:text-3xl">Teljesítmény, ami a gyakorlatban is számít</h2>
             <p className="mt-4 max-w-2xl text-sm leading-relaxed text-slate-200 md:text-base">
               A partner számára a kiszámítható minőség akkor érték, ha a végfelhasználói élmény is stabil marad. Az Aquadrop
               Expert Pro alacsony hőfokú mosásnál is jól kommunikálható, differenciáló termék, ezért a prémium pozicionálás
               nemcsak ígéret, hanem napi szinten átadható értékesítési érv.
             </p>
-            <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_0.95fr] lg:items-center">
-              <ul className="space-y-3">
-                {PERFORMANCE_POINTS.map((item) => (
-                  <li key={item} className="flex items-start gap-2.5 text-sm text-slate-200 md:text-base">
+            <div className="mt-6 space-y-5 md:hidden">
+              {PERFORMANCE_POINTS.slice(0, 2).map((item) => (
+                <article
+                  key={item}
+                  className="rounded-2xl border border-white/15 bg-slate-900/45 p-4 text-sm text-slate-200 shadow-[0_14px_24px_-24px_rgba(8,145,178,0.6)]"
+                >
+                  <p className="flex items-start gap-2.5">
                     <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-cyan-300" />
                     <span>{item}</span>
-                  </li>
+                  </p>
+                </article>
+              ))}
+              <div className="my-8 flex justify-center">
+                <div className="w-full max-w-md overflow-hidden rounded-2xl border border-white/15 bg-slate-900/60 shadow-[0_16px_28px_-26px_rgba(8,145,178,0.7)]">
+                  <Image
+                    src="/aquadrop-partner-performance.png"
+                    alt="Aquadrop partner teljesítmény vizuális összefoglaló"
+                    width={920}
+                    height={620}
+                    className="h-full w-full object-cover"
+                    sizes="(min-width: 768px) 70vw, 100vw"
+                  />
+                </div>
+              </div>
+              {PERFORMANCE_POINTS.slice(2).map((item) => (
+                <article
+                  key={item}
+                  className="rounded-2xl border border-white/15 bg-slate-900/45 p-4 text-sm text-slate-200 shadow-[0_14px_24px_-24px_rgba(8,145,178,0.6)]"
+                >
+                  <p className="flex items-start gap-2.5">
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-cyan-300" />
+                    <span>{item}</span>
+                  </p>
+                </article>
+              ))}
+            </div>
+
+            <div className="mt-8 hidden md:grid md:gap-6">
+              <div className="grid gap-4 md:grid-cols-2">
+                {PERFORMANCE_POINTS.slice(0, 2).map((item) => (
+                  <article
+                    key={item}
+                    className="rounded-2xl border border-white/15 bg-slate-900/45 p-4 text-sm text-slate-200 shadow-[0_14px_24px_-24px_rgba(8,145,178,0.6)] md:text-base"
+                  >
+                    <p className="flex items-start gap-2.5">
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-cyan-300" />
+                      <span>{item}</span>
+                    </p>
+                  </article>
                 ))}
-              </ul>
-              <div className="overflow-hidden rounded-2xl border border-white/15 bg-slate-900/60 shadow-[0_16px_28px_-26px_rgba(8,145,178,0.7)]">
-                <Image
-                  src="/aquadrop-partner-performance.png"
-                  alt="Aquadrop partner teljesítmény vizuális összefoglaló"
-                  width={920}
-                  height={620}
-                  className="h-full w-full object-cover"
-                  sizes="(min-width: 1024px) 36vw, (min-width: 768px) 70vw, 100vw"
-                />
+              </div>
+              <div className="my-4 flex justify-center">
+                <div className="w-full max-w-lg overflow-hidden rounded-2xl border border-white/15 bg-slate-900/60 shadow-[0_16px_28px_-26px_rgba(8,145,178,0.7)]">
+                  <Image
+                    src="/aquadrop-partner-performance.png"
+                    alt="Aquadrop partner teljesítmény vizuális összefoglaló"
+                    width={920}
+                    height={620}
+                    className="h-full w-full object-cover"
+                    sizes="(min-width: 1280px) 44rem, (min-width: 768px) 78vw, 100vw"
+                  />
+                </div>
+              </div>
+              <div className="grid gap-4 md:grid-cols-2">
+                {PERFORMANCE_POINTS.slice(2).map((item) => (
+                  <article
+                    key={item}
+                    className="rounded-2xl border border-white/15 bg-slate-900/45 p-4 text-sm text-slate-200 shadow-[0_14px_24px_-24px_rgba(8,145,178,0.6)] md:text-base"
+                  >
+                    <p className="flex items-start gap-2.5">
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-cyan-300" />
+                      <span>{item}</span>
+                    </p>
+                  </article>
+                ))}
               </div>
             </div>
           </article>
