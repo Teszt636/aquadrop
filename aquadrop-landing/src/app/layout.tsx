@@ -2,9 +2,10 @@ import type { Metadata } from 'next';
 import Script from 'next/script';
 import CookieConsentBanner from '@/components/CookieConsentBanner';
 import './globals.css';
+import { PRIMARY_ORIGIN } from '@/lib/site';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://www.aquadrop.hu'),
+  metadataBase: new URL(PRIMARY_ORIGIN),
   title: {
     default: 'Mosókapszula – Aquadrop Expert Pro | 2+1 ajándék kapszula',
     template: '%s | Aquadrop Expert Pro',
