@@ -477,7 +477,7 @@ export default function EnergiatakarekosMosasPage() {
         <h2>Gyakori kérdések az energiatakarékos mosásról</h2>
         <div className="space-y-5">
           {faqItems.map((item) => (
-            <div key={item.question} className="rounded-2xl border border-slate-200 bg-white/80 p-5">
+            <div key={item.question} className="rounded-2xl border border-slate-200 bg-white/80 px-5 pb-5 pt-3">
               <h3 className="mt-0 text-lg md:text-xl">{item.question}</h3>
               <p className="mt-3">{item.answer}</p>
             </div>
