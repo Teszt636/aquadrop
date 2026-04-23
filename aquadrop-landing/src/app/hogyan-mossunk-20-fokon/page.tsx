@@ -157,7 +157,7 @@ export default function HogyanMossunk20FokonPage() {
 
       <ArticleLayout
         category="Mosási útmutató"
-        readingTime="kb. 15 perc olvasás"
+        readingTime="kb. 8 perc olvasás"
         title={articleTitle}
         intro="A 20 fokos mosás ma már nem különleges megoldás, hanem egyre több energiatudatos háztartás alapbeállítása. A jó eredmény azonban nem csak a hőfokon múlik: a programidő, a kapszula elhelyezése, az adagolás és a dob töltöttsége együtt adja azt a stabil mosási folyamatot, amely alacsony hőfokon is megbízható tisztaságot tud biztosítani."
         cta={
