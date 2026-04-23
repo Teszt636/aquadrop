@@ -263,11 +263,11 @@ export function PartnerLanding() {
               {PERFORMANCE_POINTS.slice(0, 2).map((item) => (
                 <article
                   key={item}
-                  className="rounded-2xl border border-white/20 bg-white/[0.07] p-4 text-sm text-white/85 shadow-[0_14px_24px_-24px_rgba(8,145,178,0.6)] transition-colors hover:bg-white/10"
+                  className="rounded-2xl border border-white/25 bg-white/[0.08] p-4 text-sm text-slate-200 shadow-[0_14px_24px_-24px_rgba(8,145,178,0.6)] transition-colors hover:bg-white/[0.1]"
                 >
                   <p className="flex items-start gap-2.5">
                     <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-cyan-300/95" />
-                    <span>{item}</span>
+                    <span className="text-white/90">{item}</span>
                   </p>
                 </article>
               ))}
@@ -286,11 +286,11 @@ export function PartnerLanding() {
               {PERFORMANCE_POINTS.slice(2).map((item) => (
                 <article
                   key={item}
-                  className="rounded-2xl border border-white/20 bg-white/[0.07] p-4 text-sm text-white/85 shadow-[0_14px_24px_-24px_rgba(8,145,178,0.6)] transition-colors hover:bg-white/10"
+                  className="rounded-2xl border border-white/25 bg-white/[0.08] p-4 text-sm text-slate-200 shadow-[0_14px_24px_-24px_rgba(8,145,178,0.6)] transition-colors hover:bg-white/[0.1]"
                 >
                   <p className="flex items-start gap-2.5">
                     <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-cyan-300/95" />
-                    <span>{item}</span>
+                    <span className="text-white/90">{item}</span>
                   </p>
                 </article>
               ))}
@@ -301,11 +301,11 @@ export function PartnerLanding() {
                 {PERFORMANCE_POINTS.slice(0, 2).map((item) => (
                   <article
                     key={item}
-                    className="rounded-2xl border border-white/20 bg-white/[0.07] p-4 text-sm text-white/85 shadow-[0_14px_24px_-24px_rgba(8,145,178,0.6)] transition-colors hover:bg-white/10 md:text-base"
+                    className="rounded-2xl border border-white/25 bg-white/[0.08] p-4 text-sm text-slate-200 shadow-[0_14px_24px_-24px_rgba(8,145,178,0.6)] transition-colors hover:bg-white/[0.1] md:text-base"
                   >
                     <p className="flex items-start gap-2.5">
                       <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-cyan-300/95" />
-                      <span>{item}</span>
+                      <span className="text-white/90">{item}</span>
                     </p>
                   </article>
                 ))}
@@ -326,11 +326,11 @@ export function PartnerLanding() {
                 {PERFORMANCE_POINTS.slice(2).map((item) => (
                   <article
                     key={item}
-                    className="rounded-2xl border border-white/20 bg-white/[0.07] p-4 text-sm text-white/85 shadow-[0_14px_24px_-24px_rgba(8,145,178,0.6)] transition-colors hover:bg-white/10 md:text-base"
+                    className="rounded-2xl border border-white/25 bg-white/[0.08] p-4 text-sm text-slate-200 shadow-[0_14px_24px_-24px_rgba(8,145,178,0.6)] transition-colors hover:bg-white/[0.1] md:text-base"
                   >
                     <p className="flex items-start gap-2.5">
                       <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-cyan-300/95" />
-                      <span>{item}</span>
+                      <span className="text-white/90">{item}</span>
                     </p>
                   </article>
                 ))}

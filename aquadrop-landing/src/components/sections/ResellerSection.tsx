@@ -99,9 +99,11 @@ export function ResellerSection() {
       id="reseller-application-form"
       onSubmit={handleSubmit}
       noValidate
-      className="rounded-2xl border border-cyan-200/25 bg-gradient-to-br from-slate-900/90 via-slate-900/80 to-slate-950/85 p-6 shadow-[0_24px_52px_-42px_rgba(8,145,178,0.5)] backdrop-blur-md lg:h-full"
+      className="rounded-2xl border border-cyan-200/25 bg-gradient-to-br from-slate-900/90 via-slate-900/80 to-slate-950/85 p-6 shadow-[0_24px_52px_-42px_rgba(8,145,178,0.5)] backdrop-blur-md lg:flex lg:h-full lg:flex-col"
     >
-      <div className="grid gap-4">
+      <p className="mb-4 text-xs font-medium uppercase tracking-[0.18em] text-cyan-200/90">Kapcsolatfelvételi űrlap</p>
+
+      <div className="grid gap-4 lg:grid-cols-1">
         <label className="grid gap-1.5 text-sm font-medium text-slate-100" htmlFor="reseller-company-name">
           Cégnév
           <input
@@ -214,11 +216,13 @@ export function ResellerSection() {
         {errorMessage ? <p className="text-sm text-red-200">{errorMessage}</p> : null}
 
         <p className="text-sm text-cyan-100">2 munkanapon belül felvesszük veled a kapcsolatot.</p>
+      </div>
 
+      <div className="mt-5 grid gap-3 lg:mt-auto">
         <button
           type="submit"
           disabled={isSubmitting}
-          className="mt-2 inline-flex h-12 items-center justify-center rounded-xl bg-gradient-to-r from-cyan-300 via-cyan-400 to-sky-400 px-6 text-base font-semibold text-slate-950 shadow-[0_10px_20px_-14px_rgba(34,211,238,0.72)] transition hover:from-cyan-200 hover:via-cyan-300 hover:to-sky-300 disabled:cursor-not-allowed disabled:from-cyan-200 disabled:to-cyan-200"
+          className="inline-flex h-12 items-center justify-center rounded-xl bg-gradient-to-r from-cyan-300 via-cyan-400 to-sky-400 px-6 text-base font-semibold text-slate-950 shadow-[0_10px_20px_-14px_rgba(34,211,238,0.72)] transition hover:from-cyan-200 hover:via-cyan-300 hover:to-sky-300 disabled:cursor-not-allowed disabled:from-cyan-200 disabled:to-cyan-200"
         >
           {isSubmitting ? 'Küldés...' : 'Partnerként jelentkezem'}
         </button>
