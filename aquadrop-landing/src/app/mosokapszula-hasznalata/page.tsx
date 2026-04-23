@@ -87,6 +87,7 @@ export default function MosokapszulaHasznalataPage() {
       />
 
       <ArticleLayout
+        slug="mosokapszula-hasznalata"
         category="Mosási útmutató"
         readingTime="kb. 10 perc olvasás"
         title={articleTitle}

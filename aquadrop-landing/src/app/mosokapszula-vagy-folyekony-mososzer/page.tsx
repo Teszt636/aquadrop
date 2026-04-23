@@ -87,6 +87,7 @@ export default function MosokapszulaVagyFolyekonyMososerPage() {
       />
 
       <ArticleLayout
+        slug="mosokapszula-vagy-folyekony-mososzer"
         category="Mosási útmutató"
         readingTime="kb. 12 perc olvasás"
         title={articleTitle}

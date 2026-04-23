@@ -39,32 +39,6 @@ const faqItems = [
   }
 ];
 
-const relatedGuides = [
-  {
-    href: '/energiatakarekos-mosas',
-    title: 'Energiatakarékos mosás – átfogó útmutató',
-    description:
-      'Pilléroldal arról, hogyan építs stabil, alacsony hőfokú mosási rutint úgy, hogy a tisztaságérzet és a hatékonyság egyszerre maradjon meg.'
-  },
-  {
-    href: '/hogyan-mossunk-20-fokon',
-    title: 'Hogyan mossunk 20 fokon a gyakorlatban?',
-    description:
-      'Konkrét, lépésről lépésre követhető tanácsok a programválasztásról, adagolásról és a mindennapi hibák elkerüléséről.'
-  },
-  {
-    href: '/mosokapszula-nem-oldodik-fel',
-    title: 'Mit tegyél, ha nem oldódik fel a kapszula?',
-    description:
-      'Gyakorlati megoldások a maradványok megelőzésére, különös tekintettel a rövid programokra és az alacsony hőfokú mosásra.'
-  },
-  {
-    href: '/mosokapszula-vagy-folyekony-mososzer',
-    title: 'Mosókapszula vagy folyékony mosószer?',
-    description:
-      'Objektív összehasonlítás, hogy a háztartásod ritmusához és elvárásaihoz legjobban illeszkedő megoldást választhasd.'
-  }
-];
 
 export const metadata: Metadata = {
   title: 'Mennyit spórolhatsz, ha 40 helyett 20 fokon mosol? | Aquadrop',
@@ -158,6 +132,7 @@ export default function MennyitSporolhatsz20FokonPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData) }} />
 
       <ArticleLayout
+        slug="mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol"
         category="Energiatudatos mosás"
         readingTime="kb. 8 perc olvasás"
         title={articleTitle}
@@ -302,20 +277,6 @@ export default function MennyitSporolhatsz20FokonPage() {
           ))}
         </div>
 
-        <h2>Kapcsolódó útmutatók</h2>
-        <div className="grid gap-4 md:grid-cols-2">
-          {relatedGuides.map((guide) => (
-            <Link
-              className="group rounded-2xl border border-cyan-100/90 bg-white/90 p-5 shadow-[0_14px_35px_rgba(15,23,42,0.06)] transition hover:-translate-y-0.5 hover:border-cyan-300 hover:shadow-[0_18px_40px_rgba(15,23,42,0.1)]"
-              href={guide.href}
-              key={guide.href}
-            >
-              <h3 className="mt-0 text-lg leading-tight text-slate-900 transition group-hover:text-cyan-800">{guide.title}</h3>
-              <p className="mt-3 text-slate-700">{guide.description}</p>
-              <p className="mt-4 font-semibold text-brand-primary">Tovább az útmutatóhoz</p>
-            </Link>
-          ))}
-        </div>
       </ArticleLayout>
     </>
   );

@@ -88,6 +88,7 @@ export default function MosokapszulaNemOldodikFelPage() {
       />
 
       <ArticleLayout
+        slug="mosokapszula-nem-oldodik-fel"
         category="Mosási útmutató"
         readingTime="kb. 11 perc olvasás"
         title={articleTitle}
