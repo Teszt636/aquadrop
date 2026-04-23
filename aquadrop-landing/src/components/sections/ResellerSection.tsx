@@ -99,7 +99,7 @@ export function ResellerSection() {
       id="reseller-application-form"
       onSubmit={handleSubmit}
       noValidate
-      className="rounded-2xl border border-cyan-200/25 bg-gradient-to-br from-slate-900/90 via-slate-900/80 to-slate-950/85 p-6 shadow-[0_30px_70px_-42px_rgba(8,145,178,0.65)] backdrop-blur-md"
+      className="rounded-2xl border border-cyan-200/25 bg-gradient-to-br from-slate-900/90 via-slate-900/80 to-slate-950/85 p-6 shadow-[0_24px_52px_-42px_rgba(8,145,178,0.5)] backdrop-blur-md"
     >
       <div className="grid gap-4">
         <label className="grid gap-1.5 text-sm font-medium text-slate-100" htmlFor="reseller-company-name">
@@ -218,7 +218,7 @@ export function ResellerSection() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="mt-2 inline-flex h-12 items-center justify-center rounded-xl bg-gradient-to-r from-cyan-300 via-cyan-400 to-sky-400 px-6 text-base font-semibold text-slate-950 shadow-[0_12px_24px_-14px_rgba(34,211,238,0.95)] transition hover:from-cyan-200 hover:via-cyan-300 hover:to-sky-300 disabled:cursor-not-allowed disabled:from-cyan-200 disabled:to-cyan-200"
+          className="mt-2 inline-flex h-12 items-center justify-center rounded-xl bg-gradient-to-r from-cyan-300 via-cyan-400 to-sky-400 px-6 text-base font-semibold text-slate-950 shadow-[0_10px_20px_-14px_rgba(34,211,238,0.72)] transition hover:from-cyan-200 hover:via-cyan-300 hover:to-sky-300 disabled:cursor-not-allowed disabled:from-cyan-200 disabled:to-cyan-200"
         >
           {isSubmitting ? 'Küldés...' : 'Partnerként jelentkezem'}
         </button>

@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { CheckCircle2, CircleAlert, Compass, Gem, Handshake, LineChart, Megaphone, ShieldCheck } from 'lucide-react';
 
 import { ResellerSection } from '@/components/sections';
@@ -63,10 +64,11 @@ const SALES_SUPPORT = [
   }
 ] as const;
 
-const TRUST_POINTS = [
-  'Szelektív partnerprogram és szakmai alapú onboarding.',
-  'Egyértelmű, adat-alapú termékkommunikáció.',
-  'Kiszámítható együttműködés, emberi támogatással.'
+const PERFORMANCE_POINTS = [
+  'Gyors oldódási viselkedés alacsonyabb hőfokon is, ezért egyszerűbb a vásárlói edukáció.',
+  'Könnyen kommunikálható műszaki előny a napi értékesítési párbeszédben.',
+  'Prémium polci pozicionálás, ami támogatja a magasabb érzékelt értéket.',
+  'Támogatható értékesítési történet, amely stabil végfelhasználói élményre épül.'
 ] as const;
 
 export function PartnerLanding() {
@@ -98,7 +100,7 @@ export function PartnerLanding() {
               {HERO_BULLETS.map((bullet) => (
                 <li
                   key={bullet}
-                  className="rounded-2xl border border-white/15 bg-white/10 p-4 text-sm text-slate-100 shadow-[0_20px_30px_-24px_rgba(14,116,144,0.85)] backdrop-blur-lg"
+                  className="rounded-2xl border border-white/15 bg-white/10 p-4 text-sm text-slate-100 shadow-[0_16px_26px_-24px_rgba(14,116,144,0.56)] backdrop-blur-lg"
                 >
                   {bullet}
                 </li>
@@ -107,13 +109,13 @@ export function PartnerLanding() {
 
             <a
               href="#jelentkezes"
-              className="inline-flex h-12 items-center justify-center rounded-xl bg-gradient-to-r from-cyan-300 via-cyan-400 to-sky-400 px-6 text-sm font-semibold text-slate-950 shadow-[0_16px_26px_-16px_rgba(34,211,238,0.95)] transition hover:from-cyan-200 hover:to-sky-300"
+              className="mx-auto inline-flex h-12 items-center justify-center rounded-xl bg-gradient-to-r from-cyan-300 via-cyan-400 to-sky-400 px-6 text-sm font-semibold text-slate-950 shadow-[0_12px_22px_-16px_rgba(34,211,238,0.74)] transition hover:from-cyan-200 hover:to-sky-300 md:mx-0"
             >
               Partneri egyeztetést kérek
             </a>
           </div>
 
-          <article className="rounded-3xl border border-white/15 bg-white/10 p-6 shadow-[0_35px_65px_-45px_rgba(6,182,212,0.65)] backdrop-blur-xl md:p-7">
+          <article className="rounded-3xl border border-white/15 bg-white/10 p-6 shadow-[0_26px_48px_-40px_rgba(6,182,212,0.5)] backdrop-blur-xl md:p-7">
             <h2 className="text-xl font-semibold text-white md:text-2xl">Üzleti fókusz, nem zajos sales kommunikáció</h2>
             <p className="mt-3 text-sm leading-relaxed text-slate-200 md:text-base">
               A partnerprogram célja, hogy prémium, alacsony reklamációs kockázatú terméket adj a vásárlóidnak úgy, hogy közben
@@ -143,7 +145,10 @@ export function PartnerLanding() {
             <h2 className="text-2xl font-semibold text-white md:text-4xl">A probléma, amit a végén mindig a viszonteladó fizet meg</h2>
             <div className="mt-8 grid gap-4 md:grid-cols-3">
               {PROBLEM_POINTS.map((item) => (
-                <div key={item.title} className="rounded-2xl border border-red-200/20 bg-slate-950/50 p-5">
+                <div
+                  key={item.title}
+                  className="rounded-2xl border border-red-200/20 bg-slate-950/50 p-5 shadow-[0_16px_30px_-28px_rgba(15,23,42,0.85)]"
+                >
                   <p className="inline-flex items-center gap-2 text-sm font-medium text-red-200">
                     <CircleAlert className="h-4 w-4" />
                     {item.title}
@@ -158,7 +163,7 @@ export function PartnerLanding() {
 
       <section className="border-y border-white/10 bg-slate-900/70 px-5 py-14 sm:px-6 md:px-10 md:py-20">
         <div className="mx-auto grid w-full max-w-6xl gap-6 md:gap-8 lg:grid-cols-[1fr_1fr]">
-          <article className="rounded-3xl border border-white/10 bg-white/10 p-6 shadow-[0_32px_56px_-44px_rgba(14,116,144,0.95)] backdrop-blur-xl md:p-8">
+          <article className="rounded-3xl border border-white/10 bg-white/10 p-6 shadow-[0_24px_44px_-38px_rgba(14,116,144,0.62)] backdrop-blur-xl md:p-8">
             <p className="text-sm font-medium uppercase tracking-wide text-cyan-200">Megoldás</p>
             <h2 className="mt-2 text-2xl font-semibold text-white md:text-3xl">4 kamrás technológia, kiszámítható oldódási viselkedéssel</h2>
             <p className="mt-4 text-sm leading-relaxed text-slate-200 md:text-base">
@@ -167,7 +172,10 @@ export function PartnerLanding() {
             </p>
             <div className="mt-6 grid gap-3 sm:grid-cols-3">
               {DISSOLUTION_RESULTS.map((result) => (
-                <div key={result.water} className="rounded-2xl border border-cyan-100/30 bg-cyan-100/10 p-4 text-center">
+                <div
+                  key={result.water}
+                  className="rounded-2xl border border-cyan-100/30 bg-cyan-100/10 p-4 text-center shadow-[0_14px_26px_-26px_rgba(8,145,178,0.7)]"
+                >
                   <p className="text-lg font-semibold text-cyan-100">{result.water}</p>
                   <p className="mt-1 text-sm text-slate-200">{result.time}</p>
                 </div>
@@ -178,7 +186,7 @@ export function PartnerLanding() {
             </p>
           </article>
 
-          <article className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-lg md:p-8">
+          <article className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-[0_20px_38px_-36px_rgba(15,23,42,0.8)] backdrop-blur-lg md:p-8">
             <p className="text-sm font-medium uppercase tracking-wide text-cyan-200">Üzleti előnyök</p>
             <h3 className="mt-2 text-2xl font-semibold text-white md:text-3xl">Mérhető nyereség a napi működésben</h3>
             <ul className="mt-6 space-y-3">
@@ -195,7 +203,7 @@ export function PartnerLanding() {
 
       <section className="px-5 py-14 sm:px-6 md:px-10 md:py-20">
         <div className="mx-auto w-full max-w-6xl">
-          <article className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 via-white/5 to-slate-900/50 p-6 backdrop-blur-xl md:p-10">
+          <article className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 via-white/5 to-slate-900/50 p-6 shadow-[0_24px_44px_-38px_rgba(8,47,73,0.64)] backdrop-blur-xl md:p-10">
             <p className="text-sm font-medium uppercase tracking-wide text-cyan-200">Termékpozicionálás</p>
             <h2 className="mt-2 text-2xl font-semibold text-white md:text-4xl">Prémium kategória, racionális ár/érték üzenettel</h2>
             <p className="mt-4 max-w-4xl text-sm leading-relaxed text-slate-200 md:text-lg">
@@ -204,15 +212,15 @@ export function PartnerLanding() {
               erősebb márkakapcsolatot építsen.
             </p>
             <div className="mt-6 grid gap-4 md:grid-cols-3">
-              <div className="rounded-2xl border border-white/15 bg-slate-950/50 p-5">
+              <div className="rounded-2xl border border-white/15 bg-slate-950/50 p-5 shadow-[0_14px_24px_-22px_rgba(15,23,42,0.72)]">
                 <Gem className="h-5 w-5 text-cyan-300" />
                 <p className="mt-3 text-base font-medium text-white">Magas érzékelt érték</p>
               </div>
-              <div className="rounded-2xl border border-white/15 bg-slate-950/50 p-5">
+              <div className="rounded-2xl border border-white/15 bg-slate-950/50 p-5 shadow-[0_14px_24px_-22px_rgba(15,23,42,0.72)]">
                 <LineChart className="h-5 w-5 text-cyan-300" />
                 <p className="mt-3 text-base font-medium text-white">Fenntartható árrés</p>
               </div>
-              <div className="rounded-2xl border border-white/15 bg-slate-950/50 p-5">
+              <div className="rounded-2xl border border-white/15 bg-slate-950/50 p-5 shadow-[0_14px_24px_-22px_rgba(15,23,42,0.72)]">
                 <Handshake className="h-5 w-5 text-cyan-300" />
                 <p className="mt-3 text-base font-medium text-white">Hosszú távú partnerérték</p>
               </div>
@@ -226,7 +234,10 @@ export function PartnerLanding() {
           <h2 className="text-2xl font-semibold text-white md:text-4xl">Értékesítési támogatás, ami tényleg használható</h2>
           <div className="mt-8 grid gap-4 md:grid-cols-2">
             {SALES_SUPPORT.map(({ title, description, icon: Icon }) => (
-              <article key={title} className="rounded-2xl border border-white/10 bg-white/10 p-5 backdrop-blur-lg md:p-6">
+              <article
+                key={title}
+                className="rounded-2xl border border-white/10 bg-white/10 p-5 shadow-[0_18px_30px_-30px_rgba(8,47,73,0.72)] backdrop-blur-lg md:p-6"
+              >
                 <Icon className="h-5 w-5 text-cyan-300" />
                 <h3 className="mt-3 text-lg font-semibold text-white">{title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-slate-200 md:text-base">{description}</p>
@@ -237,18 +248,35 @@ export function PartnerLanding() {
       </section>
 
       <section className="px-5 py-14 sm:px-6 md:px-10 md:py-20">
-        <div className="mx-auto grid w-full max-w-6xl gap-8 lg:grid-cols-[1fr_1fr]">
-          <article className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl md:p-8">
-            <p className="text-sm font-medium uppercase tracking-wide text-cyan-200">Bizalom blokk</p>
-            <h2 className="mt-2 text-2xl font-semibold text-white md:text-3xl">Kiszámítható szakmai partnerkapcsolat</h2>
-            <ul className="mt-5 space-y-3">
-              {TRUST_POINTS.map((item) => (
-                <li key={item} className="flex items-start gap-2.5 text-sm text-slate-200 md:text-base">
-                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-cyan-300" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
+        <div className="mx-auto grid w-full max-w-6xl gap-8 lg:grid-cols-[1.15fr_0.85fr]">
+          <article className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 via-white/5 to-slate-950/55 p-6 shadow-[0_24px_42px_-36px_rgba(14,116,144,0.58)] backdrop-blur-xl md:p-8">
+            <p className="text-sm font-medium uppercase tracking-wide text-cyan-200">Teljesítmény blokk</p>
+            <h2 className="mt-2 text-2xl font-semibold text-white md:text-3xl">Teljesítmény, ami a gyakorlatban is számít</h2>
+            <p className="mt-4 max-w-2xl text-sm leading-relaxed text-slate-200 md:text-base">
+              A partner számára a kiszámítható minőség akkor érték, ha a végfelhasználói élmény is stabil marad. Az Aquadrop
+              Expert Pro alacsony hőfokú mosásnál is jól kommunikálható, differenciáló termék, ezért a prémium pozicionálás
+              nemcsak ígéret, hanem napi szinten átadható értékesítési érv.
+            </p>
+            <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_0.95fr] lg:items-center">
+              <ul className="space-y-3">
+                {PERFORMANCE_POINTS.map((item) => (
+                  <li key={item} className="flex items-start gap-2.5 text-sm text-slate-200 md:text-base">
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-cyan-300" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="overflow-hidden rounded-2xl border border-white/15 bg-slate-900/60 shadow-[0_16px_28px_-26px_rgba(8,145,178,0.7)]">
+                <Image
+                  src="/aquadrop-partner-performance.png"
+                  alt="Aquadrop partner teljesítmény vizuális összefoglaló"
+                  width={920}
+                  height={620}
+                  className="h-full w-full object-cover"
+                  sizes="(min-width: 1024px) 36vw, (min-width: 768px) 70vw, 100vw"
+                />
+              </div>
+            </div>
           </article>
 
           <div id="jelentkezes" className="scroll-mt-24">
