@@ -43,26 +43,6 @@ const faqItems = [
   }
 ];
 
-const relatedGuides = [
-  {
-    href: '/mosokapszula-hasznalata',
-    title: 'Mosókapszula használata lépésről lépésre',
-    description:
-      'Gyakorlati útmutató arról, hova kerüljön a kapszula, mennyit érdemes használni, és hogyan alakíts ki stabil napi rutint.'
-  },
-  {
-    href: '/mosokapszula-nem-oldodik-fel',
-    title: 'Mit tegyél, ha nem oldódik fel a mosókapszula?',
-    description:
-      'Összefoglaló a leggyakoribb hibákról, a gyors javítási lépésekről és azokról a beállításokról, amelyekkel megelőzhető a maradványképződés.'
-  },
-  {
-    href: '/mosokapszula-vagy-folyekony-mososzer',
-    title: 'Mosókapszula vagy folyékony mosószer?',
-    description:
-      'Objektív összehasonlítás a két megoldás előnyeiről, hogy könnyebb legyen a háztartásodhoz illő döntést meghozni.'
-  }
-];
 
 export const metadata: Metadata = {
   title: 'Energiatakarékos mosás: tiszta ruhák alacsony hőfokon is | Aquadrop',
@@ -160,6 +140,7 @@ export default function EnergiatakarekosMosasPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData) }} />
 
       <ArticleLayout
+        slug="energiatakarekos-mosas"
         category="Mosási útmutató"
         readingTime="kb. 18 perc olvasás"
         title={articleTitle}
@@ -484,27 +465,6 @@ export default function EnergiatakarekosMosasPage() {
           ))}
         </div>
 
-        <h2>Kapcsolódó útmutatók</h2>
-        <p>
-          Ha még mélyebben szeretnéd felépíteni a saját, energiatudatos mosási rendszeredet, ezek a cikkek gyakorlati
-          nézőpontból segítenek továbblépni:
-        </p>
-        <div className="grid gap-4 md:grid-cols-3">
-          {relatedGuides.map((guide) => (
-            <Link
-              key={guide.href}
-              href={guide.href}
-              className="group rounded-2xl border border-cyan-100 bg-cyan-50/50 p-5 transition hover:border-cyan-200 hover:bg-cyan-50"
-            >
-              <h3 className="mt-0 text-lg leading-tight text-slate-900 group-hover:text-brand-primary">{guide.title}</h3>
-              <p className="mt-3 text-sm leading-6 text-slate-700">{guide.description}</p>
-            </Link>
-          ))}
-        </div>
-        <p>
-          Az itt összegyűjtött útmutatók közösen adnak olyan tudásbázist, amelyre később is könnyen építhetsz, ha a
-          mosási rutinodat tovább finomítanád.
-        </p>
       </ArticleLayout>
     </>
   );

@@ -38,32 +38,6 @@ const faqItems = [
   }
 ];
 
-const relatedGuides = [
-  {
-    href: '/energiatakarekos-mosas',
-    title: 'Energiatakarékos mosás: teljes útmutató',
-    description:
-      'Átfogó pilléroldal az alacsony hőfokú, tudatos mosásról: beállítások, hibák és gyakorlati rutinok egy helyen.'
-  },
-  {
-    href: '/mosokapszula-hasznalata',
-    title: 'Mosókapszula használata lépésről lépésre',
-    description:
-      'Rövid, gyakorlatias útmutató arról, hova kerüljön a kapszula, hogyan adagolj, és mire figyelj a napi használatban.'
-  },
-  {
-    href: '/mosokapszula-nem-oldodik-fel',
-    title: 'Mit tegyél, ha nem oldódik fel a mosókapszula?',
-    description:
-      'A leggyakoribb okok és azonnal alkalmazható megoldások, hogy ritkább legyen a kapszulamaradvány és kiszámíthatóbb a végeredmény.'
-  },
-  {
-    href: '/mosokapszula-vagy-folyekony-mososzer',
-    title: 'Mosókapszula vagy folyékony mosószer?',
-    description:
-      'Objektív összehasonlítás, hogy könnyebben dönthess a háztartásodhoz illő, kényelmes és hatékony megoldás mellett.'
-  }
-];
 
 export const metadata: Metadata = {
   title: 'Hogyan mossunk hatékonyan 20 fokon? | Aquadrop',
@@ -156,6 +130,7 @@ export default function HogyanMossunk20FokonPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData) }} />
 
       <ArticleLayout
+        slug="hogyan-mossunk-20-fokon"
         category="Mosási útmutató"
         readingTime="kb. 8 perc olvasás"
         title={articleTitle}
@@ -348,20 +323,6 @@ export default function HogyanMossunk20FokonPage() {
           ))}
         </div>
 
-        <h2>Kapcsolódó útmutatók</h2>
-        <div className="grid gap-4 md:grid-cols-2">
-          {relatedGuides.map((guide) => (
-            <Link
-              key={guide.href}
-              href={guide.href}
-              className="rounded-2xl border border-cyan-100 bg-white/85 p-5 transition hover:border-cyan-200 hover:shadow-[0_10px_30px_rgba(15,23,42,0.08)]"
-            >
-              <h3 className="mt-0 text-xl leading-tight text-slate-900">{guide.title}</h3>
-              <p className="mt-3 text-slate-700">{guide.description}</p>
-              <p className="mt-3 text-sm font-semibold text-brand-primary">Tovább az útmutatóhoz</p>
-            </Link>
-          ))}
-        </div>
       </ArticleLayout>
     </>
   );
