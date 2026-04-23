@@ -88,11 +88,10 @@ export function PartnerLanding() {
             </p>
             <div className="space-y-4">
               <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl">
-                Kevesebb reklamáció. Elégedettebb vevők. Könnyebb értékesítés.
+                Kevesebb reklamáció. Egyszerűbben eladható termék. Stabilabb napi működés.
               </h1>
               <p className="max-w-2xl text-base leading-relaxed text-slate-200 sm:text-lg md:text-xl">
-                Az Aquadrop partneroldala nem általános márkaígéretre épül, hanem egy konkrét üzleti problémára ad választ:
-                hogyan csökkenthető a kapszulás mosószereknél megjelenő panasz és hogyan fordítható ez mérhető üzleti előnnyé.
+                Az Aquadrop Expert Pro nem egy átlagos mosókapszula: alacsony hőfokú mosásnál is megbízhatóan működik, így csökkenti a visszatérő panaszokat és kiszámíthatóbbá teszi az értékesítést.
               </p>
             </div>
 
