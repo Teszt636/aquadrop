@@ -54,6 +54,7 @@ import {
   TrustSection
 } from '@/components/sections';
 import { ScrollDepthTracker } from '@/components/analytics';
+import { HomeKnowledgeHub } from '@/components/home-knowledge-hub';
 
 export default function Home() {
 
@@ -172,6 +173,7 @@ export default function Home() {
           <GiftConversionSection />
           <EnergySavingsSection />
           <DubaiSection />
+          <HomeKnowledgeHub />
           <GiftSection />
           <ProblemSection />
           <BenefitsSection />
