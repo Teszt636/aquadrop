@@ -140,7 +140,7 @@ export function PartnerLanding() {
               </ul>
             </div>
 
-            <div className="mt-auto rounded-xl border border-white/10 bg-white/[0.06] p-4 md:p-5">
+            <div className="mt-8 rounded-xl border border-white/10 bg-white/[0.06] p-4 md:mt-auto md:p-5">
               <p className="text-sm font-semibold text-white md:text-base">Miért könnyebb eladni?</p>
               <ul className="mt-3 space-y-2 text-xs leading-relaxed text-slate-200 md:text-sm">
                 <li>Kevesebb reklamáció → kevesebb ügyfélszolgálati terhelés</li>
