@@ -55,6 +55,7 @@ import {
 } from '@/components/sections';
 import { ScrollDepthTracker } from '@/components/analytics';
 import { HomeKnowledgeHub } from '@/components/home-knowledge-hub';
+import { HomeResellerCta } from '@/components/home-reseller-cta';
 
 export default function Home() {
 
@@ -187,6 +188,7 @@ export default function Home() {
           <B2BBridgeSection />
           <SeoSection />
           <FaqSection items={faqItems} />
+          <HomeResellerCta />
           <FooterSection />
         </main>
       </div>
