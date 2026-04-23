@@ -34,7 +34,7 @@ export function FooterSection() {
           </div>
 
           <div className="md:text-center">
-            <p className="text-sm font-semibold text-slate-100 md:uppercase md:tracking-wide md:text-slate-100">Jogi linkek</p>
+            <p className="text-sm font-semibold text-slate-100 md:uppercase md:tracking-wide md:text-slate-100">Linkek</p>
             <div className="mt-4 space-y-4">
               <Link
                 className="inline-flex rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-100 transition-colors hover:border-cyan-300 hover:text-cyan-300"
