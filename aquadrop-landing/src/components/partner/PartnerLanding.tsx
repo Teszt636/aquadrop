@@ -250,8 +250,8 @@ export function PartnerLanding() {
       </section>
 
       <section className="px-5 py-14 sm:px-6 md:px-10 md:py-20">
-        <div className="mx-auto grid w-full max-w-6xl gap-8 lg:grid-cols-[1.15fr_0.85fr]">
-          <article className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 via-white/5 to-slate-950/55 p-6 shadow-[0_24px_42px_-36px_rgba(14,116,144,0.58)] backdrop-blur-xl md:p-8">
+        <div className="mx-auto grid w-full max-w-6xl gap-8 lg:items-stretch lg:grid-cols-[1.15fr_0.85fr]">
+          <article className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 via-white/5 to-slate-950/55 p-6 shadow-[0_24px_42px_-36px_rgba(14,116,144,0.58)] backdrop-blur-xl md:p-8 lg:flex lg:h-full lg:flex-col lg:justify-between">
             <p className="text-sm font-medium uppercase tracking-wide text-cyan-200">Teljesítmény</p>
             <h2 className="mt-2 text-2xl font-semibold text-white md:text-3xl">Teljesítmény, ami a gyakorlatban is számít</h2>
             <p className="mt-4 max-w-2xl text-sm leading-relaxed text-slate-200 md:text-base">
@@ -263,10 +263,10 @@ export function PartnerLanding() {
               {PERFORMANCE_POINTS.slice(0, 2).map((item) => (
                 <article
                   key={item}
-                  className="rounded-2xl border border-white/15 bg-slate-900/45 p-4 text-sm text-slate-200 shadow-[0_14px_24px_-24px_rgba(8,145,178,0.6)]"
+                  className="rounded-2xl border border-white/20 bg-white/[0.07] p-4 text-sm text-white/85 shadow-[0_14px_24px_-24px_rgba(8,145,178,0.6)] transition-colors hover:bg-white/10"
                 >
                   <p className="flex items-start gap-2.5">
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-cyan-300" />
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-cyan-300/95" />
                     <span>{item}</span>
                   </p>
                 </article>
@@ -286,10 +286,10 @@ export function PartnerLanding() {
               {PERFORMANCE_POINTS.slice(2).map((item) => (
                 <article
                   key={item}
-                  className="rounded-2xl border border-white/15 bg-slate-900/45 p-4 text-sm text-slate-200 shadow-[0_14px_24px_-24px_rgba(8,145,178,0.6)]"
+                  className="rounded-2xl border border-white/20 bg-white/[0.07] p-4 text-sm text-white/85 shadow-[0_14px_24px_-24px_rgba(8,145,178,0.6)] transition-colors hover:bg-white/10"
                 >
                   <p className="flex items-start gap-2.5">
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-cyan-300" />
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-cyan-300/95" />
                     <span>{item}</span>
                   </p>
                 </article>
@@ -301,10 +301,10 @@ export function PartnerLanding() {
                 {PERFORMANCE_POINTS.slice(0, 2).map((item) => (
                   <article
                     key={item}
-                    className="rounded-2xl border border-white/15 bg-slate-900/45 p-4 text-sm text-slate-200 shadow-[0_14px_24px_-24px_rgba(8,145,178,0.6)] md:text-base"
+                    className="rounded-2xl border border-white/20 bg-white/[0.07] p-4 text-sm text-white/85 shadow-[0_14px_24px_-24px_rgba(8,145,178,0.6)] transition-colors hover:bg-white/10 md:text-base"
                   >
                     <p className="flex items-start gap-2.5">
-                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-cyan-300" />
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-cyan-300/95" />
                       <span>{item}</span>
                     </p>
                   </article>
@@ -326,10 +326,10 @@ export function PartnerLanding() {
                 {PERFORMANCE_POINTS.slice(2).map((item) => (
                   <article
                     key={item}
-                    className="rounded-2xl border border-white/15 bg-slate-900/45 p-4 text-sm text-slate-200 shadow-[0_14px_24px_-24px_rgba(8,145,178,0.6)] md:text-base"
+                    className="rounded-2xl border border-white/20 bg-white/[0.07] p-4 text-sm text-white/85 shadow-[0_14px_24px_-24px_rgba(8,145,178,0.6)] transition-colors hover:bg-white/10 md:text-base"
                   >
                     <p className="flex items-start gap-2.5">
-                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-cyan-300" />
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-cyan-300/95" />
                       <span>{item}</span>
                     </p>
                   </article>
@@ -338,7 +338,7 @@ export function PartnerLanding() {
             </div>
           </article>
 
-          <div id="jelentkezes" className="scroll-mt-24">
+          <div id="jelentkezes" className="scroll-mt-24 lg:h-full">
             <ResellerSection />
           </div>
         </div>
