@@ -55,6 +55,7 @@ create table if not exists public.media_kit_downloads (
   email text not null,
   company text,
   usage_type text not null,
+  downloaded_file text,
   created_at timestamptz default now()
 );
 

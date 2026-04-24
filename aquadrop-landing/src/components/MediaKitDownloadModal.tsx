@@ -102,7 +102,8 @@ export function MediaKitDownloadModal({ isOpen, fileUrl, onClose, onDownloadStar
         name: formState.name.trim(),
         email: formState.email.trim().toLowerCase(),
         company: formState.company.trim() || null,
-        usage_type: formState.usageType
+        usage_type: formState.usageType,
+        downloaded_file: fileUrl
       });
 
       localStorage.setItem(SESSION_STORAGE_KEY, 'true');
