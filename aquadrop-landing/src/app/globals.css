@@ -169,3 +169,14 @@ body {
     animation: none;
   }
 }
+
+.media-kit-modal-field:-webkit-autofill,
+.media-kit-modal-field:-webkit-autofill:hover,
+.media-kit-modal-field:-webkit-autofill:focus,
+.media-kit-modal-field:-webkit-autofill:active {
+  -webkit-text-fill-color: #ffffff;
+  -webkit-box-shadow: 0 0 0 1000px #0f172a inset;
+  box-shadow: 0 0 0 1000px #0f172a inset;
+  caret-color: #ffffff;
+  transition: background-color 9999s ease-in-out 0s;
+}
