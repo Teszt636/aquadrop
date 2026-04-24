@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { CheckCircle2, CircleAlert, Compass, Gem, Handshake, LineChart, Megaphone, ShieldCheck } from 'lucide-react';
 
-import { ResellerSection } from '@/components/sections';
+import { PartnerMediaKitSection, ResellerSection } from '@/components/sections';
 
 const HERO_BULLETS = [
   'Kevesebb ügyfélszolgálati terhelés a visszatérő panaszok csökkentésével.',
@@ -353,6 +353,8 @@ export function PartnerLanding() {
           </div>
         </div>
       </section>
+
+      <PartnerMediaKitSection />
     </main>
   );
 }

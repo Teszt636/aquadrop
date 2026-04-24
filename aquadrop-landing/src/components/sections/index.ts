@@ -20,3 +20,5 @@ export * from './SeoSection';
 export * from './FaqSection';
 
 export * from './EnergySavingsSection';
+
+export * from './PartnerMediaKitSection';
