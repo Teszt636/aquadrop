@@ -9,14 +9,12 @@ import { SectionDescription, SectionHeading } from '@/components/ui/SectionHeadi
 type FormState = {
   name: string;
   email: string;
-  phone: string;
   consent: boolean;
 };
 
 const INITIAL_FORM_STATE: FormState = {
   name: '',
   email: '',
-  phone: '',
   consent: false
 };
 
@@ -31,7 +29,6 @@ export function AnnouncementSection() {
 
     const trimmedName = formState.name.trim();
     const trimmedEmail = formState.email.trim();
-    const trimmedPhone = formState.phone.trim();
 
     if (!trimmedName || !trimmedEmail || !formState.consent) {
       setErrorMessage('Kérlek, töltsd ki a kötelező mezőket és fogadd el az adatkezelést.');
@@ -53,7 +50,7 @@ export function AnnouncementSection() {
           payload: {
             name: trimmedName,
             email: trimmedEmail,
-            phone: trimmedPhone || null,
+            phone: null,
             consent: formState.consent
           }
         })
@@ -117,22 +114,6 @@ export function AnnouncementSection() {
                 required
                 value={formState.email}
                 onChange={(event) => setFormState((prev) => ({ ...prev, email: event.target.value }))}
-                disabled={isSubmitting}
-              />
-            </div>
-
-            <div>
-              <label className="mb-2 block text-sm font-semibold text-slate-700" htmlFor="announcement-phone">
-                Telefonszám (opcionális)
-              </label>
-              <input
-                className="w-full rounded-lg border border-slate-300 px-4 py-3 text-slate-900 placeholder:text-slate-400 focus:border-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary/20"
-                id="announcement-phone"
-                name="phone"
-                placeholder="Add meg a telefonszámod"
-                type="tel"
-                value={formState.phone}
-                onChange={(event) => setFormState((prev) => ({ ...prev, phone: event.target.value }))}
                 disabled={isSubmitting}
               />
             </div>
