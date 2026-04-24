@@ -1,4 +1,7 @@
+'use client';
+
 import { Download, FileCheck2, Image as ImageIcon, ScrollText } from 'lucide-react';
+import { trackEvent } from '@/lib/tracking';
 
 const MEDIA_KIT_ITEMS = [
   {
@@ -7,6 +10,7 @@ const MEDIA_KIT_ITEMS = [
     points: ['Webshop bannerek', 'Social media képek', 'Termékelőnyöket bemutató kreatívok'],
     cta: 'Marketing anyagok letöltése',
     href: '/media-kit/aquadrop-marketing-kepek.zip',
+    trackingEvent: 'media_kit_marketing_download',
     icon: ImageIcon,
     accentClassName: 'border-cyan-200/25 bg-cyan-200/[0.07]'
   },
@@ -17,6 +21,7 @@ const MEDIA_KIT_ITEMS = [
     points: ['Rövid termékleírás', 'Hosszú SEO termékleírás', 'Fő előnyök és bullet pointok'],
     cta: 'Termékszövegek letöltése',
     href: '/media-kit/aquadrop-termekszovegek.pdf',
+    trackingEvent: 'media_kit_product_text_download',
     icon: ScrollText,
     accentClassName: 'border-blue-200/25 bg-blue-200/[0.06]'
   },
@@ -26,6 +31,7 @@ const MEDIA_KIT_ITEMS = [
     points: ['MSDS / biztonsági adatlap', 'Használati információk', 'Forgalmazáshoz szükséges alapdokumentum'],
     cta: 'Biztonsági adatlap letöltése',
     href: '/media-kit/aquadrop-biztonsagi-adatlap.pdf',
+    trackingEvent: 'media_kit_msds_download',
     icon: FileCheck2,
     accentClassName: 'border-teal-100/35 bg-teal-100/[0.09]'
   }
@@ -44,7 +50,7 @@ export function PartnerMediaKitSection() {
         </div>
 
         <div className="mt-8 grid gap-6 md:grid-cols-3">
-          {MEDIA_KIT_ITEMS.map(({ title, description, points, cta, href, icon: Icon, accentClassName }) => (
+          {MEDIA_KIT_ITEMS.map(({ title, description, points, cta, href, trackingEvent, icon: Icon, accentClassName }) => (
             <article
               key={title}
               className="flex h-full flex-col rounded-3xl border border-white/15 bg-white/[0.06] p-6 shadow-[0_20px_34px_-30px_rgba(8,47,73,0.74)] backdrop-blur-xl"
@@ -71,6 +77,11 @@ export function PartnerMediaKitSection() {
                 <a
                   href={href}
                   download
+                  onClick={() =>
+                    trackEvent(trackingEvent, {
+                      location: 'partner_page'
+                    })
+                  }
                   className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-cyan-200/30 bg-cyan-300/15 px-4 text-sm font-semibold text-cyan-100 transition hover:border-cyan-100/45 hover:bg-cyan-300/25"
                 >
                   <Download className="h-4 w-4" />
