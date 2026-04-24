@@ -43,36 +43,40 @@ export function PartnerMediaKitSection() {
           </p>
         </div>
 
-        <div className="mt-8 grid items-stretch gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div className="mt-8 grid gap-6 md:grid-cols-3">
           {MEDIA_KIT_ITEMS.map(({ title, description, points, cta, href, icon: Icon, accentClassName }) => (
             <article
               key={title}
               className="flex h-full flex-col rounded-3xl border border-white/15 bg-white/[0.06] p-6 shadow-[0_20px_34px_-30px_rgba(8,47,73,0.74)] backdrop-blur-xl"
             >
-              <div className={`inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium text-slate-100 ${accentClassName}`}>
-                <Icon className="h-4 w-4 text-cyan-200" />
-                <span>{title}</span>
+              <div className="flex-1">
+                <div className={`inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium text-slate-100 ${accentClassName}`}>
+                  <Icon className="h-4 w-4 text-cyan-200" />
+                  <span>{title}</span>
+                </div>
+
+                <p className="mt-4 text-sm leading-relaxed text-slate-200">{description}</p>
+
+                <ul className="mt-4 space-y-2 text-sm text-slate-100">
+                  {points.map((point) => (
+                    <li key={point} className="flex items-start gap-2.5">
+                      <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-300/90" />
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
 
-              <p className="mt-4 text-sm leading-relaxed text-slate-200">{description}</p>
-
-              <ul className="mt-4 space-y-2 text-sm text-slate-100">
-                {points.map((point) => (
-                  <li key={point} className="flex items-start gap-2.5">
-                    <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-300/90" />
-                    <span>{point}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <a
-                href={href}
-                download
-                className="mt-6 inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-cyan-200/30 bg-cyan-300/15 px-4 text-sm font-semibold text-cyan-100 transition hover:border-cyan-100/45 hover:bg-cyan-300/25"
-              >
-                <Download className="h-4 w-4" />
-                {cta}
-              </a>
+              <div className="mt-auto pt-6">
+                <a
+                  href={href}
+                  download
+                  className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-cyan-200/30 bg-cyan-300/15 px-4 text-sm font-semibold text-cyan-100 transition hover:border-cyan-100/45 hover:bg-cyan-300/25"
+                >
+                  <Download className="h-4 w-4" />
+                  {cta}
+                </a>
+              </div>
             </article>
           ))}
         </div>
