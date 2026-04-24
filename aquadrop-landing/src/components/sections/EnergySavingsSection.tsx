@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export function EnergySavingsSection() {
   return (
-    <section className="py-16 md:py-20">
+    <section className="py-16 md:py-20" id="mosasi-koltseg-kalkulator">
       <div className="ds-container">
         <div className="mx-auto max-w-4xl">
           <div className="rounded-3xl border border-white/30 bg-transparent p-4 shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur-md sm:p-6 md:p-8">

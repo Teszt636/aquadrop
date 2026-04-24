@@ -1,6 +1,6 @@
 'use client';
 
-import { ButtonLink } from '@/components/ui/Button';
+import Link from 'next/link';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { trackEvent } from '@/lib/tracking';
 
@@ -19,66 +19,54 @@ export function ThreePathsSection() {
     <section className="ds-section" aria-labelledby="three-paths-heading">
       <div className="ds-container">
         <div id="three-paths-heading" className="ds-section-heading-wrap">
-          <SectionHeading>Válaszd ki a következő lépést</SectionHeading>
+          <SectionHeading>Melyik probléma ismerős?</SectionHeading>
         </div>
 
-        <div className="ds-floating-panel mt-8 grid gap-5 px-5 py-6 sm:px-7 md:grid-cols-3 md:items-stretch md:px-8 md:py-8">
-          <article className="group flex h-full flex-col items-center rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-lg md:p-7">
-            <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 text-2xl">
-              🔔
-            </div>
-            <h3 className="text-2xl font-semibold text-slate-900">Elsőként értesülnék</h3>
-            <p className="mt-3 flex-1 text-slate-700">
-              Kérj értesítést az újdonságokról, ajánlatokról és kampányokról.
+        <div className="ds-floating-panel mt-8 grid gap-4 px-4 py-5 sm:px-6 md:grid-cols-3 md:items-stretch md:px-7 md:py-7">
+          <Link
+            href="/mosokapszula-nem-oldodik-fel"
+            className="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5 text-left shadow-card transition-all duration-200 hover:-translate-y-1 hover:border-cyan-200 hover:shadow-lg md:p-6"
+            onClick={() => trackEvent('problem_card_capsule_not_dissolving_click')}
+          >
+            <h3 className="text-xl font-semibold text-slate-900">Nem oldódik fel a kapszula</h3>
+            <p className="mt-2 flex-1 text-sm leading-6 text-slate-700">
+              Tipikus okok: túl rövid program, hideg víz vagy túlterhelt dob. Nézd meg a gyors, működő megoldásokat.
             </p>
-            <button
-              type="button"
-              className="ds-button-secondary mt-6 w-full"
-              onClick={() => {
-                trackEvent('final_cta_newsletter_click');
-                scrollToSection('announcement-signup');
-              }}
-            >
-              Értesítést kérek
-            </button>
-          </article>
+            <span className="mt-4 text-sm font-semibold text-cyan-800 transition group-hover:text-cyan-600">
+              Megoldás megtekintése →
+            </span>
+          </Link>
 
-          <article className="group relative flex h-full flex-col items-center rounded-2xl border-2 border-brand-primary/35 bg-white p-6 text-center shadow-lg shadow-brand-primary/10 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl md:p-7">
-            <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-brand-primary/10 text-2xl">
-              🎁
-            </div>
-            <h3 className="text-2xl font-bold text-slate-900">Ajándék mosókapszula</h3>
-            <p className="mt-3 flex-1 text-slate-700">
-              Vásárolj 2 doboz Aquadrop Expert Pro kapszulát bármelyik partner üzletben, és elküldjük a 3. dobozt ajándékba.
+          <button
+            type="button"
+            className="group flex h-full flex-col rounded-2xl border border-cyan-200/80 bg-white p-5 text-left shadow-card transition-all duration-200 hover:-translate-y-1 hover:border-cyan-300 hover:shadow-lg md:p-6"
+            onClick={() => {
+              trackEvent('problem_card_costs_click');
+              scrollToSection('mosasi-koltseg-kalkulator');
+            }}
+          >
+            <h3 className="text-xl font-semibold text-slate-900">Magas mosási költségek</h3>
+            <p className="mt-2 flex-1 text-sm leading-6 text-slate-700">
+              Úgy érzed, egyre többe kerül egy mosás? Számold ki, mennyit spórolhatsz alacsonyabb hőfokkal.
             </p>
-            <ButtonLink
-              href="#gift-form"
-              className="mt-6 w-full text-center"
-              onClick={() => {
-                trackEvent('final_cta_gift_click');
-              }}
-            >
-              Ajándék terméket igénylek
-            </ButtonLink>
-          </article>
+            <span className="mt-4 text-sm font-semibold text-cyan-800 transition group-hover:text-cyan-600">
+              Kalkulátor megnyitása →
+            </span>
+          </button>
 
-          <article className="group flex h-full flex-col items-center rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-lg md:p-7">
-            <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 text-2xl">
-              🤝
-            </div>
-            <h3 className="text-2xl font-semibold text-slate-900">Viszonteladó vagyok</h3>
-            <p className="mt-3 flex-1 text-slate-700">
-              Érdekel az Aquadrop Expert Pro partnerprogram és az együttműködés lehetősége.
+          <Link
+            href="/hogyan-mossunk-20-fokon"
+            className="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5 text-left shadow-card transition-all duration-200 hover:-translate-y-1 hover:border-cyan-200 hover:shadow-lg md:p-6"
+            onClick={() => trackEvent('problem_card_low_temp_cleaning_click')}
+          >
+            <h3 className="text-xl font-semibold text-slate-900">Nem tiszta a ruha alacsony hőfokon</h3>
+            <p className="mt-2 flex-1 text-sm leading-6 text-slate-700">
+              Megmutatjuk, hogyan lehet 20 °C-on is alaposan tiszta és friss az eredmény, kompromisszum nélkül.
             </p>
-            <ButtonLink
-              href="/partner"
-              className="mt-6 w-full text-center"
-              variant="secondary"
-              onClick={() => trackEvent('final_cta_partner_click')}
-            >
-              Partner oldal megnyitása
-            </ButtonLink>
-          </article>
+            <span className="mt-4 text-sm font-semibold text-cyan-800 transition group-hover:text-cyan-600">
+              Útmutató megnyitása →
+            </span>
+          </Link>
         </div>
       </div>
     </section>
