@@ -133,4 +133,39 @@ body {
   .gift-date-input.is-empty::-webkit-datetime-edit {
     color: transparent;
   }
+
+  .testimonials-carousel {
+    -ms-overflow-style: none;
+  }
+
+  .testimonials-carousel::-webkit-scrollbar {
+    display: none;
+  }
+
+  .testimonials-track {
+    animation: testimonials-marquee 24s linear infinite;
+    will-change: transform;
+  }
+
+  .testimonials-carousel:hover .testimonials-track,
+  .testimonials-carousel:active .testimonials-track,
+  .testimonials-carousel:focus-within .testimonials-track {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes testimonials-marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .testimonials-track {
+    animation: none;
+  }
 }
