@@ -71,8 +71,8 @@ export function MediaKitDownloadModal({ isOpen, fileUrl, onClose, onDownloadStar
         usage_type: formState.usageType
       });
 
-      onClose();
       onDownloadStart(fileUrl);
+      onClose();
       setFormState(DEFAULT_FORM_STATE);
     } catch (error) {
       console.error('[media-kit-download-submit]', error);
@@ -97,7 +97,7 @@ export function MediaKitDownloadModal({ isOpen, fileUrl, onClose, onDownloadStar
               type="text"
               value={formState.name}
               onChange={(event) => setFormState((prev) => ({ ...prev, name: event.target.value }))}
-              className="mt-1 h-11 w-full rounded-xl border border-white/20 bg-white/5 px-3 text-sm text-white placeholder:text-slate-400 focus:border-cyan-200/60 focus:outline-none"
+              className="media-kit-modal-field mt-1 h-11 w-full rounded-xl border border-white/20 bg-white/5 px-3 text-sm text-white placeholder:text-slate-400 focus:border-cyan-200/60 focus:outline-none"
               required
             />
           </label>
@@ -108,7 +108,7 @@ export function MediaKitDownloadModal({ isOpen, fileUrl, onClose, onDownloadStar
               type="email"
               value={formState.email}
               onChange={(event) => setFormState((prev) => ({ ...prev, email: event.target.value }))}
-              className="mt-1 h-11 w-full rounded-xl border border-white/20 bg-white/5 px-3 text-sm text-white placeholder:text-slate-400 focus:border-cyan-200/60 focus:outline-none"
+              className="media-kit-modal-field mt-1 h-11 w-full rounded-xl border border-white/20 bg-white/5 px-3 text-sm text-white placeholder:text-slate-400 focus:border-cyan-200/60 focus:outline-none"
               required
             />
           </label>
@@ -119,7 +119,7 @@ export function MediaKitDownloadModal({ isOpen, fileUrl, onClose, onDownloadStar
               type="text"
               value={formState.company}
               onChange={(event) => setFormState((prev) => ({ ...prev, company: event.target.value }))}
-              className="mt-1 h-11 w-full rounded-xl border border-white/20 bg-white/5 px-3 text-sm text-white placeholder:text-slate-400 focus:border-cyan-200/60 focus:outline-none"
+              className="media-kit-modal-field mt-1 h-11 w-full rounded-xl border border-white/20 bg-white/5 px-3 text-sm text-white placeholder:text-slate-400 focus:border-cyan-200/60 focus:outline-none"
             />
           </label>
 
@@ -128,7 +128,7 @@ export function MediaKitDownloadModal({ isOpen, fileUrl, onClose, onDownloadStar
             <select
               value={formState.usageType}
               onChange={(event) => setFormState((prev) => ({ ...prev, usageType: event.target.value as UsageType }))}
-              className="mt-1 h-11 w-full rounded-xl border border-white/20 bg-slate-900 px-3 text-sm text-white focus:border-cyan-200/60 focus:outline-none"
+              className="media-kit-modal-field mt-1 h-11 w-full rounded-xl border border-white/20 bg-slate-900 px-3 text-sm text-white focus:border-cyan-200/60 focus:outline-none"
               required
             >
               <option value="webshop">webshop</option>
