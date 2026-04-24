@@ -34,9 +34,15 @@ Create an `.env.local` file in `aquadrop-landing/` with:
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=https://<your-project-ref>.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-anon-key>
+SUPABASE_SERVICE_ROLE_KEY=<your-service-role-key>
+RESEND_API_KEY=<your-resend-api-key>
+ADMIN_EMAIL=admin@aquadrop.hu
+ADMIN_NOTIFICATION_EMAIL=admin@aquadrop.hu
+SITE_URL=https://www.aquadrop.hu
 ```
 
-Both variables are required at runtime.
+`NEXT_PUBLIC_*` variables are public client variables.  
+`SUPABASE_SERVICE_ROLE_KEY` and `RESEND_API_KEY` are **server-only** secrets; never expose them in client code.
 
 ## 4) How to run locally
 
