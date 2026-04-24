@@ -35,7 +35,6 @@ export const metadata: Metadata = {
 
 import {
   AnnouncementSection,
-  B2BBridgeSection,
   BeforeAfterSection,
   BenefitsSection,
   DubaiSection,
@@ -185,7 +184,6 @@ export default function Home() {
           <BeforeAfterSection />
           <ThreePathsSection />
           <AnnouncementSection />
-          <B2BBridgeSection />
           <SeoSection />
           <FaqSection items={faqItems} />
           <HomeResellerCta />
