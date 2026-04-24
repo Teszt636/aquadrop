@@ -1,7 +1,11 @@
 'use client';
 
+import { useState } from 'react';
 import { Download, FileCheck2, Image as ImageIcon, ScrollText } from 'lucide-react';
+import { MediaKitDownloadModal, mediaKitStorageKey } from '@/components/MediaKitDownloadModal';
 import { trackEvent } from '@/lib/tracking';
+
+type MediaKitFileType = 'marketing' | 'msds' | 'text';
 
 const MEDIA_KIT_ITEMS = [
   {
@@ -10,7 +14,7 @@ const MEDIA_KIT_ITEMS = [
     points: ['Webshop bannerek', 'Social media képek', 'Termékelőnyöket bemutató kreatívok'],
     cta: 'Marketing anyagok letöltése',
     href: '/media-kit/aquadrop-marketing-kepek.zip',
-    trackingEvent: 'media_kit_marketing_download',
+    file: 'marketing' as const,
     icon: ImageIcon,
     accentClassName: 'border-cyan-200/25 bg-cyan-200/[0.07]'
   },
@@ -21,7 +25,7 @@ const MEDIA_KIT_ITEMS = [
     points: ['Rövid termékleírás', 'Hosszú SEO termékleírás', 'Fő előnyök és bullet pointok'],
     cta: 'Termékszövegek letöltése',
     href: '/media-kit/aquadrop-termekszovegek.pdf',
-    trackingEvent: 'media_kit_product_text_download',
+    file: 'text' as const,
     icon: ScrollText,
     accentClassName: 'border-blue-200/25 bg-blue-200/[0.06]'
   },
@@ -31,13 +35,54 @@ const MEDIA_KIT_ITEMS = [
     points: ['MSDS / biztonsági adatlap', 'Használati információk', 'Forgalmazáshoz szükséges alapdokumentum'],
     cta: 'Biztonsági adatlap letöltése',
     href: '/media-kit/aquadrop-biztonsagi-adatlap.pdf',
-    trackingEvent: 'media_kit_msds_download',
+    file: 'msds' as const,
     icon: FileCheck2,
     accentClassName: 'border-teal-100/35 bg-teal-100/[0.09]'
   }
 ] as const;
 
+function triggerDownload(fileUrl: string, fileType: MediaKitFileType) {
+  trackEvent('media_kit_download', {
+    file: fileType,
+    location: 'partner_page'
+  });
+
+  window.open(fileUrl, '_blank');
+}
+
 export function PartnerMediaKitSection() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [pendingDownload, setPendingDownload] = useState<{ fileUrl: string; fileType: MediaKitFileType } | null>(null);
+
+  function openModal(fileUrl: string, fileType: MediaKitFileType) {
+    setPendingDownload({ fileUrl, fileType });
+    setIsModalOpen(true);
+  }
+
+  function closeModal() {
+    setIsModalOpen(false);
+    setPendingDownload(null);
+  }
+
+  function handleDownload(fileUrl: string, fileType: MediaKitFileType) {
+    const hasUser = localStorage.getItem(mediaKitStorageKey) === 'true';
+
+    if (!hasUser) {
+      openModal(fileUrl, fileType);
+      return;
+    }
+
+    triggerDownload(fileUrl, fileType);
+  }
+
+  function handleModalDownloadStart(fileUrl: string) {
+    if (!pendingDownload) {
+      return;
+    }
+
+    triggerDownload(fileUrl, pendingDownload.fileType);
+  }
+
   return (
     <section className="border-t border-white/10 bg-slate-950/90 px-5 py-14 sm:px-6 md:px-10 md:py-20">
       <div className="mx-auto w-full max-w-6xl">
@@ -50,7 +95,7 @@ export function PartnerMediaKitSection() {
         </div>
 
         <div className="mt-8 grid gap-6 md:grid-cols-3">
-          {MEDIA_KIT_ITEMS.map(({ title, description, points, cta, href, trackingEvent, icon: Icon, accentClassName }) => (
+          {MEDIA_KIT_ITEMS.map(({ title, description, points, cta, href, file, icon: Icon, accentClassName }) => (
             <article
               key={title}
               className="flex h-full flex-col rounded-3xl border border-white/15 bg-white/[0.06] p-6 shadow-[0_20px_34px_-30px_rgba(8,47,73,0.74)] backdrop-blur-xl"
@@ -74,24 +119,26 @@ export function PartnerMediaKitSection() {
               </div>
 
               <div className="mt-auto pt-6">
-                <a
-                  href={href}
-                  download
-                  onClick={() =>
-                    trackEvent(trackingEvent, {
-                      location: 'partner_page'
-                    })
-                  }
+                <button
+                  type="button"
+                  onClick={() => handleDownload(href, file)}
                   className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-cyan-200/30 bg-cyan-300/15 px-4 text-sm font-semibold text-cyan-100 transition hover:border-cyan-100/45 hover:bg-cyan-300/25"
                 >
                   <Download className="h-4 w-4" />
                   {cta}
-                </a>
+                </button>
               </div>
             </article>
           ))}
         </div>
       </div>
+
+      <MediaKitDownloadModal
+        isOpen={isModalOpen}
+        fileUrl={pendingDownload?.fileUrl ?? null}
+        onClose={closeModal}
+        onDownloadStart={handleModalDownloadStart}
+      />
     </section>
   );
 }

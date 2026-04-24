@@ -48,3 +48,15 @@ create table if not exists public.reseller_applications (
 
 create index if not exists reseller_applications_email_idx
   on public.reseller_applications (email);
+
+create table if not exists public.media_kit_downloads (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  email text not null,
+  company text,
+  usage_type text not null,
+  created_at timestamptz default now()
+);
+
+create index if not exists media_kit_downloads_email_idx
+  on public.media_kit_downloads (email);
