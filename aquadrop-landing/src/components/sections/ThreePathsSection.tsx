@@ -41,7 +41,7 @@ export function ThreePathsSection() {
             type="button"
             className="group flex h-full flex-col rounded-2xl border border-cyan-200/80 bg-white p-5 text-left shadow-card transition-all duration-200 hover:-translate-y-1 hover:border-cyan-300 hover:shadow-lg md:p-6"
             onClick={() => {
-              trackEvent('problem_card_costs_click');
+              trackEvent('problem_card_high_washing_cost_click');
               scrollToSection('mosasi-koltseg-kalkulator');
             }}
           >
