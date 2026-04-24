@@ -87,6 +87,34 @@ export function MediaKitDownloadModal({ isOpen, fileUrl, onClose, onDownloadStar
     return null;
   }
 
+  async function notifyMediaKitEmail(payload: {
+    name: string;
+    email: string;
+    company: string | null;
+    usage_type: UsageType;
+    downloaded_file: string;
+  }) {
+    try {
+      const response = await fetch('/api/media-kit-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        const responseText = await response.text();
+        console.warn('[media-kit-email] API responded with non-OK status', {
+          status: response.status,
+          body: responseText
+        });
+      }
+    } catch (error) {
+      console.warn('[media-kit-email] API request failed', error);
+    }
+  }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -113,6 +141,14 @@ export function MediaKitDownloadModal({ isOpen, fileUrl, onClose, onDownloadStar
       });
 
       setStatus('success');
+
+      void notifyMediaKitEmail({
+        name: formState.name.trim(),
+        email: formState.email.trim().toLowerCase(),
+        company: formState.company.trim() || null,
+        usage_type: formState.usageType,
+        downloaded_file: fileUrl
+      });
 
       downloadTimeoutRef.current = setTimeout(() => {
         triggerDownload(fileUrl);
