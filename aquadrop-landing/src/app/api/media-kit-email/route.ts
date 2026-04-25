@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 
+import { resolveAquadropSenderEmail } from '@/lib/email/config';
 import { sendEmailWithResend } from '@/lib/email/resend';
 import { renderBrandedEmailLayout } from '@/lib/email/templates';
 
@@ -12,7 +13,6 @@ type MediaKitEmailRequest = {
 };
 
 const REPLY_TO_EMAIL = 'hello@aquadrop.hu';
-const DEV_SENDER_EMAIL_FALLBACK = 'Aquadrop Ügyfélszolgálat <noreply@aquadrop.hu>';
 const SITE_URL_FALLBACK = 'https://www.aquadrop.hu';
 
 export const runtime = 'nodejs';
@@ -87,6 +87,7 @@ function buildUserEmailHtml(name: string, isResellerLead: boolean): string {
   const productTextsUrl = toAbsoluteUrl('/media-kit/aquadrop-termekszovegek.pdf');
   const safetySheetUrl = toAbsoluteUrl('/media-kit/aquadrop-biztonsagi-adatlap.pdf');
   const partnerUrl = toAbsoluteUrl('/partner');
+  const homeUrl = toAbsoluteUrl('/');
 
   const resellerBlock = isResellerLead
     ? '<p style="margin: 20px 0 0; color: #475569;">Már látjuk a partneri érdeklődésedet, hamarosan felvesszük veled a kapcsolatot a részletekkel.</p>'
@@ -96,8 +97,7 @@ function buildUserEmailHtml(name: string, isResellerLead: boolean): string {
          <li>rövid egyeztetés</li>
          <li>partneri feltételek átbeszélése</li>
          <li>indulhat az együttműködés</li>
-       </ol>
-       <p style="margin: 0;"><a href="${escapeHtml(partnerUrl)}" target="_blank" style="display: inline-block; text-decoration: none; color: #ffffff; font-weight: 700; background: #2563eb; border: 1px solid #2563eb; border-radius: 10px; padding: 10px 16px;">Viszonteladói jelentkezés</a></p>`;
+       </ol>`;
 
   return renderBrandedEmailLayout({
     subject: 'Aquadrop Media Kit anyagok',
@@ -111,8 +111,8 @@ function buildUserEmailHtml(name: string, isResellerLead: boolean): string {
       ${buildDownloadItem('3. Biztonsági adatlap', safetySheetUrl)}
       ${resellerBlock}
     `,
-    ctaText: 'Media Kit megnyitása',
-    ctaUrl: partnerUrl
+    ctaText: isResellerLead ? 'Megnézem a főoldalt' : 'Viszonteladói jelentkezés',
+    ctaUrl: isResellerLead ? homeUrl : partnerUrl
   });
 }
 
@@ -179,19 +179,7 @@ export async function POST(request: Request) {
     }
 
     const isDevelopment = process.env.NODE_ENV !== 'production';
-    const senderEmail = process.env.EMAIL_FROM || (isDevelopment ? DEV_SENDER_EMAIL_FALLBACK : '');
-
-    if (!senderEmail) {
-      return NextResponse.json(
-        {
-          ok: false,
-          step: 'email-config',
-          message: 'Hiányzó EMAIL_FROM környezeti változó.',
-          details: 'Production környezetben kötelező az EMAIL_FROM beállítása.'
-        },
-        { status: 500 }
-      );
-    }
+    const senderEmail = resolveAquadropSenderEmail({ allowFallback: isDevelopment });
 
     const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL ?? 'admin@aquadrop.hu';
     let isResellerLead = false;
