@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 
 import { sendEmailWithResend } from '@/lib/email/resend';
+import { renderBrandedEmailLayout } from '@/lib/email/templates';
 
 type MediaKitEmailRequest = {
   name?: string;
@@ -12,6 +13,7 @@ type MediaKitEmailRequest = {
 
 const REPLY_TO_EMAIL = 'hello@aquadrop.hu';
 const DEV_SENDER_EMAIL_FALLBACK = 'Aquadrop Ügyfélszolgálat <noreply@aquadrop.hu>';
+const SITE_URL_FALLBACK = 'https://www.aquadrop.hu';
 
 export const runtime = 'nodejs';
 
@@ -35,23 +37,13 @@ function getSupabaseHeaders(): HeadersInit {
   };
 }
 
-function toDownloadUrl(downloadedFile: string | null | undefined): string {
-  if (!downloadedFile) {
-    return '';
-  }
+function getSiteUrl(): string {
+  return process.env.SITE_URL?.replace(/\/$/, '') || SITE_URL_FALLBACK;
+}
 
-  if (downloadedFile.startsWith('http://') || downloadedFile.startsWith('https://')) {
-    return downloadedFile;
-  }
-
-  const siteUrl = process.env.SITE_URL?.replace(/\/$/, '');
-  const filePath = downloadedFile.startsWith('/') ? downloadedFile : `/${downloadedFile}`;
-
-  if (!siteUrl) {
-    return filePath;
-  }
-
-  return `${siteUrl}${filePath}`;
+function toAbsoluteUrl(path: string): string {
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+  return `${getSiteUrl()}${normalizedPath}`;
 }
 
 function escapeHtml(value: string): string {
@@ -86,23 +78,42 @@ async function hasResellerApplication(email: string): Promise<boolean> {
   return rows.length > 0;
 }
 
-function buildUserEmailHtml(name: string, downloadUrl: string, isResellerLead: boolean): string {
-  const ctaBlock = isResellerLead
-    ? '<p>Már látjuk a partneri érdeklődésedet, hamarosan felvesszük veled a kapcsolatot.</p>'
-    : '<p>Ha még nem jelentkeztél viszonteladónak, itt tudod elindítani: <a href="https://www.aquadrop.hu/partner">https://www.aquadrop.hu/partner</a></p><p>A folyamat rövid:</p><ol><li>űrlap kitöltése</li><li>rövid egyeztetés</li><li>partneri feltételek átbeszélése</li><li>indulhat az együttműködés</li></ol>';
+function buildDownloadItem(label: string, href: string): string {
+  return `<p style="margin: 0 0 10px;"><a href="${escapeHtml(href)}" target="_blank" style="display: block; text-decoration: none; color: #1d4ed8; font-weight: 700; border: 1px solid #dbeafe; border-radius: 10px; background: #eff6ff; padding: 12px 14px;">${escapeHtml(label)}</a></p>`;
+}
 
-  return `<div>
-    <p>Szia ${escapeHtml(name)},</p>
-    <p>Köszönjük az érdeklődést!</p>
-    <p>Innen le tudod tölteni az Aquadrop Expert Pro anyagokat:<br /><a href="${escapeHtml(downloadUrl)}">${escapeHtml(downloadUrl)}</a></p>
-    <p>Néhány gyors tipp:</p>
-    <ul>
-      <li>A “20°C-on is hatékony” üzenet jól használható webshopos és közösségi kommunikációban.</li>
-      <li>A látványos termékképek és előnyöket bemutató kreatívok segíthetnek gyorsabban bemutatni a terméket.</li>
-    </ul>
-    ${ctaBlock}
-    <p>Üdv,<br />Aquadrop</p>
-  </div>`;
+function buildUserEmailHtml(name: string, isResellerLead: boolean): string {
+  const marketingImagesUrl = toAbsoluteUrl('/media-kit/aquadrop-marketing-kepek.zip');
+  const productTextsUrl = toAbsoluteUrl('/media-kit/aquadrop-termekszovegek.pdf');
+  const safetySheetUrl = toAbsoluteUrl('/media-kit/aquadrop-biztonsagi-adatlap.pdf');
+  const partnerUrl = toAbsoluteUrl('/partner');
+
+  const resellerBlock = isResellerLead
+    ? '<p style="margin: 20px 0 0; color: #475569;">Már látjuk a partneri érdeklődésedet, hamarosan felvesszük veled a kapcsolatot a részletekkel.</p>'
+    : `<p style="margin: 20px 0 10px; color: #475569;">Ha szeretnél viszonteladóként is csatlakozni, a jelentkezés néhány lépésből áll:</p>
+       <ol style="margin: 0 0 16px 20px; padding: 0; color: #475569;">
+         <li>űrlap kitöltése</li>
+         <li>rövid egyeztetés</li>
+         <li>partneri feltételek átbeszélése</li>
+         <li>indulhat az együttműködés</li>
+       </ol>
+       <p style="margin: 0;"><a href="${escapeHtml(partnerUrl)}" target="_blank" style="display: inline-block; text-decoration: none; color: #ffffff; font-weight: 700; background: #2563eb; border: 1px solid #2563eb; border-radius: 10px; padding: 10px 16px;">Viszonteladói jelentkezés</a></p>`;
+
+  return renderBrandedEmailLayout({
+    subject: 'Aquadrop Media Kit anyagok',
+    headline: 'Aquadrop Media Kit letöltési linkek',
+    bodyHtml: `
+      <p style="margin: 0 0 16px; color: #475569;">Szia ${escapeHtml(name)}!</p>
+      <p style="margin: 0 0 16px; color: #475569;">Köszönjük az érdeklődést. Összegyűjtöttük neked az Aquadrop Expert Pro értékesítéséhez használható anyagokat.</p>
+      <p style="margin: 0 0 16px; color: #475569;">A következő linkeken tudod letölteni az anyagokat:</p>
+      ${buildDownloadItem('1. Marketing képek', marketingImagesUrl)}
+      ${buildDownloadItem('2. Termékszövegek', productTextsUrl)}
+      ${buildDownloadItem('3. Biztonsági adatlap', safetySheetUrl)}
+      ${resellerBlock}
+    `,
+    ctaText: 'Media Kit megnyitása',
+    ctaUrl: partnerUrl
+  });
 }
 
 function buildAdminEmailHtml(payload: {
@@ -113,19 +124,28 @@ function buildAdminEmailHtml(payload: {
   downloadedFile: string | null;
   isResellerLead: boolean;
 }): string {
+  const partnerUrl = toAbsoluteUrl('/partner');
   const resellerStatus = payload.isResellerLead
     ? 'Már jelentkezett viszonteladónak'
     : 'Még nem jelentkezett viszonteladónak';
 
-  return `<div>
-    <p>Új Media Kit letöltés történt.</p>
-    <p>Név: ${escapeHtml(payload.name)}<br />
-    Email: ${escapeHtml(payload.email)}<br />
-    Cég: ${escapeHtml(payload.company ?? '-')}<br />
-    Felhasználás célja: ${escapeHtml(payload.usageType ?? '-')}<br />
-    Letöltött fájl: ${escapeHtml(payload.downloadedFile ?? '-')}</p>
-    <p>Reseller státusz:<br />${escapeHtml(resellerStatus)}</p>
-  </div>`;
+  return renderBrandedEmailLayout({
+    subject: 'Új Media Kit letöltés',
+    headline: 'Új Media Kit letöltés',
+    bodyHtml: `
+      <p style="margin: 0 0 16px; color: #475569;">Új Media Kit letöltés történt.</p>
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse: collapse;">
+        <tr><td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0;"><strong>Név:</strong> ${escapeHtml(payload.name)}</td></tr>
+        <tr><td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0;"><strong>Email:</strong> ${escapeHtml(payload.email)}</td></tr>
+        <tr><td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0;"><strong>Cég:</strong> ${escapeHtml(payload.company ?? '-')}</td></tr>
+        <tr><td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0;"><strong>Felhasználás célja:</strong> ${escapeHtml(payload.usageType ?? '-')}</td></tr>
+        <tr><td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0;"><strong>Elsőként kért fájl:</strong> ${escapeHtml(payload.downloadedFile ?? '-')}</td></tr>
+        <tr><td style="padding: 8px 0;"><strong>Reseller státusz:</strong> ${escapeHtml(resellerStatus)}</td></tr>
+      </table>
+    `,
+    ctaText: 'Partner oldal megnyitása',
+    ctaUrl: partnerUrl
+  });
 }
 
 export async function POST(request: Request) {
@@ -192,7 +212,6 @@ export async function POST(request: Request) {
       );
     }
 
-    const downloadUrl = toDownloadUrl(body.downloaded_file);
     const adminPayload = {
       name: normalizedName,
       email: normalizedEmail,
@@ -209,8 +228,8 @@ export async function POST(request: Request) {
       const downloadEmailResult = await sendEmailWithResend({
         from: senderEmail,
         to: normalizedEmail,
-        subject: 'Aquadrop anyagok + következő lépés',
-        html: buildUserEmailHtml(normalizedName, downloadUrl, isResellerLead),
+        subject: 'Aquadrop Media Kit anyagok',
+        html: buildUserEmailHtml(normalizedName, isResellerLead),
         replyTo: REPLY_TO_EMAIL
       });
       downloadEmailSent = true;
