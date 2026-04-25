@@ -9,19 +9,21 @@ import {
   buildResellerAdminEmail,
   buildResellerUserEmail
 } from '@/lib/email/templates';
+import { resolveAquadropSenderEmail } from '@/lib/email/config';
 import { sendEmailWithResend } from '@/lib/email/resend';
 import { type EmailNotificationRequest } from '@/lib/email/types';
 
-const SENDER_EMAIL = 'Aquadrop Ügyfélszolgálat <noreply@aquadrop.hu>';
 const REPLY_TO_EMAIL = 'hello@aquadrop.hu';
 
 function getSenderEmail(): string {
+  const senderEmail = resolveAquadropSenderEmail({ allowFallback: true });
+
   console.info('[email][notifications] Sender email resolved', {
-    from: SENDER_EMAIL,
-    source: 'STATIC'
+    from: senderEmail,
+    source: process.env.EMAIL_FROM ? 'EMAIL_FROM' : 'FALLBACK'
   });
 
-  return SENDER_EMAIL;
+  return senderEmail;
 }
 
 function getReplyToEmail(): string {
