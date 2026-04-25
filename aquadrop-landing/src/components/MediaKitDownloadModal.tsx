@@ -29,7 +29,8 @@ const DEFAULT_FORM_STATE: FormState = {
 };
 
 const SESSION_STORAGE_KEY = 'aquadrop_media_kit_user';
-const DOWNLOAD_DELAY_MS = 1200;
+const DOWNLOAD_DELAY_MS = 1500;
+const FALLBACK_CLOSE_MS = 10000;
 
 export function MediaKitDownloadModal({ isOpen, fileUrl, onClose, onDownloadStart }: MediaKitDownloadModalProps) {
   const [formState, setFormState] = useState<FormState>(DEFAULT_FORM_STATE);
@@ -37,6 +38,9 @@ export function MediaKitDownloadModal({ isOpen, fileUrl, onClose, onDownloadStar
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [hasTriggeredDownload, setHasTriggeredDownload] = useState(false);
   const downloadTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const fallbackTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hasInitializedSuccessEffectRef = useRef(false);
+  const hasTriggeredDownloadRef = useRef(false);
 
   const isSubmitting = status === 'loading';
 
@@ -54,31 +58,71 @@ export function MediaKitDownloadModal({ isOpen, fileUrl, onClose, onDownloadStar
       if (downloadTimeoutRef.current) {
         clearTimeout(downloadTimeoutRef.current);
       }
+      if (fallbackTimeoutRef.current) {
+        clearTimeout(fallbackTimeoutRef.current);
+      }
     };
   }, []);
+
+  useEffect(() => {
+    if (status !== 'success' || !fileUrl || hasInitializedSuccessEffectRef.current) {
+      return;
+    }
+
+    hasInitializedSuccessEffectRef.current = true;
+
+    downloadTimeoutRef.current = setTimeout(() => {
+      triggerDownload(fileUrl);
+      onClose();
+    }, DOWNLOAD_DELAY_MS);
+
+    fallbackTimeoutRef.current = setTimeout(() => {
+      onClose();
+    }, FALLBACK_CLOSE_MS);
+
+    return () => {
+      if (downloadTimeoutRef.current) {
+        clearTimeout(downloadTimeoutRef.current);
+      }
+      if (fallbackTimeoutRef.current) {
+        clearTimeout(fallbackTimeoutRef.current);
+      }
+    };
+  }, [fileUrl, onClose, status]);
 
   function resetModalState() {
     setFormState(DEFAULT_FORM_STATE);
     setStatus('form');
     setSubmitError(null);
     setHasTriggeredDownload(false);
+    hasTriggeredDownloadRef.current = false;
 
     if (downloadTimeoutRef.current) {
       clearTimeout(downloadTimeoutRef.current);
       downloadTimeoutRef.current = null;
     }
+    if (fallbackTimeoutRef.current) {
+      clearTimeout(fallbackTimeoutRef.current);
+      fallbackTimeoutRef.current = null;
+    }
+    hasInitializedSuccessEffectRef.current = false;
   }
 
   function handleClose() {
+    if (status === 'success' && fileUrl && !hasTriggeredDownloadRef.current) {
+      triggerDownload(fileUrl);
+    }
+
     resetModalState();
     onClose();
   }
 
   function triggerDownload(downloadUrl: string) {
-    if (hasTriggeredDownload) {
+    if (hasTriggeredDownloadRef.current) {
       return;
     }
 
+    hasTriggeredDownloadRef.current = true;
     onDownloadStart(downloadUrl);
     setHasTriggeredDownload(true);
   }
@@ -150,9 +194,6 @@ export function MediaKitDownloadModal({ isOpen, fileUrl, onClose, onDownloadStar
         downloaded_file: fileUrl
       });
 
-      downloadTimeoutRef.current = setTimeout(() => {
-        triggerDownload(fileUrl);
-      }, DOWNLOAD_DELAY_MS);
     } catch (error) {
       console.error('[media-kit-download-submit]', error);
       setSubmitError('Nem sikerült elküldeni az adatokat. Kérlek próbáld újra.');
@@ -166,8 +207,9 @@ export function MediaKitDownloadModal({ isOpen, fileUrl, onClose, onDownloadStar
         {status === 'success' ? (
           <div className="flex flex-col items-center text-center">
             <h3 className="text-xl font-semibold text-white md:text-2xl">Köszönjük!</h3>
-            <p className="mt-2 text-sm leading-relaxed text-slate-200">Indítjuk a letöltést...</p>
+            <p className="mt-2 text-xl font-semibold tracking-tight text-white md:text-2xl">Indítjuk a letöltést...</p>
             <div className="mt-6 h-8 w-8 animate-spin rounded-full border-2 border-cyan-200/25 border-t-cyan-200" />
+            <p className="mt-2 text-sm text-slate-400">Ez csak néhány másodperc...</p>
 
             <button
               type="button"
