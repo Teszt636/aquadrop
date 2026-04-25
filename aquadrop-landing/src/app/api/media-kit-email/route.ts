@@ -10,8 +10,10 @@ type MediaKitEmailRequest = {
   downloaded_file?: string | null;
 };
 
-const SENDER_EMAIL = 'Aquadrop Ügyfélszolgálat <noreply@aquadrop.hu>';
 const REPLY_TO_EMAIL = 'hello@aquadrop.hu';
+const DEV_SENDER_EMAIL_FALLBACK = 'Aquadrop Ügyfélszolgálat <noreply@aquadrop.hu>';
+
+export const runtime = 'nodejs';
 
 function requireServerEnv(name: string): string {
   const value = process.env[name];
@@ -42,8 +44,12 @@ function toDownloadUrl(downloadedFile: string | null | undefined): string {
     return downloadedFile;
   }
 
-  const siteUrl = requireServerEnv('SITE_URL').replace(/\/$/, '');
+  const siteUrl = process.env.SITE_URL?.replace(/\/$/, '');
   const filePath = downloadedFile.startsWith('/') ? downloadedFile : `/${downloadedFile}`;
+
+  if (!siteUrl) {
+    return filePath;
+  }
 
   return `${siteUrl}${filePath}`;
 }
@@ -123,6 +129,22 @@ function buildAdminEmailHtml(payload: {
 }
 
 export async function POST(request: Request) {
+  console.info('[media-kit-email] Route called');
+
+  const hasResendKey = Boolean(process.env.RESEND_API_KEY);
+  const hasEmailFrom = Boolean(process.env.EMAIL_FROM);
+  const hasAdminEmail = Boolean(process.env.ADMIN_NOTIFICATION_EMAIL);
+  const hasSupabaseUrl = Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL);
+  const hasServiceRole = Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY);
+
+  console.info('[media-kit-email] Configuration diagnostics', {
+    hasResendKey,
+    hasEmailFrom,
+    hasAdminEmail,
+    hasSupabaseUrl,
+    hasServiceRole
+  });
+
   try {
     const body = (await request.json()) as MediaKitEmailRequest;
 
@@ -131,46 +153,136 @@ export async function POST(request: Request) {
 
     if (!normalizedName || !normalizedEmail) {
       return NextResponse.json(
-        { ok: false, error: 'name és email kötelező.' },
+        { ok: false, step: 'validation', message: 'name és email kötelező.', details: null },
         { status: 400 }
       );
     }
 
-    const adminEmail = process.env.ADMIN_EMAIL ?? 'admin@aquadrop.hu';
-    const isResellerLead = await hasResellerApplication(normalizedEmail);
-    const downloadUrl = toDownloadUrl(body.downloaded_file);
+    const isDevelopment = process.env.NODE_ENV !== 'production';
+    const senderEmail = process.env.EMAIL_FROM || (isDevelopment ? DEV_SENDER_EMAIL_FALLBACK : '');
 
-    await Promise.all([
-      sendEmailWithResend({
-        from: SENDER_EMAIL,
+    if (!senderEmail) {
+      return NextResponse.json(
+        {
+          ok: false,
+          step: 'email-config',
+          message: 'Hiányzó EMAIL_FROM környezeti változó.',
+          details: 'Production környezetben kötelező az EMAIL_FROM beállítása.'
+        },
+        { status: 500 }
+      );
+    }
+
+    const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL ?? 'admin@aquadrop.hu';
+    let isResellerLead = false;
+
+    try {
+      isResellerLead = await hasResellerApplication(normalizedEmail);
+      console.info('[media-kit-email] Reseller check result', { resellerFound: isResellerLead });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unexpected Supabase reseller lookup error';
+      return NextResponse.json(
+        {
+          ok: false,
+          step: 'reseller-check',
+          message: 'A viszonteladói ellenőrzés nem sikerült.',
+          details: message
+        },
+        { status: 500 }
+      );
+    }
+
+    const downloadUrl = toDownloadUrl(body.downloaded_file);
+    const adminPayload = {
+      name: normalizedName,
+      email: normalizedEmail,
+      company: body.company?.trim() || null,
+      usageType: body.usage_type?.trim() || null,
+      downloadedFile: body.downloaded_file?.trim() || null,
+      isResellerLead
+    };
+
+    let downloadEmailSent = false;
+    let adminEmailSent = false;
+
+    try {
+      const downloadEmailResult = await sendEmailWithResend({
+        from: senderEmail,
         to: normalizedEmail,
         subject: 'Aquadrop anyagok + következő lépés',
         html: buildUserEmailHtml(normalizedName, downloadUrl, isResellerLead),
         replyTo: REPLY_TO_EMAIL
-      }),
-      sendEmailWithResend({
-        from: SENDER_EMAIL,
+      });
+      downloadEmailSent = true;
+      console.info('[media-kit-email] Resend send result', {
+        emailType: 'download-email',
+        success: true,
+        resendId: downloadEmailResult.id ?? null
+      });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unexpected Resend error (download email)';
+      console.error('[media-kit-email] Resend send result', {
+        emailType: 'download-email',
+        success: false,
+        error: message
+      });
+      return NextResponse.json(
+        {
+          ok: false,
+          step: 'send-download-email',
+          message: 'A letöltési email küldése nem sikerült.',
+          details: message
+        },
+        { status: 500 }
+      );
+    }
+
+    try {
+      const adminEmailResult = await sendEmailWithResend({
+        from: senderEmail,
         to: adminEmail,
         subject: 'Új Media Kit letöltés',
-        html: buildAdminEmailHtml({
-          name: normalizedName,
-          email: normalizedEmail,
-          company: body.company?.trim() || null,
-          usageType: body.usage_type?.trim() || null,
-          downloadedFile: body.downloaded_file?.trim() || null,
-          isResellerLead
-        }),
+        html: buildAdminEmailHtml(adminPayload),
         replyTo: REPLY_TO_EMAIL
-      })
-    ]);
+      });
+      adminEmailSent = true;
+      console.info('[media-kit-email] Resend send result', {
+        emailType: 'admin-email',
+        success: true,
+        resendId: adminEmailResult.id ?? null
+      });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unexpected Resend error (admin email)';
+      console.error('[media-kit-email] Resend send result', {
+        emailType: 'admin-email',
+        success: false,
+        error: message
+      });
+      return NextResponse.json(
+        {
+          ok: false,
+          step: 'send-admin-email',
+          message: 'Az admin értesítő email küldése nem sikerült.',
+          details: message
+        },
+        { status: 500 }
+      );
+    }
 
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({
+      ok: true,
+      resellerFound: isResellerLead,
+      downloadEmailSent,
+      adminEmailSent
+    });
   } catch (error) {
     console.error('[media-kit-email] Sending media kit notifications failed', error);
     return NextResponse.json(
       {
         ok: false,
-        error: error instanceof Error ? error.message : 'Unexpected media kit notification error'
+        step: 'unexpected',
+        message: 'Váratlan hiba történt a media kit email feldolgozás közben.',
+        details: error instanceof Error ? error.message : 'Unexpected media kit notification error'
       },
       { status: 500 }
     );
