@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { FormEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { insertIntoTable } from '@/lib/supabase';
 import { trackEvent } from '@/lib/tracking';
 
@@ -64,6 +64,19 @@ export function MediaKitDownloadModal({ isOpen, fileUrl, onClose, onDownloadStar
     };
   }, []);
 
+  const triggerDownload = useCallback(
+    (downloadUrl: string) => {
+      if (hasTriggeredDownloadRef.current) {
+        return;
+      }
+
+      hasTriggeredDownloadRef.current = true;
+      onDownloadStart(downloadUrl);
+      setHasTriggeredDownload(true);
+    },
+    [onDownloadStart]
+  );
+
   useEffect(() => {
     if (status !== 'success' || !fileUrl || hasInitializedSuccessEffectRef.current) {
       return;
@@ -88,7 +101,7 @@ export function MediaKitDownloadModal({ isOpen, fileUrl, onClose, onDownloadStar
         clearTimeout(fallbackTimeoutRef.current);
       }
     };
-  }, [fileUrl, onClose, status]);
+  }, [fileUrl, onClose, status, triggerDownload]);
 
   function resetModalState() {
     setFormState(DEFAULT_FORM_STATE);
@@ -117,15 +130,6 @@ export function MediaKitDownloadModal({ isOpen, fileUrl, onClose, onDownloadStar
     onClose();
   }
 
-  function triggerDownload(downloadUrl: string) {
-    if (hasTriggeredDownloadRef.current) {
-      return;
-    }
-
-    hasTriggeredDownloadRef.current = true;
-    onDownloadStart(downloadUrl);
-    setHasTriggeredDownload(true);
-  }
 
   if (!isOpen) {
     return null;

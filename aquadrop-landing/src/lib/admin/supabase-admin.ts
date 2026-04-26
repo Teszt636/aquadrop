@@ -1,18 +1,35 @@
-import { NEXT_PUBLIC_SUPABASE_URL } from '@/lib/env';
 import { type AdminTableName } from '@/lib/admin/constants';
 
-const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+function getSupabaseUrl(): string {
+  const value = process.env.NEXT_PUBLIC_SUPABASE_URL;
 
-if (!SUPABASE_SERVICE_ROLE_KEY) {
-  throw new Error('Missing required environment variable: SUPABASE_SERVICE_ROLE_KEY');
+  if (!value) {
+    throw new Error('Missing NEXT_PUBLIC_SUPABASE_URL');
+  }
+
+  return value;
 }
 
-const REST_URL = `${NEXT_PUBLIC_SUPABASE_URL.replace(/\/$/, '')}/rest/v1`;
+function getServiceRoleKey(): string {
+  const value = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!value) {
+    throw new Error('Missing SUPABASE_SERVICE_ROLE_KEY');
+  }
+
+  return value;
+}
+
+function getRestUrl(): string {
+  return `${getSupabaseUrl().replace(/\/$/, '')}/rest/v1`;
+}
 
 function getServiceHeaders(additionalHeaders?: HeadersInit): HeadersInit {
+  const serviceRoleKey = getServiceRoleKey();
+
   return {
-    apikey: SUPABASE_SERVICE_ROLE_KEY,
-    Authorization: `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+    apikey: serviceRoleKey,
+    Authorization: `Bearer ${serviceRoleKey}`,
     'Content-Type': 'application/json',
     ...(additionalHeaders ?? {})
   };
@@ -25,7 +42,7 @@ async function fetchRowsWithOrder(table: AdminTableName, order: string) {
     limit: '200'
   });
 
-  return fetch(`${REST_URL}/${table}?${query.toString()}`, {
+  return fetch(`${getRestUrl()}/${table}?${query.toString()}`, {
     method: 'GET',
     headers: getServiceHeaders(),
     cache: 'no-store'
@@ -57,7 +74,7 @@ export async function patchAdminTableRow(
   id: string,
   updates: Record<string, unknown>
 ): Promise<void> {
-  const response = await fetch(`${REST_URL}/${table}?id=eq.${encodeURIComponent(id)}`, {
+  const response = await fetch(`${getRestUrl()}/${table}?id=eq.${encodeURIComponent(id)}`, {
     method: 'PATCH',
     headers: getServiceHeaders({ Prefer: 'return=minimal' }),
     body: JSON.stringify(updates)
@@ -69,7 +86,7 @@ export async function patchAdminTableRow(
 }
 
 export async function deleteAdminTableRow(table: AdminTableName, id: string): Promise<void> {
-  const response = await fetch(`${REST_URL}/${table}?id=eq.${encodeURIComponent(id)}`, {
+  const response = await fetch(`${getRestUrl()}/${table}?id=eq.${encodeURIComponent(id)}`, {
     method: 'DELETE',
     headers: getServiceHeaders({ Prefer: 'return=minimal' })
   });
