@@ -123,6 +123,7 @@ function buildAdminEmailHtml(payload: {
   usageType: string | null;
   downloadedFile: string | null;
   isResellerLead: boolean;
+  leadQualification: string;
 }): string {
   const partnerUrl = toAbsoluteUrl('/partner');
   const resellerStatus = payload.isResellerLead
@@ -140,12 +141,59 @@ function buildAdminEmailHtml(payload: {
         <tr><td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0;"><strong>Cég:</strong> ${escapeHtml(payload.company ?? '-')}</td></tr>
         <tr><td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0;"><strong>Felhasználás célja:</strong> ${escapeHtml(payload.usageType ?? '-')}</td></tr>
         <tr><td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0;"><strong>Elsőként kért fájl:</strong> ${escapeHtml(payload.downloadedFile ?? '-')}</td></tr>
+        <tr><td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0;"><strong>Lead minősítés:</strong> ${escapeHtml(payload.leadQualification)}</td></tr>
         <tr><td style="padding: 8px 0;"><strong>Reseller státusz:</strong> ${escapeHtml(resellerStatus)}</td></tr>
       </table>
     `,
     ctaText: 'Partner oldal megnyitása',
     ctaUrl: partnerUrl
   });
+}
+
+function getAdminLeadDetails(usageType: string | null): {
+  subject: string;
+  qualification: string;
+  usageLabel: string;
+} {
+  const normalizedUsageType = usageType?.trim().toLowerCase() ?? '';
+
+  if (normalizedUsageType === 'nagyker') {
+    return {
+      subject: '🔥🔥 HOT LEAD – Media Kit letöltés – Nagyker',
+      qualification: '🔥🔥 HOT LEAD – kiemelt nagykereskedelmi érdeklődő',
+      usageLabel: 'Nagyker'
+    };
+  }
+
+  if (normalizedUsageType === 'webshop') {
+    return {
+      subject: '🔥 HOT LEAD – Media Kit letöltés – Webshop',
+      qualification: '🔥 HOT LEAD – webshopos partnerjelölt',
+      usageLabel: 'Webshop'
+    };
+  }
+
+  if (normalizedUsageType === 'offline bolt') {
+    return {
+      subject: '⭐ Media Kit letöltés – Offline bolt',
+      qualification: '⭐ Normál érdeklődő – offline bolt',
+      usageLabel: 'Offline bolt'
+    };
+  }
+
+  if (normalizedUsageType === 'egyéb' || normalizedUsageType === 'egyeb') {
+    return {
+      subject: 'Media Kit letöltés – Egyéb felhasználás',
+      qualification: 'ℹ️ Egyéb érdeklődés',
+      usageLabel: 'Egyéb felhasználás'
+    };
+  }
+
+  return {
+    subject: 'Media Kit letöltés',
+    qualification: 'ℹ️ Egyéb érdeklődés',
+    usageLabel: usageType?.trim() || '-'
+  };
 }
 
 export async function POST(request: Request) {
@@ -208,6 +256,7 @@ export async function POST(request: Request) {
       downloadedFile: body.downloaded_file?.trim() || null,
       isResellerLead
     };
+    const adminLeadDetails = getAdminLeadDetails(adminPayload.usageType);
 
     let downloadEmailSent = false;
     let adminEmailSent = false;
@@ -248,8 +297,12 @@ export async function POST(request: Request) {
       const adminEmailResult = await sendEmailWithResend({
         from: senderEmail,
         to: adminEmail,
-        subject: 'Új Media Kit letöltés',
-        html: buildAdminEmailHtml(adminPayload),
+        subject: adminLeadDetails.subject,
+        html: buildAdminEmailHtml({
+          ...adminPayload,
+          usageType: adminLeadDetails.usageLabel,
+          leadQualification: adminLeadDetails.qualification
+        }),
         replyTo: REPLY_TO_EMAIL
       });
       adminEmailSent = true;
