@@ -13,7 +13,7 @@ export type AdminColumnConfig = {
   label: string;
   type?: AdminColumnType;
   editable?: boolean;
-  inputType?: 'text' | 'select';
+  inputType?: 'text' | 'select' | 'textarea';
   options?: string[];
   hiddenInTable?: boolean;
   hiddenInDetails?: boolean;
@@ -138,10 +138,11 @@ export const adminTableConfigs: Record<AdminTableViewName, AdminTableConfig> = {
       { key: 'full_name', label: 'Név', editable: true },
       { key: 'email', label: 'Email', editable: true },
       { key: 'phone', label: 'Telefonszám', editable: true },
-      { key: 'shipping_address', label: 'Szállítási cím', editable: true },
-      { key: 'receipt_url', label: 'Blokk', type: 'link' },
+      { key: 'shipping_address', label: 'Szállítási cím', editable: true, hiddenInTable: true },
+      { key: 'receipt_url', label: 'Blokk', type: 'link', hiddenInTable: true },
       { key: 'purchase_location', label: 'Vásárlás helye', editable: true },
-      { key: 'purchase_date', label: 'Vásárlás ideje', editable: true },
+      { key: 'purchase_date', label: 'Vásárlás ideje', editable: true, hiddenInTable: true },
+      { key: 'admin_note', label: 'Megjegyzés', editable: true, inputType: 'textarea', hiddenInTable: true },
       { key: 'created_at', label: 'Igénylés ideje', type: 'date' },
       { key: 'id', label: 'ID', hiddenInTable: true, hiddenInDetails: true }
     ]
