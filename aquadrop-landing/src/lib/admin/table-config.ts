@@ -100,6 +100,45 @@ export function getGiftStatusValue(row: Record<string, unknown>): string {
   return typeof raw === 'string' && raw.trim() ? raw : 'Új';
 }
 
+function toAbsoluteHttpUrl(value: unknown): string | null {
+  if (typeof value !== 'string') {
+    return null;
+  }
+
+  const trimmed = value.trim();
+
+  if (!/^https?:\/\//i.test(trimmed)) {
+    return null;
+  }
+
+  return trimmed;
+}
+
+export function getGiftReceiptDisplayUrl(record: Record<string, unknown>): string | null {
+  const directReceiptUrl = toAbsoluteHttpUrl(record.receipt_url);
+
+  if (directReceiptUrl) {
+    return directReceiptUrl;
+  }
+
+  if (typeof record.receipt_path === 'string' && record.receipt_path.trim()) {
+    const cleanPath = record.receipt_path
+      .trim()
+      .replace(/^gift-receipts\//, '')
+      .replace(/^\/+/, '');
+
+    if (cleanPath) {
+      const baseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim().replace(/\/+$/, '');
+
+      if (baseUrl) {
+        return `${baseUrl}/storage/v1/object/public/gift-receipts/${cleanPath}`;
+      }
+    }
+  }
+
+  return toAbsoluteHttpUrl(record.receipt_file_url);
+}
+
 export const adminTableConfigs: Record<AdminTableViewName, AdminTableConfig> = {
   announcement_signups: {
     label: 'Feliratkozók',

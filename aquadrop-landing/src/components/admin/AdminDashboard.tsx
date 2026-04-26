@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   adminTableConfigs,
   formatAdminDate,
+  getGiftReceiptDisplayUrl,
   getGiftStatusValue,
   type AdminColumnConfig,
   type AdminTableViewName
@@ -249,22 +250,31 @@ export function AdminDashboard() {
                     activeConfig.newRowHighlight?.(row) ? 'bg-slate-800/60 font-semibold' : ''
                   }`}
                 >
-                  {tableColumns.map((column) => (
-                    <td key={`${getRowId(row)}-${column.key}`} className="max-w-xs px-3 py-2">
-                      {column.type === 'link' && typeof row[column.key] === 'string' && row[column.key] ? (
-                        <a
-                          href={String(row[column.key])}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="underline decoration-cyan-500 underline-offset-2"
-                        >
-                          Blokk megnyitása
-                        </a>
-                      ) : (
-                        <span className="line-clamp-3 break-words">{renderCellValue(column, row[column.key])}</span>
-                      )}
-                    </td>
-                  ))}
+                  {tableColumns.map((column) => {
+                    const receiptDisplayUrl =
+                      column.key === 'receipt_url' ? getGiftReceiptDisplayUrl(row) : null;
+
+                    return (
+                      <td key={`${getRowId(row)}-${column.key}`} className="max-w-xs px-3 py-2">
+                        {column.type === 'link' ? (
+                          receiptDisplayUrl ? (
+                            <a
+                              href={receiptDisplayUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="underline decoration-cyan-500 underline-offset-2"
+                            >
+                              Blokk megnyitása
+                            </a>
+                          ) : (
+                            <span className="line-clamp-3 break-words">Nincs blokk</span>
+                          )
+                        ) : (
+                          <span className="line-clamp-3 break-words">{renderCellValue(column, row[column.key])}</span>
+                        )}
+                      </td>
+                    );
+                  })}
                   <td className="px-3 py-2">
                     <div className="flex flex-wrap gap-2">
                       <button
@@ -304,6 +314,7 @@ export function AdminDashboard() {
                 const field = column.key;
                 const canEdit = editableFields.some((editable) => editable.key === field);
                 const value = selectedRow[field];
+                const receiptDisplayUrl = field === 'receipt_url' ? getGiftReceiptDisplayUrl(selectedRow) : null;
 
                 return (
                   <label key={field} className="block text-sm text-slate-200">
@@ -340,15 +351,19 @@ export function AdminDashboard() {
                           className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
                         />
                       )
-                    ) : column.type === 'link' && typeof value === 'string' && value ? (
-                      <a
-                        href={value}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex rounded-md border border-slate-700 px-3 py-2 text-sm text-cyan-300 hover:bg-slate-800"
-                      >
-                        Blokk megnyitása
-                      </a>
+                    ) : column.type === 'link' ? (
+                      receiptDisplayUrl ? (
+                        <a
+                          href={receiptDisplayUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex rounded-md border border-slate-700 px-3 py-2 text-sm text-cyan-300 hover:bg-slate-800"
+                        >
+                          Blokk megnyitása
+                        </a>
+                      ) : (
+                        <p className="py-2 text-sm text-slate-400">Nincs blokk</p>
+                      )
                     ) : (
                       <textarea
                         readOnly
