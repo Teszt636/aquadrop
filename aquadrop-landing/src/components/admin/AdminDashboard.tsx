@@ -32,6 +32,13 @@ function stringifyValue(value: unknown): string {
   return JSON.stringify(value);
 }
 
+function normalizeForSearch(value: string): string {
+  return value
+    .toLocaleLowerCase('hu-HU')
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '');
+}
+
 function getRowId(row: Row): string {
   const value = row.id;
   return typeof value === 'string' || typeof value === 'number' ? String(value) : '';
@@ -91,16 +98,25 @@ export function AdminDashboard() {
   );
 
   const filteredRows = useMemo(() => {
-    const needle = query.trim().toLowerCase();
+    const needle = normalizeForSearch(query.trim());
 
     if (!needle) {
       return rows;
     }
 
     return rows.filter((row) =>
-      Object.values(row).some((value) => stringifyValue(value).toLowerCase().includes(needle))
+      tableColumns.some((column) => {
+        const cellText =
+          column.type === 'link'
+            ? getGiftReceiptDisplayUrl(row)
+              ? 'Blokk megnyitása'
+              : 'Nincs blokk'
+            : renderCellValue(column, row[column.key]);
+
+        return normalizeForSearch(cellText).includes(needle);
+      })
     );
-  }, [query, rows]);
+  }, [query, rows, tableColumns]);
 
   const editableFields = useMemo(
     () => detailColumns.filter((column) => column.editable && selectedRow && column.key in selectedRow),
@@ -302,6 +318,12 @@ export function AdminDashboard() {
             </p>
           ) : null}
         </div>
+
+        <p className="text-slate-400 text-sm mt-4">
+          {query.trim()
+            ? `Szűrt találatok: ${filteredRows.length} / ${rows.length} tétel`
+            : `Összesen: ${rows.length} tétel`}
+        </p>
       </div>
 
       {selectedRow ? (
