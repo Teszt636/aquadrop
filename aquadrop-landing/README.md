@@ -90,6 +90,13 @@ This creates:
 - `reseller_applications`
 - `media_kit_downloads`
 
+If your `gift_claims` table was created earlier and does not yet include the admin note field, run:
+
+```sql
+alter table public.gift_claims
+add column if not exists admin_note text;
+```
+
 ### Storage bucket (required for receipt upload)
 
 Create a bucket named:

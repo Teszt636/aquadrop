@@ -323,6 +323,14 @@ export function AdminDashboard() {
                             </option>
                           ))}
                         </select>
+                      ) : column.inputType === 'textarea' ? (
+                        <textarea
+                          value={editValues[field] ?? ''}
+                          onChange={(event) =>
+                            setEditValues((previous) => ({ ...previous, [field]: event.target.value }))
+                          }
+                          className="min-h-24 w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
+                        />
                       ) : (
                         <input
                           value={editValues[field] ?? ''}
