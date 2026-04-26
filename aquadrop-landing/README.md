@@ -39,10 +39,11 @@ RESEND_API_KEY=<your-resend-api-key>
 ADMIN_EMAIL=admin@aquadrop.hu
 ADMIN_NOTIFICATION_EMAIL=admin@aquadrop.hu
 SITE_URL=https://www.aquadrop.hu
+ADMIN_PASSWORD=<strong-admin-password>
 ```
 
 `NEXT_PUBLIC_*` variables are public client variables.  
-`SUPABASE_SERVICE_ROLE_KEY` and `RESEND_API_KEY` are **server-only** secrets; never expose them in client code.
+`SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`, and `ADMIN_PASSWORD` are **server-only** secrets; never expose them in client code.
 
 ## 4) How to run locally
 
@@ -87,6 +88,7 @@ This creates:
 - `announcement_signups`
 - `gift_claims`
 - `reseller_applications`
+- `media_kit_downloads`
 
 ### Storage bucket (required for receipt upload)
 
@@ -112,16 +114,29 @@ Receipt upload is handled in the gift form flow:
 
 If upload or insert fails, the user sees a validation/error message and submission stops.
 
-## 8) How the simple admin page works
+## 8) Admin dashboard (/admin)
 
-There is no custom in-app admin UI yet.
+A simple password-protected admin interface is available at `/admin`.
 
-Current "simple admin" workflow is through Supabase dashboard:
+Authentication flow:
 
-- Use **Table Editor → gift_claims** to review new claims.
-- Open `receipt_file_url` to inspect uploaded receipt images.
-- Update `status` (default: `uj`) and `admin_note` manually to track review decisions.
-- Use `announcement_signups` and `reseller_applications` for marketing and partner follow-up.
+- If there is no valid admin session cookie, `/admin` shows a login screen.
+- Login is validated on `POST /api/admin/login` using `ADMIN_PASSWORD` server-side only.
+- On success, server sets `aquadrop_admin_session` cookie (`httpOnly`, `sameSite=lax`, `secure` in production, `maxAge=8h`).
+- Logout is handled with `POST /api/admin/logout` and clears the admin cookie.
+
+Admin data operations:
+
+- `GET /api/admin/table?name=<table>` lists allowed table rows.
+- `PATCH /api/admin/table` updates editable fields by `id`.
+- `DELETE /api/admin/table` removes a row by `id` after confirmation in UI.
+- All admin API routes require a valid admin session and enforce a strict table whitelist:
+  - `announcement_signups`
+  - `gift_claims`
+  - `reseller_applications`
+  - `media_kit_downloads`
+
+The admin UI includes tabs, search, detail view, edit mode, delete confirmation, refresh, and date-desc sorting behavior.
 
 ## 9) Planned later phases
 
