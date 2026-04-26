@@ -1,81 +1,23 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  adminTableConfigs,
+  formatAdminDate,
+  getGiftStatusValue,
+  type AdminColumnConfig,
+  type AdminTableViewName
+} from '@/lib/admin/table-config';
 
-const TABLES = [
-  { key: 'announcement_signups', label: 'Feliratkozók' },
-  { key: 'gift_claims', label: 'Ajándék igénylések' },
-  { key: 'reseller_applications', label: 'Viszonteladók' },
-  { key: 'media_kit_downloads', label: 'Media Kit letöltések' }
-] as const;
-
-type TableKey = (typeof TABLES)[number]['key'];
 type Row = Record<string, unknown>;
-
-const BASE_EDIT_FIELDS: Record<TableKey, string[]> = {
-  announcement_signups: ['name', 'email', 'phone'],
-  gift_claims: [
-    'full_name',
-    'name',
-    'email',
-    'phone',
-    'shipping_address',
-    'purchase_location',
-    'purchase_date',
-    'receipt_file_url',
-    'receipt_url',
-    'status',
-    'admin_note'
-  ],
-  reseller_applications: [
-    'company_name',
-    'company',
-    'contact_name',
-    'name',
-    'email',
-    'phone',
-    'website',
-    'sales_channel',
-    'message'
-  ],
-  media_kit_downloads: ['name', 'email', 'company', 'usage_type', 'downloaded_file']
-};
-
-const VISIBLE_FIELDS: Record<TableKey, string[]> = {
-  announcement_signups: ['id', 'name', 'email', 'created_at'],
-  gift_claims: [
-    'id',
-    'full_name',
-    'name',
-    'email',
-    'phone',
-    'shipping_address',
-    'receipt_file_url',
-    'receipt_url',
-    'created_at'
-  ],
-  reseller_applications: [
-    'id',
-    'company_name',
-    'company',
-    'contact_name',
-    'name',
-    'email',
-    'phone',
-    'website',
-    'sales_channel',
-    'created_at'
-  ],
-  media_kit_downloads: [
-    'id',
-    'name',
-    'email',
-    'company',
-    'usage_type',
-    'downloaded_file',
-    'created_at'
-  ]
-};
+const TABLE_ORDER: AdminTableViewName[] = [
+  'announcement_signups',
+  'gift_claims',
+  'reseller_applications',
+  'media_kit_downloads',
+  'unsubscribed'
+];
+const TABLES = TABLE_ORDER.map((key) => ({ key, label: adminTableConfigs[key].label }));
 
 function stringifyValue(value: unknown): string {
   if (value === null || value === undefined) {
@@ -89,8 +31,23 @@ function stringifyValue(value: unknown): string {
   return JSON.stringify(value);
 }
 
+function getRowId(row: Row): string {
+  const value = row.id;
+  return typeof value === 'string' || typeof value === 'number' ? String(value) : '';
+}
+
+function renderCellValue(column: AdminColumnConfig, value: unknown) {
+  if (column.type === 'date') {
+    return formatAdminDate(value);
+  }
+  if (column.formatter) {
+    return column.formatter(value);
+  }
+  return stringifyValue(value) || '-';
+}
+
 export function AdminDashboard() {
-  const [activeTable, setActiveTable] = useState<TableKey>('announcement_signups');
+  const [activeTable, setActiveTable] = useState<AdminTableViewName>('announcement_signups');
   const [rows, setRows] = useState<Row[]>([]);
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
@@ -122,12 +79,15 @@ export function AdminDashboard() {
     void loadRows();
   }, [loadRows]);
 
-  const visibleColumns = useMemo(() => {
-    const base = VISIBLE_FIELDS[activeTable];
-    const dynamic = rows.length > 0 ? Object.keys(rows[0]) : [];
-
-    return [...new Set([...base, ...dynamic])].filter((column) => rows.some((row) => column in row));
-  }, [activeTable, rows]);
+  const activeConfig = adminTableConfigs[activeTable];
+  const tableColumns = useMemo(
+    () => activeConfig.columns.filter((column) => !column.hiddenInTable),
+    [activeConfig.columns]
+  );
+  const detailColumns = useMemo(
+    () => activeConfig.columns.filter((column) => !column.hiddenInDetails),
+    [activeConfig.columns]
+  );
 
   const filteredRows = useMemo(() => {
     const needle = query.trim().toLowerCase();
@@ -141,15 +101,10 @@ export function AdminDashboard() {
     );
   }, [query, rows]);
 
-  const editableFields = useMemo(() => {
-    if (!selectedRow) {
-      return [];
-    }
-
-    const tableFields = BASE_EDIT_FIELDS[activeTable];
-
-    return tableFields.filter((field) => field in selectedRow && !['id', 'created_at'].includes(field));
-  }, [activeTable, selectedRow]);
+  const editableFields = useMemo(
+    () => detailColumns.filter((column) => column.editable && selectedRow && column.key in selectedRow),
+    [detailColumns, selectedRow]
+  );
 
   function openRow(row: Row) {
     setSelectedRow(row);
@@ -164,19 +119,21 @@ export function AdminDashboard() {
   }
 
   async function saveRow() {
-    if (!selectedRow || typeof selectedRow.id !== 'string') {
+    if (!selectedRow) {
       return;
     }
+    const rowId = getRowId(selectedRow);
+    if (!rowId) return;
 
     const updates = editableFields.reduce<Record<string, string>>((acc, field) => {
-      acc[field] = editValues[field] ?? '';
+      acc[field.key] = editValues[field.key] ?? '';
       return acc;
     }, {});
 
     const response = await fetch('/api/admin/table', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ table: activeTable, id: selectedRow.id, updates })
+      body: JSON.stringify({ table: activeTable, id: rowId, updates })
     });
 
     if (!response.ok) {
@@ -190,7 +147,8 @@ export function AdminDashboard() {
   }
 
   async function deleteRow(row: Row) {
-    if (typeof row.id !== 'string') {
+    const rowId = getRowId(row);
+    if (!rowId) {
       return;
     }
 
@@ -203,7 +161,7 @@ export function AdminDashboard() {
     const response = await fetch('/api/admin/table', {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ table: activeTable, id: row.id })
+      body: JSON.stringify({ table: activeTable, id: rowId })
     });
 
     if (!response.ok) {
@@ -212,7 +170,7 @@ export function AdminDashboard() {
       return;
     }
 
-    if (selectedRow?.id === row.id) {
+    if (getRowId(selectedRow ?? {}) === rowId) {
       setSelectedRow(null);
     }
 
@@ -248,7 +206,7 @@ export function AdminDashboard() {
         {TABLES.map((table) => (
           <button
             key={table.key}
-            onClick={() => setActiveTable(table.key)}
+            onClick={() => setActiveTable(table.key as AdminTableViewName)}
             className={`rounded-md px-3 py-2 text-sm font-medium transition ${
               activeTable === table.key
                 ? 'bg-cyan-500 text-slate-950'
@@ -275,9 +233,9 @@ export function AdminDashboard() {
           <table className="min-w-full text-left text-sm text-slate-200">
             <thead className="bg-slate-800/60 text-xs uppercase tracking-wide text-slate-300">
               <tr>
-                {visibleColumns.map((column) => (
-                  <th key={column} className="px-3 py-2">
-                    {column}
+                {tableColumns.map((column) => (
+                  <th key={column.key} className="px-3 py-2">
+                    {column.label}
                   </th>
                 ))}
                 <th className="px-3 py-2">Műveletek</th>
@@ -285,10 +243,26 @@ export function AdminDashboard() {
             </thead>
             <tbody>
               {filteredRows.map((row) => (
-                <tr key={String(row.id)} className="border-b border-slate-800 align-top">
-                  {visibleColumns.map((column) => (
-                    <td key={`${String(row.id)}-${column}`} className="max-w-xs px-3 py-2">
-                      <span className="line-clamp-3 break-words">{stringifyValue(row[column]) || '-'}</span>
+                <tr
+                  key={getRowId(row)}
+                  className={`border-b border-slate-800 align-top ${
+                    activeConfig.newRowHighlight?.(row) ? 'bg-slate-800/60 font-semibold' : ''
+                  }`}
+                >
+                  {tableColumns.map((column) => (
+                    <td key={`${getRowId(row)}-${column.key}`} className="max-w-xs px-3 py-2">
+                      {column.type === 'link' && typeof row[column.key] === 'string' && row[column.key] ? (
+                        <a
+                          href={String(row[column.key])}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="underline decoration-cyan-500 underline-offset-2"
+                        >
+                          Blokk megnyitása
+                        </a>
+                      ) : (
+                        <span className="line-clamp-3 break-words">{renderCellValue(column, row[column.key])}</span>
+                      )}
                     </td>
                   ))}
                   <td className="px-3 py-2">
@@ -313,7 +287,9 @@ export function AdminDashboard() {
           </table>
 
           {!loading && filteredRows.length === 0 ? (
-            <p className="py-6 text-center text-sm text-slate-400">Nincs megjeleníthető rekord.</p>
+            <p className="py-6 text-center text-sm text-slate-400">
+              {activeConfig.emptyState ?? 'Nincs megjeleníthető rekord.'}
+            </p>
           ) : null}
         </div>
       </div>
@@ -322,30 +298,55 @@ export function AdminDashboard() {
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 p-3 md:items-center">
           <div className="max-h-[90vh] w-full max-w-2xl overflow-auto rounded-xl border border-slate-700 bg-slate-900 p-4 md:p-6">
             <h2 className="text-lg font-semibold text-white">Rekord részletei</h2>
-            <p className="mb-4 mt-1 text-xs text-slate-400">ID: {String(selectedRow.id ?? '-')}</p>
 
             <div className="space-y-3">
-              {Object.keys(selectedRow).map((field) => {
-                const isReadOnly = field === 'id' || field === 'created_at';
-                const canEdit = editableFields.includes(field);
+              {detailColumns.map((column) => {
+                const field = column.key;
+                const canEdit = editableFields.some((editable) => editable.key === field);
+                const value = selectedRow[field];
 
                 return (
                   <label key={field} className="block text-sm text-slate-200">
-                    <span className="mb-1 block text-xs uppercase tracking-wide text-slate-400">{field}</span>
+                    <span className="mb-1 block text-xs uppercase tracking-wide text-slate-400">{column.label}</span>
                     {canEdit ? (
-                      <input
-                        value={editValues[field] ?? ''}
-                        onChange={(event) =>
-                          setEditValues((previous) => ({ ...previous, [field]: event.target.value }))
-                        }
-                        className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
-                      />
+                      column.inputType === 'select' ? (
+                        <select
+                          value={editValues[field] ?? getGiftStatusValue(selectedRow)}
+                          onChange={(event) =>
+                            setEditValues((previous) => ({ ...previous, [field]: event.target.value }))
+                          }
+                          className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
+                        >
+                          {(column.options ?? []).map((option) => (
+                            <option key={option} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                        </select>
+                      ) : (
+                        <input
+                          value={editValues[field] ?? ''}
+                          onChange={(event) =>
+                            setEditValues((previous) => ({ ...previous, [field]: event.target.value }))
+                          }
+                          className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
+                        />
+                      )
+                    ) : column.type === 'link' && typeof value === 'string' && value ? (
+                      <a
+                        href={value}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex rounded-md border border-slate-700 px-3 py-2 text-sm text-cyan-300 hover:bg-slate-800"
+                      >
+                        Blokk megnyitása
+                      </a>
                     ) : (
                       <textarea
                         readOnly
-                        value={editValues[field] ?? ''}
+                        value={renderCellValue(column, value)}
                         className="min-h-20 w-full rounded-md border border-slate-800 bg-slate-950 px-3 py-2 text-sm text-slate-300"
-                        disabled={isReadOnly}
+                        disabled
                       />
                     )}
                   </label>
