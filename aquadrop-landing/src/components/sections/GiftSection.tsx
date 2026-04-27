@@ -29,6 +29,28 @@ const INITIAL_FORM_STATE: GiftFormState = {
   purchase_declaration: false
 };
 
+const ACCEPTED_RECEIPT_EXTENSIONS = new Set(['jpg', 'jpeg', 'png', 'webp', 'heic', 'heif', 'avif']);
+
+function isAcceptedReceiptFile(file: File): boolean {
+  const normalizedMimeType = file.type.trim().toLowerCase();
+  const mimeAccepted =
+    normalizedMimeType === 'image/jpeg' ||
+    normalizedMimeType === 'image/png' ||
+    normalizedMimeType === 'image/webp' ||
+    normalizedMimeType === 'image/heic' ||
+    normalizedMimeType === 'image/heif' ||
+    normalizedMimeType === 'image/avif';
+
+  if (mimeAccepted) {
+    return true;
+  }
+
+  const fileName = file.name.trim().toLowerCase();
+  const extension = fileName.includes('.') ? fileName.split('.').pop() ?? '' : '';
+
+  return ACCEPTED_RECEIPT_EXTENSIONS.has(extension);
+}
+
 export function GiftSection() {
   const router = useRouter();
   const purchaseDateInputRef = useRef<HTMLInputElement | null>(null);
@@ -65,9 +87,9 @@ export function GiftSection() {
       return;
     }
 
-    if (!file.type.startsWith('image/')) {
+    if (!isAcceptedReceiptFile(file)) {
       setReceiptFile(null);
-      setErrorMessage('Kérlek, csak képfájlt tölts fel a blokkhoz.');
+      setErrorMessage('Kérlek, JPG, PNG, WEBP, HEIC, HEIF vagy AVIF képfájlt tölts fel.');
       event.target.value = '';
       return;
     }
@@ -329,7 +351,7 @@ export function GiftSection() {
                   name="receipt_file"
                   type="file"
                   required
-                  accept="image/*"
+                  accept="image/jpeg,image/png,image/webp,image/heic,image/heif,image/avif,.jpg,.jpeg,.png,.webp,.heic,.heif,.avif"
                   onChange={handleReceiptChange}
                   disabled={isSubmitting}
                   className="sr-only"

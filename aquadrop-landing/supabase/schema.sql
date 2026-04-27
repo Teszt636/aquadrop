@@ -23,6 +23,8 @@ create table if not exists public.gift_claims (
   shipping_address text not null,
   purchase_location text not null,
   purchase_date date not null,
+  receipt_url text,
+  receipt_path text,
   receipt_file_url text,
   consent boolean not null default false,
   purchase_declaration boolean not null default false,
@@ -30,6 +32,12 @@ create table if not exists public.gift_claims (
   admin_note text,
   created_at timestamptz default now()
 );
+
+alter table public.gift_claims
+add column if not exists receipt_url text;
+
+alter table public.gift_claims
+add column if not exists receipt_path text;
 
 create index if not exists gift_claims_email_idx
   on public.gift_claims (email);

@@ -44,6 +44,8 @@ type ResellerSubmitRequest = {
 
 type SubmitRequest = AnnouncementSubmitRequest | GiftSubmitRequest | ResellerSubmitRequest;
 
+type SupabaseOperation = 'select' | 'insert';
+
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, '');
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
@@ -76,7 +78,16 @@ async function selectRows<TResponse = unknown>(table: string, query: URLSearchPa
   });
 
   if (!response.ok) {
-    throw new Error(`Supabase select failed (${response.status}): ${await response.text()}`);
+    const errorText = await response.text();
+    const error = new Error(`Supabase select failed (${response.status}): ${errorText}`) as Error & {
+      operation?: SupabaseOperation;
+      supabaseErrorText?: string;
+      table?: string;
+    };
+    error.operation = 'select';
+    error.supabaseErrorText = errorText;
+    error.table = table;
+    throw error;
   }
 
   return (await response.json()) as TResponse[];
@@ -90,13 +101,25 @@ async function insertRow(table: string, payload: Record<string, unknown>): Promi
   });
 
   if (!response.ok) {
-    throw new Error(`Supabase insert failed (${response.status}): ${await response.text()}`);
+    const errorText = await response.text();
+    const error = new Error(`Supabase insert failed (${response.status}): ${errorText}`) as Error & {
+      operation?: SupabaseOperation;
+      supabaseErrorText?: string;
+      table?: string;
+    };
+    error.operation = 'insert';
+    error.supabaseErrorText = errorText;
+    error.table = table;
+    throw error;
   }
 }
 
 export async function POST(request: Request) {
+  let formType: SubmitRequest['formType'] | 'unknown' = 'unknown';
+
   try {
     const body = (await request.json()) as SubmitRequest;
+    formType = body.formType;
 
     if (body.formType === 'announcement_signup') {
       const normalizedEmail = body.payload.email.trim().toLowerCase();
@@ -264,7 +287,14 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: false, error: 'Unsupported form type.' }, { status: 400 });
   } catch (error) {
-    console.error('[forms][submit] request failed', error);
+    const supabaseErrorText =
+      error instanceof Error && 'supabaseErrorText' in error ? String(error.supabaseErrorText ?? '') : null;
+
+    console.error('[forms][submit] request failed', {
+      formType,
+      message: error instanceof Error ? error.message : 'Unexpected submit error',
+      supabaseResponseText: supabaseErrorText
+    });
 
     return NextResponse.json(
       {
