@@ -216,7 +216,14 @@ export const adminTableConfigs: Record<AdminTableViewName, AdminTableConfig> = {
       { key: 'website', label: 'Weboldal', editable: true },
       { key: 'sales_channel', label: 'Értékesítési felület', editable: true },
       { key: 'assigned_to', label: 'Felelős', editable: true },
-      { key: 'next_action_date', label: 'Következő teendő', editable: true, type: 'date', inputType: 'date' },
+      {
+        key: 'next_action_at',
+        label: 'Következő teendő',
+        editable: true,
+        type: 'date',
+        inputType: 'datetime-local'
+      },
+      { key: 'next_action_date', label: 'Korábbi teendő dátum', type: 'date', hiddenInTable: true },
       {
         key: 'last_contacted_at',
         label: 'Utolsó kapcsolat',

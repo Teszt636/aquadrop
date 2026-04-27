@@ -58,22 +58,6 @@ function renderCellValue(column: AdminColumnConfig, value: unknown) {
   return stringifyValue(value) || '-';
 }
 
-function normalizeDateInputValue(value: unknown): string {
-  if (!value) {
-    return '';
-  }
-
-  const parsed = new Date(stringifyValue(value));
-  if (Number.isNaN(parsed.getTime())) {
-    return '';
-  }
-
-  const yyyy = parsed.getFullYear();
-  const mm = `${parsed.getMonth() + 1}`.padStart(2, '0');
-  const dd = `${parsed.getDate()}`.padStart(2, '0');
-  return `${yyyy}-${mm}-${dd}`;
-}
-
 function normalizeDatetimeLocalInputValue(value: unknown): string {
   if (!value) {
     return '';
@@ -90,6 +74,80 @@ function normalizeDatetimeLocalInputValue(value: unknown): string {
   const hh = `${parsed.getHours()}`.padStart(2, '0');
   const mi = `${parsed.getMinutes()}`.padStart(2, '0');
   return `${yyyy}-${mm}-${dd}T${hh}:${mi}`;
+}
+
+function normalizeNextActionParts(value: unknown): { date: string; hour: string; minute: string } {
+  if (!value) {
+    return { date: '', hour: '', minute: '' };
+  }
+
+  const parsed = new Date(stringifyValue(value));
+  if (Number.isNaN(parsed.getTime())) {
+    return { date: '', hour: '', minute: '' };
+  }
+
+  const yyyy = parsed.getFullYear();
+  const mm = `${parsed.getMonth() + 1}`.padStart(2, '0');
+  const dd = `${parsed.getDate()}`.padStart(2, '0');
+  const hh = `${parsed.getHours()}`.padStart(2, '0');
+  const minutes = [0, 15, 30, 45];
+  const roundedMinute = minutes.reduce((previous, current) =>
+    Math.abs(current - parsed.getMinutes()) < Math.abs(previous - parsed.getMinutes()) ? current : previous
+  );
+
+  return {
+    date: `${yyyy}-${mm}-${dd}`,
+    hour: hh,
+    minute: `${roundedMinute}`.padStart(2, '0')
+  };
+}
+
+function combineNextActionAt(date: string, hour: string, minute: string): string | null {
+  if (!date) return null;
+
+  const normalizedHour = hour || '06';
+  const normalizedMinute = minute || '00';
+  return `${date}T${normalizedHour}:${normalizedMinute}:00`;
+}
+
+function toWebsiteHref(value: unknown): string | null {
+  const raw = stringifyValue(value).trim();
+  if (!raw) {
+    return null;
+  }
+  if (/^https?:\/\//i.test(raw)) {
+    return raw;
+  }
+  return `https://${raw}`;
+}
+
+function getLeadScoreTone(value: unknown): string {
+  const score = Number(value);
+  if (!Number.isFinite(score)) return 'text-slate-300 bg-slate-800';
+  if (score >= 60) return 'text-rose-200 bg-rose-900/40 border border-rose-700/60';
+  if (score >= 40) return 'text-amber-200 bg-amber-900/40 border border-amber-700/60';
+  return 'text-cyan-200 bg-cyan-900/40 border border-cyan-700/60';
+}
+
+function getPipelineBadgeTone(statusValue: unknown): string {
+  const status = stringifyValue(statusValue);
+  if (status === 'Partner lett') return 'bg-emerald-900/50 text-emerald-200 border border-emerald-700/70';
+  if (status === 'Elutasítva') return 'bg-slate-800 text-slate-300 border border-slate-600';
+  return 'bg-indigo-900/40 text-indigo-200 border border-indigo-700/70';
+}
+
+function getNextActionState(value: unknown): 'none' | 'overdue' | 'today' | 'future' {
+  const raw = stringifyValue(value).trim();
+  if (!raw) return 'none';
+
+  const parsed = new Date(raw);
+  if (Number.isNaN(parsed.getTime())) return 'none';
+  const now = new Date();
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  const valueStart = new Date(parsed.getFullYear(), parsed.getMonth(), parsed.getDate()).getTime();
+  if (valueStart < todayStart) return 'overdue';
+  if (valueStart === todayStart) return 'today';
+  return 'future';
 }
 
 export function AdminDashboard() {
@@ -177,22 +235,15 @@ export function AdminDashboard() {
         )
       : rows;
 
-    const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-
     return resellerRows.filter((row) => {
       const status = stringifyValue(row.pipeline_status) || 'Új lead';
       const isHotLead = Boolean(row.is_hot_lead);
       const assignedTo = stringifyValue(row.assigned_to).trim() || 'nincs';
-      const nextActionRaw = stringifyValue(row.next_action_date).trim();
-      const nextActionDate = nextActionRaw ? new Date(`${nextActionRaw}T00:00:00`) : null;
-      const nextActionKind = !nextActionDate
+      const nextActionRaw = stringifyValue(row.next_action_at || row.next_action_date).trim();
+      const nextActionDate = nextActionRaw ? new Date(nextActionRaw) : null;
+      const nextActionKind = !nextActionDate || Number.isNaN(nextActionDate.getTime())
         ? 'none'
-        : nextActionDate.getTime() < today.getTime()
-          ? 'overdue'
-          : nextActionDate.getTime() === today.getTime()
-            ? 'today'
-            : 'future';
+        : getNextActionState(nextActionDate.toISOString());
 
       if (statusFilter !== 'all' && statusFilter !== status) return false;
       if (hotLeadFilter === 'hot' && !isHotLead) return false;
@@ -431,186 +482,267 @@ export function AdminDashboard() {
         {error ? <p className="pb-4 text-sm text-rose-300">{error}</p> : null}
         {loading ? <p className="pb-4 text-sm text-slate-300">Betöltés...</p> : null}
 
-        <div className="overflow-x-auto">
-          <table className="min-w-full text-left text-sm text-slate-200">
-            <thead className="bg-slate-800/60 text-xs uppercase tracking-wide text-slate-300">
-              <tr>
-                {tableColumns.map((column) => (
-                  <th key={column.key} className="px-3 py-2">
-                    {column.label}
-                  </th>
-                ))}
-                <th className="px-3 py-2">Műveletek</th>
-              </tr>
-            </thead>
-            <tbody>
-              {(isResellerTable ? resellerSearchRows : filteredRows).map((row) => (
-                <tr
-                  key={getRowId(row)}
-                  className={`border-b border-slate-800 align-top ${
-                    activeConfig.newRowHighlight?.(row)
-                      ? 'bg-slate-800/60 font-semibold'
-                      : Boolean(row.is_hot_lead)
-                        ? 'bg-rose-950/30'
-                        : ''
-                  }`}
-                >
-                  {tableColumns.map((column) => {
-                    const receiptDisplayUrl =
-                      column.key === 'receipt_url' ? getGiftReceiptDisplayUrl(row) : null;
+        {isResellerTable ? (
+          <div className="space-y-4">
+            {resellerSearchRows.map((row) => {
+              const rowId = getRowId(row);
+              const nextActionDraft = getResellerDraftValue(row, 'next_action_at') ?? getResellerDraftValue(row, 'next_action_date');
+              const nextActionParts = normalizeNextActionParts(nextActionDraft);
+              const nextActionState = getNextActionState(nextActionDraft);
+              const lastContactValue = getResellerDraftValue(row, 'last_contacted_at');
+              const email = stringifyValue(getResellerDraftValue(row, 'email'));
+              const phone = stringifyValue(getResellerDraftValue(row, 'phone'));
+              const websiteRaw = getResellerDraftValue(row, 'website');
+              const websiteHref = toWebsiteHref(websiteRaw);
+              const pipelineStatus = getResellerDraftValue(row, 'pipeline_status') ?? 'Új lead';
+              const leadScore = getResellerDraftValue(row, 'lead_score') ?? 0;
+              const isHot = Boolean(getResellerDraftValue(row, 'is_hot_lead'));
 
-                    return (
-                      <td key={`${getRowId(row)}-${column.key}`} className="max-w-xs px-3 py-2">
-                        {column.type === 'link' ? (
-                          receiptDisplayUrl ? (
-                            <a
-                              href={receiptDisplayUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="underline decoration-cyan-500 underline-offset-2"
-                            >
-                              Blokk megnyitása
-                            </a>
-                          ) : (
-                            <span className="line-clamp-3 break-words">Nincs blokk</span>
-                          )
-                        ) : isResellerTable && column.editable ? (
-                          column.inputType === 'select' ? (
-                            <select
-                              value={stringifyValue(getResellerDraftValue(row, column.key) ?? '')}
-                              onChange={(event) =>
-                                setResellerDraftValue(getRowId(row), column.key, event.target.value)
-                              }
-                              className="w-full rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-xs text-white"
-                            >
-                              {(column.options ?? []).map((option) => (
-                                <option key={option} value={option}>
-                                  {option}
-                                </option>
-                              ))}
-                            </select>
-                          ) : column.inputType === 'checkbox' ? (
-                            <input
-                              type="checkbox"
-                              checked={Boolean(getResellerDraftValue(row, column.key))}
-                              onChange={(event) =>
-                                setResellerDraftValue(getRowId(row), column.key, event.target.checked)
-                              }
-                              className="h-4 w-4"
-                            />
-                          ) : column.inputType === 'date' ? (
-                            <input
-                              type="date"
-                              value={normalizeDateInputValue(getResellerDraftValue(row, column.key))}
-                              onChange={(event) =>
-                                setResellerDraftValue(getRowId(row), column.key, event.target.value || null)
-                              }
-                              className="w-full rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-xs text-white"
-                            />
-                          ) : column.inputType === 'datetime-local' ? (
-                            <div className="space-y-1">
-                              <input
-                                type="datetime-local"
-                                value={normalizeDatetimeLocalInputValue(getResellerDraftValue(row, column.key))}
-                                onChange={(event) =>
-                                  setResellerDraftValue(getRowId(row), column.key, event.target.value || null)
-                                }
-                                className="w-full rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-xs text-white"
-                              />
-                              <button
-                                onClick={() =>
-                                  setResellerDraftValue(getRowId(row), column.key, new Date().toISOString())
-                                }
-                                className="rounded border border-cyan-500/40 px-2 py-1 text-[11px] text-cyan-300"
-                              >
-                                Kapcsolatfelvétel rögzítése
-                              </button>
-                            </div>
-                          ) : column.inputType === 'number' ? (
-                            <input
-                              type="number"
-                              min={0}
-                              max={100}
-                              value={stringifyValue(getResellerDraftValue(row, column.key) ?? '0')}
-                              onChange={(event) =>
-                                setResellerDraftValue(getRowId(row), column.key, event.target.value)
-                              }
-                              className="w-full rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-xs text-white"
-                            />
-                          ) : (
-                            <input
-                              value={stringifyValue(getResellerDraftValue(row, column.key))}
-                              onChange={(event) =>
-                                setResellerDraftValue(getRowId(row), column.key, event.target.value)
-                              }
-                              className="w-full rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-xs text-white"
-                            />
-                          )
-                        ) : (
-                          <span
-                            className={`line-clamp-3 break-words ${
-                              isResellerTable && column.key === 'pipeline_status'
-                                ? row[column.key] === 'Partner lett'
-                                  ? 'font-semibold text-emerald-300'
-                                  : row[column.key] === 'Elutasítva'
-                                    ? 'text-slate-400'
-                                    : ''
-                                : isResellerTable && column.key === 'next_action_date'
-                                  ? (() => {
-                                      const value = stringifyValue(row[column.key]);
-                                      if (!value) return '';
-                                      const today = new Date();
-                                      const base = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-                                      const parsed = new Date(`${value}T00:00:00`);
-                                      if (parsed.getTime() < base.getTime()) return 'text-rose-300 font-semibold';
-                                      if (parsed.getTime() === base.getTime()) return 'text-amber-300 font-semibold';
-                                      return '';
-                                    })()
-                                  : ''
-                            }`}
-                          >
-                            {renderCellValue(column, row[column.key])}
-                          </span>
-                        )}
-                      </td>
-                    );
-                  })}
-                  <td className="px-3 py-2">
-                    <div className="flex flex-wrap gap-2">
-                      <button
-                        onClick={() => openRow(row)}
-                        className="rounded border border-slate-700 px-2 py-1 text-xs hover:bg-slate-800"
+              return (
+                <article key={rowId} className="rounded-xl border border-slate-700 bg-slate-950/70 p-4">
+                  <div className="grid gap-3 md:grid-cols-7">
+                    <label className="text-xs text-slate-300">
+                      <span className="mb-1 block uppercase tracking-wide text-slate-500">Státusz</span>
+                      <select
+                        value={stringifyValue(pipelineStatus)}
+                        onChange={(event) => setResellerDraftValue(rowId, 'pipeline_status', event.target.value)}
+                        className={`w-full rounded-md px-3 py-2 text-sm font-medium ${getPipelineBadgeTone(pipelineStatus)}`}
                       >
-                        Megnyitás
+                        {RESELLER_PIPELINE_OPTIONS.map((option) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                    <label className="text-xs text-slate-300">
+                      <span className="mb-1 block uppercase tracking-wide text-slate-500">Lead score</span>
+                      <input
+                        type="number"
+                        min={0}
+                        max={100}
+                        value={stringifyValue(leadScore)}
+                        onChange={(event) => setResellerDraftValue(rowId, 'lead_score', event.target.value)}
+                        className={`w-full rounded-md px-3 py-2 text-sm ${getLeadScoreTone(leadScore)}`}
+                      />
+                    </label>
+                    <label className="text-xs text-slate-300">
+                      <span className="mb-1 block uppercase tracking-wide text-slate-500">Hot lead</span>
+                      <button
+                        type="button"
+                        onClick={() => setResellerDraftValue(rowId, 'is_hot_lead', !isHot)}
+                        className={`w-full rounded-md border px-3 py-2 text-sm font-semibold ${isHot ? 'border-rose-500/70 bg-rose-900/40 text-rose-200' : 'border-slate-600 bg-slate-900 text-slate-300'}`}
+                      >
+                        🔥 Hot lead {isHot ? 'Igen' : 'Nem'}
                       </button>
-                      {isResellerTable ? (
-                        <button
-                          onClick={() => void saveResellerRow(row)}
-                          disabled={!rowEdits[getRowId(row)] || savingRowId === getRowId(row)}
-                          className="rounded border border-emerald-500/40 px-2 py-1 text-xs text-emerald-300 disabled:opacity-40"
-                        >
-                          {savingRowId === getRowId(row) ? 'Mentés...' : 'CRM mentés'}
-                        </button>
+                    </label>
+                    {['company_name', 'contact_name', 'email', 'phone'].map((field) => (
+                      <label key={field} className="text-xs text-slate-300">
+                        <span className="mb-1 block uppercase tracking-wide text-slate-500">
+                          {field === 'company_name' ? 'Cégnév' : field === 'contact_name' ? 'Kapcsolattartó' : field === 'email' ? 'Email' : 'Telefonszám'}
+                        </span>
+                        <input
+                          value={stringifyValue(getResellerDraftValue(row, field))}
+                          onChange={(event) => setResellerDraftValue(rowId, field, event.target.value)}
+                          className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white"
+                        />
+                        {field === 'email' && email ? (
+                          <a href={`mailto:${email}`} className="mt-1 inline-block text-[11px] text-cyan-300 underline">
+                            mailto link
+                          </a>
+                        ) : null}
+                        {field === 'phone' && phone ? (
+                          <a href={`tel:${phone}`} className="mt-1 inline-block text-[11px] text-cyan-300 underline">
+                            tel link
+                          </a>
+                        ) : null}
+                      </label>
+                    ))}
+                  </div>
+
+                  <div className="mt-4 grid gap-3 md:grid-cols-7">
+                    <label className="text-xs text-slate-300">
+                      <span className="mb-1 block uppercase tracking-wide text-slate-500">Weboldal</span>
+                      <input
+                        value={stringifyValue(websiteRaw)}
+                        onChange={(event) => setResellerDraftValue(rowId, 'website', event.target.value)}
+                        className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white"
+                      />
+                      {websiteHref ? (
+                        <a href={websiteHref} target="_blank" rel="noopener noreferrer" className="mt-1 inline-block text-[11px] text-cyan-300 underline">
+                          Weboldal megnyitása
+                        </a>
                       ) : null}
+                    </label>
+                    <label className="text-xs text-slate-300">
+                      <span className="mb-1 block uppercase tracking-wide text-slate-500">Értékesítési felület</span>
+                      <input
+                        value={stringifyValue(getResellerDraftValue(row, 'sales_channel'))}
+                        onChange={(event) => setResellerDraftValue(rowId, 'sales_channel', event.target.value)}
+                        className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white"
+                      />
+                    </label>
+                    <label className="text-xs text-slate-300">
+                      <span className="mb-1 block uppercase tracking-wide text-slate-500">Felelős</span>
+                      <input
+                        value={stringifyValue(getResellerDraftValue(row, 'assigned_to'))}
+                        onChange={(event) => setResellerDraftValue(rowId, 'assigned_to', event.target.value)}
+                        className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white"
+                      />
+                    </label>
+                    <div className="text-xs text-slate-300">
+                      <span className="mb-1 block uppercase tracking-wide text-slate-500">Következő teendő</span>
+                      <div className={`rounded-md border p-2 ${nextActionState === 'overdue' ? 'border-rose-500 bg-rose-950/30' : nextActionState === 'today' ? 'border-amber-500 bg-amber-950/20' : 'border-slate-700 bg-slate-900'}`}>
+                        <input
+                          type="date"
+                          value={nextActionParts.date}
+                          onChange={(event) =>
+                            setResellerDraftValue(
+                              rowId,
+                              'next_action_at',
+                              combineNextActionAt(event.target.value, nextActionParts.hour, nextActionParts.minute)
+                            )
+                          }
+                          className="mb-2 w-full rounded border border-slate-700 bg-slate-950 px-2 py-1 text-sm text-white"
+                        />
+                        <div className="grid grid-cols-2 gap-2">
+                          <select
+                            value={nextActionParts.hour}
+                            onChange={(event) =>
+                              setResellerDraftValue(
+                                rowId,
+                                'next_action_at',
+                                combineNextActionAt(nextActionParts.date, event.target.value, nextActionParts.minute)
+                              )
+                            }
+                            className="rounded border border-slate-700 bg-slate-950 px-2 py-1 text-sm text-white"
+                          >
+                            <option value="">Óra</option>
+                            {Array.from({ length: 15 }, (_, index) => `${index + 6}`.padStart(2, '0')).map((hour) => (
+                              <option key={hour} value={hour}>
+                                {hour}
+                              </option>
+                            ))}
+                          </select>
+                          <select
+                            value={nextActionParts.minute}
+                            onChange={(event) =>
+                              setResellerDraftValue(
+                                rowId,
+                                'next_action_at',
+                                combineNextActionAt(nextActionParts.date, nextActionParts.hour, event.target.value)
+                              )
+                            }
+                            className="rounded border border-slate-700 bg-slate-950 px-2 py-1 text-sm text-white"
+                          >
+                            <option value="">Perc</option>
+                            {['00', '15', '30', '45'].map((minute) => (
+                              <option key={minute} value={minute}>
+                                {minute}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-xs text-slate-300">
+                      <span className="mb-1 block uppercase tracking-wide text-slate-500">Utolsó kapcsolat</span>
+                      <input
+                        type="datetime-local"
+                        value={normalizeDatetimeLocalInputValue(lastContactValue)}
+                        onChange={(event) => setResellerDraftValue(rowId, 'last_contacted_at', event.target.value || null)}
+                        className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white"
+                      />
+                      <p className="mt-1 text-[11px] text-slate-400">{lastContactValue ? formatAdminDate(lastContactValue) : 'Nincs rögzítve'}</p>
+                    </div>
+                    <div className="flex items-end">
+                      <button
+                        type="button"
+                        onClick={() => setResellerDraftValue(rowId, 'last_contacted_at', new Date().toISOString())}
+                        className="w-full rounded border border-cyan-500/40 px-3 py-2 text-sm text-cyan-300"
+                      >
+                        Kapcsolatfelvétel rögzítése
+                      </button>
+                    </div>
+                    <div className="flex items-end gap-2">
+                      <button
+                        onClick={() => void saveResellerRow(row)}
+                        disabled={!rowEdits[rowId] || savingRowId === rowId}
+                        className="flex-1 rounded border border-emerald-500/40 px-3 py-2 text-sm text-emerald-300 disabled:opacity-40"
+                      >
+                        {savingRowId === rowId ? 'Mentés...' : 'CRM mentés'}
+                      </button>
                       <button
                         onClick={() => void deleteRow(row)}
-                        className="rounded border border-rose-500/40 px-2 py-1 text-xs text-rose-300 hover:bg-rose-500/15"
+                        className="rounded border border-rose-500/40 px-3 py-2 text-sm text-rose-300 hover:bg-rose-500/15"
                       >
                         Törlés
                       </button>
                     </div>
-                  </td>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-left text-sm text-slate-200">
+              <thead className="bg-slate-800/60 text-xs uppercase tracking-wide text-slate-300">
+                <tr>
+                  {tableColumns.map((column) => (
+                    <th key={column.key} className="px-3 py-2">
+                      {column.label}
+                    </th>
+                  ))}
+                  <th className="px-3 py-2">Műveletek</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filteredRows.map((row) => (
+                  <tr
+                    key={getRowId(row)}
+                    className={`border-b border-slate-800 align-top ${activeConfig.newRowHighlight?.(row) ? 'bg-slate-800/60 font-semibold' : ''}`}
+                  >
+                    {tableColumns.map((column) => {
+                      const receiptDisplayUrl = column.key === 'receipt_url' ? getGiftReceiptDisplayUrl(row) : null;
+                      return (
+                        <td key={`${getRowId(row)}-${column.key}`} className="max-w-xs px-3 py-2">
+                          {column.type === 'link' ? (
+                            receiptDisplayUrl ? (
+                              <a href={receiptDisplayUrl} target="_blank" rel="noopener noreferrer" className="underline decoration-cyan-500 underline-offset-2">
+                                Blokk megnyitása
+                              </a>
+                            ) : (
+                              <span className="line-clamp-3 break-words">Nincs blokk</span>
+                            )
+                          ) : (
+                            <span className="line-clamp-3 break-words">{renderCellValue(column, row[column.key])}</span>
+                          )}
+                        </td>
+                      );
+                    })}
+                    <td className="px-3 py-2">
+                      <div className="flex flex-wrap gap-2">
+                        <button onClick={() => openRow(row)} className="rounded border border-slate-700 px-2 py-1 text-xs hover:bg-slate-800">
+                          Megnyitás
+                        </button>
+                        <button onClick={() => void deleteRow(row)} className="rounded border border-rose-500/40 px-2 py-1 text-xs text-rose-300 hover:bg-rose-500/15">
+                          Törlés
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
 
-          {!loading && (isResellerTable ? resellerSearchRows : filteredRows).length === 0 ? (
-            <p className="py-6 text-center text-sm text-slate-400">
-              {activeConfig.emptyState ?? 'Nincs megjeleníthető rekord.'}
-            </p>
-          ) : null}
-        </div>
+        {!loading && (isResellerTable ? resellerSearchRows : filteredRows).length === 0 ? (
+          <p className="py-6 text-center text-sm text-slate-400">
+            {activeConfig.emptyState ?? 'Nincs megjeleníthető rekord.'}
+          </p>
+        ) : null}
 
         <p className="text-slate-400 text-sm mt-4">
           {query.trim()

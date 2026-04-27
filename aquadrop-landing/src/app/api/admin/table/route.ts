@@ -26,6 +26,7 @@ const EDITABLE_FIELDS: Record<AdminTableName, string[]> = {
     'assigned_to',
     'admin_note',
     'next_action_date',
+    'next_action_at',
     'last_contacted_at',
     'lead_score',
     'is_hot_lead',
@@ -67,6 +68,26 @@ function sanitizeValue(key: string, value: unknown): unknown {
       throw new Error('A következő teendő dátuma hibás.');
     }
     return value;
+  }
+
+  if (key === 'next_action_at') {
+    if (value === '' || value === null) return null;
+    if (typeof value !== 'string') {
+      throw new Error('A következő teendő időpontja hibás.');
+    }
+    const parsed = new Date(value);
+    if (Number.isNaN(parsed.getTime())) {
+      throw new Error('A következő teendő időpontja hibás.');
+    }
+    const hour = parsed.getUTCHours();
+    const minute = parsed.getUTCMinutes();
+    if (hour < 6 || hour > 20) {
+      throw new Error('A következő teendő órája csak 06:00 és 20:00 között lehet.');
+    }
+    if (![0, 15, 30, 45].includes(minute)) {
+      throw new Error('A következő teendő perce csak 00, 15, 30 vagy 45 lehet.');
+    }
+    return parsed.toISOString();
   }
 
   if (key === 'last_contacted_at') {

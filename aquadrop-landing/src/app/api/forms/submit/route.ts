@@ -314,7 +314,8 @@ export async function POST(request: Request) {
           sales_channel: normalizedSalesChannel,
           message: normalizedMessage,
           lead_score: leadScore,
-          is_hot_lead: isHotLead
+          is_hot_lead: isHotLead,
+          last_contacted_at: new Date().toISOString()
         });
       }
 
