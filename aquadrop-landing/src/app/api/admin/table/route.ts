@@ -228,18 +228,83 @@ function formatFieldValue(fieldName: string, value: unknown, adminMap: Map<strin
 }
 
 function equalLogValues(oldValue: unknown, newValue: unknown): boolean {
-  if (oldValue === null || oldValue === undefined || oldValue === '') {
-    return newValue === null || newValue === undefined || newValue === '';
-  }
-  if (newValue === null || newValue === undefined || newValue === '') {
-    return false;
+  const normalizeNullable = (value: unknown): unknown => {
+    if (value === null || value === undefined || value === '') {
+      return null;
+    }
+    return value;
+  };
+
+  const normalizeBoolean = (value: unknown): boolean | null => {
+    if (typeof value === 'boolean') return value;
+    if (typeof value === 'string') {
+      if (value === 'true') return true;
+      if (value === 'false') return false;
+    }
+    return null;
+  };
+
+  const normalizeNumber = (value: unknown): number | null => {
+    if (typeof value === 'number' && Number.isFinite(value)) return value;
+    if (typeof value === 'string' && value.trim() !== '') {
+      const parsed = Number(value);
+      if (Number.isFinite(parsed)) return parsed;
+    }
+    return null;
+  };
+
+  const normalizeUuid = (value: unknown): string | null => {
+    if (typeof value !== 'string') return null;
+    const normalized = value.trim().toLowerCase();
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(normalized)) {
+      return null;
+    }
+    return normalized;
+  };
+
+  const normalizeDate = (value: unknown): string | null => {
+    if (typeof value !== 'string' || value.trim() === '') return null;
+    const parsed = new Date(value);
+    if (Number.isNaN(parsed.getTime())) return null;
+    return parsed.toISOString();
+  };
+
+  const normalizedOld = normalizeNullable(oldValue);
+  const normalizedNew = normalizeNullable(newValue);
+
+  if (normalizedOld === null || normalizedNew === null) {
+    return normalizedOld === normalizedNew;
   }
 
-  if (typeof oldValue === 'string' || typeof newValue === 'string') {
-    return String(oldValue) === String(newValue);
+  const oldBool = normalizeBoolean(normalizedOld);
+  const newBool = normalizeBoolean(normalizedNew);
+  if (oldBool !== null && newBool !== null) {
+    return oldBool === newBool;
   }
 
-  return oldValue === newValue;
+  const oldNum = normalizeNumber(normalizedOld);
+  const newNum = normalizeNumber(normalizedNew);
+  if (oldNum !== null && newNum !== null) {
+    return oldNum === newNum;
+  }
+
+  const oldUuid = normalizeUuid(normalizedOld);
+  const newUuid = normalizeUuid(normalizedNew);
+  if (oldUuid !== null && newUuid !== null) {
+    return oldUuid === newUuid;
+  }
+
+  const oldDate = normalizeDate(normalizedOld);
+  const newDate = normalizeDate(normalizedNew);
+  if (oldDate !== null && newDate !== null) {
+    return oldDate === newDate;
+  }
+
+  if (typeof normalizedOld === 'string' || typeof normalizedNew === 'string') {
+    return String(normalizedOld) === String(normalizedNew);
+  }
+
+  return normalizedOld === normalizedNew;
 }
 
 function buildChangeSummary(fieldName: string, oldValue: string, newValue: string): string {
@@ -379,6 +444,12 @@ export async function PATCH(request: Request) {
   let requestId = 'unknown';
   let requestPayload: Record<string, unknown> = {};
   let requestSessionUser: { id?: string | null; name?: string | null; email?: string | null } | null = null;
+  let debugUpdatedFields: string[] = [];
+  let debugInsertedActivityLogs: Array<Record<string, unknown>> = [];
+  let debugActivityLogErrors: Array<Record<string, unknown>> = [];
+  let debugActivityLogAttempted = false;
+  let debugActivityLogInserted = false;
+  let debugActivityLogError: Record<string, unknown> | null = null;
 
   try {
     const body = (await request.json()) as PatchRequestBody;
@@ -450,6 +521,7 @@ export async function PATCH(request: Request) {
     }
 
     await patchAdminTableRow(table, body.id, sanitizedUpdates);
+    debugUpdatedFields = Object.keys(sanitizedUpdates);
 
     if (shouldCreateLog && beforeRow) {
       const [afterRow, adminUsers] = await Promise.all([
@@ -475,7 +547,7 @@ export async function PATCH(request: Request) {
           const newValue = formatFieldValue(fieldName, newRawValue, adminMap);
 
           return {
-            reseller_application_id: body.id as string,
+            reseller_application_id: String(afterRow?.id ?? body.id),
             changed_by_user_id: changedByUserId,
             changed_by_name: changedByName,
             changed_by_email: changedByEmail,
@@ -487,10 +559,27 @@ export async function PATCH(request: Request) {
         })
         .filter(Boolean) as Array<Record<string, unknown>>;
 
+      debugUpdatedFields = Object.keys(sanitizedUpdates).filter((fieldName) => {
+        const oldRawValue = beforeRow?.[fieldName];
+        const newRawValue = afterRow?.[fieldName];
+        return !equalLogValues(oldRawValue, newRawValue);
+      });
+
       if (logs.length > 0) {
+        debugActivityLogAttempted = true;
         try {
           await insertResellerActivityLogs(logs);
+          debugActivityLogInserted = true;
+          debugInsertedActivityLogs = logs;
         } catch (activityLogError) {
+          const parsedActivityError = parseSupabaseError(activityLogError);
+          debugActivityLogError = parsedActivityError;
+          debugActivityLogErrors.push({
+            message: parsedActivityError.message ?? 'Ismeretlen activity log hiba.',
+            code: parsedActivityError.code ?? null,
+            details: parsedActivityError.details ?? null,
+            hint: parsedActivityError.hint ?? null
+          });
           logActivityInsertFailure({
             table,
             id: body.id,
@@ -502,7 +591,15 @@ export async function PATCH(request: Request) {
       }
     }
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({
+      success: true,
+      updatedFields: debugUpdatedFields,
+      insertedActivityLogs: debugInsertedActivityLogs,
+      activityLogErrors: debugActivityLogErrors,
+      activityLogAttempted: debugActivityLogAttempted,
+      activityLogInserted: debugActivityLogInserted,
+      activityLogError: debugActivityLogError
+    });
   } catch (error) {
     logPatchFailure({
       table: requestTable ?? 'reseller_applications',
