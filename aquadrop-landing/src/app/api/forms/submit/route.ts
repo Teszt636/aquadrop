@@ -63,6 +63,38 @@ type SupabaseOperation = 'select' | 'insert';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, '');
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const FREE_EMAIL_DOMAINS = ['gmail.com', 'freemail.hu', 'citromail.hu', 'yahoo.com', 'hotmail.com'];
+
+function calculateInitialResellerLeadScore(payload: {
+  companyName: string;
+  email: string;
+  phone: string;
+  website: string | null;
+  salesChannel: string;
+  message: string | null;
+}): number {
+  let score = 0;
+
+  if (payload.companyName.trim()) score += 10;
+  if (payload.phone.trim()) score += 10;
+  if (payload.website?.trim()) score += 15;
+
+  const channel = payload.salesChannel.trim().toLocaleLowerCase('hu-HU');
+  if (channel.includes('nagyker') || channel.includes('webshop') || channel.includes('üzlet')) {
+    score += 20;
+  }
+
+  if ((payload.message?.trim().length ?? 0) >= 40) {
+    score += 10;
+  }
+
+  const domain = payload.email.split('@')[1]?.trim().toLocaleLowerCase('hu-HU');
+  if (domain && !FREE_EMAIL_DOMAINS.includes(domain)) {
+    score += 15;
+  }
+
+  return Math.min(score, 100);
+}
 
 function getRestUrl(table: string, query?: URLSearchParams): string {
   if (!SUPABASE_URL) {
@@ -263,6 +295,16 @@ export async function POST(request: Request) {
       const insertSkipped = duplicateDetected;
 
       if (!duplicateDetected) {
+        const leadScore = calculateInitialResellerLeadScore({
+          companyName: normalizedCompanyName,
+          email: normalizedEmail,
+          phone: normalizedPhone,
+          website: normalizedWebsite,
+          salesChannel: normalizedSalesChannel,
+          message: normalizedMessage
+        });
+        const isHotLead = leadScore >= 60;
+
         await insertRow('reseller_applications', {
           company_name: normalizedCompanyName,
           contact_name: normalizedContactName,
@@ -270,7 +312,9 @@ export async function POST(request: Request) {
           phone: normalizedPhone,
           website: normalizedWebsite,
           sales_channel: normalizedSalesChannel,
-          message: normalizedMessage
+          message: normalizedMessage,
+          lead_score: leadScore,
+          is_hot_lead: isHotLead
         });
       }
 

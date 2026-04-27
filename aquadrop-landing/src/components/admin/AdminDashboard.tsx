@@ -6,6 +6,7 @@ import {
   formatAdminDate,
   getGiftReceiptDisplayUrl,
   getGiftStatusValue,
+  RESELLER_PIPELINE_OPTIONS,
   type AdminColumnConfig,
   type AdminTableViewName
 } from '@/lib/admin/table-config';
@@ -51,7 +52,44 @@ function renderCellValue(column: AdminColumnConfig, value: unknown) {
   if (column.formatter) {
     return column.formatter(value);
   }
+  if (column.type === 'boolean') {
+    return value ? 'Igen' : 'Nem';
+  }
   return stringifyValue(value) || '-';
+}
+
+function normalizeDateInputValue(value: unknown): string {
+  if (!value) {
+    return '';
+  }
+
+  const parsed = new Date(stringifyValue(value));
+  if (Number.isNaN(parsed.getTime())) {
+    return '';
+  }
+
+  const yyyy = parsed.getFullYear();
+  const mm = `${parsed.getMonth() + 1}`.padStart(2, '0');
+  const dd = `${parsed.getDate()}`.padStart(2, '0');
+  return `${yyyy}-${mm}-${dd}`;
+}
+
+function normalizeDatetimeLocalInputValue(value: unknown): string {
+  if (!value) {
+    return '';
+  }
+
+  const parsed = new Date(stringifyValue(value));
+  if (Number.isNaN(parsed.getTime())) {
+    return '';
+  }
+
+  const yyyy = parsed.getFullYear();
+  const mm = `${parsed.getMonth() + 1}`.padStart(2, '0');
+  const dd = `${parsed.getDate()}`.padStart(2, '0');
+  const hh = `${parsed.getHours()}`.padStart(2, '0');
+  const mi = `${parsed.getMinutes()}`.padStart(2, '0');
+  return `${yyyy}-${mm}-${dd}T${hh}:${mi}`;
 }
 
 export function AdminDashboard() {
@@ -62,6 +100,12 @@ export function AdminDashboard() {
   const [error, setError] = useState<string | null>(null);
   const [selectedRow, setSelectedRow] = useState<Row | null>(null);
   const [editValues, setEditValues] = useState<Record<string, string>>({});
+  const [rowEdits, setRowEdits] = useState<Record<string, Record<string, unknown>>>({});
+  const [savingRowId, setSavingRowId] = useState<string | null>(null);
+  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [hotLeadFilter, setHotLeadFilter] = useState<string>('all');
+  const [assignedFilter, setAssignedFilter] = useState<string>('all');
+  const [nextActionFilter, setNextActionFilter] = useState<string>('all');
 
   const loadRows = useCallback(async () => {
     setLoading(true);
@@ -88,6 +132,7 @@ export function AdminDashboard() {
   }, [loadRows]);
 
   const activeConfig = adminTableConfigs[activeTable];
+  const isResellerTable = activeTable === 'reseller_applications';
   const tableColumns = useMemo(
     () => activeConfig.columns.filter((column) => !column.hiddenInTable),
     [activeConfig.columns]
@@ -118,6 +163,46 @@ export function AdminDashboard() {
     );
   }, [query, rows, tableColumns]);
 
+  const resellerSearchRows = useMemo(() => {
+    if (!isResellerTable) {
+      return filteredRows;
+    }
+
+    const needle = normalizeForSearch(query.trim());
+    const resellerRows = needle
+      ? rows.filter((row) =>
+          ['company_name', 'contact_name', 'email', 'phone', 'website', 'message'].some((key) =>
+            normalizeForSearch(stringifyValue(row[key])).includes(needle)
+          )
+        )
+      : rows;
+
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+    return resellerRows.filter((row) => {
+      const status = stringifyValue(row.pipeline_status) || 'Új lead';
+      const isHotLead = Boolean(row.is_hot_lead);
+      const assignedTo = stringifyValue(row.assigned_to).trim() || 'nincs';
+      const nextActionRaw = stringifyValue(row.next_action_date).trim();
+      const nextActionDate = nextActionRaw ? new Date(`${nextActionRaw}T00:00:00`) : null;
+      const nextActionKind = !nextActionDate
+        ? 'none'
+        : nextActionDate.getTime() < today.getTime()
+          ? 'overdue'
+          : nextActionDate.getTime() === today.getTime()
+            ? 'today'
+            : 'future';
+
+      if (statusFilter !== 'all' && statusFilter !== status) return false;
+      if (hotLeadFilter === 'hot' && !isHotLead) return false;
+      if (hotLeadFilter === 'not-hot' && isHotLead) return false;
+      if (assignedFilter !== 'all' && assignedFilter !== assignedTo) return false;
+      if (nextActionFilter !== 'all' && nextActionFilter !== nextActionKind) return false;
+      return true;
+    });
+  }, [assignedFilter, filteredRows, hotLeadFilter, isResellerTable, nextActionFilter, query, rows, statusFilter]);
+
   const editableFields = useMemo(
     () => detailColumns.filter((column) => column.editable && selectedRow && column.key in selectedRow),
     [detailColumns, selectedRow]
@@ -133,6 +218,51 @@ export function AdminDashboard() {
     }
 
     setEditValues(nextValues);
+  }
+
+  function getResellerDraftValue(row: Row, key: string): unknown {
+    const rowId = getRowId(row);
+    if (rowId && rowEdits[rowId] && key in rowEdits[rowId]) {
+      return rowEdits[rowId][key];
+    }
+    return row[key];
+  }
+
+  function setResellerDraftValue(rowId: string, key: string, value: unknown) {
+    setRowEdits((previous) => ({
+      ...previous,
+      [rowId]: { ...(previous[rowId] ?? {}), [key]: value }
+    }));
+  }
+
+  async function saveResellerRow(row: Row) {
+    const rowId = getRowId(row);
+    const updates = rowId ? rowEdits[rowId] : null;
+
+    if (!rowId || !updates || Object.keys(updates).length === 0) {
+      return;
+    }
+
+    setSavingRowId(rowId);
+    const response = await fetch('/api/admin/table', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ table: activeTable, id: rowId, updates })
+    });
+
+    setSavingRowId(null);
+    if (!response.ok) {
+      const body = (await response.json()) as { error?: string };
+      alert(body.error ?? 'Sikertelen mentés.');
+      return;
+    }
+
+    setRowEdits((previous) => {
+      const next = { ...previous };
+      delete next[rowId];
+      return next;
+    });
+    await loadRows();
   }
 
   async function saveRow() {
@@ -242,6 +372,61 @@ export function AdminDashboard() {
           placeholder="Keresés bármely mezőben..."
           className="mb-4 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white outline-none ring-cyan-400 transition focus:ring-2"
         />
+        {isResellerTable ? (
+          <div className="mb-4 grid gap-2 md:grid-cols-4">
+            <select
+              value={statusFilter}
+              onChange={(event) => setStatusFilter(event.target.value)}
+              className="rounded border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
+            >
+              <option value="all">Minden státusz</option>
+              {RESELLER_PIPELINE_OPTIONS.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+            <select
+              value={hotLeadFilter}
+              onChange={(event) => setHotLeadFilter(event.target.value)}
+              className="rounded border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
+            >
+              <option value="all">Hot lead: mind</option>
+              <option value="hot">Csak hot lead</option>
+              <option value="not-hot">Nem hot lead</option>
+            </select>
+            <select
+              value={assignedFilter}
+              onChange={(event) => setAssignedFilter(event.target.value)}
+              className="rounded border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
+            >
+              <option value="all">Felelős: mind</option>
+              <option value="nincs">Nincs felelős</option>
+              {Array.from(
+                new Set(
+                  rows
+                    .map((row) => stringifyValue(row.assigned_to).trim())
+                    .filter((value) => Boolean(value))
+                )
+              ).map((value) => (
+                <option key={value} value={value}>
+                  {value}
+                </option>
+              ))}
+            </select>
+            <select
+              value={nextActionFilter}
+              onChange={(event) => setNextActionFilter(event.target.value)}
+              className="rounded border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
+            >
+              <option value="all">Teendő: mind</option>
+              <option value="overdue">Lejárt</option>
+              <option value="today">Ma esedékes</option>
+              <option value="future">Jövőbeni</option>
+              <option value="none">Nincs dátum</option>
+            </select>
+          </div>
+        ) : null}
 
         {error ? <p className="pb-4 text-sm text-rose-300">{error}</p> : null}
         {loading ? <p className="pb-4 text-sm text-slate-300">Betöltés...</p> : null}
@@ -259,11 +444,15 @@ export function AdminDashboard() {
               </tr>
             </thead>
             <tbody>
-              {filteredRows.map((row) => (
+              {(isResellerTable ? resellerSearchRows : filteredRows).map((row) => (
                 <tr
                   key={getRowId(row)}
                   className={`border-b border-slate-800 align-top ${
-                    activeConfig.newRowHighlight?.(row) ? 'bg-slate-800/60 font-semibold' : ''
+                    activeConfig.newRowHighlight?.(row)
+                      ? 'bg-slate-800/60 font-semibold'
+                      : Boolean(row.is_hot_lead)
+                        ? 'bg-rose-950/30'
+                        : ''
                   }`}
                 >
                   {tableColumns.map((column) => {
@@ -285,8 +474,103 @@ export function AdminDashboard() {
                           ) : (
                             <span className="line-clamp-3 break-words">Nincs blokk</span>
                           )
+                        ) : isResellerTable && column.editable ? (
+                          column.inputType === 'select' ? (
+                            <select
+                              value={stringifyValue(getResellerDraftValue(row, column.key) ?? '')}
+                              onChange={(event) =>
+                                setResellerDraftValue(getRowId(row), column.key, event.target.value)
+                              }
+                              className="w-full rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-xs text-white"
+                            >
+                              {(column.options ?? []).map((option) => (
+                                <option key={option} value={option}>
+                                  {option}
+                                </option>
+                              ))}
+                            </select>
+                          ) : column.inputType === 'checkbox' ? (
+                            <input
+                              type="checkbox"
+                              checked={Boolean(getResellerDraftValue(row, column.key))}
+                              onChange={(event) =>
+                                setResellerDraftValue(getRowId(row), column.key, event.target.checked)
+                              }
+                              className="h-4 w-4"
+                            />
+                          ) : column.inputType === 'date' ? (
+                            <input
+                              type="date"
+                              value={normalizeDateInputValue(getResellerDraftValue(row, column.key))}
+                              onChange={(event) =>
+                                setResellerDraftValue(getRowId(row), column.key, event.target.value || null)
+                              }
+                              className="w-full rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-xs text-white"
+                            />
+                          ) : column.inputType === 'datetime-local' ? (
+                            <div className="space-y-1">
+                              <input
+                                type="datetime-local"
+                                value={normalizeDatetimeLocalInputValue(getResellerDraftValue(row, column.key))}
+                                onChange={(event) =>
+                                  setResellerDraftValue(getRowId(row), column.key, event.target.value || null)
+                                }
+                                className="w-full rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-xs text-white"
+                              />
+                              <button
+                                onClick={() =>
+                                  setResellerDraftValue(getRowId(row), column.key, new Date().toISOString())
+                                }
+                                className="rounded border border-cyan-500/40 px-2 py-1 text-[11px] text-cyan-300"
+                              >
+                                Kapcsolatfelvétel rögzítése
+                              </button>
+                            </div>
+                          ) : column.inputType === 'number' ? (
+                            <input
+                              type="number"
+                              min={0}
+                              max={100}
+                              value={stringifyValue(getResellerDraftValue(row, column.key) ?? '0')}
+                              onChange={(event) =>
+                                setResellerDraftValue(getRowId(row), column.key, event.target.value)
+                              }
+                              className="w-full rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-xs text-white"
+                            />
+                          ) : (
+                            <input
+                              value={stringifyValue(getResellerDraftValue(row, column.key))}
+                              onChange={(event) =>
+                                setResellerDraftValue(getRowId(row), column.key, event.target.value)
+                              }
+                              className="w-full rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-xs text-white"
+                            />
+                          )
                         ) : (
-                          <span className="line-clamp-3 break-words">{renderCellValue(column, row[column.key])}</span>
+                          <span
+                            className={`line-clamp-3 break-words ${
+                              isResellerTable && column.key === 'pipeline_status'
+                                ? row[column.key] === 'Partner lett'
+                                  ? 'font-semibold text-emerald-300'
+                                  : row[column.key] === 'Elutasítva'
+                                    ? 'text-slate-400'
+                                    : ''
+                                : isResellerTable && column.key === 'next_action_date'
+                                  ? (() => {
+                                      const value = stringifyValue(row[column.key]);
+                                      if (!value) return '';
+                                      const today = new Date();
+                                      const base = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+                                      const parsed = new Date(`${value}T00:00:00`);
+                                      if (parsed.getTime() < base.getTime()) return 'text-rose-300 font-semibold';
+                                      if (parsed.getTime() === base.getTime()) return 'text-amber-300 font-semibold';
+                                      return '';
+                                    })()
+                                  : ''
+                            }`}
+                          >
+                            {renderCellValue(column, row[column.key])}
+                          </span>
                         )}
                       </td>
                     );
@@ -299,6 +583,15 @@ export function AdminDashboard() {
                       >
                         Megnyitás
                       </button>
+                      {isResellerTable ? (
+                        <button
+                          onClick={() => void saveResellerRow(row)}
+                          disabled={!rowEdits[getRowId(row)] || savingRowId === getRowId(row)}
+                          className="rounded border border-emerald-500/40 px-2 py-1 text-xs text-emerald-300 disabled:opacity-40"
+                        >
+                          {savingRowId === getRowId(row) ? 'Mentés...' : 'CRM mentés'}
+                        </button>
+                      ) : null}
                       <button
                         onClick={() => void deleteRow(row)}
                         className="rounded border border-rose-500/40 px-2 py-1 text-xs text-rose-300 hover:bg-rose-500/15"
@@ -312,7 +605,7 @@ export function AdminDashboard() {
             </tbody>
           </table>
 
-          {!loading && filteredRows.length === 0 ? (
+          {!loading && (isResellerTable ? resellerSearchRows : filteredRows).length === 0 ? (
             <p className="py-6 text-center text-sm text-slate-400">
               {activeConfig.emptyState ?? 'Nincs megjeleníthető rekord.'}
             </p>
@@ -321,7 +614,7 @@ export function AdminDashboard() {
 
         <p className="text-slate-400 text-sm mt-4">
           {query.trim()
-            ? `Szűrt találatok: ${filteredRows.length} / ${rows.length} tétel`
+            ? `Szűrt találatok: ${(isResellerTable ? resellerSearchRows : filteredRows).length} / ${rows.length} tétel`
             : `Összesen: ${rows.length} tétel`}
         </p>
       </div>
@@ -364,8 +657,21 @@ export function AdminDashboard() {
                           }
                           className="min-h-24 w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
                         />
+                      ) : column.inputType === 'checkbox' ? (
+                        <input
+                          type="checkbox"
+                          checked={editValues[field] === 'true'}
+                          onChange={(event) =>
+                            setEditValues((previous) => ({
+                              ...previous,
+                              [field]: event.target.checked ? 'true' : 'false'
+                            }))
+                          }
+                          className="h-4 w-4"
+                        />
                       ) : (
                         <input
+                          type={column.inputType === 'number' ? 'number' : column.inputType ?? 'text'}
                           value={editValues[field] ?? ''}
                           onChange={(event) =>
                             setEditValues((previous) => ({ ...previous, [field]: event.target.value }))
