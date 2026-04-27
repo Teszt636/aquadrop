@@ -79,7 +79,12 @@ export function ResellerSection() {
       });
 
       if (!response.ok) {
-        throw new Error(`Submit route returned status ${response.status}`);
+        const responseBody = await response.text();
+        console.error('[reseller-submit] Submit route returned non-OK response', {
+          status: response.status,
+          responseBody
+        });
+        throw new Error(`Submit route returned status ${response.status}. Body: ${responseBody}`);
       }
       const result = (await response.json()) as { success?: boolean };
 
@@ -88,7 +93,8 @@ export function ResellerSection() {
       }
 
       router.push('/koszonjuk/viszontelado');
-    } catch {
+    } catch (error) {
+      console.error('[reseller-submit]', error);
       setErrorMessage('Hiba történt a jelentkezés elküldése közben. Kérlek, próbáld újra.');
       setIsSubmitting(false);
     }

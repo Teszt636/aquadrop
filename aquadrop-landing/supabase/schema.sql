@@ -28,7 +28,7 @@ create table if not exists public.gift_claims (
   receipt_file_url text,
   consent boolean not null default false,
   purchase_declaration boolean not null default false,
-  status text not null default 'uj',
+  status text not null default 'Új' check (status in ('Új', 'Feldolgozás alatt', 'Kész', 'Elutasítva')),
   admin_note text,
   created_at timestamptz default now()
 );
@@ -38,6 +38,20 @@ add column if not exists receipt_url text;
 
 alter table public.gift_claims
 add column if not exists receipt_path text;
+
+update public.gift_claims
+set status = 'Új'
+where status = 'uj';
+
+alter table public.gift_claims
+alter column status set default 'Új';
+
+alter table public.gift_claims
+drop constraint if exists gift_claims_status_check;
+
+alter table public.gift_claims
+add constraint gift_claims_status_check
+check (status in ('Új', 'Feldolgozás alatt', 'Kész', 'Elutasítva'));
 
 create index if not exists gift_claims_email_idx
   on public.gift_claims (email);

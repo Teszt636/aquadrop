@@ -194,6 +194,7 @@ export async function POST(request: Request) {
           shipping_address: normalizedShippingAddress,
           purchase_location: normalizedPurchaseLocation,
           purchase_date: normalizedPurchaseDate,
+          status: 'Új',
           consent: body.payload.consent,
           purchase_declaration: body.payload.purchase_declaration,
           receipt_url: normalizedReceiptUrl,
