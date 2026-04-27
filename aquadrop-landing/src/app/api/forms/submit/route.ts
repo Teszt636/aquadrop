@@ -64,8 +64,6 @@ type SupabaseOperation = 'select' | 'insert';
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, '');
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const FREE_EMAIL_DOMAINS = ['gmail.com', 'freemail.hu', 'citromail.hu', 'yahoo.com', 'hotmail.com'];
-const DEFAULT_NEXT_ACTION_DESCRIPTION =
-  'A mai napon ellenőrizd a jelentkezőt és vedd fel vele a kapcsolatot a viszonteladói értékesítéssel kapcsolatban.';
 
 function getNextBusinessDayTenAmIso(from = new Date()): string {
   const next = new Date(Date.UTC(from.getUTCFullYear(), from.getUTCMonth(), from.getUTCDate(), 10, 0, 0, 0));
@@ -325,8 +323,7 @@ export async function POST(request: Request) {
           message: normalizedMessage,
           lead_score: leadScore,
           is_hot_lead: isHotLead,
-          next_action_at: getNextBusinessDayTenAmIso(),
-          next_action_description: DEFAULT_NEXT_ACTION_DESCRIPTION
+          next_action_at: getNextBusinessDayTenAmIso()
         });
       }
 
