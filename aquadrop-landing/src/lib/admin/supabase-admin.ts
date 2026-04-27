@@ -67,11 +67,12 @@ export async function fetchAdminTableRows(table: AdminTableViewName): Promise<Re
     filters.set('is_subscribed', 'eq.false');
   }
 
-  let response = await fetchRowsWithOrder(
-    sourceTable,
-    'updated_at.desc.nullslast,created_at.desc.nullslast',
-    filters
-  );
+  const defaultOrder =
+    table === 'reseller_applications'
+      ? 'next_action_at.asc.nullslast,updated_at.desc.nullslast,created_at.desc.nullslast'
+      : 'updated_at.desc.nullslast,created_at.desc.nullslast';
+
+  let response = await fetchRowsWithOrder(sourceTable, defaultOrder, filters);
 
   if (!response.ok) {
     const firstError = await response.text();
@@ -91,6 +92,25 @@ export async function fetchAdminTableRows(table: AdminTableViewName): Promise<Re
 
   if (!response.ok) {
     throw new Error(`Failed to read ${sourceTable}: ${response.status} ${await response.text()}`);
+  }
+
+  return (await response.json()) as Record<string, unknown>[];
+}
+
+export async function fetchAdminUsers(): Promise<Record<string, unknown>[]> {
+  const query = new URLSearchParams({
+    select: 'id,name,email',
+    order: 'name.asc',
+    limit: '200'
+  });
+  const response = await fetch(`${getRestUrl()}/admin_users?${query.toString()}`, {
+    method: 'GET',
+    headers: getServiceHeaders(),
+    cache: 'no-store'
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to read admin_users: ${response.status} ${await response.text()}`);
   }
 
   return (await response.json()) as Record<string, unknown>[];

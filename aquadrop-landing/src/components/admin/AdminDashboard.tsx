@@ -12,6 +12,7 @@ import {
 } from '@/lib/admin/table-config';
 
 type Row = Record<string, unknown>;
+type AdminUser = { id: string; name: string; email: string };
 const TABLE_ORDER: AdminTableViewName[] = [
   'announcement_signups',
   'gift_claims',
@@ -105,7 +106,7 @@ function normalizeNextActionParts(value: unknown): { date: string; hour: string;
 function combineNextActionAt(date: string, hour: string, minute: string): string | null {
   if (!date) return null;
 
-  const normalizedHour = hour || '06';
+  const normalizedHour = hour || '10';
   const normalizedMinute = minute || '00';
   return `${date}T${normalizedHour}:${normalizedMinute}:00`;
 }
@@ -165,6 +166,7 @@ export function AdminDashboard() {
   const [hotLeadFilter, setHotLeadFilter] = useState<string>('all');
   const [assignedFilter, setAssignedFilter] = useState<string>('all');
   const [nextActionFilter, setNextActionFilter] = useState<string>('all');
+  const [adminUsers, setAdminUsers] = useState<AdminUser[]>([]);
   const rowSaveTimersRef = useRef<Record<string, number>>({});
 
   const loadRows = useCallback(async () => {
@@ -173,13 +175,14 @@ export function AdminDashboard() {
 
     try {
       const response = await fetch(`/api/admin/table?name=${activeTable}`, { cache: 'no-store' });
-      const body = (await response.json()) as { rows?: Row[]; error?: string };
+      const body = (await response.json()) as { rows?: Row[]; adminUsers?: AdminUser[]; error?: string };
 
       if (!response.ok) {
         throw new Error(body.error ?? 'Sikertelen adatlekérés.');
       }
 
       setRows(body.rows ?? []);
+      setAdminUsers(body.adminUsers ?? []);
     } catch (loadError) {
       setError(loadError instanceof Error ? loadError.message : 'Sikertelen adatlekérés.');
     } finally {
@@ -437,7 +440,6 @@ export function AdminDashboard() {
         <input
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Keresés bármely mezőben..."
           className="mb-4 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white outline-none ring-cyan-400 transition focus:ring-2"
         />
         {isResellerTable ? (
@@ -470,15 +472,9 @@ export function AdminDashboard() {
             >
               <option value="all">Felelős: mind</option>
               <option value="nincs">Nincs felelős</option>
-              {Array.from(
-                new Set(
-                  rows
-                    .map((row) => stringifyValue(row.assigned_to).trim())
-                    .filter((value) => Boolean(value))
-                )
-              ).map((value) => (
-                <option key={value} value={value}>
-                  {value}
+              {adminUsers.map((user) => (
+                <option key={user.id} value={user.id}>
+                  {user.name}
                 </option>
               ))}
             </select>
@@ -514,8 +510,13 @@ export function AdminDashboard() {
               const pipelineStatus = getResellerDraftValue(row, 'pipeline_status') ?? 'Új lead';
               const leadScore = getResellerDraftValue(row, 'lead_score') ?? 0;
               const isHot = Boolean(getResellerDraftValue(row, 'is_hot_lead'));
-              const assignedTo = stringifyValue(getResellerDraftValue(row, 'assigned_to')).trim() || 'Nincs felelős';
+              const assignedUserId = stringifyValue(getResellerDraftValue(row, 'assigned_to')).trim();
+              const assignedTo =
+                adminUsers.find((user) => user.id === assignedUserId)?.name ||
+                (assignedUserId ? 'Ismeretlen felhasználó' : 'Nincs felelős');
               const nextActionLabel = nextActionDraft ? formatAdminDate(nextActionDraft) : 'Nincs rögzítve';
+              const nextActionDescription = stringifyValue(getResellerDraftValue(row, 'next_action_description'));
+              const previousContactValue = getResellerDraftValue(row, 'previous_contacted_at');
               const isExpanded = Boolean(expandedRows[rowId]);
               const nextActionTone =
                 nextActionState === 'overdue'
@@ -530,6 +531,11 @@ export function AdminDashboard() {
                     <div className="space-y-2">
                       <p className="text-lg font-semibold text-white">{stringifyValue(getResellerDraftValue(row, 'company_name')) || 'Névtelen cég'}</p>
                       <p className="text-sm text-slate-200">Kapcsolattartó: {stringifyValue(getResellerDraftValue(row, 'contact_name')) || '-'}</p>
+                      <div className="flex flex-wrap gap-2">
+                        <span className={`rounded-full px-2 py-1 text-xs font-medium ${getPipelineBadgeTone(pipelineStatus)}`}>{stringifyValue(pipelineStatus)}</span>
+                        {isHot ? <span className="rounded-full border border-rose-500/70 bg-rose-900/40 px-2 py-1 text-xs font-semibold text-rose-200">🔥 HOT</span> : null}
+                        <span className={`rounded-full px-2 py-1 text-xs font-medium ${getLeadScoreTone(leadScore)}`}>Lead score: {stringifyValue(leadScore) || '0'}</span>
+                      </div>
                       <div className="flex flex-wrap items-center gap-2 text-xs">
                         {phone ? (
                           <a href={`tel:${phone}`} className="rounded border border-cyan-500/40 px-2 py-1 text-cyan-300 hover:bg-cyan-500/10">
@@ -554,16 +560,12 @@ export function AdminDashboard() {
                     </div>
 
                     <div className="space-y-2 text-sm">
-                      <div className="flex flex-wrap gap-2">
-                        <span className={`rounded-full px-2 py-1 text-xs font-medium ${getPipelineBadgeTone(pipelineStatus)}`}>{stringifyValue(pipelineStatus)}</span>
-                        {isHot ? <span className="rounded-full border border-rose-500/70 bg-rose-900/40 px-2 py-1 text-xs font-semibold text-rose-200">🔥 HOT</span> : null}
-                        <span className={`rounded-full px-2 py-1 text-xs font-medium ${getLeadScoreTone(leadScore)}`}>Lead score: {stringifyValue(leadScore) || '0'}</span>
-                      </div>
                       <div className={`rounded-md border px-3 py-2 ${nextActionTone}`}>
                         <p className="text-[11px] uppercase tracking-wide opacity-80">Következő teendő</p>
                         <p className="text-sm font-semibold">{nextActionLabel}</p>
+                        <p className="mt-1 text-xs text-slate-100">{nextActionDescription || 'Nincs leírás.'}</p>
+                        <p className="mt-2 text-xs text-slate-300">Felelős: <span className="font-medium text-white">{assignedTo}</span></p>
                       </div>
-                      <p className="text-slate-300">Felelős: <span className="font-medium text-white">{assignedTo}</span></p>
                       <div className="flex flex-wrap gap-2">
                         {phone ? (
                           <a href={`tel:${phone}`} className="rounded border border-slate-600 px-2 py-1 text-xs text-white hover:bg-slate-800">
@@ -578,6 +580,10 @@ export function AdminDashboard() {
                         <button
                           type="button"
                           onClick={() => {
+                            const currentLast = getResellerDraftValue(row, 'last_contacted_at');
+                            if (currentLast) {
+                              setResellerDraftValue(rowId, 'previous_contacted_at', stringifyValue(currentLast));
+                            }
                             setResellerDraftValue(rowId, 'last_contacted_at', new Date().toISOString());
                             scheduleResellerAutoSave(rowId);
                           }}
@@ -600,31 +606,78 @@ export function AdminDashboard() {
 
                     {isExpanded ? (
                       <div className="mt-3 grid gap-3 md:grid-cols-2">
-                        <label className="text-xs text-slate-300">
-                          <span className="mb-1 block uppercase tracking-wide text-slate-500">Lead score (szerkesztés)</span>
-                          <input
-                            type="number"
-                            min={0}
-                            max={100}
-                            value={stringifyValue(leadScore)}
-                            onChange={(event) => {
-                              setResellerDraftValue(rowId, 'lead_score', event.target.value);
-                              scheduleResellerAutoSave(rowId);
-                            }}
-                            className={`w-full rounded-md px-3 py-2 text-sm ${getLeadScoreTone(leadScore)}`}
-                          />
-                        </label>
-                        <label className="text-xs text-slate-300">
-                          <span className="mb-1 block uppercase tracking-wide text-slate-500">Felelős</span>
-                          <input
-                            value={stringifyValue(getResellerDraftValue(row, 'assigned_to'))}
-                            onChange={(event) => {
-                              setResellerDraftValue(rowId, 'assigned_to', event.target.value);
-                              scheduleResellerAutoSave(rowId);
-                            }}
-                            className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white"
-                          />
-                        </label>
+                        <div className="space-y-3">
+                          <div className="flex items-center gap-2 text-xs">
+                            <span className={`rounded-full px-2 py-1 font-semibold ${getLeadScoreTone(leadScore)}`}>Lead score: {stringifyValue(leadScore) || '0'}</span>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setResellerDraftValue(rowId, 'is_hot_lead', !isHot);
+                                scheduleResellerAutoSave(rowId);
+                              }}
+                              className={`rounded-full border px-2 py-1 text-xs font-semibold ${isHot ? 'border-rose-500/70 bg-rose-900/40 text-rose-200' : 'border-slate-600 bg-slate-900 text-slate-300'}`}
+                            >
+                              {isHot ? '🔥 HOT' : 'Nem HOT'}
+                            </button>
+                          </div>
+                          <label className="text-xs text-slate-300">
+                            <span className="mb-1 block uppercase tracking-wide text-slate-500">Kapcsolatfelvétel rögzítése</span>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const currentLast = getResellerDraftValue(row, 'last_contacted_at');
+                                if (currentLast) {
+                                  setResellerDraftValue(rowId, 'previous_contacted_at', stringifyValue(currentLast));
+                                }
+                                setResellerDraftValue(rowId, 'last_contacted_at', new Date().toISOString());
+                                scheduleResellerAutoSave(rowId);
+                              }}
+                              className="w-full rounded-md border border-cyan-500/40 px-3 py-2 text-sm text-cyan-300 hover:bg-cyan-500/10"
+                            >
+                              Kapcsolatfelvétel most
+                            </button>
+                          </label>
+                          <p className="text-xs text-slate-400">Utolsó kapcsolat: {lastContactValue ? formatAdminDate(lastContactValue) : 'Nincs rögzítve'}</p>
+                          <p className="text-xs text-slate-400">Előző kapcsolat: {previousContactValue ? formatAdminDate(previousContactValue) : 'Nincs rögzítve'}</p>
+                        </div>
+                        <div className="space-y-3">
+                          <label className="text-xs text-slate-300">
+                            <span className="mb-1 block uppercase tracking-wide text-slate-500">Státusz</span>
+                            <select
+                              value={stringifyValue(getResellerDraftValue(row, 'pipeline_status')) || 'Új lead'}
+                              onChange={(event) => {
+                                setResellerDraftValue(rowId, 'pipeline_status', event.target.value);
+                                setResellerDraftValue(rowId, 'next_action_description', '');
+                                scheduleResellerAutoSave(rowId);
+                              }}
+                              className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white"
+                            >
+                              {RESELLER_PIPELINE_OPTIONS.map((option) => (
+                                <option key={option} value={option}>
+                                  {option}
+                                </option>
+                              ))}
+                            </select>
+                          </label>
+                          <label className="text-xs text-slate-300">
+                            <span className="mb-1 block uppercase tracking-wide text-slate-500">Felelős</span>
+                            <select
+                              value={assignedUserId}
+                              onChange={(event) => {
+                                setResellerDraftValue(rowId, 'assigned_to', event.target.value || null);
+                                scheduleResellerAutoSave(rowId);
+                              }}
+                              className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white"
+                            >
+                              <option value="">Nincs felelős</option>
+                              {adminUsers.map((user) => (
+                                <option key={user.id} value={user.id}>
+                                  {user.name}
+                                </option>
+                              ))}
+                            </select>
+                          </label>
+                        </div>
                         <div className="text-xs text-slate-300">
                           <span className="mb-1 block uppercase tracking-wide text-slate-500">Következő teendő időpontja</span>
                           <div className={`rounded-md border p-2 ${nextActionTone}`}>
@@ -632,80 +685,23 @@ export function AdminDashboard() {
                               type="date"
                               value={nextActionParts.date}
                               onChange={(event) => {
-                                setResellerDraftValue(
-                                  rowId,
-                                  'next_action_at',
-                                  combineNextActionAt(event.target.value, nextActionParts.hour, nextActionParts.minute)
-                                );
+                                setResellerDraftValue(rowId, 'next_action_at', combineNextActionAt(event.target.value, '10', '00'));
                                 scheduleResellerAutoSave(rowId);
                               }}
-                              className="mb-2 w-full rounded border border-slate-700 bg-slate-950 px-2 py-1 text-sm text-white"
+                              className="w-full rounded border border-slate-700 bg-slate-950 px-2 py-1 text-sm text-white"
                             />
-                            <div className="grid grid-cols-2 gap-2">
-                              <select
-                                value={nextActionParts.hour}
-                                onChange={(event) => {
-                                  setResellerDraftValue(
-                                    rowId,
-                                    'next_action_at',
-                                    combineNextActionAt(nextActionParts.date, event.target.value, nextActionParts.minute)
-                                  );
-                                  scheduleResellerAutoSave(rowId);
-                                }}
-                                className="rounded border border-slate-700 bg-slate-950 px-2 py-1 text-sm text-white"
-                              >
-                                <option value="">Óra</option>
-                                {Array.from({ length: 15 }, (_, index) => `${index + 6}`.padStart(2, '0')).map((hour) => (
-                                  <option key={hour} value={hour}>
-                                    {hour}
-                                  </option>
-                                ))}
-                              </select>
-                              <select
-                                value={nextActionParts.minute}
-                                onChange={(event) => {
-                                  setResellerDraftValue(
-                                    rowId,
-                                    'next_action_at',
-                                    combineNextActionAt(nextActionParts.date, nextActionParts.hour, event.target.value)
-                                  );
-                                  scheduleResellerAutoSave(rowId);
-                                }}
-                                className="rounded border border-slate-700 bg-slate-950 px-2 py-1 text-sm text-white"
-                              >
-                                <option value="">Perc</option>
-                                {['00', '15', '30', '45'].map((minute) => (
-                                  <option key={minute} value={minute}>
-                                    {minute}
-                                  </option>
-                                ))}
-                              </select>
-                            </div>
                           </div>
                         </div>
-                        <label className="text-xs text-slate-300">
-                          <span className="mb-1 block uppercase tracking-wide text-slate-500">Admin megjegyzés</span>
+                        <label className="text-xs text-slate-300 md:col-span-2">
+                          <span className="mb-1 block uppercase tracking-wide text-slate-500">Következő teendő leírása</span>
                           <textarea
-                            value={stringifyValue(getResellerDraftValue(row, 'admin_note'))}
+                            value={stringifyValue(getResellerDraftValue(row, 'next_action_description'))}
                             onChange={(event) => {
-                              setResellerDraftValue(rowId, 'admin_note', event.target.value);
+                              setResellerDraftValue(rowId, 'next_action_description', event.target.value);
                               scheduleResellerAutoSave(rowId);
                             }}
                             className="min-h-24 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white"
                           />
-                        </label>
-                        <label className="text-xs text-slate-300">
-                          <span className="mb-1 block uppercase tracking-wide text-slate-500">Hot lead</span>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setResellerDraftValue(rowId, 'is_hot_lead', !isHot);
-                              scheduleResellerAutoSave(rowId);
-                            }}
-                            className={`w-full rounded-md border px-3 py-2 text-sm font-semibold ${isHot ? 'border-rose-500/70 bg-rose-900/40 text-rose-200' : 'border-slate-600 bg-slate-900 text-slate-300'}`}
-                          >
-                            {isHot ? '🔥 HOT' : 'Nem HOT'}
-                          </button>
                         </label>
                         <div className="text-xs text-slate-300">
                           <span className="mb-1 block uppercase tracking-wide text-slate-500">Utolsó kapcsolat</span>
@@ -713,6 +709,9 @@ export function AdminDashboard() {
                             type="datetime-local"
                             value={normalizeDatetimeLocalInputValue(lastContactValue)}
                             onChange={(event) => {
+                              if (lastContactValue) {
+                                setResellerDraftValue(rowId, 'previous_contacted_at', stringifyValue(lastContactValue));
+                              }
                               setResellerDraftValue(rowId, 'last_contacted_at', event.target.value || null);
                               scheduleResellerAutoSave(rowId);
                             }}
