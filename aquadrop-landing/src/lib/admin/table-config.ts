@@ -231,8 +231,15 @@ export const adminTableConfigs: Record<AdminTableViewName, AdminTableConfig> = {
         type: 'date',
         inputType: 'datetime-local'
       },
+      { key: 'previous_contacted_at', label: 'Előző kapcsolat', type: 'date', hiddenInTable: true },
       { key: 'created_at', label: 'Beküldve', type: 'date' },
-      { key: 'admin_note', label: 'Admin megjegyzés', editable: true, inputType: 'textarea', hiddenInTable: true },
+      {
+        key: 'next_action_description',
+        label: 'Következő teendő leírása',
+        editable: true,
+        inputType: 'textarea',
+        hiddenInTable: true
+      },
       { key: 'message', label: 'Üzenet', editable: true, hiddenInTable: true },
       { key: 'id', label: 'ID', hiddenInTable: true, hiddenInDetails: true }
     ]

@@ -71,15 +71,23 @@ create table if not exists public.reseller_applications (
 create index if not exists reseller_applications_email_idx
   on public.reseller_applications (email);
 
+create table if not exists public.admin_users (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  email text not null unique
+);
+
 alter table public.reseller_applications
   add column if not exists pipeline_status text not null default 'Új lead',
-  add column if not exists assigned_to text,
-  add column if not exists admin_note text,
+  add column if not exists assigned_to uuid references public.admin_users(id) on delete set null,
+  add column if not exists next_action_description text,
   add column if not exists next_action_date date,
   add column if not exists last_contacted_at timestamptz,
+  add column if not exists previous_contacted_at timestamptz,
   add column if not exists lead_score integer not null default 0,
   add column if not exists is_hot_lead boolean not null default false,
-  add column if not exists updated_at timestamptz not null default now();
+  add column if not exists updated_at timestamptz not null default now(),
+  add column if not exists next_action_at timestamptz;
 
 alter table public.reseller_applications
 drop constraint if exists reseller_applications_pipeline_status_check;
@@ -104,6 +112,20 @@ drop constraint if exists reseller_applications_lead_score_check;
 alter table public.reseller_applications
 add constraint reseller_applications_lead_score_check
 check (lead_score between 0 and 100);
+
+alter table public.reseller_applications
+  drop constraint if exists reseller_applications_next_action_at_time_check;
+
+alter table public.reseller_applications
+  add constraint reseller_applications_next_action_at_time_check
+  check (
+    next_action_at is null
+    or (
+      extract(hour from next_action_at at time zone 'UTC') between 6 and 20
+      and extract(minute from next_action_at at time zone 'UTC') in (0, 15, 30, 45)
+      and extract(second from next_action_at at time zone 'UTC') = 0
+    )
+  );
 
 create or replace function public.set_updated_at_column()
 returns trigger

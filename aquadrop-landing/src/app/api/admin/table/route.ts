@@ -4,6 +4,7 @@ import { ADMIN_TABLE_SET, type AdminTableName } from '@/lib/admin/constants';
 import { isAdminSessionValid } from '@/lib/admin/auth';
 import {
   deleteAdminTableRow,
+  fetchAdminUsers,
   fetchAdminTableRows,
   patchAdminTableRow
 } from '@/lib/admin/supabase-admin';
@@ -24,7 +25,8 @@ const EDITABLE_FIELDS: Record<AdminTableName, string[]> = {
   reseller_applications: [
     'pipeline_status',
     'assigned_to',
-    'admin_note',
+    'next_action_description',
+    'previous_contacted_at',
     'next_action_date',
     'next_action_at',
     'last_contacted_at',
@@ -88,6 +90,14 @@ function sanitizeValue(key: string, value: unknown): unknown {
       throw new Error('A következő teendő perce csak 00, 15, 30 vagy 45 lehet.');
     }
     return parsed.toISOString();
+  }
+
+  if (key === 'assigned_to') {
+    if (value === '' || value === null) return null;
+    if (typeof value !== 'string' || !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value)) {
+      throw new Error('A felelős azonosítója hibás.');
+    }
+    return value;
   }
 
   if (key === 'last_contacted_at') {
@@ -157,8 +167,9 @@ export async function GET(request: Request) {
 
   try {
     const rows = await fetchAdminTableRows(table);
+    const adminUsers = table === 'reseller_applications' ? await fetchAdminUsers() : [];
 
-    return NextResponse.json({ rows });
+    return NextResponse.json({ rows, adminUsers });
   } catch (error) {
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Lekérdezési hiba.' },
@@ -198,6 +209,10 @@ export async function PATCH(request: Request) {
       .map(([key, value]) => [key, sanitizeValue(key, value)])
       .filter(([, value]) => value !== undefined)
   );
+
+  if ('pipeline_status' in sanitizedUpdates) {
+    sanitizedUpdates.next_action_description = null;
+  }
 
   if (Object.keys(sanitizedUpdates).length === 0) {
     return NextResponse.json({ error: 'Nincs menthető mező.' }, { status: 400 });
