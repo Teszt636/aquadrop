@@ -93,6 +93,15 @@ function combineNextActionAt(date: string, hour: string, minute: string): string
   return `${date}T${normalizedHour}:${normalizedMinute}:00`;
 }
 
+function formatNextActionSummary(value: unknown): string {
+  const parts = normalizeNextActionParts(value);
+  if (!parts.date) {
+    return 'Időpont kiválasztása';
+  }
+  const [year, month, day] = parts.date.split('-');
+  return `${year}.${month}.${day} ${parts.hour || '10'}:${parts.minute || '00'}`;
+}
+
 function toWebsiteHref(value: unknown): string | null {
   const raw = stringifyValue(value).trim();
   if (!raw) {
@@ -154,6 +163,9 @@ export function AdminDashboard() {
   const [assignedFilter, setAssignedFilter] = useState<string>('all');
   const [nextActionFilter, setNextActionFilter] = useState<string>('all');
   const [adminUsers, setAdminUsers] = useState<AdminUser[]>([]);
+  const [nextActionEditors, setNextActionEditors] = useState<
+    Record<string, { isOpen: boolean; date: string; hour: string; minute: string }>
+  >({});
   const rowSaveTimersRef = useRef<Record<string, number>>({});
 
   const loadRows = useCallback(async () => {
@@ -275,6 +287,42 @@ export function AdminDashboard() {
     setRowEdits((previous) => ({
       ...previous,
       [rowId]: { ...(previous[rowId] ?? {}), [key]: value }
+    }));
+  }
+
+  function openNextActionEditor(rowId: string, row: Row) {
+    const nextActionDraft = getResellerDraftValue(row, 'next_action_at') ?? getResellerDraftValue(row, 'next_action_date');
+    const parts = normalizeNextActionParts(nextActionDraft);
+    setNextActionEditors((previous) => ({
+      ...previous,
+      [rowId]: {
+        isOpen: true,
+        date: parts.date,
+        hour: parts.hour,
+        minute: parts.minute
+      }
+    }));
+  }
+
+  function setNextActionEditorValue(rowId: string, key: 'date' | 'hour' | 'minute', value: string) {
+    setNextActionEditors((previous) => {
+      const current = previous[rowId] ?? { isOpen: true, date: '', hour: '', minute: '' };
+      return {
+        ...previous,
+        [rowId]: { ...current, [key]: value }
+      };
+    });
+  }
+
+  function closeNextActionEditor(rowId: string) {
+    const editor = nextActionEditors[rowId];
+    if (!editor) return;
+    const nextValue = combineNextActionAt(editor.date, editor.hour || '10', editor.minute || '00');
+    setResellerDraftValue(rowId, 'next_action_at', nextValue);
+    scheduleResellerAutoSave(rowId);
+    setNextActionEditors((previous) => ({
+      ...previous,
+      [rowId]: { ...editor, isOpen: false }
     }));
   }
 
@@ -674,62 +722,89 @@ export function AdminDashboard() {
                           </label>
                           <div className="text-xs text-slate-300">
                             <span className="mb-1 block uppercase tracking-wide text-slate-500">Következő teendő időpontja</span>
-                            <div className={`rounded-md border p-2 ${nextActionTone}`}>
-                              <div className="grid gap-2 sm:grid-cols-3">
-                                <input
-                                  type="date"
-                                  value={nextActionParts.date}
-                                  onChange={(event) => {
-                                    const nextDate = event.target.value;
-                                    const nextHour = nextActionParts.hour || '06';
-                                    const nextMinute = nextActionParts.minute || '00';
-                                    setResellerDraftValue(rowId, 'next_action_at', combineNextActionAt(nextDate, nextHour, nextMinute));
-                                    scheduleResellerAutoSave(rowId);
-                                  }}
-                                  className="w-full rounded border border-slate-700 bg-slate-950 px-2 py-1 text-sm text-white"
-                                />
-                                <select
-                                  value={nextActionParts.hour}
-                                  onChange={(event) => {
-                                    const nextHour = event.target.value;
-                                    setResellerDraftValue(
-                                      rowId,
-                                      'next_action_at',
-                                      combineNextActionAt(nextActionParts.date, nextHour, nextActionParts.minute || '00')
-                                    );
-                                    scheduleResellerAutoSave(rowId);
-                                  }}
-                                  className="w-full rounded border border-slate-700 bg-slate-950 px-2 py-1 text-sm text-white"
-                                >
-                                  <option value="" />
-                                  {nextActionHourOptions.map((hour) => (
-                                    <option key={hour} value={hour}>
-                                      {hour}
-                                    </option>
-                                  ))}
-                                </select>
-                                <select
-                                  value={nextActionParts.minute}
-                                  onChange={(event) => {
-                                    const nextMinute = event.target.value;
-                                    setResellerDraftValue(
-                                      rowId,
-                                      'next_action_at',
-                                      combineNextActionAt(nextActionParts.date, nextActionParts.hour || '06', nextMinute)
-                                    );
-                                    scheduleResellerAutoSave(rowId);
-                                  }}
-                                  className="w-full rounded border border-slate-700 bg-slate-950 px-2 py-1 text-sm text-white"
-                                >
-                                  <option value="" />
-                                  {nextActionMinuteOptions.map((minute) => (
-                                    <option key={minute} value={minute}>
-                                      {minute}
-                                    </option>
-                                  ))}
-                                </select>
-                              </div>
+                            <div className={`relative rounded-md border p-2 ${nextActionTone}`}>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  if (nextActionEditors[rowId]?.isOpen) {
+                                    closeNextActionEditor(rowId);
+                                    return;
+                                  }
+                                  openNextActionEditor(rowId, row);
+                                }}
+                                className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-left text-sm font-medium text-white hover:border-cyan-500/60"
+                              >
+                                {formatNextActionSummary(nextActionDraft)}
+                              </button>
+                              {nextActionEditors[rowId]?.isOpen ? (
+                                <div className="mt-2 space-y-3 rounded-xl border border-slate-700 bg-slate-950/95 p-3 shadow-xl">
+                                  <input
+                                    type="date"
+                                    value={nextActionEditors[rowId]?.date ?? ''}
+                                    onChange={(event) => {
+                                      const nextDate = event.target.value;
+                                      setNextActionEditorValue(rowId, 'date', nextDate);
+                                      if (nextDate && !(nextActionEditors[rowId]?.hour ?? '')) {
+                                        setNextActionEditorValue(rowId, 'hour', '10');
+                                      }
+                                      if (nextDate && !(nextActionEditors[rowId]?.minute ?? '')) {
+                                        setNextActionEditorValue(rowId, 'minute', '00');
+                                      }
+                                    }}
+                                    className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white"
+                                  />
+                                  <div>
+                                    <p className="mb-2 text-[11px] uppercase tracking-wide text-slate-400">Óra</p>
+                                    <div className="grid grid-cols-5 gap-2">
+                                      {nextActionHourOptions.map((hour) => {
+                                        const isActive = (nextActionEditors[rowId]?.hour ?? '') === hour;
+                                        return (
+                                          <button
+                                            key={hour}
+                                            type="button"
+                                            onClick={() => setNextActionEditorValue(rowId, 'hour', hour)}
+                                            className={`rounded-full px-2 py-2 text-sm font-semibold transition ${isActive ? 'bg-cyan-500 text-slate-950' : 'bg-slate-900 text-slate-200 hover:bg-slate-800'}`}
+                                          >
+                                            {hour}
+                                          </button>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <p className="mb-2 text-[11px] uppercase tracking-wide text-slate-400">Perc</p>
+                                    <div className="grid grid-cols-4 gap-2">
+                                      {nextActionMinuteOptions.map((minute) => {
+                                        const isActive = (nextActionEditors[rowId]?.minute ?? '') === minute;
+                                        return (
+                                          <button
+                                            key={minute}
+                                            type="button"
+                                            onClick={() => setNextActionEditorValue(rowId, 'minute', minute)}
+                                            className={`rounded-full px-3 py-2 text-sm font-semibold transition ${isActive ? 'bg-cyan-500 text-slate-950' : 'bg-slate-900 text-slate-200 hover:bg-slate-800'}`}
+                                          >
+                                            {minute}
+                                          </button>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+                                  <div className="flex justify-end">
+                                    <button
+                                      type="button"
+                                      onClick={() => closeNextActionEditor(rowId)}
+                                      className="rounded-lg bg-cyan-500 px-4 py-2 text-sm font-semibold text-slate-950 hover:bg-cyan-400"
+                                    >
+                                      Kész
+                                    </button>
+                                  </div>
+                                </div>
+                              ) : null}
+                              <div className="mt-1 text-[11px] text-slate-400">Választható idő: 06:00–20:45, 15 perces lépés.</div>
                             </div>
+                          </div>
+                          <div className="text-[11px] text-slate-500">
+                            {nextActionParts.date ? `Aktuális érték: ${formatNextActionSummary(nextActionDraft)}` : 'Még nincs kiválasztott időpont.'}
                           </div>
                           <label className="text-xs text-slate-300">
                             <span className="mb-1 block uppercase tracking-wide text-slate-500">Következő teendő leírása</span>
