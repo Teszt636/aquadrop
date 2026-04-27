@@ -1,13 +1,12 @@
 import { NextResponse } from 'next/server';
 
-import { isAdminSessionValid } from '@/lib/admin/auth';
+import { requireAdminSession } from '@/lib/admin/auth';
 import { fetchResellerActivityLogs } from '@/lib/admin/supabase-admin';
 
 async function assertSession() {
-  const isValid = await isAdminSessionValid();
-
-  if (!isValid) {
-    return NextResponse.json({ error: 'Nincs admin jogosultság.' }, { status: 401 });
+  const user = await requireAdminSession(['admin', 'crm_user']);
+  if (!user) {
+    return NextResponse.json({ error: 'Nincs CRM jogosultság.' }, { status: 403 });
   }
 
   return null;

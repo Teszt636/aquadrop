@@ -10,6 +10,7 @@ import {
   type AdminColumnConfig,
   type AdminTableViewName
 } from '@/lib/admin/table-config';
+import { type AdminSessionUser } from '@/lib/admin/constants';
 
 type Row = Record<string, unknown>;
 type AdminUser = { id: string; name: string; email: string };
@@ -25,15 +26,21 @@ type ActivityState = {
   error: string | null;
   logs: ResellerActivityLog[];
 };
-const ACTIVE_OPERATOR_STORAGE_KEY = 'aquadrop_admin_active_operator_id';
 const TABLE_ORDER: AdminTableViewName[] = [
   'announcement_signups',
+  'unsubscribed',
+  'media_kit_downloads',
   'gift_claims',
   'reseller_applications',
-  'media_kit_downloads',
-  'unsubscribed'
+  'admin_users'
 ];
-const TABLES = TABLE_ORDER.map((key) => ({ key, label: adminTableConfigs[key].label }));
+type ManagedUser = {
+  id: string;
+  name: string;
+  email: string;
+  role: 'admin' | 'crm_user';
+  is_active: boolean;
+};
 
 function stringifyValue(value: unknown): string {
   if (value === null || value === undefined) {
@@ -155,13 +162,15 @@ function getNextActionState(value: unknown): 'none' | 'overdue' | 'today' | 'fut
   return 'future';
 }
 
-export function AdminDashboard() {
+export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser }) {
   const nextActionHourOptions = useMemo(
     () => Array.from({ length: 15 }, (_, index) => `${index + 6}`.padStart(2, '0')),
     []
   );
   const nextActionMinuteOptions = useMemo(() => ['00', '15', '30', '45'], []);
-  const [activeTable, setActiveTable] = useState<AdminTableViewName>('announcement_signups');
+  const [activeTable, setActiveTable] = useState<AdminTableViewName>(
+    sessionUser.role === 'crm_user' ? 'reseller_applications' : 'announcement_signups'
+  );
   const [rows, setRows] = useState<Row[]>([]);
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
@@ -176,27 +185,45 @@ export function AdminDashboard() {
   const [assignedFilter, setAssignedFilter] = useState<string>('all');
   const [nextActionFilter, setNextActionFilter] = useState<string>('all');
   const [adminUsers, setAdminUsers] = useState<AdminUser[]>([]);
-  const [activeOperatorId, setActiveOperatorId] = useState<string>('');
+  const [managedUsers, setManagedUsers] = useState<ManagedUser[]>([]);
+  const [newUserName, setNewUserName] = useState('');
+  const [newUserEmail, setNewUserEmail] = useState('');
+  const [newUserPassword, setNewUserPassword] = useState('');
   const [activityByRowId, setActivityByRowId] = useState<Record<string, ActivityState>>({});
   const [nextActionEditors, setNextActionEditors] = useState<
     Record<string, { isOpen: boolean; date: string; hour: string; minute: string }>
   >({});
   const rowSaveTimersRef = useRef<Record<string, number>>({});
+  const TABLES = useMemo(
+    () => {
+      const visible: AdminTableViewName[] =
+        sessionUser.role === 'crm_user' ? (['reseller_applications'] satisfies AdminTableViewName[]) : TABLE_ORDER;
+      return visible
+        .filter((key) => !(key === 'admin_users' && sessionUser.role !== 'admin'))
+        .map((key) => ({ key, label: adminTableConfigs[key].label }));
+    },
+    [sessionUser.role]
+  );
 
   const loadRows = useCallback(async () => {
     setLoading(true);
     setError(null);
 
     try {
-      const response = await fetch(`/api/admin/table?name=${activeTable}`, { cache: 'no-store' });
+      const endpoint = activeTable === 'admin_users' ? '/api/admin/users' : `/api/admin/table?name=${activeTable}`;
+      const response = await fetch(endpoint, { cache: 'no-store' });
       const body = (await response.json()) as { rows?: Row[]; adminUsers?: AdminUser[]; error?: string };
 
       if (!response.ok) {
         throw new Error(body.error ?? 'Sikertelen adatlekérés.');
       }
 
-      setRows(body.rows ?? []);
+      const nextRows = body.rows ?? [];
+      setRows(nextRows);
       setAdminUsers(body.adminUsers ?? []);
+      if (activeTable === 'admin_users') {
+        setManagedUsers(nextRows as ManagedUser[]);
+      }
     } catch (loadError) {
       setError(loadError instanceof Error ? loadError.message : 'Sikertelen adatlekérés.');
     } finally {
@@ -247,50 +274,24 @@ export function AdminDashboard() {
     }
   }, []);
 
-  const getChangedByPayload = useCallback(() => {
-    const selected = adminUsers.find((user) => user.id === activeOperatorId);
-
-    if (!selected) {
-      return {
-        changed_by_user_id: null,
-        changed_by_name: null,
-        changed_by_email: null
-      };
-    }
-
-    return {
-      changed_by_user_id: selected.id,
-      changed_by_name: selected.name,
-      changed_by_email: selected.email
-    };
-  }, [activeOperatorId, adminUsers]);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const storedOperatorId = window.localStorage.getItem(ACTIVE_OPERATOR_STORAGE_KEY);
-    if (storedOperatorId) {
-      setActiveOperatorId(storedOperatorId);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    if (!activeOperatorId) return;
-    window.localStorage.setItem(ACTIVE_OPERATOR_STORAGE_KEY, activeOperatorId);
-  }, [activeOperatorId]);
-
-  useEffect(() => {
-    if (adminUsers.length === 0) return;
-
-    const stillExists = adminUsers.some((user) => user.id === activeOperatorId);
-    if (stillExists) return;
-
-    setActiveOperatorId(adminUsers[0]?.id ?? '');
-  }, [activeOperatorId, adminUsers]);
+  const getChangedByPayload = useCallback(
+    () => ({
+      changed_by_user_id: sessionUser.id,
+      changed_by_name: sessionUser.name,
+      changed_by_email: sessionUser.email
+    }),
+    [sessionUser.email, sessionUser.id, sessionUser.name]
+  );
 
   useEffect(() => {
     void loadRows();
   }, [loadRows]);
+
+  useEffect(() => {
+    if (!TABLES.some((table) => table.key === activeTable)) {
+      setActiveTable(TABLES[0]?.key ?? 'reseller_applications');
+    }
+  }, [TABLES, activeTable]);
 
   const activeConfig = adminTableConfigs[activeTable];
   const isResellerTable = activeTable === 'reseller_applications';
@@ -528,6 +529,45 @@ export function AdminDashboard() {
     window.location.reload();
   }
 
+  async function createCrmUser() {
+    const response = await fetch('/api/admin/users', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: newUserName,
+        email: newUserEmail,
+        password: newUserPassword,
+        is_active: true
+      })
+    });
+    const body = (await response.json()) as { error?: string };
+    if (!response.ok) {
+      alert(body.error ?? 'Sikertelen felhasználó létrehozás.');
+      return;
+    }
+    setNewUserName('');
+    setNewUserEmail('');
+    setNewUserPassword('');
+    await loadRows();
+  }
+
+  async function updateManagedUser(
+    userId: string,
+    updates: Partial<{ name: string; email: string; is_active: boolean; password: string }>
+  ) {
+    const response = await fetch('/api/admin/users', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: userId, ...updates })
+    });
+    const body = (await response.json()) as { error?: string };
+    if (!response.ok) {
+      alert(body.error ?? 'Sikertelen felhasználó frissítés.');
+      return;
+    }
+    await loadRows();
+  }
+
   useEffect(() => {
     return () => {
       Object.values(rowSaveTimersRef.current).forEach((timerId) => window.clearTimeout(timerId));
@@ -540,23 +580,9 @@ export function AdminDashboard() {
       <header className="flex flex-col gap-3 rounded-xl border border-slate-800 bg-slate-900 p-4 md:flex-row md:items-center md:justify-between">
         <h1 className="text-xl font-semibold text-white md:text-2xl">Aquadrop Admin</h1>
         <div className="flex flex-wrap items-center gap-2">
-          {activeTable === 'reseller_applications' ? (
-            <label className="flex items-center gap-2 rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-xs text-slate-300">
-              <span>Aktív kezelő:</span>
-              <select
-                value={activeOperatorId}
-                onChange={(event) => setActiveOperatorId(event.target.value)}
-                className="rounded border border-slate-700 bg-slate-900 px-2 py-1 text-xs text-white"
-              >
-                <option value="">Nincs kiválasztva</option>
-                {adminUsers.map((user) => (
-                  <option key={user.id} value={user.id}>
-                    {user.name} ({user.email})
-                  </option>
-                ))}
-              </select>
-            </label>
-          ) : null}
+          <span className="rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-xs text-slate-300">
+            Belépve: {sessionUser.name} ({sessionUser.email}) · {sessionUser.role}
+          </span>
           <button
             onClick={() => void loadRows()}
             className="rounded-md border border-slate-700 px-3 py-2 text-sm text-slate-100 transition hover:bg-slate-800"
@@ -595,7 +621,70 @@ export function AdminDashboard() {
           placeholder="Keresés bármely mezőben..."
           className="mb-4 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white outline-none ring-cyan-400 transition focus:ring-2"
         />
-        {isResellerTable ? (
+        {activeTable === 'admin_users' ? (
+          <div className="space-y-4">
+            <div className="grid gap-2 rounded-lg border border-slate-800 bg-slate-950/60 p-3 md:grid-cols-4">
+              <input
+                value={newUserName}
+                onChange={(event) => setNewUserName(event.target.value)}
+                placeholder="Név"
+                className="rounded border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white"
+              />
+              <input
+                value={newUserEmail}
+                onChange={(event) => setNewUserEmail(event.target.value)}
+                placeholder="Email"
+                type="email"
+                className="rounded border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white"
+              />
+              <input
+                value={newUserPassword}
+                onChange={(event) => setNewUserPassword(event.target.value)}
+                placeholder="Kezdő jelszó (opcionális)"
+                type="password"
+                className="rounded border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white"
+              />
+              <button
+                onClick={() => void createCrmUser()}
+                className="rounded bg-cyan-500 px-3 py-2 text-sm font-semibold text-slate-950 hover:bg-cyan-400"
+              >
+                Kezelő hozzáadása
+              </button>
+            </div>
+
+            <div className="space-y-2">
+              {managedUsers.map((user) => (
+                <div key={user.id} className="grid gap-2 rounded-lg border border-slate-800 bg-slate-950/60 p-3 md:grid-cols-5">
+                  <input
+                    defaultValue={user.name}
+                    onBlur={(event) => void updateManagedUser(user.id, { name: event.target.value })}
+                    className="rounded border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white"
+                  />
+                  <input
+                    defaultValue={user.email}
+                    onBlur={(event) => void updateManagedUser(user.id, { email: event.target.value })}
+                    className="rounded border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white"
+                  />
+                  <input
+                    placeholder="Új jelszó"
+                    type="password"
+                    onBlur={(event) =>
+                      event.target.value ? void updateManagedUser(user.id, { password: event.target.value }) : undefined
+                    }
+                    className="rounded border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white"
+                  />
+                  <button
+                    onClick={() => void updateManagedUser(user.id, { is_active: !user.is_active })}
+                    className={`rounded px-3 py-2 text-sm ${user.is_active ? 'bg-emerald-700 text-white' : 'bg-slate-700 text-slate-100'}`}
+                  >
+                    {user.is_active ? 'Aktív' : 'Inaktív'}
+                  </button>
+                  <div className="rounded border border-slate-700 px-3 py-2 text-sm text-slate-300">{user.role}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : isResellerTable ? (
           <div className="mb-4 grid gap-2 md:grid-cols-4">
             <select
               value={statusFilter}
