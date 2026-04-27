@@ -97,6 +97,31 @@ export async function fetchAdminTableRows(table: AdminTableViewName): Promise<Re
   return (await response.json()) as Record<string, unknown>[];
 }
 
+export async function fetchAdminTableRowById(
+  table: AdminTableViewName,
+  id: string
+): Promise<Record<string, unknown> | null> {
+  const sourceTable = resolveSourceTable(table);
+  const query = new URLSearchParams({
+    select: '*',
+    id: `eq.${id}`,
+    limit: '1'
+  });
+
+  const response = await fetch(`${getRestUrl()}/${sourceTable}?${query.toString()}`, {
+    method: 'GET',
+    headers: getServiceHeaders(),
+    cache: 'no-store'
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to read ${sourceTable} row: ${response.status} ${await response.text()}`);
+  }
+
+  const rows = (await response.json()) as Record<string, unknown>[];
+  return rows[0] ?? null;
+}
+
 export async function fetchAdminUsers(): Promise<Record<string, unknown>[]> {
   const query = new URLSearchParams({
     select: 'id,name,email',
@@ -114,6 +139,41 @@ export async function fetchAdminUsers(): Promise<Record<string, unknown>[]> {
   }
 
   return (await response.json()) as Record<string, unknown>[];
+}
+
+export async function fetchResellerActivityLogs(resellerId: string): Promise<Record<string, unknown>[]> {
+  const query = new URLSearchParams({
+    select: '*',
+    reseller_application_id: `eq.${resellerId}`,
+    order: 'created_at.desc',
+    limit: '200'
+  });
+
+  const response = await fetch(`${getRestUrl()}/reseller_activity_logs?${query.toString()}`, {
+    method: 'GET',
+    headers: getServiceHeaders(),
+    cache: 'no-store'
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to read reseller_activity_logs: ${response.status} ${await response.text()}`);
+  }
+
+  return (await response.json()) as Record<string, unknown>[];
+}
+
+export async function insertResellerActivityLogs(rows: Record<string, unknown>[]): Promise<void> {
+  if (rows.length === 0) return;
+
+  const response = await fetch(`${getRestUrl()}/reseller_activity_logs`, {
+    method: 'POST',
+    headers: getServiceHeaders({ Prefer: 'return=minimal' }),
+    body: JSON.stringify(rows)
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to insert reseller_activity_logs: ${response.status} ${await response.text()}`);
+  }
 }
 
 export async function patchAdminTableRow(
