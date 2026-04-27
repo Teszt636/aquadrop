@@ -6,14 +6,14 @@ export type AdminBaseTableName =
 
 export type AdminTableViewName = AdminBaseTableName | 'unsubscribed';
 
-export type AdminColumnType = 'text' | 'date' | 'link' | 'mapped';
+export type AdminColumnType = 'text' | 'date' | 'link' | 'mapped' | 'badge' | 'boolean';
 
 export type AdminColumnConfig = {
   key: string;
   label: string;
   type?: AdminColumnType;
   editable?: boolean;
-  inputType?: 'text' | 'select' | 'textarea';
+  inputType?: 'text' | 'select' | 'textarea' | 'date' | 'datetime-local' | 'number' | 'checkbox';
   options?: string[];
   hiddenInTable?: boolean;
   hiddenInDetails?: boolean;
@@ -94,6 +94,15 @@ export function formatUsageType(value: unknown): string {
 }
 
 export const GIFT_STATUS_OPTIONS = ['Új', 'Feldolgozás alatt', 'Kész', 'Elutasítva'];
+export const RESELLER_PIPELINE_OPTIONS = [
+  'Új lead',
+  'Felhívandó',
+  'Tárgyalásban',
+  'Mintát küldeni',
+  'Szerződés előtt',
+  'Partner lett',
+  'Elutasítva'
+];
 
 export function getGiftStatusValue(row: Record<string, unknown>): string {
   const raw = row.status;
@@ -190,14 +199,34 @@ export const adminTableConfigs: Record<AdminTableViewName, AdminTableConfig> = {
     label: 'Viszonteladók',
     sourceTable: 'reseller_applications',
     columns: [
-      { key: 'company', label: 'Cégnév', editable: true },
-      { key: 'name', label: 'Név', editable: true },
+      {
+        key: 'pipeline_status',
+        label: 'Státusz',
+        editable: true,
+        inputType: 'select',
+        type: 'badge',
+        options: RESELLER_PIPELINE_OPTIONS
+      },
+      { key: 'lead_score', label: 'Lead score', editable: true, inputType: 'number' },
+      { key: 'is_hot_lead', label: 'Hot lead', editable: true, inputType: 'checkbox', type: 'boolean' },
+      { key: 'company_name', label: 'Cégnév', editable: true },
+      { key: 'contact_name', label: 'Kapcsolattartó', editable: true },
       { key: 'email', label: 'Email', editable: true },
       { key: 'phone', label: 'Telefonszám', editable: true },
       { key: 'website', label: 'Weboldal', editable: true },
       { key: 'sales_channel', label: 'Értékesítési felület', editable: true },
-      { key: 'message', label: 'Üzenet', editable: true },
+      { key: 'assigned_to', label: 'Felelős', editable: true },
+      { key: 'next_action_date', label: 'Következő teendő', editable: true, type: 'date', inputType: 'date' },
+      {
+        key: 'last_contacted_at',
+        label: 'Utolsó kapcsolat',
+        editable: true,
+        type: 'date',
+        inputType: 'datetime-local'
+      },
       { key: 'created_at', label: 'Beküldve', type: 'date' },
+      { key: 'admin_note', label: 'Admin megjegyzés', editable: true, inputType: 'textarea', hiddenInTable: true },
+      { key: 'message', label: 'Üzenet', editable: true, hiddenInTable: true },
       { key: 'id', label: 'ID', hiddenInTable: true, hiddenInDetails: true }
     ]
   },
