@@ -61,3 +61,149 @@ create table if not exists public.media_kit_downloads (
 
 create index if not exists media_kit_downloads_email_idx
   on public.media_kit_downloads (email);
+
+alter table public.announcement_signups enable row level security;
+alter table public.gift_claims enable row level security;
+alter table public.media_kit_downloads enable row level security;
+alter table public.reseller_applications enable row level security;
+
+do $$
+declare
+  table_name text;
+  policy_name text;
+begin
+  foreach table_name in array array[
+    'announcement_signups',
+    'gift_claims',
+    'media_kit_downloads',
+    'reseller_applications'
+  ]
+  loop
+    for policy_name in
+      select pol.policyname
+      from pg_policies pol
+      where pol.schemaname = 'public'
+        and pol.tablename = table_name
+        and pol.qual = 'true'
+    loop
+      execute format('drop policy if exists %I on public.%I;', policy_name, table_name);
+    end loop;
+  end loop;
+end
+$$;
+
+drop policy if exists "Allow public insert" on public.announcement_signups;
+drop policy if exists "Deny public select" on public.announcement_signups;
+drop policy if exists "Deny public update" on public.announcement_signups;
+drop policy if exists "Deny public delete" on public.announcement_signups;
+
+create policy "Allow public insert"
+on public.announcement_signups
+for insert
+to anon
+with check (true);
+
+create policy "Deny public select"
+on public.announcement_signups
+for select
+to anon
+using (false);
+
+create policy "Deny public update"
+on public.announcement_signups
+for update
+to anon
+using (false);
+
+create policy "Deny public delete"
+on public.announcement_signups
+for delete
+to anon
+using (false);
+
+drop policy if exists "Allow public insert" on public.gift_claims;
+drop policy if exists "Deny public select" on public.gift_claims;
+drop policy if exists "Deny public update" on public.gift_claims;
+drop policy if exists "Deny public delete" on public.gift_claims;
+
+create policy "Allow public insert"
+on public.gift_claims
+for insert
+to anon
+with check (true);
+
+create policy "Deny public select"
+on public.gift_claims
+for select
+to anon
+using (false);
+
+create policy "Deny public update"
+on public.gift_claims
+for update
+to anon
+using (false);
+
+create policy "Deny public delete"
+on public.gift_claims
+for delete
+to anon
+using (false);
+
+drop policy if exists "Allow public insert" on public.media_kit_downloads;
+drop policy if exists "Deny public select" on public.media_kit_downloads;
+drop policy if exists "Deny public update" on public.media_kit_downloads;
+drop policy if exists "Deny public delete" on public.media_kit_downloads;
+
+create policy "Allow public insert"
+on public.media_kit_downloads
+for insert
+to anon
+with check (true);
+
+create policy "Deny public select"
+on public.media_kit_downloads
+for select
+to anon
+using (false);
+
+create policy "Deny public update"
+on public.media_kit_downloads
+for update
+to anon
+using (false);
+
+create policy "Deny public delete"
+on public.media_kit_downloads
+for delete
+to anon
+using (false);
+
+drop policy if exists "Allow public insert" on public.reseller_applications;
+drop policy if exists "Deny public select" on public.reseller_applications;
+drop policy if exists "Deny public update" on public.reseller_applications;
+drop policy if exists "Deny public delete" on public.reseller_applications;
+
+create policy "Allow public insert"
+on public.reseller_applications
+for insert
+to anon
+with check (true);
+
+create policy "Deny public select"
+on public.reseller_applications
+for select
+to anon
+using (false);
+
+create policy "Deny public update"
+on public.reseller_applications
+for update
+to anon
+using (false);
+
+create policy "Deny public delete"
+on public.reseller_applications
+for delete
+to anon
+using (false);
