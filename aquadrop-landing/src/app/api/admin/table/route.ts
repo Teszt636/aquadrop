@@ -75,13 +75,26 @@ type PatchRequestBody = {
   updates?: Record<string, unknown>;
 };
 
+type SupabaseErrorDetails = {
+  code?: string | null;
+  message?: string | null;
+  details?: string | null;
+  hint?: string | null;
+  raw?: string;
+};
+
 function sanitizeValue(key: string, value: unknown): unknown {
   if (value === undefined) {
     return undefined;
   }
 
   if (key === 'is_hot_lead') {
-    return value === true || value === 'true';
+    if (typeof value === 'boolean') {
+      return value;
+    }
+    if (value === 'true') return true;
+    if (value === 'false') return false;
+    throw new Error('A hot lead értéke csak logikai (boolean) lehet.');
   }
 
   if (key === 'lead_score') {
@@ -124,7 +137,7 @@ function sanitizeValue(key: string, value: unknown): unknown {
   }
 
   if (key === 'assigned_to') {
-    if (value === '' || value === null) return null;
+    if (value === '' || value === null || value === 'Nincs felelős') return null;
     if (typeof value !== 'string' || !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value)) {
       throw new Error('A felelős azonosítója hibás.');
     }
@@ -234,6 +247,76 @@ function buildChangeSummary(fieldName: string, oldValue: string, newValue: strin
   return `${label} módosítva: ${oldValue} → ${newValue}`;
 }
 
+function parseSupabaseError(error: unknown): SupabaseErrorDetails {
+  if (!(error instanceof Error)) {
+    return { message: 'Ismeretlen hiba.' };
+  }
+
+  const raw = error.message ?? 'Ismeretlen hiba.';
+  const jsonStart = raw.indexOf('{');
+  if (jsonStart === -1) {
+    return { message: raw, raw };
+  }
+
+  const maybeJson = raw.slice(jsonStart);
+  try {
+    const parsed = JSON.parse(maybeJson) as {
+      code?: string;
+      message?: string;
+      details?: string;
+      hint?: string;
+    };
+
+    return {
+      code: parsed.code ?? null,
+      message: parsed.message ?? raw,
+      details: parsed.details ?? null,
+      hint: parsed.hint ?? null,
+      raw
+    };
+  } catch {
+    return { message: raw, raw };
+  }
+}
+
+function logPatchFailure(params: {
+  table: AdminTableName;
+  id: string;
+  payload: Record<string, unknown>;
+  sessionUser: unknown;
+  error: unknown;
+}) {
+  const supabaseError = parseSupabaseError(params.error);
+
+  console.error('[admin/table PATCH] reseller update failed', {
+    table: params.table,
+    recordId: params.id,
+    payloadFields: Object.keys(params.payload),
+    payload: params.payload,
+    sessionUser: params.sessionUser,
+    supabaseError
+  });
+}
+
+function logActivityInsertFailure(params: {
+  table: AdminTableName;
+  id: string;
+  payload: Record<string, unknown>;
+  sessionUser: unknown;
+  error: unknown;
+}) {
+  const supabaseError = parseSupabaseError(params.error);
+
+  console.error('[admin/table PATCH] activity log insert failed', {
+    table: params.table,
+    recordId: params.id,
+    payloadFields: Object.keys(params.payload),
+    payload: params.payload,
+    sessionUser: params.sessionUser,
+    supabaseError
+  });
+}
+
 async function assertSession(table: AdminTableName, method: 'GET' | 'PATCH' | 'DELETE') {
   if (table === 'admin_users') {
     const user = await requireAdminSession(['admin']);
@@ -291,38 +374,52 @@ export async function GET(request: Request) {
 }
 
 export async function PATCH(request: Request) {
-  const body = (await request.json()) as PatchRequestBody;
-
-  const table = getSafeTableName(body.table);
-
-  if (!table) {
-    return NextResponse.json({ error: 'Nem engedélyezett tábla.' }, { status: 400 });
-  }
-  const { error: sessionError, sessionUser } = await assertSession(table, 'PATCH');
-  if (sessionError) return sessionError;
-
-  if (!body.id || typeof body.id !== 'string') {
-    return NextResponse.json({ error: 'Hiányzó rekord azonosító.' }, { status: 400 });
-  }
-
-  const updates = body.updates ?? {};
-  const allowedFields = new Set(EDITABLE_FIELDS[table] ?? []);
-  const sanitizedUpdates = Object.fromEntries(
-    Object.entries(updates)
-      .filter(([key]) => allowedFields.has(key))
-      .map(([key, value]) => [key, sanitizeValue(key, value)])
-      .filter(([, value]) => value !== undefined)
-  );
-
-  if ('pipeline_status' in sanitizedUpdates) {
-    sanitizedUpdates.next_action_description = null;
-  }
-
-  if (Object.keys(sanitizedUpdates).length === 0) {
-    return NextResponse.json({ error: 'Nincs menthető mező.' }, { status: 400 });
-  }
+  let parsedBody: PatchRequestBody = {};
+  let requestTable: AdminTableName | null = null;
+  let requestId = 'unknown';
+  let requestPayload: Record<string, unknown> = {};
+  let requestSessionUser: { id?: string | null; name?: string | null; email?: string | null } | null = null;
 
   try {
+    const body = (await request.json()) as PatchRequestBody;
+    parsedBody = body;
+    requestTable = getSafeTableName(body.table);
+    requestId = typeof body.id === 'string' ? body.id : 'unknown';
+    requestPayload = (body.updates ?? {}) as Record<string, unknown>;
+    const table = requestTable;
+
+    if (!table) {
+      return NextResponse.json({ success: false, error: 'Nem engedélyezett tábla.', details: null }, { status: 400 });
+    }
+    const { error: sessionError, sessionUser } = await assertSession(table, 'PATCH');
+    if (sessionError) return sessionError;
+    requestSessionUser = {
+      id: sessionUser?.id ?? null,
+      name: sessionUser?.name ?? null,
+      email: sessionUser?.email ?? null
+    };
+
+    if (!body.id || typeof body.id !== 'string') {
+      return NextResponse.json({ success: false, error: 'Hiányzó rekord azonosító.', details: null }, { status: 400 });
+    }
+
+    const updates = body.updates ?? {};
+    const allowedFields = new Set(EDITABLE_FIELDS[table] ?? []);
+    const sanitizedUpdates = Object.fromEntries(
+      Object.entries(updates)
+        .filter(([key]) => allowedFields.has(key))
+        .map(([key, value]) => [key, sanitizeValue(key, value)])
+        .filter(([, value]) => value !== undefined)
+    );
+
+    if ('pipeline_status' in sanitizedUpdates) {
+      sanitizedUpdates.next_action_description = null;
+    }
+
+    if (Object.keys(sanitizedUpdates).length === 0) {
+      return NextResponse.json({ success: false, error: 'Nincs menthető mező.', details: null }, { status: 400 });
+    }
+
     let beforeRow: Record<string, unknown> | null = null;
     const shouldCreateLog = table === 'reseller_applications';
     const changedByUserId = sessionUser?.id ?? null;
@@ -331,6 +428,25 @@ export async function PATCH(request: Request) {
 
     if (shouldCreateLog) {
       beforeRow = await fetchAdminTableRowById(table, body.id);
+
+      if ('assigned_to' in sanitizedUpdates) {
+        const assignedTo = sanitizedUpdates.assigned_to;
+        if (assignedTo !== null) {
+          const adminUsers = await fetchAdminUsers(true);
+          const validAdminIds = new Set(adminUsers.map((user) => user.id));
+          if (!validAdminIds.has(String(assignedTo))) {
+            return NextResponse.json(
+              { success: false, error: 'Érvénytelen felelős azonosító.', details: { assigned_to: assignedTo } },
+              { status: 400 }
+            );
+          }
+        }
+      }
+
+      if ('last_contacted_at' in sanitizedUpdates) {
+        sanitizedUpdates.previous_contacted_at = beforeRow?.last_contacted_at ?? null;
+        sanitizedUpdates.last_contacted_at = new Date().toISOString();
+      }
     }
 
     await patchAdminTableRow(table, body.id, sanitizedUpdates);
@@ -372,14 +488,37 @@ export async function PATCH(request: Request) {
         .filter(Boolean) as Array<Record<string, unknown>>;
 
       if (logs.length > 0) {
-        await insertResellerActivityLogs(logs);
+        try {
+          await insertResellerActivityLogs(logs);
+        } catch (activityLogError) {
+          logActivityInsertFailure({
+            table,
+            id: body.id,
+            payload: sanitizedUpdates,
+            sessionUser,
+            error: activityLogError
+          });
+        }
       }
     }
 
     return NextResponse.json({ success: true });
   } catch (error) {
+    logPatchFailure({
+      table: requestTable ?? 'reseller_applications',
+      id: requestId,
+      payload: requestPayload,
+      sessionUser: requestSessionUser ?? { id: null, name: null, email: null, table: parsedBody.table ?? null },
+      error
+    });
+
+    const details = parseSupabaseError(error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Mentési hiba.' },
+      {
+        success: false,
+        error: details.message ?? 'Mentési hiba.',
+        details
+      },
       { status: 500 }
     );
   }
