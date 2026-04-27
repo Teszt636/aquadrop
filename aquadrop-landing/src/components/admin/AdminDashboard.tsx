@@ -196,7 +196,8 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
   const rowSaveTimersRef = useRef<Record<string, number>>({});
   const TABLES = useMemo(
     () => {
-      const visible = sessionUser.role === 'crm_user' ? ['reseller_applications'] : TABLE_ORDER;
+      const visible: AdminTableViewName[] =
+        sessionUser.role === 'crm_user' ? (['reseller_applications'] satisfies AdminTableViewName[]) : TABLE_ORDER;
       return visible
         .filter((key) => !(key === 'admin_users' && sessionUser.role !== 'admin'))
         .map((key) => ({ key, label: adminTableConfigs[key].label }));
