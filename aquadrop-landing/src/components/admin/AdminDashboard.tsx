@@ -206,6 +206,7 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
   >({});
   const rowSaveStateTimersRef = useRef<Record<string, number>>({});
   const rowSaveQueueRef = useRef<Record<string, Promise<void>>>({});
+  const expandedRowsRef = useRef<Record<string, boolean>>({});
   const TABLES = useMemo(
     () => {
       const visible: AdminTableViewName[] =
@@ -304,6 +305,10 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
       setActiveTable(TABLES[0]?.key ?? 'reseller_applications');
     }
   }, [TABLES, activeTable]);
+
+  useEffect(() => {
+    expandedRowsRef.current = expandedRows;
+  }, [expandedRows]);
 
   const activeConfig = adminTableConfigs[activeTable];
   const isResellerTable = activeTable === 'reseller_applications';
@@ -479,15 +484,16 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
           [rowId]: { status: 'saved', message: 'Mentve' }
         }));
         clearSavedStateLater(rowId);
-        await loadRows();
-        await loadResellerActivity(rowId);
+        if (expandedRowsRef.current[rowId]) {
+          await loadResellerActivity(rowId);
+        }
       };
 
       const queued = (rowSaveQueueRef.current[rowId] ?? Promise.resolve()).then(runSave, runSave);
       rowSaveQueueRef.current[rowId] = queued;
       return queued;
     },
-    [activeTable, getChangedByPayload, loadResellerActivity, loadRows]
+    [activeTable, getChangedByPayload, loadResellerActivity]
   );
 
   function updateAndPersistNextAction(
