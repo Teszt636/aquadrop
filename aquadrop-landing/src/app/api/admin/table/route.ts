@@ -446,7 +446,7 @@ export async function PATCH(request: Request) {
   let requestSessionUser: { id?: string | null; name?: string | null; email?: string | null } | null = null;
   let debugUpdatedFields: string[] = [];
   let debugInsertedActivityLogs: Array<Record<string, unknown>> = [];
-  let debugActivityLogErrors: Array<Record<string, unknown>> = [];
+  const debugActivityLogErrors: Array<Record<string, unknown>> = [];
   let debugActivityLogAttempted = false;
   let debugActivityLogInserted = false;
   let debugActivityLogError: Record<string, unknown> | null = null;
