@@ -519,6 +519,30 @@ export function AdminDashboard() {
               const nextActionDescription = stringifyValue(getResellerDraftValue(row, 'next_action_description'));
               const previousContactValue = getResellerDraftValue(row, 'previous_contacted_at');
               const isExpanded = Boolean(expandedRows[rowId]);
+              const nextActionDeadlineTone =
+                nextActionState === 'overdue'
+                  ? 'text-rose-300'
+                  : nextActionState === 'today'
+                    ? 'text-amber-300'
+                    : nextActionState === 'none'
+                      ? 'text-slate-400'
+                      : 'text-slate-200';
+              const nextActionDeadlineBadgeTone =
+                nextActionState === 'overdue'
+                  ? 'border-rose-500/60 bg-rose-950/30 text-rose-300'
+                  : nextActionState === 'today'
+                    ? 'border-amber-500/60 bg-amber-950/30 text-amber-300'
+                    : nextActionState === 'none'
+                      ? 'border-slate-600 bg-slate-900 text-slate-400'
+                      : 'border-slate-600 bg-slate-900 text-slate-300';
+              const nextActionDeadlineStatus =
+                nextActionState === 'overdue'
+                  ? 'Lejárt'
+                  : nextActionState === 'today'
+                    ? 'Ma'
+                    : nextActionState === 'none'
+                      ? 'Nincs dátum'
+                      : 'Jövőbeni';
               const nextActionTone =
                 nextActionState === 'overdue'
                   ? 'border-rose-500/70 bg-rose-950/40 text-rose-200'
@@ -561,17 +585,17 @@ export function AdminDashboard() {
                     </div>
 
                     <div className="space-y-2 text-sm">
-                      <div className={`h-full rounded-md border px-4 py-3 ${nextActionTone}`}>
-                        <p className="text-sm font-semibold text-white">Következő teendő</p>
-                        <p className="mt-2 text-xs text-slate-300">
-                          Határidő: <span className="font-medium text-white">{nextActionLabel}</span>
-                        </p>
-                        <p className="mt-2 text-xs text-slate-300">Teendő leírása:</p>
-                        <p className="mt-1 whitespace-pre-wrap break-words text-sm text-slate-100">{nextActionDescription || 'Nincs leírás.'}</p>
-                        <p className="mt-3 text-xs text-slate-300">
-                          Felelős: <span className="font-medium text-white">{assignedTo || 'Nincs felelős'}</span>
-                        </p>
-                      </div>
+                      <p className="text-sm font-semibold text-white">Következő teendő</p>
+                      <p className="flex flex-wrap items-center gap-2 text-xs">
+                        <span className="text-slate-400">Határidő:</span>
+                        <span className={`font-medium ${nextActionDeadlineTone}`}>{nextActionLabel}</span>
+                        <span className={`rounded-full border px-2 py-0.5 text-[11px] font-semibold ${nextActionDeadlineBadgeTone}`}>{nextActionDeadlineStatus}</span>
+                      </p>
+                      <p className="text-xs text-slate-400">Teendő leírása:</p>
+                      <p className="whitespace-pre-wrap break-words text-sm text-slate-100">{nextActionDescription || 'Nincs leírás.'}</p>
+                      <p className="text-xs text-slate-300">
+                        Felelős: <span className="font-medium text-white">{assignedTo || 'Nincs felelős'}</span>
+                      </p>
                     </div>
                   </div>
 
