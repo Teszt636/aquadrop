@@ -41,6 +41,8 @@ type BrandedEmailLayoutParams = {
 };
 
 const SITE_URL_FALLBACK = 'https://www.aquadrop.hu';
+const ADMIN_DASHBOARD_URL = 'https://www.aquadrop.hu/admin';
+const ADMIN_CTA_TEXT = 'Admin felület megnyitása';
 
 function getSiteUrl(): string {
   return process.env.SITE_URL?.replace(/\/$/, '') || SITE_URL_FALLBACK;
@@ -222,8 +224,8 @@ export function buildAnnouncementAdminEmail(data: AnnouncementSignupEmailData): 
       { label: 'Telefon', value: formatOptional(data.phone) },
       { label: 'Időpont', value: data.submittedAt }
     ],
-    ctaText: 'Partner oldal megnyitása',
-    ctaUrl: `${getSiteUrl()}/partner`
+    ctaText: ADMIN_CTA_TEXT,
+    ctaUrl: ADMIN_DASHBOARD_URL
   });
 }
 
@@ -265,8 +267,8 @@ export function buildGiftAdminEmail(data: GiftClaimEmailData): EmailTemplate {
       { label: 'Receipt URL', value: formatOptional(data.receiptUrl) },
       { label: 'Időpont', value: data.submittedAt }
     ],
-    ctaText: 'Partner oldal megnyitása',
-    ctaUrl: `${getSiteUrl()}/partner`
+    ctaText: ADMIN_CTA_TEXT,
+    ctaUrl: ADMIN_DASHBOARD_URL
   });
 }
 
@@ -308,7 +310,7 @@ export function buildResellerAdminEmail(data: ResellerApplicationEmailData): Ema
       { label: 'Üzenet', value: formatOptional(data.message) },
       { label: 'Időpont', value: data.submittedAt }
     ],
-    ctaText: 'Partner oldal megnyitása',
-    ctaUrl: `${getSiteUrl()}/partner`
+    ctaText: ADMIN_CTA_TEXT,
+    ctaUrl: ADMIN_DASHBOARD_URL
   });
 }
