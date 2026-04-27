@@ -244,44 +244,47 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
     }
   }, [activeTable]);
 
-  const loadResellerActivity = useCallback(async (rowId: string) => {
-    if (!rowId) {
+  const fetchActivityLogs = useCallback(async (resellerId: string) => {
+    if (!resellerId) {
       return;
     }
 
     setActivityByRowId((previous) => ({
       ...previous,
-      [rowId]: {
+      [resellerId]: {
         loading: true,
         error: null,
-        logs: previous[rowId]?.logs ?? []
+        logs: previous[resellerId]?.logs ?? []
       }
     }));
 
     try {
-      const response = await fetch(`/api/admin/reseller-activity?resellerId=${encodeURIComponent(rowId)}`, {
+      const response = await fetch(`/api/admin/reseller-activity?resellerId=${encodeURIComponent(resellerId)}`, {
         cache: 'no-store'
       });
       const body = (await response.json()) as { rows?: ResellerActivityLog[]; error?: string };
       if (!response.ok) {
         throw new Error(body.error ?? 'Sikertelen előzmény lekérdezés.');
       }
+      const nextLogs = [...(body.rows ?? [])].sort(
+        (left, right) => new Date(right.created_at).getTime() - new Date(left.created_at).getTime()
+      );
 
       setActivityByRowId((previous) => ({
         ...previous,
-        [rowId]: {
+        [resellerId]: {
           loading: false,
           error: null,
-          logs: body.rows ?? []
+          logs: nextLogs
         }
       }));
     } catch (activityError) {
       setActivityByRowId((previous) => ({
         ...previous,
-        [rowId]: {
+        [resellerId]: {
           loading: false,
           error: activityError instanceof Error ? activityError.message : 'Sikertelen előzmény lekérdezés.',
-          logs: previous[rowId]?.logs ?? []
+          logs: previous[resellerId]?.logs ?? []
         }
       }));
     }
@@ -469,12 +472,23 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ table: activeTable, id: rowId, updates, ...getChangedByPayload() })
         });
+        const body = (await response.json()) as {
+          success?: boolean;
+          error?: string;
+          newActivityLogs?: ResellerActivityLog[];
+        };
 
         if (!response.ok) {
-          const body = (await response.json()) as { error?: string };
           setRowSaveState((previous) => ({
             ...previous,
             [rowId]: { status: 'error', message: body.error ?? 'Hiba a mentéskor' }
+          }));
+          return;
+        }
+        if (!body.success) {
+          setRowSaveState((previous) => ({
+            ...previous,
+            [rowId]: { status: 'error', message: body.error ?? 'Sikertelen mentés.' }
           }));
           return;
         }
@@ -485,7 +499,21 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
         }));
         clearSavedStateLater(rowId);
         if (expandedRowsRef.current[rowId]) {
-          await loadResellerActivity(rowId);
+          if (Array.isArray(body.newActivityLogs)) {
+            const nextLogs = [...body.newActivityLogs].sort(
+              (left, right) => new Date(right.created_at).getTime() - new Date(left.created_at).getTime()
+            );
+            setActivityByRowId((previous) => ({
+              ...previous,
+              [rowId]: {
+                loading: false,
+                error: null,
+                logs: nextLogs
+              }
+            }));
+          } else {
+            await fetchActivityLogs(rowId);
+          }
         }
       };
 
@@ -493,7 +521,7 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
       rowSaveQueueRef.current[rowId] = queued;
       return queued;
     },
-    [activeTable, getChangedByPayload, loadResellerActivity]
+    [activeTable, fetchActivityLogs, getChangedByPayload]
   );
 
   function updateAndPersistNextAction(
@@ -910,7 +938,7 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
                         const willExpand = !expandedRows[rowId];
                         setExpandedRows((previous) => ({ ...previous, [rowId]: willExpand }));
                         if (willExpand) {
-                          void loadResellerActivity(rowId);
+                          void fetchActivityLogs(rowId);
                         }
                       }}
                       className="text-sm text-cyan-300 hover:text-cyan-200"
