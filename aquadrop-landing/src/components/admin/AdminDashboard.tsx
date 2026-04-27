@@ -440,6 +440,7 @@ export function AdminDashboard() {
         <input
           value={query}
           onChange={(event) => setQuery(event.target.value)}
+          placeholder="Keresés bármely mezőben..."
           className="mb-4 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white outline-none ring-cyan-400 transition focus:ring-2"
         />
         {isResellerTable ? (
@@ -560,37 +561,16 @@ export function AdminDashboard() {
                     </div>
 
                     <div className="space-y-2 text-sm">
-                      <div className={`rounded-md border px-3 py-2 ${nextActionTone}`}>
-                        <p className="text-[11px] uppercase tracking-wide opacity-80">Következő teendő</p>
-                        <p className="text-sm font-semibold">{nextActionLabel}</p>
-                        <p className="mt-1 text-xs text-slate-100">{nextActionDescription || 'Nincs leírás.'}</p>
-                        <p className="mt-2 text-xs text-slate-300">Felelős: <span className="font-medium text-white">{assignedTo}</span></p>
-                      </div>
-                      <div className="flex flex-wrap gap-2">
-                        {phone ? (
-                          <a href={`tel:${phone}`} className="rounded border border-slate-600 px-2 py-1 text-xs text-white hover:bg-slate-800">
-                            Hívás
-                          </a>
-                        ) : null}
-                        {email ? (
-                          <a href={`mailto:${email}`} className="rounded border border-slate-600 px-2 py-1 text-xs text-white hover:bg-slate-800">
-                            Email
-                          </a>
-                        ) : null}
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const currentLast = getResellerDraftValue(row, 'last_contacted_at');
-                            if (currentLast) {
-                              setResellerDraftValue(rowId, 'previous_contacted_at', stringifyValue(currentLast));
-                            }
-                            setResellerDraftValue(rowId, 'last_contacted_at', new Date().toISOString());
-                            scheduleResellerAutoSave(rowId);
-                          }}
-                          className="rounded border border-cyan-500/40 px-2 py-1 text-xs text-cyan-300 hover:bg-cyan-500/10"
-                        >
-                          Kapcsolatfelvétel rögzítése
-                        </button>
+                      <div className={`h-full rounded-md border px-4 py-3 ${nextActionTone}`}>
+                        <p className="text-sm font-semibold text-white">Következő teendő</p>
+                        <p className="mt-2 text-xs text-slate-300">
+                          Határidő: <span className="font-medium text-white">{nextActionLabel}</span>
+                        </p>
+                        <p className="mt-2 text-xs text-slate-300">Teendő leírása:</p>
+                        <p className="mt-1 whitespace-pre-wrap break-words text-sm text-slate-100">{nextActionDescription || 'Nincs leírás.'}</p>
+                        <p className="mt-3 text-xs text-slate-300">
+                          Felelős: <span className="font-medium text-white">{assignedTo || 'Nincs felelős'}</span>
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -676,6 +656,20 @@ export function AdminDashboard() {
                                 </option>
                               ))}
                             </select>
+                          </label>
+                          <label className="text-xs text-slate-300">
+                            <span className="mb-1 block uppercase tracking-wide text-slate-500">Lead score</span>
+                            <input
+                              type="number"
+                              min={0}
+                              max={100}
+                              value={stringifyValue(getResellerDraftValue(row, 'lead_score'))}
+                              onChange={(event) => {
+                                setResellerDraftValue(rowId, 'lead_score', event.target.value);
+                                scheduleResellerAutoSave(rowId);
+                              }}
+                              className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white"
+                            />
                           </label>
                         </div>
                         <div className="text-xs text-slate-300">
