@@ -189,6 +189,43 @@ export async function insertAdminUser(row: Record<string, unknown>): Promise<voi
   }
 }
 
+export async function findOrCreateAdminUser(params: {
+  email: string;
+  name: string;
+  role: AdminRole;
+  isActive?: boolean;
+}): Promise<AdminUserRecord> {
+  const normalizedEmail = params.email.trim().toLowerCase();
+  const isActive = params.isActive ?? true;
+
+  const existingUser = await fetchAdminUserByEmail(normalizedEmail);
+  if (existingUser) {
+    return existingUser;
+  }
+
+  try {
+    await insertAdminUser({
+      email: normalizedEmail,
+      name: params.name,
+      role: params.role,
+      is_active: isActive
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message.toLowerCase() : '';
+    const isConflict = message.includes('409') || message.includes('duplicate key');
+    if (!isConflict) {
+      throw error;
+    }
+  }
+
+  const createdUser = await fetchAdminUserByEmail(normalizedEmail);
+  if (createdUser) {
+    return createdUser;
+  }
+
+  throw new Error(`Failed to find or create admin user for ${normalizedEmail}.`);
+}
+
 export async function fetchResellerActivityLogs(resellerId: string): Promise<Record<string, unknown>[]> {
   const query = new URLSearchParams({
     select: '*',

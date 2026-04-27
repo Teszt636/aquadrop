@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import { isMainAdminCredentials, setAdminSessionCookie } from '@/lib/admin/auth';
 import { MAIN_ADMIN_EMAIL } from '@/lib/admin/constants';
 import { verifyPassword } from '@/lib/admin/password';
-import { fetchAdminUserByEmail } from '@/lib/admin/supabase-admin';
+import { fetchAdminUserByEmail, findOrCreateAdminUser } from '@/lib/admin/supabase-admin';
 
 function normalizeEmail(email: string): string {
   return email.trim().toLowerCase();
@@ -20,10 +20,17 @@ export async function POST(request: Request) {
     }
 
     if (isMainAdminCredentials(email, password)) {
-      await setAdminSessionCookie({
-        id: 'main-admin',
-        name: 'Aquadrop Admin',
+      const mainAdminUser = await findOrCreateAdminUser({
         email: MAIN_ADMIN_EMAIL,
+        name: 'Aquadrop Admin',
+        role: 'admin',
+        isActive: true
+      });
+
+      await setAdminSessionCookie({
+        id: mainAdminUser.id,
+        name: mainAdminUser.name,
+        email: mainAdminUser.email,
         role: 'admin'
       });
       return NextResponse.json({ success: true });

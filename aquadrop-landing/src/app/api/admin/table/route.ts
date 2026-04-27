@@ -193,6 +193,14 @@ function normalizeText(value: unknown): string {
   return String(value);
 }
 
+function isValidUuid(value: unknown): value is string {
+  if (typeof value !== 'string') {
+    return false;
+  }
+
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value.trim());
+}
+
 function formatDateTime(value: unknown): string {
   if (!value) return '—';
   const parsed = new Date(String(value));
@@ -493,7 +501,7 @@ export async function PATCH(request: Request) {
 
     let beforeRow: Record<string, unknown> | null = null;
     const shouldCreateLog = table === 'reseller_applications';
-    const changedByUserId = sessionUser?.id ?? null;
+    const changedByUserId = isValidUuid(sessionUser?.id) ? sessionUser.id : null;
     const changedByName = sessionUser?.name ?? null;
     const changedByEmail = sessionUser?.email ?? null;
 
