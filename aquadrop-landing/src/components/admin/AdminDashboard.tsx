@@ -110,6 +110,17 @@ function combineNextActionAt(date: string, hour: string, minute: string): string
 
   const normalizedHour = hour || '10';
   const normalizedMinute = minute || '00';
+  const hourNumber = Number(normalizedHour);
+  const minuteNumber = Number(normalizedMinute);
+  const allowedMinuteValues = new Set([0, 15, 30, 45]);
+
+  if (!Number.isInteger(hourNumber) || hourNumber < 6 || hourNumber > 20) {
+    return null;
+  }
+  if (!Number.isInteger(minuteNumber) || !allowedMinuteValues.has(minuteNumber)) {
+    return null;
+  }
+
   return `${date}T${normalizedHour}:${normalizedMinute}:00`;
 }
 
@@ -178,7 +189,7 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
   const [selectedRow, setSelectedRow] = useState<Row | null>(null);
   const [editValues, setEditValues] = useState<Record<string, string>>({});
   const [rowEdits, setRowEdits] = useState<Record<string, Record<string, unknown>>>({});
-  const [savingRowId, setSavingRowId] = useState<string | null>(null);
+  const [rowSaveState, setRowSaveState] = useState<Record<string, { status: 'idle' | 'saving' | 'saved' | 'error'; message: string | null }>>({});
   const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [hotLeadFilter, setHotLeadFilter] = useState<string>('all');
@@ -193,7 +204,8 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
   const [nextActionEditors, setNextActionEditors] = useState<
     Record<string, { isOpen: boolean; date: string; hour: string; minute: string }>
   >({});
-  const rowSaveTimersRef = useRef<Record<string, number>>({});
+  const rowSaveStateTimersRef = useRef<Record<string, number>>({});
+  const rowSaveQueueRef = useRef<Record<string, Promise<void>>>({});
   const TABLES = useMemo(
     () => {
       const visible: AdminTableViewName[] =
@@ -390,6 +402,28 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
     }));
   }
 
+  function commitResellerUpdates(rowId: string, updates: Record<string, unknown>) {
+    setRowEdits((previous) => {
+      const current = previous[rowId] ?? {};
+      return {
+        ...previous,
+        [rowId]: { ...current, ...updates }
+      };
+    });
+  }
+
+  function clearSavedStateLater(rowId: string) {
+    if (rowSaveStateTimersRef.current[rowId]) {
+      window.clearTimeout(rowSaveStateTimersRef.current[rowId]);
+    }
+    rowSaveStateTimersRef.current[rowId] = window.setTimeout(() => {
+      setRowSaveState((previous) => ({
+        ...previous,
+        [rowId]: { status: 'idle', message: null }
+      }));
+    }, 1500);
+  }
+
   function openNextActionEditor(rowId: string, row: Row) {
     const nextActionDraft = getResellerDraftValue(row, 'next_action_at') ?? getResellerDraftValue(row, 'next_action_date');
     const parts = normalizeNextActionParts(nextActionDraft);
@@ -404,65 +438,83 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
     }));
   }
 
-  function setNextActionEditorValue(rowId: string, key: 'date' | 'hour' | 'minute', value: string) {
-    setNextActionEditors((previous) => {
-      const current = previous[rowId] ?? { isOpen: true, date: '', hour: '', minute: '' };
-      return {
-        ...previous,
-        [rowId]: { ...current, [key]: value }
-      };
-    });
-  }
-
   function closeNextActionEditor(rowId: string) {
     const editor = nextActionEditors[rowId];
     if (!editor) return;
-    const nextValue = combineNextActionAt(editor.date, editor.hour || '10', editor.minute || '00');
-    setResellerDraftValue(rowId, 'next_action_at', nextValue);
-    scheduleResellerAutoSave(rowId);
     setNextActionEditors((previous) => ({
       ...previous,
       [rowId]: { ...editor, isOpen: false }
     }));
   }
 
-  const saveResellerRow = useCallback(async (rowId: string) => {
-    const updates = rowEdits[rowId];
+  const persistResellerUpdates = useCallback(
+    (rowId: string, updates: Record<string, unknown>) => {
+      if (!rowId || Object.keys(updates).length === 0) {
+        return Promise.resolve();
+      }
 
-    if (!updates || Object.keys(updates).length === 0) {
+      const runSave = async () => {
+        setRowSaveState((previous) => ({
+          ...previous,
+          [rowId]: { status: 'saving', message: 'Mentés...' }
+        }));
+
+        const response = await fetch('/api/admin/table', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ table: activeTable, id: rowId, updates, ...getChangedByPayload() })
+        });
+
+        if (!response.ok) {
+          const body = (await response.json()) as { error?: string };
+          setRowSaveState((previous) => ({
+            ...previous,
+            [rowId]: { status: 'error', message: body.error ?? 'Hiba a mentéskor' }
+          }));
+          return;
+        }
+
+        setRowSaveState((previous) => ({
+          ...previous,
+          [rowId]: { status: 'saved', message: 'Mentve' }
+        }));
+        clearSavedStateLater(rowId);
+        await loadRows();
+        await loadResellerActivity(rowId);
+      };
+
+      const queued = (rowSaveQueueRef.current[rowId] ?? Promise.resolve()).then(runSave, runSave);
+      rowSaveQueueRef.current[rowId] = queued;
+      return queued;
+    },
+    [activeTable, getChangedByPayload, loadResellerActivity, loadRows]
+  );
+
+  function updateAndPersistNextAction(
+    rowId: string,
+    update: Partial<{ date: string; hour: string; minute: string }>
+  ) {
+    const current = nextActionEditors[rowId] ?? { isOpen: true, date: '', hour: '', minute: '' };
+    const nextEditor = { ...current, ...update };
+    if (nextEditor.date && !nextEditor.hour) {
+      nextEditor.hour = '10';
+    }
+    if (nextEditor.date && !nextEditor.minute) {
+      nextEditor.minute = '00';
+    }
+
+    setNextActionEditors((previous) => ({
+      ...previous,
+      [rowId]: nextEditor
+    }));
+
+    const nextActionAt = combineNextActionAt(nextEditor.date, nextEditor.hour, nextEditor.minute);
+    if (!nextActionAt) {
       return;
     }
 
-    setSavingRowId(rowId);
-    const response = await fetch('/api/admin/table', {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ table: activeTable, id: rowId, updates, ...getChangedByPayload() })
-    });
-
-    setSavingRowId(null);
-    if (!response.ok) {
-      const body = (await response.json()) as { error?: string };
-      alert(body.error ?? 'Sikertelen mentés.');
-      return;
-    }
-
-    setRowEdits((previous) => {
-      const next = { ...previous };
-      delete next[rowId];
-      return next;
-    });
-    await loadRows();
-    await loadResellerActivity(rowId);
-  }, [activeTable, getChangedByPayload, loadResellerActivity, loadRows, rowEdits]);
-
-  function scheduleResellerAutoSave(rowId: string) {
-    if (rowSaveTimersRef.current[rowId]) {
-      window.clearTimeout(rowSaveTimersRef.current[rowId]);
-    }
-    rowSaveTimersRef.current[rowId] = window.setTimeout(() => {
-      void saveResellerRow(rowId);
-    }, 450);
+    commitResellerUpdates(rowId, { next_action_at: nextActionAt });
+    void persistResellerUpdates(rowId, { next_action_at: nextActionAt });
   }
 
   async function saveRow() {
@@ -570,8 +622,9 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
 
   useEffect(() => {
     return () => {
-      Object.values(rowSaveTimersRef.current).forEach((timerId) => window.clearTimeout(timerId));
-      rowSaveTimersRef.current = {};
+      Object.values(rowSaveStateTimersRef.current).forEach((timerId) => window.clearTimeout(timerId));
+      rowSaveStateTimersRef.current = {};
+      rowSaveQueueRef.current = {};
     };
   }, []);
 
@@ -742,7 +795,6 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
             {resellerSearchRows.map((row) => {
               const rowId = getRowId(row);
               const nextActionDraft = getResellerDraftValue(row, 'next_action_at') ?? getResellerDraftValue(row, 'next_action_date');
-              const nextActionParts = normalizeNextActionParts(nextActionDraft);
               const nextActionState = getNextActionState(nextActionDraft);
               const lastContactValue = getResellerDraftValue(row, 'last_contacted_at');
               const email = stringifyValue(getResellerDraftValue(row, 'email'));
@@ -870,9 +922,12 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
                               <select
                                 value={stringifyValue(getResellerDraftValue(row, 'pipeline_status')) || 'Új lead'}
                                 onChange={(event) => {
-                                  setResellerDraftValue(rowId, 'pipeline_status', event.target.value);
-                                  setResellerDraftValue(rowId, 'next_action_description', '');
-                                  scheduleResellerAutoSave(rowId);
+                                  const updates = {
+                                    pipeline_status: event.target.value,
+                                    next_action_description: ''
+                                  };
+                                  commitResellerUpdates(rowId, updates);
+                                  void persistResellerUpdates(rowId, updates);
                                 }}
                                 className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white"
                               >
@@ -888,8 +943,9 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
                               <button
                                 type="button"
                                 onClick={() => {
-                                  setResellerDraftValue(rowId, 'is_hot_lead', !isHot);
-                                  scheduleResellerAutoSave(rowId);
+                                  const updates = { is_hot_lead: !isHot };
+                                  commitResellerUpdates(rowId, updates);
+                                  void persistResellerUpdates(rowId, updates);
                                 }}
                                 className={`w-full rounded-md border px-3 py-2 text-sm font-semibold ${isHot ? 'border-rose-500/70 bg-rose-900/40 text-rose-200' : 'border-slate-700 bg-slate-900 text-slate-200'}`}
                               >
@@ -903,11 +959,14 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
                             type="button"
                             onClick={() => {
                               const currentLast = getResellerDraftValue(row, 'last_contacted_at');
+                              const updates: Record<string, unknown> = {
+                                last_contacted_at: new Date().toISOString()
+                              };
                               if (currentLast) {
-                                setResellerDraftValue(rowId, 'previous_contacted_at', stringifyValue(currentLast));
+                                updates.previous_contacted_at = stringifyValue(currentLast);
                               }
-                              setResellerDraftValue(rowId, 'last_contacted_at', new Date().toISOString());
-                              scheduleResellerAutoSave(rowId);
+                              commitResellerUpdates(rowId, updates);
+                              void persistResellerUpdates(rowId, updates);
                             }}
                             className="w-full rounded-md border border-cyan-500/40 px-3 py-2 text-sm text-cyan-300 hover:bg-cyan-500/10"
                           >
@@ -920,8 +979,9 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
                             <select
                               value={assignedUserId}
                               onChange={(event) => {
-                                setResellerDraftValue(rowId, 'assigned_to', event.target.value || null);
-                                scheduleResellerAutoSave(rowId);
+                                const updates = { assigned_to: event.target.value || null };
+                                commitResellerUpdates(rowId, updates);
+                                void persistResellerUpdates(rowId, updates);
                               }}
                               className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white"
                             >
@@ -955,14 +1015,7 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
                                     type="date"
                                     value={nextActionEditors[rowId]?.date ?? ''}
                                     onChange={(event) => {
-                                      const nextDate = event.target.value;
-                                      setNextActionEditorValue(rowId, 'date', nextDate);
-                                      if (nextDate && !(nextActionEditors[rowId]?.hour ?? '')) {
-                                        setNextActionEditorValue(rowId, 'hour', '10');
-                                      }
-                                      if (nextDate && !(nextActionEditors[rowId]?.minute ?? '')) {
-                                        setNextActionEditorValue(rowId, 'minute', '00');
-                                      }
+                                      updateAndPersistNextAction(rowId, { date: event.target.value });
                                     }}
                                     className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white"
                                   />
@@ -975,7 +1028,7 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
                                           <button
                                             key={hour}
                                             type="button"
-                                            onClick={() => setNextActionEditorValue(rowId, 'hour', hour)}
+                                            onClick={() => updateAndPersistNextAction(rowId, { hour })}
                                             className={`rounded-full px-2 py-2 text-sm font-semibold transition ${isActive ? 'bg-cyan-500 text-slate-950' : 'bg-slate-900 text-slate-200 hover:bg-slate-800'}`}
                                           >
                                             {hour}
@@ -993,7 +1046,7 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
                                           <button
                                             key={minute}
                                             type="button"
-                                            onClick={() => setNextActionEditorValue(rowId, 'minute', minute)}
+                                            onClick={() => updateAndPersistNextAction(rowId, { minute })}
                                             className={`rounded-full px-3 py-2 text-sm font-semibold transition ${isActive ? 'bg-cyan-500 text-slate-950' : 'bg-slate-900 text-slate-200 hover:bg-slate-800'}`}
                                           >
                                             {minute}
@@ -1016,9 +1069,6 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
                               <div className="mt-1 text-[11px] text-slate-400">Választható idő: 06:00–20:45, 15 perces lépés.</div>
                             </div>
                           </div>
-                          <div className="text-[11px] text-slate-500">
-                            {nextActionParts.date ? `Aktuális érték: ${formatNextActionSummary(nextActionDraft)}` : 'Még nincs kiválasztott időpont.'}
-                          </div>
                           <label className="text-xs text-slate-300">
                             <span className="mb-1 block uppercase tracking-wide text-slate-500">Következő teendő leírása</span>
                             <textarea
@@ -1027,7 +1077,9 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
                                 setResellerDraftValue(rowId, 'next_action_description', event.target.value);
                               }}
                               onBlur={() => {
-                                scheduleResellerAutoSave(rowId);
+                                void persistResellerUpdates(rowId, {
+                                  next_action_description: stringifyValue(getResellerDraftValue(row, 'next_action_description'))
+                                });
                               }}
                               className="min-h-24 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white"
                             />
@@ -1064,7 +1116,19 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
                         </section>
                       </div>
                     ) : null}
-                    {savingRowId === rowId ? <p className="mt-2 text-xs text-emerald-300">Automatikus mentés…</p> : null}
+                    {rowSaveState[rowId]?.status && rowSaveState[rowId]?.status !== 'idle' ? (
+                      <p
+                        className={`mt-2 text-right text-xs ${
+                          rowSaveState[rowId]?.status === 'error'
+                            ? 'text-rose-300'
+                            : rowSaveState[rowId]?.status === 'saved'
+                              ? 'text-emerald-300'
+                              : 'text-slate-300'
+                        }`}
+                      >
+                        {rowSaveState[rowId]?.status === 'error' ? 'Hiba a mentéskor' : rowSaveState[rowId]?.message}
+                      </p>
+                    ) : null}
                   </div>
                 </article>
               );
