@@ -14,6 +14,8 @@ type MediaKitEmailRequest = {
 
 const REPLY_TO_EMAIL = 'hello@aquadrop.hu';
 const SITE_URL_FALLBACK = 'https://www.aquadrop.hu';
+const ADMIN_DASHBOARD_URL = 'https://www.aquadrop.hu/admin';
+const ADMIN_CTA_TEXT = 'Admin felület megnyitása';
 
 export const runtime = 'nodejs';
 
@@ -125,7 +127,6 @@ function buildAdminEmailHtml(payload: {
   isResellerLead: boolean;
   leadQualification: string;
 }): string {
-  const partnerUrl = toAbsoluteUrl('/partner');
   const resellerStatus = payload.isResellerLead
     ? 'Már jelentkezett viszonteladónak'
     : 'Még nem jelentkezett viszonteladónak';
@@ -145,8 +146,8 @@ function buildAdminEmailHtml(payload: {
         <tr><td style="padding: 8px 0;"><strong>Reseller státusz:</strong> ${escapeHtml(resellerStatus)}</td></tr>
       </table>
     `,
-    ctaText: 'Partner oldal megnyitása',
-    ctaUrl: partnerUrl
+    ctaText: ADMIN_CTA_TEXT,
+    ctaUrl: ADMIN_DASHBOARD_URL
   });
 }
 
