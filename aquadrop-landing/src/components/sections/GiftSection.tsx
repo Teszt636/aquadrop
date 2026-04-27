@@ -155,7 +155,12 @@ export function GiftSection() {
       });
 
       if (!response.ok) {
-        throw new Error(`Submit route returned status ${response.status}`);
+        const responseBody = await response.text();
+        console.error('[gift-submit] Submit route returned non-OK response', {
+          status: response.status,
+          responseBody
+        });
+        throw new Error(`Submit route returned status ${response.status}. Body: ${responseBody}`);
       }
       const result = (await response.json()) as { success?: boolean };
 

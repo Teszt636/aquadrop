@@ -57,7 +57,12 @@ export function AnnouncementSection() {
       });
 
       if (!response.ok) {
-        throw new Error(`Submit route returned status ${response.status}`);
+        const responseBody = await response.text();
+        console.error('[announcement-submit] Submit route returned non-OK response', {
+          status: response.status,
+          responseBody
+        });
+        throw new Error(`Submit route returned status ${response.status}. Body: ${responseBody}`);
       }
       const result = (await response.json()) as { success?: boolean };
 
@@ -66,7 +71,8 @@ export function AnnouncementSection() {
       }
 
       router.push('/koszonjuk/feliratkozas');
-    } catch {
+    } catch (error) {
+      console.error('[announcement-submit]', error);
       setErrorMessage('Hiba történt a feliratkozás során. Kérlek, próbáld újra.');
       setIsSubmitting(false);
     }
