@@ -4,8 +4,10 @@ import { ADMIN_TABLE_SET, type AdminTableName } from '@/lib/admin/constants';
 import { isAdminSessionValid } from '@/lib/admin/auth';
 import {
   deleteAdminTableRow,
+  fetchAdminTableRowById,
   fetchAdminUsers,
   fetchAdminTableRows,
+  insertResellerActivityLogs,
   patchAdminTableRow
 } from '@/lib/admin/supabase-admin';
 import { GIFT_STATUS_OPTIONS, RESELLER_PIPELINE_OPTIONS } from '@/lib/admin/table-config';
@@ -42,6 +44,37 @@ const EDITABLE_FIELDS: Record<AdminTableName, string[]> = {
   ],
   media_kit_downloads: [],
   unsubscribed: ['name', 'email']
+};
+
+const RESSELLER_TRACKED_FIELDS = new Set([
+  'pipeline_status',
+  'assigned_to',
+  'is_hot_lead',
+  'lead_score',
+  'next_action_at',
+  'next_action_description',
+  'last_contacted_at',
+  'previous_contacted_at'
+]);
+
+const FIELD_LABELS: Record<string, string> = {
+  pipeline_status: 'Státusz',
+  assigned_to: 'Felelős',
+  is_hot_lead: 'Hot lead',
+  lead_score: 'Lead score',
+  next_action_at: 'Következő teendő időpontja',
+  next_action_description: 'Következő teendő',
+  last_contacted_at: 'Utolsó kapcsolatfelvétel',
+  previous_contacted_at: 'Előző kapcsolatfelvétel'
+};
+
+type PatchRequestBody = {
+  table?: string;
+  id?: string;
+  updates?: Record<string, unknown>;
+  changed_by_user_id?: string | null;
+  changed_by_name?: string | null;
+  changed_by_email?: string | null;
 };
 
 function sanitizeValue(key: string, value: unknown): unknown {
@@ -100,7 +133,7 @@ function sanitizeValue(key: string, value: unknown): unknown {
     return value;
   }
 
-  if (key === 'last_contacted_at') {
+  if (key === 'last_contacted_at' || key === 'previous_contacted_at') {
     if (value === '' || value === null) return null;
     if (typeof value !== 'string') {
       throw new Error('Az utolsó kapcsolatfelvétel hibás.');
@@ -140,6 +173,67 @@ function getSafeTableName(table: unknown): AdminTableName | null {
   }
 
   return table as AdminTableName;
+}
+
+function normalizeText(value: unknown): string {
+  if (value === null || value === undefined || value === '') {
+    return '—';
+  }
+  return String(value);
+}
+
+function formatDateTime(value: unknown): string {
+  if (!value) return '—';
+  const parsed = new Date(String(value));
+  if (Number.isNaN(parsed.getTime())) return normalizeText(value);
+
+  return new Intl.DateTimeFormat('hu-HU', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit'
+  }).format(parsed);
+}
+
+function formatFieldValue(fieldName: string, value: unknown, adminMap: Map<string, { name: string }>): string {
+  if (fieldName === 'assigned_to') {
+    if (!value) return 'Nincs felelős';
+    const userId = String(value);
+    return adminMap.get(userId)?.name ?? userId;
+  }
+  if (fieldName === 'is_hot_lead') {
+    return value ? 'Igen' : 'Nem';
+  }
+  if (fieldName === 'next_action_at' || fieldName === 'last_contacted_at' || fieldName === 'previous_contacted_at') {
+    return formatDateTime(value);
+  }
+  if (fieldName === 'lead_score') {
+    if (value === null || value === undefined || value === '') return '0';
+    return String(value);
+  }
+
+  return normalizeText(value);
+}
+
+function equalLogValues(oldValue: unknown, newValue: unknown): boolean {
+  if (oldValue === null || oldValue === undefined || oldValue === '') {
+    return newValue === null || newValue === undefined || newValue === '';
+  }
+  if (newValue === null || newValue === undefined || newValue === '') {
+    return false;
+  }
+
+  if (typeof oldValue === 'string' || typeof newValue === 'string') {
+    return String(oldValue) === String(newValue);
+  }
+
+  return oldValue === newValue;
+}
+
+function buildChangeSummary(fieldName: string, oldValue: string, newValue: string): string {
+  const label = FIELD_LABELS[fieldName] ?? fieldName;
+  return `${label} módosítva: ${oldValue} → ${newValue}`;
 }
 
 async function assertSession() {
@@ -185,11 +279,7 @@ export async function PATCH(request: Request) {
     return sessionError;
   }
 
-  const body = (await request.json()) as {
-    table?: string;
-    id?: string;
-    updates?: Record<string, unknown>;
-  };
+  const body = (await request.json()) as PatchRequestBody;
 
   const table = getSafeTableName(body.table);
 
@@ -219,7 +309,60 @@ export async function PATCH(request: Request) {
   }
 
   try {
+    let beforeRow: Record<string, unknown> | null = null;
+    const shouldCreateLog = table === 'reseller_applications';
+    const changedByUserId =
+      body.changed_by_user_id && typeof body.changed_by_user_id === 'string' ? body.changed_by_user_id : null;
+    const changedByName = body.changed_by_name && typeof body.changed_by_name === 'string' ? body.changed_by_name : null;
+    const changedByEmail =
+      body.changed_by_email && typeof body.changed_by_email === 'string' ? body.changed_by_email : null;
+
+    if (shouldCreateLog) {
+      beforeRow = await fetchAdminTableRowById(table, body.id);
+    }
+
     await patchAdminTableRow(table, body.id, sanitizedUpdates);
+
+    if (shouldCreateLog && beforeRow) {
+      const [afterRow, adminUsers] = await Promise.all([
+        fetchAdminTableRowById(table, body.id),
+        fetchAdminUsers()
+      ]);
+      const adminMap = new Map(
+        adminUsers
+          .filter((user) => typeof user.id === 'string')
+          .map((user) => [String(user.id), { name: normalizeText(user.name) }])
+      );
+
+      const trackedKeys = Object.keys(sanitizedUpdates).filter((key) => RESSELLER_TRACKED_FIELDS.has(key));
+      const logs = trackedKeys
+        .map((fieldName) => {
+          const oldRawValue = beforeRow?.[fieldName];
+          const newRawValue = afterRow?.[fieldName];
+          if (equalLogValues(oldRawValue, newRawValue)) {
+            return null;
+          }
+
+          const oldValue = formatFieldValue(fieldName, oldRawValue, adminMap);
+          const newValue = formatFieldValue(fieldName, newRawValue, adminMap);
+
+          return {
+            reseller_application_id: body.id as string,
+            changed_by_user_id: changedByUserId,
+            changed_by_name: changedByName,
+            changed_by_email: changedByEmail,
+            field_name: fieldName,
+            old_value: oldValue === '—' ? null : oldValue,
+            new_value: newValue === '—' ? null : newValue,
+            change_summary: buildChangeSummary(fieldName, oldValue, newValue)
+          };
+        })
+        .filter(Boolean) as Array<Record<string, unknown>>;
+
+      if (logs.length > 0) {
+        await insertResellerActivityLogs(logs);
+      }
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {

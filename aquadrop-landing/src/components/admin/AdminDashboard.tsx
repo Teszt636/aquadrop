@@ -13,6 +13,19 @@ import {
 
 type Row = Record<string, unknown>;
 type AdminUser = { id: string; name: string; email: string };
+type ResellerActivityLog = {
+  id: string;
+  created_at: string;
+  changed_by_name: string | null;
+  changed_by_email: string | null;
+  change_summary: string | null;
+};
+type ActivityState = {
+  loading: boolean;
+  error: string | null;
+  logs: ResellerActivityLog[];
+};
+const ACTIVE_OPERATOR_STORAGE_KEY = 'aquadrop_admin_active_operator_id';
 const TABLE_ORDER: AdminTableViewName[] = [
   'announcement_signups',
   'gift_claims',
@@ -163,6 +176,8 @@ export function AdminDashboard() {
   const [assignedFilter, setAssignedFilter] = useState<string>('all');
   const [nextActionFilter, setNextActionFilter] = useState<string>('all');
   const [adminUsers, setAdminUsers] = useState<AdminUser[]>([]);
+  const [activeOperatorId, setActiveOperatorId] = useState<string>('');
+  const [activityByRowId, setActivityByRowId] = useState<Record<string, ActivityState>>({});
   const [nextActionEditors, setNextActionEditors] = useState<
     Record<string, { isOpen: boolean; date: string; hour: string; minute: string }>
   >({});
@@ -188,6 +203,90 @@ export function AdminDashboard() {
       setLoading(false);
     }
   }, [activeTable]);
+
+  const loadResellerActivity = useCallback(async (rowId: string) => {
+    if (!rowId) {
+      return;
+    }
+
+    setActivityByRowId((previous) => ({
+      ...previous,
+      [rowId]: {
+        loading: true,
+        error: null,
+        logs: previous[rowId]?.logs ?? []
+      }
+    }));
+
+    try {
+      const response = await fetch(`/api/admin/reseller-activity?resellerId=${encodeURIComponent(rowId)}`, {
+        cache: 'no-store'
+      });
+      const body = (await response.json()) as { rows?: ResellerActivityLog[]; error?: string };
+      if (!response.ok) {
+        throw new Error(body.error ?? 'Sikertelen előzmény lekérdezés.');
+      }
+
+      setActivityByRowId((previous) => ({
+        ...previous,
+        [rowId]: {
+          loading: false,
+          error: null,
+          logs: body.rows ?? []
+        }
+      }));
+    } catch (activityError) {
+      setActivityByRowId((previous) => ({
+        ...previous,
+        [rowId]: {
+          loading: false,
+          error: activityError instanceof Error ? activityError.message : 'Sikertelen előzmény lekérdezés.',
+          logs: previous[rowId]?.logs ?? []
+        }
+      }));
+    }
+  }, []);
+
+  const getChangedByPayload = useCallback(() => {
+    const selected = adminUsers.find((user) => user.id === activeOperatorId);
+
+    if (!selected) {
+      return {
+        changed_by_user_id: null,
+        changed_by_name: null,
+        changed_by_email: null
+      };
+    }
+
+    return {
+      changed_by_user_id: selected.id,
+      changed_by_name: selected.name,
+      changed_by_email: selected.email
+    };
+  }, [activeOperatorId, adminUsers]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const storedOperatorId = window.localStorage.getItem(ACTIVE_OPERATOR_STORAGE_KEY);
+    if (storedOperatorId) {
+      setActiveOperatorId(storedOperatorId);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (!activeOperatorId) return;
+    window.localStorage.setItem(ACTIVE_OPERATOR_STORAGE_KEY, activeOperatorId);
+  }, [activeOperatorId]);
+
+  useEffect(() => {
+    if (adminUsers.length === 0) return;
+
+    const stillExists = adminUsers.some((user) => user.id === activeOperatorId);
+    if (stillExists) return;
+
+    setActiveOperatorId(adminUsers[0]?.id ?? '');
+  }, [activeOperatorId, adminUsers]);
 
   useEffect(() => {
     void loadRows();
@@ -337,7 +436,7 @@ export function AdminDashboard() {
     const response = await fetch('/api/admin/table', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ table: activeTable, id: rowId, updates })
+      body: JSON.stringify({ table: activeTable, id: rowId, updates, ...getChangedByPayload() })
     });
 
     setSavingRowId(null);
@@ -353,7 +452,8 @@ export function AdminDashboard() {
       return next;
     });
     await loadRows();
-  }, [activeTable, loadRows, rowEdits]);
+    await loadResellerActivity(rowId);
+  }, [activeTable, getChangedByPayload, loadResellerActivity, loadRows, rowEdits]);
 
   function scheduleResellerAutoSave(rowId: string) {
     if (rowSaveTimersRef.current[rowId]) {
@@ -379,7 +479,7 @@ export function AdminDashboard() {
     const response = await fetch('/api/admin/table', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ table: activeTable, id: rowId, updates })
+      body: JSON.stringify({ table: activeTable, id: rowId, updates, ...getChangedByPayload() })
     });
 
     if (!response.ok) {
@@ -439,7 +539,24 @@ export function AdminDashboard() {
     <section className="space-y-4">
       <header className="flex flex-col gap-3 rounded-xl border border-slate-800 bg-slate-900 p-4 md:flex-row md:items-center md:justify-between">
         <h1 className="text-xl font-semibold text-white md:text-2xl">Aquadrop Admin</h1>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          {activeTable === 'reseller_applications' ? (
+            <label className="flex items-center gap-2 rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-xs text-slate-300">
+              <span>Aktív kezelő:</span>
+              <select
+                value={activeOperatorId}
+                onChange={(event) => setActiveOperatorId(event.target.value)}
+                className="rounded border border-slate-700 bg-slate-900 px-2 py-1 text-xs text-white"
+              >
+                <option value="">Nincs kiválasztva</option>
+                {adminUsers.map((user) => (
+                  <option key={user.id} value={user.id}>
+                    {user.name} ({user.email})
+                  </option>
+                ))}
+              </select>
+            </label>
+          ) : null}
           <button
             onClick={() => void loadRows()}
             className="rounded-md border border-slate-700 px-3 py-2 text-sm text-slate-100 transition hover:bg-slate-800"
@@ -642,14 +759,21 @@ export function AdminDashboard() {
                   <div className="mt-4 border-t border-slate-800 pt-3">
                     <button
                       type="button"
-                      onClick={() => setExpandedRows((previous) => ({ ...previous, [rowId]: !previous[rowId] }))}
+                      onClick={() => {
+                        const willExpand = !expandedRows[rowId];
+                        setExpandedRows((previous) => ({ ...previous, [rowId]: willExpand }));
+                        if (willExpand) {
+                          void loadResellerActivity(rowId);
+                        }
+                      }}
                       className="text-sm text-cyan-300 hover:text-cyan-200"
                     >
                       {isExpanded ? 'Részletek elrejtése ▲' : 'Részletek szerkesztése ▼'}
                     </button>
 
                     {isExpanded ? (
-                      <div className="mt-3 grid gap-3 md:grid-cols-2">
+                      <div className="mt-3 space-y-3">
+                        <div className="grid gap-3 md:grid-cols-2">
                         <div className="space-y-3 rounded-lg border border-slate-800/80 bg-slate-900/70 p-3">
                           <div className="grid gap-2 sm:grid-cols-2">
                             <label className="text-xs text-slate-300">
@@ -820,6 +944,35 @@ export function AdminDashboard() {
                             />
                           </label>
                         </div>
+                        </div>
+                        <section className="rounded-lg border border-slate-800/80 bg-slate-900/70 p-3">
+                          <h4 className="mb-3 text-sm font-semibold text-white">Előzmények</h4>
+                          {activityByRowId[rowId]?.loading ? (
+                            <p className="text-xs text-slate-400">Előzmények betöltése...</p>
+                          ) : activityByRowId[rowId]?.error ? (
+                            <p className="text-xs text-rose-300">{activityByRowId[rowId]?.error}</p>
+                          ) : (activityByRowId[rowId]?.logs?.length ?? 0) === 0 ? (
+                            <p className="text-xs text-slate-400">Még nincs rögzített módosítás.</p>
+                          ) : (
+                            <ul className="space-y-2">
+                              {(activityByRowId[rowId]?.logs ?? []).map((log) => {
+                                const timestamp = formatAdminDate(log.created_at);
+                                const actor = log.changed_by_name?.trim() || log.changed_by_email?.trim() || 'Ismeretlen kezelő';
+                                const actorEmail = log.changed_by_email?.trim();
+                                return (
+                                  <li key={log.id} className="rounded-md border border-slate-800 bg-slate-950/60 p-2 text-xs text-slate-200">
+                                    <span className="font-medium text-slate-100">{timestamp}</span>
+                                    <span className="text-slate-400"> – </span>
+                                    <span className="font-medium text-slate-100">{actor}</span>
+                                    {actorEmail ? <span className="text-slate-400"> ({actorEmail})</span> : null}
+                                    <span className="text-slate-400"> – </span>
+                                    <span className="text-slate-300">{log.change_summary || 'Módosítás történt.'}</span>
+                                  </li>
+                                );
+                              })}
+                            </ul>
+                          )}
+                        </section>
                       </div>
                     ) : null}
                     {savingRowId === rowId ? <p className="mt-2 text-xs text-emerald-300">Automatikus mentés…</p> : null}
