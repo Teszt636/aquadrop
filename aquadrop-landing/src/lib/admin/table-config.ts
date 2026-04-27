@@ -2,7 +2,8 @@ export type AdminBaseTableName =
   | 'announcement_signups'
   | 'gift_claims'
   | 'reseller_applications'
-  | 'media_kit_downloads';
+  | 'media_kit_downloads'
+  | 'admin_users';
 
 export type AdminTableViewName = AdminBaseTableName | 'unsubscribed';
 
@@ -254,6 +255,19 @@ export const adminTableConfigs: Record<AdminTableViewName, AdminTableConfig> = {
       { key: 'usage_type', label: 'Felület', formatter: formatUsageType },
       { key: 'downloaded_file', label: 'Letöltve', type: 'mapped', formatter: formatDownloadedFile },
       { key: 'created_at', label: 'Letöltés ideje', type: 'date' },
+      { key: 'id', label: 'ID', hiddenInTable: true, hiddenInDetails: true }
+    ]
+  },
+  admin_users: {
+    label: 'Felhasználók',
+    sourceTable: 'admin_users',
+    columns: [
+      { key: 'name', label: 'Név', editable: true },
+      { key: 'email', label: 'Email', editable: true },
+      { key: 'role', label: 'Jogosultság' },
+      { key: 'is_active', label: 'Aktív', type: 'boolean', editable: true, inputType: 'checkbox' },
+      { key: 'created_at', label: 'Létrehozva', type: 'date' },
+      { key: 'updated_at', label: 'Módosítva', type: 'date' },
       { key: 'id', label: 'ID', hiddenInTable: true, hiddenInDetails: true }
     ]
   }

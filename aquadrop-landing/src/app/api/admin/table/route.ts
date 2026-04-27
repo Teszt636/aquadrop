@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
 import { ADMIN_TABLE_SET, type AdminTableName } from '@/lib/admin/constants';
-import { isAdminSessionValid } from '@/lib/admin/auth';
+import { requireAdminSession } from '@/lib/admin/auth';
 import {
   deleteAdminTableRow,
   fetchAdminTableRowById,
@@ -72,9 +72,6 @@ type PatchRequestBody = {
   table?: string;
   id?: string;
   updates?: Record<string, unknown>;
-  changed_by_user_id?: string | null;
-  changed_by_name?: string | null;
-  changed_by_email?: string | null;
 };
 
 function sanitizeValue(key: string, value: unknown): unknown {
@@ -236,32 +233,52 @@ function buildChangeSummary(fieldName: string, oldValue: string, newValue: strin
   return `${label} módosítva: ${oldValue} → ${newValue}`;
 }
 
-async function assertSession() {
-  const isValid = await isAdminSessionValid();
-
-  if (!isValid) {
-    return NextResponse.json({ error: 'Nincs admin jogosultság.' }, { status: 401 });
+async function assertSession(table: AdminTableName, method: 'GET' | 'PATCH' | 'DELETE') {
+  if (table === 'admin_users') {
+    const user = await requireAdminSession(['admin']);
+    if (!user) {
+      return { error: NextResponse.json({ error: 'Nincs admin jogosultság.' }, { status: 403 }), sessionUser: null };
+    }
+    return { error: null, sessionUser: user };
   }
 
-  return null;
+  if (table === 'reseller_applications') {
+    const user = await requireAdminSession(method === 'DELETE' ? ['admin'] : ['admin', 'crm_user']);
+    if (!user) {
+      return {
+        error: NextResponse.json({ error: 'Nincs CRM jogosultság.' }, { status: 403 }),
+        sessionUser: null
+      };
+    }
+    return { error: null, sessionUser: user };
+  }
+
+  if (method === 'GET') {
+    const user = await requireAdminSession(['admin']);
+    if (!user) {
+      return { error: NextResponse.json({ error: 'Nincs admin jogosultság.' }, { status: 403 }), sessionUser: null };
+    }
+    return { error: null, sessionUser: user };
+  }
+
+  return {
+    error: NextResponse.json({ error: 'Ehhez a művelethez admin jogosultság szükséges.' }, { status: 403 }),
+    sessionUser: null
+  };
 }
 
 export async function GET(request: Request) {
-  const sessionError = await assertSession();
-
-  if (sessionError) {
-    return sessionError;
-  }
-
   const table = getSafeTableName(new URL(request.url).searchParams.get('name'));
 
   if (!table) {
     return NextResponse.json({ error: 'Nem engedélyezett tábla.' }, { status: 400 });
   }
+  const { error: sessionError } = await assertSession(table, 'GET');
+  if (sessionError) return sessionError;
 
   try {
     const rows = await fetchAdminTableRows(table);
-    const adminUsers = table === 'reseller_applications' ? await fetchAdminUsers() : [];
+    const adminUsers = table === 'reseller_applications' ? await fetchAdminUsers(false) : [];
 
     return NextResponse.json({ rows, adminUsers });
   } catch (error) {
@@ -273,12 +290,6 @@ export async function GET(request: Request) {
 }
 
 export async function PATCH(request: Request) {
-  const sessionError = await assertSession();
-
-  if (sessionError) {
-    return sessionError;
-  }
-
   const body = (await request.json()) as PatchRequestBody;
 
   const table = getSafeTableName(body.table);
@@ -286,6 +297,8 @@ export async function PATCH(request: Request) {
   if (!table) {
     return NextResponse.json({ error: 'Nem engedélyezett tábla.' }, { status: 400 });
   }
+  const { error: sessionError, sessionUser } = await assertSession(table, 'PATCH');
+  if (sessionError) return sessionError;
 
   if (!body.id || typeof body.id !== 'string') {
     return NextResponse.json({ error: 'Hiányzó rekord azonosító.' }, { status: 400 });
@@ -311,11 +324,9 @@ export async function PATCH(request: Request) {
   try {
     let beforeRow: Record<string, unknown> | null = null;
     const shouldCreateLog = table === 'reseller_applications';
-    const changedByUserId =
-      body.changed_by_user_id && typeof body.changed_by_user_id === 'string' ? body.changed_by_user_id : null;
-    const changedByName = body.changed_by_name && typeof body.changed_by_name === 'string' ? body.changed_by_name : null;
-    const changedByEmail =
-      body.changed_by_email && typeof body.changed_by_email === 'string' ? body.changed_by_email : null;
+    const changedByUserId = sessionUser?.id ?? null;
+    const changedByName = sessionUser?.name ?? null;
+    const changedByEmail = sessionUser?.email ?? null;
 
     if (shouldCreateLog) {
       beforeRow = await fetchAdminTableRowById(table, body.id);
@@ -326,7 +337,7 @@ export async function PATCH(request: Request) {
     if (shouldCreateLog && beforeRow) {
       const [afterRow, adminUsers] = await Promise.all([
         fetchAdminTableRowById(table, body.id),
-        fetchAdminUsers()
+        fetchAdminUsers(false)
       ]);
       const adminMap = new Map(
         adminUsers
@@ -374,18 +385,14 @@ export async function PATCH(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  const sessionError = await assertSession();
-
-  if (sessionError) {
-    return sessionError;
-  }
-
   const body = (await request.json()) as { table?: string; id?: string };
   const table = getSafeTableName(body.table);
 
   if (!table) {
     return NextResponse.json({ error: 'Nem engedélyezett tábla.' }, { status: 400 });
   }
+  const { error: sessionError } = await assertSession(table, 'DELETE');
+  if (sessionError) return sessionError;
 
   if (!body.id || typeof body.id !== 'string') {
     return NextResponse.json({ error: 'Hiányzó rekord azonosító.' }, { status: 400 });

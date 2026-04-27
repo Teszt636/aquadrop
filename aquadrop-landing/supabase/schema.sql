@@ -74,7 +74,12 @@ create index if not exists reseller_applications_email_idx
 create table if not exists public.admin_users (
   id uuid primary key default gen_random_uuid(),
   name text not null,
-  email text not null unique
+  email text not null unique,
+  role text not null default 'crm_user' check (role in ('admin', 'crm_user')),
+  password_hash text,
+  is_active boolean not null default true,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
 );
 
 alter table public.reseller_applications
