@@ -586,6 +586,9 @@ export function AdminDashboard() {
 
                     <div className="space-y-2 text-sm">
                       <p className="text-sm font-semibold text-white">Következő teendő</p>
+                      <p className="text-xs text-slate-300">
+                        Felelős: <span className="font-medium text-white">{assignedTo || 'Nincs felelős'}</span>
+                      </p>
                       <p className="flex flex-wrap items-center gap-2 text-xs">
                         <span className="text-slate-400">Határidő:</span>
                         <span className={`font-medium ${nextActionDeadlineTone}`}>{nextActionLabel}</span>
@@ -593,9 +596,6 @@ export function AdminDashboard() {
                       </p>
                       <p className="text-xs text-slate-400">Teendő leírása:</p>
                       <p className="whitespace-pre-wrap break-words text-sm text-slate-100">{nextActionDescription || 'Nincs leírás.'}</p>
-                      <p className="text-xs text-slate-300">
-                        Felelős: <span className="font-medium text-white">{assignedTo || 'Nincs felelős'}</span>
-                      </p>
                     </div>
                   </div>
 
