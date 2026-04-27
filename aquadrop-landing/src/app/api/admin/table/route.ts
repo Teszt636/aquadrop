@@ -42,6 +42,7 @@ const EDITABLE_FIELDS: Record<AdminTableName, string[]> = {
     'sales_channel',
     'message'
   ],
+  admin_users: ['name', 'email', 'role', 'is_active'],
   media_kit_downloads: [],
   unsubscribed: ['name', 'email']
 };
