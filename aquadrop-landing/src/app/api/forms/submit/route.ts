@@ -42,7 +42,22 @@ type ResellerSubmitRequest = {
   };
 };
 
-type SubmitRequest = AnnouncementSubmitRequest | GiftSubmitRequest | ResellerSubmitRequest;
+type MediaKitSubmitRequest = {
+  formType: 'media_kit_download';
+  payload: {
+    name: string;
+    email: string;
+    company: string | null;
+    usage_type: string;
+    downloaded_file: string;
+  };
+};
+
+type SubmitRequest =
+  | AnnouncementSubmitRequest
+  | GiftSubmitRequest
+  | ResellerSubmitRequest
+  | MediaKitSubmitRequest;
 
 type SupabaseOperation = 'select' | 'insert';
 
@@ -284,6 +299,28 @@ export async function POST(request: Request) {
       });
 
       return NextResponse.json({ success: true, duplicate: duplicateDetected });
+    }
+
+    if (body.formType === 'media_kit_download') {
+      const normalizedName = body.payload.name.trim();
+      const normalizedEmail = body.payload.email.trim().toLowerCase();
+      const normalizedCompany = body.payload.company?.trim() || null;
+      const normalizedUsageType = body.payload.usage_type.trim();
+      const normalizedDownloadedFile = body.payload.downloaded_file.trim();
+
+      await insertRow('media_kit_downloads', {
+        name: normalizedName,
+        email: normalizedEmail,
+        company: normalizedCompany,
+        usage_type: normalizedUsageType,
+        downloaded_file: normalizedDownloadedFile
+      });
+
+      console.info('[forms][submit]', {
+        formType: body.formType
+      });
+
+      return NextResponse.json({ success: true });
     }
 
     return NextResponse.json({ success: false, error: 'Unsupported form type.' }, { status: 400 });
