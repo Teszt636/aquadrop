@@ -314,7 +314,7 @@ export function AdminDashboard() {
     });
   }
 
-  function closeNextActionEditor(rowId: string, row: Row) {
+  function closeNextActionEditor(rowId: string) {
     const editor = nextActionEditors[rowId];
     if (!editor) return;
     const nextValue = combineNextActionAt(editor.date, editor.hour || '10', editor.minute || '00');
@@ -727,7 +727,7 @@ export function AdminDashboard() {
                                 type="button"
                                 onClick={() => {
                                   if (nextActionEditors[rowId]?.isOpen) {
-                                    closeNextActionEditor(rowId, row);
+                                    closeNextActionEditor(rowId);
                                     return;
                                   }
                                   openNextActionEditor(rowId, row);
@@ -792,7 +792,7 @@ export function AdminDashboard() {
                                   <div className="flex justify-end">
                                     <button
                                       type="button"
-                                      onClick={() => closeNextActionEditor(rowId, row)}
+                                      onClick={() => closeNextActionEditor(rowId)}
                                       className="rounded-lg bg-cyan-500 px-4 py-2 text-sm font-semibold text-slate-950 hover:bg-cyan-400"
                                     >
                                       Kész
