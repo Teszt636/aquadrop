@@ -1,7 +1,6 @@
 'use client';
 
 import { FormEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { insertIntoTable } from '@/lib/supabase';
 import { trackEvent } from '@/lib/tracking';
 
 type UsageType = 'webshop' | 'offline bolt' | 'nagyker' | 'egyéb';
@@ -174,13 +173,29 @@ export function MediaKitDownloadModal({ isOpen, fileUrl, onClose, onDownloadStar
     setStatus('loading');
 
     try {
-      await insertIntoTable('media_kit_downloads', {
+      const submitPayload = {
         name: formState.name.trim(),
         email: formState.email.trim().toLowerCase(),
         company: formState.company.trim() || null,
         usage_type: formState.usageType,
         downloaded_file: fileUrl
+      };
+
+      const response = await fetch('/api/forms/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          formType: 'media_kit_download',
+          payload: submitPayload
+        })
       });
+
+      if (!response.ok) {
+        const responseText = await response.text();
+        throw new Error(`Media kit submit failed (${response.status}): ${responseText}`);
+      }
 
       localStorage.setItem(SESSION_STORAGE_KEY, 'true');
 
@@ -190,13 +205,7 @@ export function MediaKitDownloadModal({ isOpen, fileUrl, onClose, onDownloadStar
 
       setStatus('success');
 
-      void notifyMediaKitEmail({
-        name: formState.name.trim(),
-        email: formState.email.trim().toLowerCase(),
-        company: formState.company.trim() || null,
-        usage_type: formState.usageType,
-        downloaded_file: fileUrl
-      });
+      void notifyMediaKitEmail(submitPayload);
 
     } catch (error) {
       console.error('[media-kit-download-submit]', error);
