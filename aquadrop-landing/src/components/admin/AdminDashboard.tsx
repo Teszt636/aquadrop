@@ -543,6 +543,12 @@ export function AdminDashboard() {
                     : nextActionState === 'none'
                       ? 'Nincs dátum'
                       : 'Jövőbeni';
+              const nextActionTone =
+                nextActionState === 'overdue'
+                  ? 'border-rose-500/70 bg-rose-950/40 text-rose-200'
+                  : nextActionState === 'today'
+                    ? 'border-amber-500/70 bg-amber-950/30 text-amber-200'
+                    : 'border-slate-700 bg-slate-900 text-slate-200';
 
               return (
                 <article key={rowId} className="rounded-xl border border-slate-700 bg-slate-950/70 p-4">
