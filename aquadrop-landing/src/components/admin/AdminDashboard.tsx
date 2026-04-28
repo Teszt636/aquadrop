@@ -691,22 +691,41 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
         body: JSON.stringify({ giftClaimId: rowId, ...getChangedByPayload() })
       });
 
-      if (!response.ok) {
+      const body = (await response.json()) as {
+        success?: boolean;
+        type?: 'hianypotlas' | 'jovahagyas' | 'szallitas' | 'elutasitas';
+        error?: string;
+        missingConditions?: string[];
+      };
+
+      if (!response.ok || !body.success) {
+        const missing = Array.isArray(body.missingConditions) ? body.missingConditions : [];
+        const message = missing.length > 0 ? `${body.error ?? 'Sikertelen email küldés.'} (${missing.join('; ')})` : body.error ?? 'Sikertelen email küldés.';
         setGiftNotificationStateByRowId((previous) => ({
           ...previous,
-          [rowId]: { status: 'info', message: 'Az értesítő küldés hamarosan elérhető.' }
+          [rowId]: { status: 'error', message }
         }));
         return;
       }
 
+      const typeLabelMap: Record<NonNullable<typeof body.type>, string> = {
+        hianypotlas: 'Hiánypótlás',
+        jovahagyas: 'Jóváhagyás',
+        szallitas: 'Szállítás',
+        elutasitas: 'Elutasítás'
+      };
+
       setGiftNotificationStateByRowId((previous) => ({
         ...previous,
-        [rowId]: { status: 'info', message: 'Az értesítő küldés hamarosan elérhető.' }
+        [rowId]: {
+          status: 'info',
+          message: `Értesítő elküldve (${typeLabelMap[body.type ?? 'jovahagyas']}).`
+        }
       }));
     } catch {
       setGiftNotificationStateByRowId((previous) => ({
         ...previous,
-        [rowId]: { status: 'info', message: 'Az értesítő küldés hamarosan elérhető.' }
+        [rowId]: { status: 'error', message: 'Sikertelen email küldés.' }
       }));
     }
   }
