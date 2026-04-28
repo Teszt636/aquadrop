@@ -5,6 +5,12 @@ import {
   buildPartnerOneHourReminderEmail,
   type PartnerTaskLeadItem
 } from '@/lib/email/templates';
+import {
+  formatBudapestDateTime,
+  getBudapestDateKey,
+  getBudapestDayRange,
+  getBudapestNow
+} from '@/lib/datetime/budapest';
 
 type AdminUser = {
   id: string;
@@ -39,7 +45,6 @@ type NotificationLogRow = {
 
 const CLOSED_STATUSES = new Set(['Partner lett', 'Elutasítva']);
 const REPLY_TO_EMAIL = 'hello@aquadrop.hu';
-const BUDAPEST_TIMEZONE = 'Europe/Budapest';
 
 function getSupabaseUrl(): string {
   const value = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -67,40 +72,6 @@ function getServiceHeaders(additionalHeaders?: HeadersInit): HeadersInit {
   };
 }
 
-function getCurrentBudapestParts(now = new Date()): { date: string; hour: number } {
-  const date = new Intl.DateTimeFormat('en-CA', {
-    timeZone: BUDAPEST_TIMEZONE,
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit'
-  }).format(now);
-
-  const hour = Number(
-    new Intl.DateTimeFormat('en-GB', {
-      timeZone: BUDAPEST_TIMEZONE,
-      hour: '2-digit',
-      hour12: false
-    }).format(now)
-  );
-
-  return { date, hour };
-}
-
-
-function getBudapestDateKey(value: string): string | null {
-  const parsed = new Date(value);
-  if (Number.isNaN(parsed.getTime())) {
-    return null;
-  }
-
-  return new Intl.DateTimeFormat('en-CA', {
-    timeZone: BUDAPEST_TIMEZONE,
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit'
-  }).format(parsed);
-}
-
 function toLeadItem(lead: ResellerLead): PartnerTaskLeadItem {
   return {
     companyName: lead.company_name,
@@ -112,13 +83,15 @@ function toLeadItem(lead: ResellerLead): PartnerTaskLeadItem {
   };
 }
 
-async function fetchActiveAdminUsers(): Promise<AdminUser[]> {
+async function fetchAdminUsers(params?: { activeOnly?: boolean }): Promise<AdminUser[]> {
   const query = new URLSearchParams({
     select: 'id,name,email,is_active',
-    is_active: 'eq.true',
     order: 'name.asc',
     limit: '500'
   });
+  if (params?.activeOnly) {
+    query.set('is_active', 'eq.true');
+  }
 
   const response = await fetch(`${getRestUrl()}/admin_users?${query.toString()}`, {
     method: 'GET',
@@ -262,23 +235,34 @@ export function isCronRequestAuthorized(request: Request): boolean {
 }
 
 export async function runPartnerDailyTasksCron(params: { dryRun: boolean }) {
-  const { date: localDate, hour } = getCurrentBudapestParts();
+  const nowSnapshot = getBudapestNow();
+  const localDate = nowSnapshot.date;
+  const hour = nowSnapshot.hour;
+  const todayRangeUtc = getBudapestDayRange(localDate);
   const senderEmail = resolveAquadropSenderEmail({ allowFallback: true });
-  const admins = await fetchActiveAdminUsers();
+  const admins = await fetchAdminUsers({ activeOnly: true });
   const summary = {
     success: true,
+    todayBudapest: localDate,
+    todayRangeUtc,
     checkedUsers: admins.length,
+    usersWithTasks: 0,
+    overdueCount: 0,
+    todayCount: 0,
+    hotCount: 0,
     sentEmails: 0,
     skippedEmails: 0,
     errors: [] as string[],
     dryRun: params.dryRun,
     skippedByTimeWindow: false,
-    wouldSend: [] as Array<{ userEmail: string; overdue: number; today: number; hot: number }>
+    skippedReasons: {} as Record<string, number>,
+    wouldSendTo: [] as Array<{ userEmail: string; overdue: number; today: number; hot: number }>
   };
 
   if (hour !== 8) {
     summary.skippedByTimeWindow = true;
     summary.skippedEmails = admins.length;
+    summary.skippedReasons.outside_daily_window = admins.length;
     return summary;
   }
 
@@ -296,20 +280,26 @@ export async function runPartnerDailyTasksCron(params: { dryRun: boolean }) {
         return dueDate === localDate;
       });
       const hot = leads.filter((lead) => Boolean(lead.is_hot_lead) && !isClosedPipelineStatus(lead.pipeline_status));
+      summary.overdueCount += overdue.length;
+      summary.todayCount += today.length;
+      summary.hotCount += hot.length;
 
       if (overdue.length === 0 && today.length === 0 && hot.length === 0) {
         summary.skippedEmails += 1;
+        summary.skippedReasons.no_tasks = (summary.skippedReasons.no_tasks ?? 0) + 1;
         continue;
       }
+      summary.usersWithTasks += 1;
 
       const alreadySent = await hasDailyNotificationForUser(admin.id, localDate);
       if (alreadySent) {
         summary.skippedEmails += 1;
+        summary.skippedReasons.already_sent = (summary.skippedReasons.already_sent ?? 0) + 1;
         continue;
       }
 
       if (params.dryRun) {
-        summary.wouldSend.push({
+        summary.wouldSendTo.push({
           userEmail: admin.email,
           overdue: overdue.length,
           today: today.length,
@@ -364,20 +354,29 @@ export async function runPartnerTaskReminderCron(params: { dryRun: boolean }) {
   const windowStartIso = now.toISOString();
   const windowEndIso = new Date(now.getTime() + 60 * 60 * 1000).toISOString();
 
-  const users = await fetchActiveAdminUsers();
-  const userEmailById = new Map(users.map((user) => [user.id, user.email]));
+  const users = await fetchAdminUsers();
+  const userById = new Map(users.map((user) => [user.id, user]));
+  const activeUsers = users.filter((user) => user.is_active);
 
   const summary = {
     success: true,
-    checkedUsers: users.length,
+    nowUtc: windowStartIso,
+    nowBudapest: formatBudapestDateTime(windowStartIso),
+    windowStartUtc: windowStartIso,
+    windowEndUtc: windowEndIso,
+    checkedUsers: activeUsers.length,
+    checkedLeads: 0,
+    eligibleLeads: 0,
     sentEmails: 0,
     skippedEmails: 0,
     errors: [] as string[],
     dryRun: params.dryRun,
-    wouldSend: [] as Array<{ userEmail: string; resellerId: string; nextActionAt: string | null }>
+    skippedReasons: {} as Record<string, number>,
+    wouldSendTo: [] as Array<{ userEmail: string; resellerId: string; nextActionAt: string | null }>
   };
 
   const leads = await fetchLeadsDueWithinOneHour(windowStartIso, windowEndIso);
+  summary.checkedLeads = leads.length;
 
   for (const lead of leads) {
     const assignedUserId = lead.assigned_to;
@@ -385,12 +384,26 @@ export async function runPartnerTaskReminderCron(params: { dryRun: boolean }) {
 
     if (!assignedUserId || !nextActionAt) {
       summary.skippedEmails += 1;
+      summary.skippedReasons.missing_assignee_or_due_at =
+        (summary.skippedReasons.missing_assignee_or_due_at ?? 0) + 1;
       continue;
     }
 
-    const adminEmail = userEmailById.get(assignedUserId);
+    const assignedUser = userById.get(assignedUserId);
+    if (!assignedUser) {
+      summary.skippedEmails += 1;
+      summary.skippedReasons.assigned_user_not_found = (summary.skippedReasons.assigned_user_not_found ?? 0) + 1;
+      continue;
+    }
+    if (!assignedUser.is_active) {
+      summary.skippedEmails += 1;
+      summary.skippedReasons.assigned_user_inactive = (summary.skippedReasons.assigned_user_inactive ?? 0) + 1;
+      continue;
+    }
+    const adminEmail = assignedUser.email?.trim();
     if (!adminEmail) {
       summary.skippedEmails += 1;
+      summary.skippedReasons.assigned_user_missing_email = (summary.skippedReasons.assigned_user_missing_email ?? 0) + 1;
       continue;
     }
 
@@ -398,11 +411,13 @@ export async function runPartnerTaskReminderCron(params: { dryRun: boolean }) {
       const alreadySent = await hasReminderNotification(lead.id, nextActionAt);
       if (alreadySent) {
         summary.skippedEmails += 1;
+        summary.skippedReasons.already_sent = (summary.skippedReasons.already_sent ?? 0) + 1;
         continue;
       }
+      summary.eligibleLeads += 1;
 
       if (params.dryRun) {
-        summary.wouldSend.push({ userEmail: adminEmail, resellerId: lead.id, nextActionAt });
+        summary.wouldSendTo.push({ userEmail: adminEmail, resellerId: lead.id, nextActionAt });
         continue;
       }
 
