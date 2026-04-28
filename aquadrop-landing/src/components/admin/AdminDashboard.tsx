@@ -200,6 +200,7 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
   const [rowEdits, setRowEdits] = useState<Record<string, Record<string, unknown>>>({});
   const [rowSaveState, setRowSaveState] = useState<Record<string, { status: 'idle' | 'saving' | 'saved' | 'error'; message: string | null }>>({});
   const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});
+  const [expandedHistoryRows, setExpandedHistoryRows] = useState<Record<string, boolean>>({});
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [hotLeadFilter, setHotLeadFilter] = useState<string>('all');
   const [assignedFilter, setAssignedFilter] = useState<string>('all');
@@ -215,7 +216,7 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
   >({});
   const rowSaveStateTimersRef = useRef<Record<string, number>>({});
   const rowSaveQueueRef = useRef<Record<string, Promise<void>>>({});
-  const expandedRowsRef = useRef<Record<string, boolean>>({});
+  const expandedHistoryRowsRef = useRef<Record<string, boolean>>({});
   const TABLES = useMemo(
     () => {
       const visible: AdminTableViewName[] =
@@ -321,8 +322,8 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
   }, [TABLES, activeTable]);
 
   useEffect(() => {
-    expandedRowsRef.current = expandedRows;
-  }, [expandedRows]);
+    expandedHistoryRowsRef.current = expandedHistoryRows;
+  }, [expandedHistoryRows]);
 
   const activeConfig = adminTableConfigs[activeTable];
   const isResellerTable = activeTable === 'reseller_applications';
@@ -525,7 +526,7 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
           [rowId]: { status: 'saved', message: 'Mentve' }
         }));
         clearSavedStateLater(rowId);
-        if (expandedRowsRef.current[rowId]) {
+        if (expandedHistoryRowsRef.current[rowId]) {
           if (Array.isArray(body.newActivityLogs)) {
             const nextLogs = [...body.newActivityLogs].sort(
               (left, right) => new Date(right.created_at).getTime() - new Date(left.created_at).getTime()
@@ -970,9 +971,6 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
                       onClick={() => {
                         const willExpand = !expandedRows[rowId];
                         setExpandedRows((previous) => ({ ...previous, [rowId]: willExpand }));
-                        if (willExpand) {
-                          void fetchActivityLogs(rowId);
-                        }
                       }}
                       className="text-sm text-cyan-300 hover:text-cyan-200"
                     >
@@ -1153,33 +1151,54 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
                           </label>
                         </div>
                         </div>
-                        <section className="rounded-lg border border-slate-800/80 bg-slate-900/70 p-3">
-                          <h4 className="mb-3 text-sm font-semibold text-white">Előzmények</h4>
-                          {activityByRowId[rowId]?.loading ? (
-                            <p className="text-xs text-slate-400">Előzmények betöltése...</p>
-                          ) : activityByRowId[rowId]?.error ? (
-                            <p className="text-xs text-rose-300">{activityByRowId[rowId]?.error}</p>
-                          ) : (activityByRowId[rowId]?.logs?.length ?? 0) === 0 ? (
-                            <p className="text-xs text-slate-400">Még nincs rögzített módosítás.</p>
-                          ) : (
-                            <ul className="space-y-2">
-                              {(activityByRowId[rowId]?.logs ?? []).map((log) => {
-                                const timestamp = formatAdminDate(log.created_at);
-                                const actor = log.changed_by_name?.trim() || log.changed_by_email?.trim() || 'Ismeretlen kezelő';
-                                const actorEmail = log.changed_by_email?.trim();
-                                return (
-                                  <li key={log.id} className="rounded-md border border-slate-800 bg-slate-950/60 p-2 text-xs text-slate-200">
-                                    <span className="font-medium text-slate-100">{timestamp}</span>
-                                    <span className="text-slate-400"> – </span>
-                                    <span className="font-medium text-slate-100">{actor}</span>
-                                    {actorEmail ? <span className="text-slate-400"> ({actorEmail})</span> : null}
-                                    <span className="text-slate-400"> – </span>
-                                    <span className="text-slate-300">{log.change_summary || 'Módosítás történt.'}</span>
-                                  </li>
-                                );
-                              })}
-                            </ul>
-                          )}
+                        <section className="border-t border-slate-800 pt-3">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const willExpandHistory = !expandedHistoryRows[rowId];
+                              setExpandedHistoryRows((previous) => ({ ...previous, [rowId]: willExpandHistory }));
+                              const activityState = activityByRowId[rowId];
+                              const isAlreadyLoaded = Boolean(
+                                activityState && !activityState.loading && !activityState.error
+                              );
+                              if (willExpandHistory && !isAlreadyLoaded) {
+                                void fetchActivityLogs(rowId);
+                              }
+                            }}
+                            className="text-xs font-medium text-slate-400 hover:text-slate-200"
+                          >
+                            {expandedHistoryRows[rowId] ? 'Előzmények elrejtése ▲' : 'Előzmények megnyitása ▼'}
+                          </button>
+                          {expandedHistoryRows[rowId] ? (
+                            <div className="mt-3 rounded-lg border border-slate-800/80 bg-slate-900/70 p-3">
+                              <h4 className="mb-3 text-sm font-semibold text-white">Előzmények</h4>
+                              {activityByRowId[rowId]?.loading ? (
+                                <p className="text-xs text-slate-400">Előzmények betöltése...</p>
+                              ) : activityByRowId[rowId]?.error ? (
+                                <p className="text-xs text-rose-300">{activityByRowId[rowId]?.error}</p>
+                              ) : (activityByRowId[rowId]?.logs?.length ?? 0) === 0 ? (
+                                <p className="text-xs text-slate-400">Még nincs rögzített módosítás.</p>
+                              ) : (
+                                <ul className="max-h-80 space-y-2 overflow-y-auto pr-1">
+                                  {(activityByRowId[rowId]?.logs ?? []).map((log) => {
+                                    const timestamp = formatAdminDate(log.created_at);
+                                    const actor = log.changed_by_name?.trim() || log.changed_by_email?.trim() || 'Ismeretlen kezelő';
+                                    const actorEmail = log.changed_by_email?.trim();
+                                    return (
+                                      <li key={log.id} className="rounded-md border border-slate-800 bg-slate-950/60 p-2 text-xs text-slate-200">
+                                        <span className="font-medium text-slate-100">{timestamp}</span>
+                                        <span className="text-slate-400"> – </span>
+                                        <span className="font-medium text-slate-100">{actor}</span>
+                                        {actorEmail ? <span className="text-slate-400"> ({actorEmail})</span> : null}
+                                        <span className="text-slate-400"> – </span>
+                                        <span className="text-slate-300">{log.change_summary || 'Módosítás történt.'}</span>
+                                      </li>
+                                    );
+                                  })}
+                                </ul>
+                              )}
+                            </div>
+                          ) : null}
                         </section>
                       </div>
                     ) : null}
