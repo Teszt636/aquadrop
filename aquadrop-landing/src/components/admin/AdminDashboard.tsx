@@ -174,13 +174,14 @@ function getNextActionState(value: unknown): 'none' | 'overdue' | 'today' | 'fut
 }
 
 export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser }) {
+  const isAdmin = sessionUser.role === 'admin';
   const nextActionHourOptions = useMemo(
     () => Array.from({ length: 15 }, (_, index) => `${index + 6}`.padStart(2, '0')),
     []
   );
   const nextActionMinuteOptions = useMemo(() => ['00', '15', '30', '45'], []);
   const [activeTable, setActiveTable] = useState<AdminTableViewName>(
-    sessionUser.role === 'crm_user' ? 'reseller_applications' : 'announcement_signups'
+    'announcement_signups'
   );
   const [rows, setRows] = useState<Row[]>([]);
   const [query, setQuery] = useState('');
@@ -210,7 +211,9 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
   const TABLES = useMemo(
     () => {
       const visible: AdminTableViewName[] =
-        sessionUser.role === 'crm_user' ? (['reseller_applications'] satisfies AdminTableViewName[]) : TABLE_ORDER;
+        sessionUser.role === 'crm_user'
+          ? TABLE_ORDER.filter((table) => table !== 'admin_users')
+          : TABLE_ORDER;
       return visible
         .filter((key) => !(key === 'admin_users' && sessionUser.role !== 'admin'))
         .map((key) => ({ key, label: adminTableConfigs[key].label }));
@@ -315,6 +318,8 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
 
   const activeConfig = adminTableConfigs[activeTable];
   const isResellerTable = activeTable === 'reseller_applications';
+  const canModifyActiveTable = isAdmin || isResellerTable;
+  const canDeleteInTable = isAdmin;
   const tableColumns = useMemo(
     () => activeConfig.columns.filter((column) => !column.hiddenInTable),
     [activeConfig.columns]
@@ -379,8 +384,8 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
   }, [assignedFilter, filteredRows, hotLeadFilter, isResellerTable, nextActionFilter, query, rows, statusFilter]);
 
   const editableFields = useMemo(
-    () => detailColumns.filter((column) => column.editable && selectedRow && column.key in selectedRow),
-    [detailColumns, selectedRow]
+    () => (canModifyActiveTable ? detailColumns.filter((column) => column.editable && selectedRow && column.key in selectedRow) : []),
+    [canModifyActiveTable, detailColumns, selectedRow]
   );
 
   function openRow(row: Row) {
@@ -552,6 +557,9 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
   }
 
   async function saveRow() {
+    if (!canModifyActiveTable) {
+      return;
+    }
     if (!selectedRow) {
       return;
     }
@@ -580,6 +588,9 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
   }
 
   async function deleteRow(row: Row) {
+    if (!canDeleteInTable) {
+      return;
+    }
     const rowId = getRowId(row);
     if (!rowId) {
       return;
@@ -1210,9 +1221,14 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
                         <button onClick={() => openRow(row)} className="rounded border border-slate-700 px-2 py-1 text-xs hover:bg-slate-800">
                           Megnyitás
                         </button>
-                        <button onClick={() => void deleteRow(row)} className="rounded border border-rose-500/40 px-2 py-1 text-xs text-rose-300 hover:bg-rose-500/15">
-                          Törlés
-                        </button>
+                        {canDeleteInTable ? (
+                          <button
+                            onClick={() => void deleteRow(row)}
+                            className="rounded border border-rose-500/40 px-2 py-1 text-xs text-rose-300 hover:bg-rose-500/15"
+                          >
+                            Törlés
+                          </button>
+                        ) : null}
                       </div>
                     </td>
                   </tr>
@@ -1328,12 +1344,14 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
               >
                 Mégse
               </button>
-              <button
-                onClick={() => void saveRow()}
-                className="rounded-md bg-cyan-500 px-4 py-2 text-sm font-semibold text-slate-950 hover:bg-cyan-400"
-              >
-                Mentés
-              </button>
+              {canModifyActiveTable ? (
+                <button
+                  onClick={() => void saveRow()}
+                  className="rounded-md bg-cyan-500 px-4 py-2 text-sm font-semibold text-slate-950 hover:bg-cyan-400"
+                >
+                  Mentés
+                </button>
+              ) : null}
             </div>
           </div>
         </div>
