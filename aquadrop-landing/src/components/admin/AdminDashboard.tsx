@@ -236,6 +236,10 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
   const [giftNotificationStateByRowId, setGiftNotificationStateByRowId] = useState<
     Record<string, { status: 'idle' | 'pending' | 'info' | 'error'; message: string | null }>
   >({});
+  const [giftNotificationModal, setGiftNotificationModal] = useState<{
+    rowId: string;
+    missingConditions: string[];
+  } | null>(null);
   const rowSaveStateTimersRef = useRef<Record<string, number>>({});
   const rowSaveQueueRef = useRef<Record<string, Promise<boolean>>>({});
   const expandedHistoryRowsRef = useRef<Record<string, boolean>>({});
@@ -700,7 +704,10 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
 
       if (!response.ok || !body.success) {
         const missing = Array.isArray(body.missingConditions) ? body.missingConditions : [];
-        const message = missing.length > 0 ? `${body.error ?? 'Sikertelen email küldés.'} (${missing.join('; ')})` : body.error ?? 'Sikertelen email küldés.';
+        if (missing.length > 0) {
+          setGiftNotificationModal({ rowId, missingConditions: missing });
+        }
+        const message = body.error ?? 'Sikertelen email küldés.';
         setGiftNotificationStateByRowId((previous) => ({
           ...previous,
           [rowId]: { status: 'error', message }
@@ -719,7 +726,7 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
         ...previous,
         [rowId]: {
           status: 'info',
-          message: `Értesítő elküldve (${typeLabelMap[body.type ?? 'jovahagyas']}).`
+          message: `Értesítő elküldve: ${typeLabelMap[body.type ?? 'jovahagyas']}`
         }
       }));
     } catch {
@@ -728,6 +735,24 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
         [rowId]: { status: 'error', message: 'Sikertelen email küldés.' }
       }));
     }
+  }
+
+  function getGiftNotificationMissingConditionLabel(condition: string): string {
+    const normalized = condition.trim();
+    const labels: Record<string, string> = {
+      'pipeline_status legyen az alábbiak egyike: Hianypotlas, Jovahagyva, Futarnak atadva, Elutasitva':
+        'A státusz legyen: Hiánypótlás szükséges / Jóváhagyva / Futárnak átadva / Elutasítva',
+      'receipt_check_status legyen "Nem olvasható" vagy "Nem megfelelő termék"':
+        'A blokk állapota legyen: Nem olvasható vagy Nem megfelelő termék',
+      'receipt_check_note nem lehet üres': 'Az ellenőrzési megjegyzés legyen kitöltve',
+      'receipt_check_status legyen "Ervenyes"': 'A blokk állapota legyen: Érvényes',
+      'courier_name nem lehet üres': 'A futárszolgálat neve legyen kitöltve',
+      'tracking_number nem lehet üres': 'A tracking szám legyen kitöltve',
+      'receipt_check_status legyen "Duplikalt blokk" vagy "Elutasitva"':
+        'A blokk állapota legyen: Duplikált blokk vagy Elutasítva',
+      'email nem lehet üres': 'Az email cím legyen kitöltve'
+    };
+    return labels[normalized] ?? normalized;
   }
 
   async function saveRow() {
@@ -1650,13 +1675,19 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
                               <input value={stringifyValue(getResellerDraftValue(row, 'tracking_number'))} onChange={(event) => setResellerDraftValue(rowId, 'tracking_number', event.target.value)} onBlur={() => { const draftValue = stringifyValue(getResellerDraftValue(row, 'tracking_number')); const persistedValue = stringifyValue(row.tracking_number); if (draftValue === persistedValue) return; void persistResellerUpdates(rowId, { tracking_number: draftValue }); }} placeholder="Tracking number" className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white" />
                             </div>
                             <div className="flex justify-center">
-                              <button
-                                type="button"
-                                onClick={() => void sendGiftNotification(rowId)}
-                                className="rounded-lg border border-slate-600 bg-slate-900 px-3 py-2 text-sm font-medium text-slate-100 transition hover:border-cyan-500/60 hover:text-white"
-                              >
-                                Értesítő küldése
-                              </button>
+                              {(() => {
+                                const isSending = giftNotificationStateByRowId[rowId]?.status === 'pending';
+                                return (
+                                  <button
+                                    type="button"
+                                    onClick={() => void sendGiftNotification(rowId)}
+                                    disabled={isSending}
+                                    className="rounded-lg border border-slate-600 bg-slate-900 px-3 py-2 text-sm font-medium text-slate-100 transition hover:border-cyan-500/60 hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
+                                  >
+                                    {isSending ? 'Küldés...' : 'Értesítő küldése'}
+                                  </button>
+                                );
+                              })()}
                             </div>
                             {giftNotificationStateByRowId[rowId]?.message ? (
                               <p className="mt-2 text-center text-xs text-slate-400">{giftNotificationStateByRowId[rowId]?.message}</p>
@@ -1757,6 +1788,30 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
         </p>
       </div>
 
+      {giftNotificationModal ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4">
+          <div className="w-full max-w-xl rounded-xl border border-slate-700 bg-slate-900 p-5 shadow-2xl">
+            <h2 className="text-lg font-semibold text-white">Az értesítő nem küldhető</h2>
+            <p className="mt-2 text-sm text-slate-300">
+              A jelenlegi állapot alapján még nem teljesülnek az email küldés feltételei.
+            </p>
+            <ul className="mt-4 list-disc space-y-2 pl-5 text-sm text-slate-200">
+              {giftNotificationModal.missingConditions.map((condition) => (
+                <li key={`${giftNotificationModal.rowId}-${condition}`}>{getGiftNotificationMissingConditionLabel(condition)}</li>
+              ))}
+            </ul>
+            <div className="mt-5 flex justify-end">
+              <button
+                type="button"
+                onClick={() => setGiftNotificationModal(null)}
+                className="rounded-lg bg-cyan-500 px-4 py-2 text-sm font-semibold text-slate-950 hover:bg-cyan-400"
+              >
+                Rendben
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
       {selectedRow ? (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 p-3 md:items-center">
           <div className="max-h-[90vh] w-full max-w-2xl overflow-auto rounded-xl border border-slate-700 bg-slate-900 p-4 md:p-6">
