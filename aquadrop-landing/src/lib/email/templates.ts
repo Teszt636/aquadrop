@@ -18,6 +18,8 @@ export type GiftClaimEmailData = {
   submittedAt: string;
 };
 
+const GIFT_STATUS_CTA_TEXT = 'Igénylési folyamat állapota';
+
 export type ResellerApplicationEmailData = {
   companyName: string;
   contactName: string;
@@ -136,7 +138,8 @@ function buildUserEmailTemplate(params: {
   greetingName: string;
   title: string;
   paragraphs: string[];
-  ctaText: string;
+  ctaText?: string;
+  ctaUrl?: string;
 }): EmailTemplate {
   const bodyParagraphs = params.paragraphs
     .map(
@@ -154,7 +157,7 @@ function buildUserEmailTemplate(params: {
       headline: params.title,
       bodyHtml,
       ctaText: params.ctaText,
-      ctaUrl: getSiteUrl()
+      ctaUrl: params.ctaUrl ?? getSiteUrl()
     })
   };
 }
@@ -231,7 +234,7 @@ export function buildAnnouncementAdminEmail(data: AnnouncementSignupEmailData): 
   });
 }
 
-export function buildGiftUserEmail(name: string): EmailTemplate {
+export function buildGiftUserEmail(name: string, statusUrl?: string | null): EmailTemplate {
   return buildUserEmailTemplate({
     subject: 'Megkaptuk az ajándékigénylésed',
     greetingName: name,
@@ -239,7 +242,8 @@ export function buildGiftUserEmail(name: string): EmailTemplate {
     paragraphs: [
       'Köszönjük, hogy igényelted az Aquadrop ajándék mosókapszulát. Az igénylésed rendben megérkezett, jelenleg feldolgozás alatt van.'
     ],
-    ctaText: 'Megnézem az Aquadrop Expert Prót'
+    ctaText: statusUrl ? GIFT_STATUS_CTA_TEXT : undefined,
+    ctaUrl: statusUrl ?? undefined
   });
 }
 
