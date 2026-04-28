@@ -80,6 +80,8 @@ export async function fetchAdminTableRows(table: AdminTableViewName): Promise<Re
   const defaultOrder =
     table === 'reseller_applications'
       ? 'next_action_at.asc.nullslast,updated_at.desc.nullslast,created_at.desc.nullslast'
+      : table === 'gift_claims'
+        ? 'next_action_at.asc.nullslast,updated_at.desc.nullslast,created_at.desc.nullslast'
       : 'updated_at.desc.nullslast,created_at.desc.nullslast';
 
   let response = await fetchRowsWithOrder(sourceTable, defaultOrder, filters);
@@ -258,6 +260,41 @@ export async function insertResellerActivityLogs(rows: Record<string, unknown>[]
 
   if (!response.ok) {
     throw new Error(`Failed to insert reseller_activity_logs: ${response.status} ${await response.text()}`);
+  }
+}
+
+export async function fetchGiftActivityLogs(giftClaimId: string): Promise<Record<string, unknown>[]> {
+  const query = new URLSearchParams({
+    select: '*',
+    gift_claim_id: `eq.${giftClaimId}`,
+    order: 'created_at.desc',
+    limit: '200'
+  });
+
+  const response = await fetch(`${getRestUrl()}/gift_activity_logs?${query.toString()}`, {
+    method: 'GET',
+    headers: getServiceHeaders(),
+    cache: 'no-store'
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to read gift_activity_logs: ${response.status} ${await response.text()}`);
+  }
+
+  return (await response.json()) as Record<string, unknown>[];
+}
+
+export async function insertGiftActivityLogs(rows: Record<string, unknown>[]): Promise<void> {
+  if (rows.length === 0) return;
+
+  const response = await fetch(`${getRestUrl()}/gift_activity_logs`, {
+    method: 'POST',
+    headers: getServiceHeaders({ Prefer: 'return=minimal' }),
+    body: JSON.stringify(rows)
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to insert gift_activity_logs: ${response.status} ${await response.text()}`);
   }
 }
 

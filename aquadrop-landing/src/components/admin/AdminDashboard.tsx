@@ -4,6 +4,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   adminTableConfigs,
   formatAdminDate,
+  GIFT_PIPELINE_STATUS_OPTIONS,
+  GIFT_RECEIPT_CHECK_STATUS_OPTIONS,
+  GIFT_SHIPPING_STATUS_OPTIONS,
   getGiftReceiptDisplayUrl,
   getGiftStatusValue,
   RESELLER_PIPELINE_OPTIONS,
@@ -15,6 +18,13 @@ import { type AdminSessionUser } from '@/lib/admin/constants';
 type Row = Record<string, unknown>;
 type AdminUser = { id: string; name: string; email: string };
 type ResellerActivityLog = {
+  id: string;
+  created_at: string;
+  changed_by_name: string | null;
+  changed_by_email: string | null;
+  change_summary: string | null;
+};
+type GiftActivityLog = {
   id: string;
   created_at: string;
   changed_by_name: string | null;
@@ -202,6 +212,8 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
   const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});
   const [expandedHistoryRows, setExpandedHistoryRows] = useState<Record<string, boolean>>({});
   const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [giftReceiptFilter, setGiftReceiptFilter] = useState<string>('all');
+  const [giftShippingFilter, setGiftShippingFilter] = useState<string>('all');
   const [hotLeadFilter, setHotLeadFilter] = useState<string>('all');
   const [assignedFilter, setAssignedFilter] = useState<string>('all');
   const [nextActionFilter, setNextActionFilter] = useState<string>('all');
@@ -256,25 +268,29 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
     }
   }, [activeTable]);
 
-  const fetchActivityLogs = useCallback(async (resellerId: string) => {
-    if (!resellerId) {
+  const fetchActivityLogs = useCallback(async (table: 'reseller_applications' | 'gift_claims', rowId: string) => {
+    if (!rowId) {
       return;
     }
 
     setActivityByRowId((previous) => ({
       ...previous,
-      [resellerId]: {
+      [rowId]: {
         loading: true,
         error: null,
-        logs: previous[resellerId]?.logs ?? []
+        logs: previous[rowId]?.logs ?? []
       }
     }));
 
     try {
-      const response = await fetch(`/api/admin/reseller-activity?resellerId=${encodeURIComponent(resellerId)}`, {
+      const endpoint =
+        table === 'reseller_applications'
+          ? `/api/admin/reseller-activity?resellerId=${encodeURIComponent(rowId)}`
+          : `/api/admin/gift-activity?giftClaimId=${encodeURIComponent(rowId)}`;
+      const response = await fetch(endpoint, {
         cache: 'no-store'
       });
-      const body = (await response.json()) as { rows?: ResellerActivityLog[]; error?: string };
+      const body = (await response.json()) as { rows?: Array<ResellerActivityLog | GiftActivityLog>; error?: string };
       if (!response.ok) {
         throw new Error(body.error ?? 'Sikertelen előzmény lekérdezés.');
       }
@@ -284,7 +300,7 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
 
       setActivityByRowId((previous) => ({
         ...previous,
-        [resellerId]: {
+        [rowId]: {
           loading: false,
           error: null,
           logs: nextLogs
@@ -293,10 +309,10 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
     } catch (activityError) {
       setActivityByRowId((previous) => ({
         ...previous,
-        [resellerId]: {
+        [rowId]: {
           loading: false,
           error: activityError instanceof Error ? activityError.message : 'Sikertelen előzmény lekérdezés.',
-          logs: previous[resellerId]?.logs ?? []
+          logs: previous[rowId]?.logs ?? []
         }
       }));
     }
@@ -327,6 +343,7 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
 
   const activeConfig = adminTableConfigs[activeTable];
   const isResellerTable = activeTable === 'reseller_applications';
+  const isGiftClaimsTable = activeTable === 'gift_claims';
   const canModifyActiveTable = isAdmin || CRM_EDITABLE_TABLES.includes(activeTable);
   const canDeleteInTable = isAdmin;
   const tableColumns = useMemo(
@@ -391,6 +408,55 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
       return true;
     });
   }, [assignedFilter, filteredRows, hotLeadFilter, isResellerTable, nextActionFilter, query, rows, statusFilter]);
+
+  const giftSearchRows = useMemo(() => {
+    if (!isGiftClaimsTable) {
+      return filteredRows;
+    }
+
+    const needle = normalizeForSearch(query.trim());
+    const giftRows = needle
+      ? rows.filter((row) =>
+          ['full_name', 'email', 'phone', 'shipping_address', 'purchase_location', 'tracking_number'].some((key) =>
+            normalizeForSearch(stringifyValue(row[key])).includes(needle)
+          )
+        )
+      : rows;
+
+    const filtered = giftRows.filter((row) => {
+      const pipelineStatus = stringifyValue(getResellerDraftValue(row, 'pipeline_status')).trim() || 'Új igénylés';
+      const receiptStatus = stringifyValue(getResellerDraftValue(row, 'receipt_check_status')).trim() || 'Ellenőrzésre vár';
+      const shippingStatus = stringifyValue(getResellerDraftValue(row, 'shipping_status')).trim() || 'Nincs előkészítve';
+      const assignedTo = stringifyValue(getResellerDraftValue(row, 'assigned_to')).trim() || 'nincs';
+      const nextActionKind = getNextActionState(getResellerDraftValue(row, 'next_action_at'));
+
+      if (statusFilter !== 'all' && statusFilter !== pipelineStatus) return false;
+      if (giftReceiptFilter !== 'all' && giftReceiptFilter !== receiptStatus) return false;
+      if (giftShippingFilter !== 'all' && giftShippingFilter !== shippingStatus) return false;
+      if (assignedFilter !== 'all' && assignedFilter !== assignedTo) return false;
+      if (nextActionFilter !== 'all' && nextActionFilter !== nextActionKind) return false;
+      return true;
+    });
+
+    return [...filtered].sort((left, right) => {
+      const leftValue = stringifyValue(getResellerDraftValue(left, 'next_action_at')).trim();
+      const rightValue = stringifyValue(getResellerDraftValue(right, 'next_action_at')).trim();
+      if (!leftValue && !rightValue) return 0;
+      if (!leftValue) return 1;
+      if (!rightValue) return -1;
+      return new Date(leftValue).getTime() - new Date(rightValue).getTime();
+    });
+  }, [
+    assignedFilter,
+    filteredRows,
+    giftReceiptFilter,
+    giftShippingFilter,
+    isGiftClaimsTable,
+    nextActionFilter,
+    query,
+    rows,
+    statusFilter
+  ]);
 
   const editableFields = useMemo(
     () =>
@@ -557,7 +623,9 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
               }
             }));
           } else {
-            await fetchActivityLogs(rowId);
+            if (activeTable === 'reseller_applications' || activeTable === 'gift_claims') {
+              await fetchActivityLogs(activeTable, rowId);
+            }
           }
         }
         return didSucceed;
@@ -872,6 +940,41 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
               <option value="today">Ma esedékes</option>
               <option value="future">Jövőbeni</option>
               <option value="none">Nincs dátum</option>
+            </select>
+          </div>
+        ) : isGiftClaimsTable ? (
+          <div className="mb-4 grid gap-2 md:grid-cols-3 lg:grid-cols-6">
+            <select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)} className="rounded border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white">
+              <option value="all">Pipeline: mind</option>
+              {GIFT_PIPELINE_STATUS_OPTIONS.map((option) => (
+                <option key={option} value={option}>{option}</option>
+              ))}
+            </select>
+            <select value={giftReceiptFilter} onChange={(event) => setGiftReceiptFilter(event.target.value)} className="rounded border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white">
+              <option value="all">Blokk: mind</option>
+              {GIFT_RECEIPT_CHECK_STATUS_OPTIONS.map((option) => (
+                <option key={option} value={option}>{option}</option>
+              ))}
+            </select>
+            <select value={giftShippingFilter} onChange={(event) => setGiftShippingFilter(event.target.value)} className="rounded border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white">
+              <option value="all">Szállítás: mind</option>
+              {GIFT_SHIPPING_STATUS_OPTIONS.map((option) => (
+                <option key={option} value={option}>{option}</option>
+              ))}
+            </select>
+            <select value={assignedFilter} onChange={(event) => setAssignedFilter(event.target.value)} className="rounded border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white">
+              <option value="all">Felelős: mind</option>
+              <option value="nincs">Nincs felelős</option>
+              {adminUsers.map((user) => (
+                <option key={user.id} value={user.id}>{user.name}</option>
+              ))}
+            </select>
+            <select value={nextActionFilter} onChange={(event) => setNextActionFilter(event.target.value)} className="rounded border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white">
+              <option value="all">Teendő: mind</option>
+              <option value="overdue">Lejárt</option>
+              <option value="today">Ma</option>
+              <option value="future">Jövőbeni</option>
+              <option value="none">Nincs</option>
             </select>
           </div>
         ) : null}
@@ -1195,7 +1298,7 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
                                 activityState && !activityState.loading && !activityState.error
                               );
                               if (willExpandHistory && !isAlreadyLoaded) {
-                                void fetchActivityLogs(rowId);
+                                void fetchActivityLogs('reseller_applications', rowId);
                               }
                             }}
                             className="text-xs font-medium text-slate-400 hover:text-slate-200"
@@ -1247,6 +1350,87 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
                       >
                         {rowSaveState[rowId]?.status === 'error' ? 'Hiba a mentéskor' : rowSaveState[rowId]?.message}
                       </p>
+                    ) : null}
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        ) : isGiftClaimsTable ? (
+          <div className="space-y-4">
+            {giftSearchRows.map((row) => {
+              const rowId = getRowId(row);
+              const isExpanded = Boolean(expandedRows[rowId]);
+              const receiptUrl = getGiftReceiptDisplayUrl(row);
+              const assignedUserId = stringifyValue(getResellerDraftValue(row, 'assigned_to')).trim();
+              const assignedTo =
+                adminUsers.find((user) => user.id === assignedUserId)?.name ||
+                (assignedUserId ? 'Ismeretlen felhasználó' : 'Nincs felelős');
+              const nextActionDraft = getResellerDraftValue(row, 'next_action_at');
+
+              return (
+                <article key={rowId} className="rounded-xl border border-slate-700 bg-slate-950/70 p-4">
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div className="space-y-1 text-sm text-slate-200">
+                      <p className="text-lg font-semibold text-white">{stringifyValue(getResellerDraftValue(row, 'full_name')) || 'Névtelen igénylő'}</p>
+                      <p>{stringifyValue(getResellerDraftValue(row, 'email')) || '-'}</p>
+                      <p>{stringifyValue(getResellerDraftValue(row, 'phone')) || '-'}</p>
+                      <p>{stringifyValue(getResellerDraftValue(row, 'shipping_address')) || '-'}</p>
+                      <p>Vásárlás helye: {stringifyValue(getResellerDraftValue(row, 'purchase_location')) || '-'}</p>
+                      <p>Vásárlás dátuma: {stringifyValue(getResellerDraftValue(row, 'purchase_date')) || '-'}</p>
+                      <p>Igénylés: {formatAdminDate(getResellerDraftValue(row, 'created_at'))}</p>
+                      <div className="flex flex-wrap gap-2 pt-1">
+                        <span className="rounded-full border border-indigo-700/70 bg-indigo-900/40 px-2 py-1 text-xs text-indigo-200">{stringifyValue(getResellerDraftValue(row, 'pipeline_status')) || 'Új igénylés'}</span>
+                        <span className="rounded-full border border-amber-700/70 bg-amber-900/40 px-2 py-1 text-xs text-amber-200">{stringifyValue(getResellerDraftValue(row, 'receipt_check_status')) || 'Ellenőrzésre vár'}</span>
+                        <span className="rounded-full border border-emerald-700/70 bg-emerald-900/40 px-2 py-1 text-xs text-emerald-200">{stringifyValue(getResellerDraftValue(row, 'shipping_status')) || 'Nincs előkészítve'}</span>
+                      </div>
+                    </div>
+                    <div className="space-y-2 text-sm text-slate-200">
+                      <p className="font-semibold text-white">Következő teendő</p>
+                      <p>Felelős: <span className="font-medium text-white">{assignedTo}</span></p>
+                      <p>Határidő: {nextActionDraft ? formatAdminDate(nextActionDraft) : 'Nincs rögzítve'}</p>
+                      <p className="whitespace-pre-wrap text-slate-300">{stringifyValue(getResellerDraftValue(row, 'next_action_description')) || 'Nincs megadva.'}</p>
+                      {receiptUrl ? (
+                        <a href={receiptUrl} target="_blank" rel="noopener noreferrer" className="inline-flex rounded border border-cyan-500/40 px-2 py-1 text-xs text-cyan-300 hover:bg-cyan-500/10">
+                          Blokk megnyitása
+                        </a>
+                      ) : (
+                        <span className="text-xs text-slate-500">Nincs blokk</span>
+                      )}
+                    </div>
+                  </div>
+                  <div className="mt-4 border-t border-slate-800 pt-3">
+                    <button type="button" onClick={() => setExpandedRows((prev) => ({ ...prev, [rowId]: !prev[rowId] }))} className="text-sm text-cyan-300 hover:text-cyan-200">
+                      {isExpanded ? 'Részletek elrejtése ▲' : 'Részletek szerkesztése ▼'}
+                    </button>
+                    {isExpanded ? (
+                      <div className="mt-3 space-y-3">
+                        <div className="grid gap-3 md:grid-cols-2">
+                          <div className="space-y-2 rounded-lg border border-slate-800/80 bg-slate-900/70 p-3">
+                            <select value={stringifyValue(getResellerDraftValue(row, 'pipeline_status')) || 'Új igénylés'} onChange={(event) => { const updates = { pipeline_status: event.target.value }; commitResellerUpdates(rowId, updates); void persistResellerUpdates(rowId, updates); }} className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white">{GIFT_PIPELINE_STATUS_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}</select>
+                            <select value={stringifyValue(getResellerDraftValue(row, 'receipt_check_status')) || 'Ellenőrzésre vár'} onChange={(event) => { const updates = { receipt_check_status: event.target.value }; commitResellerUpdates(rowId, updates); void persistResellerUpdates(rowId, updates); }} className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white">{GIFT_RECEIPT_CHECK_STATUS_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}</select>
+                            <select value={stringifyValue(getResellerDraftValue(row, 'receipt_is_valid')) === '' ? 'Nincs megadva' : (stringifyValue(getResellerDraftValue(row, 'receipt_is_valid')) === 'true' ? 'Igen' : 'Nem')} onChange={(event) => { const updates = { receipt_is_valid: event.target.value }; commitResellerUpdates(rowId, updates); void persistResellerUpdates(rowId, updates); }} className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white"><option>Nincs megadva</option><option>Igen</option><option>Nem</option></select>
+                            <textarea value={stringifyValue(getResellerDraftValue(row, 'receipt_check_note'))} onChange={(event) => setResellerDraftValue(rowId, 'receipt_check_note', event.target.value)} onBlur={() => void persistResellerUpdates(rowId, { receipt_check_note: stringifyValue(getResellerDraftValue(row, 'receipt_check_note')) })} placeholder="Ellenőrzési megjegyzés" className="min-h-20 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white" />
+                          </div>
+                          <div className="space-y-2 rounded-lg border border-slate-800/80 bg-slate-900/70 p-3">
+                            <select value={assignedUserId} onChange={(event) => { const updates = { assigned_to: event.target.value || null }; commitResellerUpdates(rowId, updates); void persistResellerUpdates(rowId, updates); }} className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white"><option value="">Nincs felelős</option>{adminUsers.map((user) => <option key={user.id} value={user.id}>{user.name}</option>)}</select>
+                            <input type="datetime-local" value={stringifyValue(getResellerDraftValue(row, 'next_action_at')).slice(0, 16)} onChange={(event) => { const updates = { next_action_at: event.target.value || null }; commitResellerUpdates(rowId, updates); }} onBlur={() => void persistResellerUpdates(rowId, { next_action_at: getResellerDraftValue(row, 'next_action_at') })} className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white" />
+                            <textarea value={stringifyValue(getResellerDraftValue(row, 'next_action_description'))} onChange={(event) => setResellerDraftValue(rowId, 'next_action_description', event.target.value)} onBlur={() => void persistResellerUpdates(rowId, { next_action_description: stringifyValue(getResellerDraftValue(row, 'next_action_description')) })} placeholder="Következő teendő" className="min-h-20 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white" />
+                            <select value={stringifyValue(getResellerDraftValue(row, 'shipping_status')) || 'Nincs előkészítve'} onChange={(event) => { const updates = { shipping_status: event.target.value }; commitResellerUpdates(rowId, updates); void persistResellerUpdates(rowId, updates); }} className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white">{GIFT_SHIPPING_STATUS_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}</select>
+                            <input value={stringifyValue(getResellerDraftValue(row, 'courier_name'))} onChange={(event) => setResellerDraftValue(rowId, 'courier_name', event.target.value)} onBlur={() => void persistResellerUpdates(rowId, { courier_name: stringifyValue(getResellerDraftValue(row, 'courier_name')) })} placeholder="Futárszolgálat neve" className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white" />
+                            <input value={stringifyValue(getResellerDraftValue(row, 'tracking_number'))} onChange={(event) => setResellerDraftValue(rowId, 'tracking_number', event.target.value)} onBlur={() => void persistResellerUpdates(rowId, { tracking_number: stringifyValue(getResellerDraftValue(row, 'tracking_number')) })} placeholder="Tracking number" className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white" />
+                            <input value={stringifyValue(getResellerDraftValue(row, 'tracking_url'))} onChange={(event) => setResellerDraftValue(rowId, 'tracking_url', event.target.value)} onBlur={() => void persistResellerUpdates(rowId, { tracking_url: stringifyValue(getResellerDraftValue(row, 'tracking_url')) })} placeholder="Tracking URL" className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white" />
+                          </div>
+                        </div>
+                        <section className="border-t border-slate-800 pt-3">
+                          <button type="button" onClick={() => { const willExpandHistory = !expandedHistoryRows[rowId]; setExpandedHistoryRows((previous) => ({ ...previous, [rowId]: willExpandHistory })); if (willExpandHistory) void fetchActivityLogs('gift_claims', rowId); }} className="text-xs font-medium text-slate-400 hover:text-slate-200">{expandedHistoryRows[rowId] ? 'Előzmények elrejtése ▲' : 'Előzmények megnyitása ▼'}</button>
+                          {expandedHistoryRows[rowId] ? (
+                            <div className="mt-3 rounded-lg border border-slate-800/80 bg-slate-900/70 p-3">
+                              {(activityByRowId[rowId]?.logs ?? []).length === 0 ? <p className="text-xs text-slate-400">Még nincs rögzített módosítás.</p> : <ul className="max-h-80 space-y-2 overflow-y-auto pr-1">{(activityByRowId[rowId]?.logs ?? []).map((log) => <li key={log.id} className="rounded-md border border-slate-800 bg-slate-950/60 p-2 text-xs text-slate-200">{formatAdminDate(log.created_at)} – {log.change_summary || 'Módosítás történt.'}</li>)}</ul>}
+                            </div>
+                          ) : null}
+                        </section>
+                      </div>
                     ) : null}
                   </div>
                 </article>
@@ -1312,7 +1496,7 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
           </div>
         )}
 
-        {!loading && (isResellerTable ? resellerSearchRows : filteredRows).length === 0 ? (
+        {!loading && (isResellerTable ? resellerSearchRows : isGiftClaimsTable ? giftSearchRows : filteredRows).length === 0 ? (
           <p className="py-6 text-center text-sm text-slate-400">
             {activeConfig.emptyState ?? 'Nincs megjeleníthető rekord.'}
           </p>
@@ -1320,7 +1504,7 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
 
         <p className="text-slate-400 text-sm mt-4">
           {query.trim()
-            ? `Szűrt találatok: ${(isResellerTable ? resellerSearchRows : filteredRows).length} / ${rows.length} tétel`
+            ? `Szűrt találatok: ${(isResellerTable ? resellerSearchRows : isGiftClaimsTable ? giftSearchRows : filteredRows).length} / ${rows.length} tétel`
             : `Összesen: ${rows.length} tétel`}
         </p>
       </div>

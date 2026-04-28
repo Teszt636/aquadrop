@@ -250,6 +250,13 @@ export async function POST(request: Request) {
           purchase_location: normalizedPurchaseLocation,
           purchase_date: normalizedPurchaseDate,
           status: 'Új',
+          pipeline_status: 'Új igénylés',
+          receipt_check_status: 'Ellenőrzésre vár',
+          shipping_status: 'Nincs előkészítve',
+          ai_check_status: 'Nincs ellenőrizve',
+          next_action_at: getNextBusinessDayTenAmIso(),
+          next_action_description:
+            'Ellenőrizd a feltöltött blokkot, a vásárlás adatait és az igénylés jogosultságát.',
           consent: body.payload.consent,
           purchase_declaration: body.payload.purchase_declaration,
           receipt_url: normalizedReceiptUrl,
