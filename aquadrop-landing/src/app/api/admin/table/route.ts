@@ -404,7 +404,7 @@ async function assertSession(table: AdminTableName, method: 'GET' | 'PATCH' | 'D
     return { error: null, sessionUser: adminUser };
   }
 
-  if (table === 'reseller_applications') {
+  if (table === 'reseller_applications' || table === 'gift_claims') {
     const user = await requireAdminSession(method === 'DELETE' ? ['admin'] : ['admin', 'crm_user']);
     if (!user) {
       return {
