@@ -399,6 +399,11 @@ async function assertSession(table: AdminTableName, method: 'GET' | 'PATCH' | 'D
     return { error: null, sessionUser: user };
   }
 
+  const adminUser = await requireAdminSession(['admin']);
+  if (adminUser) {
+    return { error: null, sessionUser: adminUser };
+  }
+
   if (table === 'reseller_applications') {
     const user = await requireAdminSession(method === 'DELETE' ? ['admin'] : ['admin', 'crm_user']);
     if (!user) {
@@ -411,9 +416,9 @@ async function assertSession(table: AdminTableName, method: 'GET' | 'PATCH' | 'D
   }
 
   if (method === 'GET') {
-    const user = await requireAdminSession(['admin']);
+    const user = await requireAdminSession(['admin', 'crm_user']);
     if (!user) {
-      return { error: NextResponse.json({ error: 'Nincs admin jogosultság.' }, { status: 403 }), sessionUser: null };
+      return { error: NextResponse.json({ error: 'Nincs jogosultság.' }, { status: 403 }), sessionUser: null };
     }
     return { error: null, sessionUser: user };
   }
