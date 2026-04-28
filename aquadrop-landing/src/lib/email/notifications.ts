@@ -134,7 +134,13 @@ export async function sendFormNotifications(request: EmailNotificationRequest): 
       ) {
         console.error('[email][notifications] Invalid gift_claim payload', request.payload);
       }
-      const userEmail = buildGiftUserEmail(request.payload.fullName);
+      if (!request.payload.statusUrl) {
+        console.warn('[email][notifications] Missing gift claim status URL, sending confirmation without status CTA', {
+          recipientEmail: request.payload.email,
+          type: request.type
+        });
+      }
+      const userEmail = buildGiftUserEmail(request.payload.fullName, request.payload.statusUrl);
       const adminTemplate = buildGiftAdminEmail({ ...request.payload, submittedAt });
 
       const [userResponse, adminResponse] = await Promise.all([

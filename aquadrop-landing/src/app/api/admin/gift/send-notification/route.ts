@@ -5,6 +5,7 @@ import { fetchAdminTableRowById, insertGiftActivityLogs } from '@/lib/admin/supa
 import { resolveAquadropSenderEmail } from '@/lib/email/config';
 import { sendEmailWithResend } from '@/lib/email/resend';
 import { renderBrandedEmailLayout } from '@/lib/email/templates';
+import { buildGiftClaimStatusUrl } from '@/lib/gift/status';
 
 type NotificationType = 'hianypotlas' | 'jovahagyas' | 'szallitas' | 'elutasitas';
 
@@ -19,6 +20,7 @@ type GiftClaimNotificationRow = {
   id: string;
   full_name: string | null;
   email: string | null;
+  status_token: string | null;
   pipeline_status: string | null;
   receipt_check_status: string | null;
   receipt_check_note: string | null;
@@ -28,6 +30,7 @@ type GiftClaimNotificationRow = {
 };
 
 const REPLY_TO_EMAIL = 'hello@aquadrop.hu';
+const GIFT_STATUS_CTA_TEXT = 'Igénylési folyamat állapota';
 
 function normalizeText(value: unknown): string {
   return typeof value === 'string' ? value.trim() : '';
@@ -40,6 +43,16 @@ function escapeHtml(value: string): string {
     .replaceAll('>', '&gt;')
     .replaceAll('\"', '&quot;')
     .replaceAll("'", '&#39;');
+}
+
+function resolveGiftStatusUrl(statusToken: string | null, context: { giftClaimId: string; type: NotificationType }): string | null {
+  const normalizedToken = normalizeText(statusToken);
+  if (!normalizedToken) {
+    console.warn('[gift-notification] Missing status_token, skipping status CTA.', context);
+    return null;
+  }
+
+  return buildGiftClaimStatusUrl(normalizedToken);
 }
 
 function resolveNotificationType(row: GiftClaimNotificationRow):
@@ -113,6 +126,7 @@ function buildNotificationEmail(type: NotificationType, row: GiftClaimNotificati
   const courierName = escapeHtml(normalizeText(row.courier_name) || '—');
   const trackingNumber = escapeHtml(normalizeText(row.tracking_number) || '—');
   const trackingUrl = escapeHtml(normalizeText(row.tracking_url) || '—');
+  const statusUrl = type === 'elutasitas' ? null : resolveGiftStatusUrl(row.status_token, { giftClaimId: row.id, type });
 
   if (type === 'hianypotlas') {
     const subject = 'Hiánypótlás szükséges az ajándékigényléshez';
@@ -127,7 +141,9 @@ function buildNotificationEmail(type: NotificationType, row: GiftClaimNotificati
       html: renderBrandedEmailLayout({
         subject,
         headline: 'Hiánypótlás szükséges',
-        bodyHtml
+        bodyHtml,
+        ctaText: statusUrl ? GIFT_STATUS_CTA_TEXT : undefined,
+        ctaUrl: statusUrl ?? undefined
       })
     };
   }
@@ -144,7 +160,9 @@ function buildNotificationEmail(type: NotificationType, row: GiftClaimNotificati
       html: renderBrandedEmailLayout({
         subject,
         headline: 'Sikeres jóváhagyás',
-        bodyHtml
+        bodyHtml,
+        ctaText: statusUrl ? GIFT_STATUS_CTA_TEXT : undefined,
+        ctaUrl: statusUrl ?? undefined
       })
     };
   }
@@ -164,7 +182,9 @@ function buildNotificationEmail(type: NotificationType, row: GiftClaimNotificati
       html: renderBrandedEmailLayout({
         subject,
         headline: 'Csomag feladva',
-        bodyHtml
+        bodyHtml,
+        ctaText: statusUrl ? GIFT_STATUS_CTA_TEXT : undefined,
+        ctaUrl: statusUrl ?? undefined
       })
     };
   }
