@@ -65,6 +65,16 @@ export function formatAdminDate(value: unknown): string {
   return `${parsed.getFullYear()}.${pad(parsed.getMonth() + 1)}.${pad(parsed.getDate())} ${parsed.getHours()}:${pad(parsed.getMinutes())}`;
 }
 
+export function formatAdminDateShort(value: unknown): string {
+  const parsed = normalizeDateValue(value);
+
+  if (!parsed) {
+    return '-';
+  }
+
+  return `${parsed.getFullYear()}.${pad(parsed.getMonth() + 1)}.${pad(parsed.getDate())}`;
+}
+
 export function formatDownloadedFile(value: unknown): string {
   if (typeof value !== 'string' || !value.trim()) {
     return '-';
