@@ -34,6 +34,14 @@ const TABLE_ORDER: AdminTableViewName[] = [
   'reseller_applications',
   'admin_users'
 ];
+const CRM_EDITABLE_TABLES: AdminTableViewName[] = ['reseller_applications', 'gift_claims'];
+const CRM_GIFT_CLAIMS_EDITABLE_FIELDS = new Set([
+  'status',
+  'admin_note',
+  'shipping_address',
+  'purchase_location',
+  'purchase_date'
+]);
 type ManagedUser = {
   id: string;
   name: string;
@@ -318,7 +326,7 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
 
   const activeConfig = adminTableConfigs[activeTable];
   const isResellerTable = activeTable === 'reseller_applications';
-  const canModifyActiveTable = isAdmin || isResellerTable;
+  const canModifyActiveTable = isAdmin || CRM_EDITABLE_TABLES.includes(activeTable);
   const canDeleteInTable = isAdmin;
   const tableColumns = useMemo(
     () => activeConfig.columns.filter((column) => !column.hiddenInTable),
@@ -384,8 +392,22 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
   }, [assignedFilter, filteredRows, hotLeadFilter, isResellerTable, nextActionFilter, query, rows, statusFilter]);
 
   const editableFields = useMemo(
-    () => (canModifyActiveTable ? detailColumns.filter((column) => column.editable && selectedRow && column.key in selectedRow) : []),
-    [canModifyActiveTable, detailColumns, selectedRow]
+    () =>
+      canModifyActiveTable
+        ? detailColumns.filter((column) => {
+            if (!column.editable || !selectedRow || !(column.key in selectedRow)) {
+              return false;
+            }
+            if (isAdmin) {
+              return true;
+            }
+            if (activeTable === 'gift_claims') {
+              return CRM_GIFT_CLAIMS_EDITABLE_FIELDS.has(column.key);
+            }
+            return activeTable === 'reseller_applications';
+          })
+        : [],
+    [activeTable, canModifyActiveTable, detailColumns, isAdmin, selectedRow]
   );
 
   function openRow(row: Row) {
