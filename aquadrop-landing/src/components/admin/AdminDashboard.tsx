@@ -1524,7 +1524,10 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
                             </div>
                           </div>
                           <div className="space-y-2 rounded-lg border border-slate-800/80 bg-slate-900/70 p-3">
-                            <select value={assignedUserId} onChange={(event) => { const updates = { assigned_to: event.target.value || null }; commitResellerUpdates(rowId, updates); void persistResellerUpdates(rowId, updates); }} className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white"><option value="">Nincs felelős</option>{adminUsers.map((user) => <option key={user.id} value={user.id}>{user.name}</option>)}</select>
+                            <label className="text-xs text-slate-300">
+                              <span className="mb-1 block uppercase tracking-wide text-slate-500">Felelős</span>
+                              <select value={assignedUserId} onChange={(event) => { const updates = { assigned_to: event.target.value || null }; commitResellerUpdates(rowId, updates); void persistResellerUpdates(rowId, updates); }} className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white"><option value="">Nincs felelős</option>{adminUsers.map((user) => <option key={user.id} value={user.id}>{user.name}</option>)}</select>
+                            </label>
                             <div className="text-xs text-slate-300">
                               <span className="mb-1 block uppercase tracking-wide text-slate-500">Következő teendő időpontja</span>
                               <div className={`relative rounded-md border p-2 ${nextActionTone}`}>
@@ -1621,7 +1624,7 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
                               <input value={stringifyValue(getResellerDraftValue(row, 'courier_name'))} onChange={(event) => setResellerDraftValue(rowId, 'courier_name', event.target.value)} onBlur={() => { const draftValue = stringifyValue(getResellerDraftValue(row, 'courier_name')); const persistedValue = stringifyValue(row.courier_name); if (draftValue === persistedValue) return; void persistResellerUpdates(rowId, { courier_name: draftValue }); }} placeholder="Futárszolgálat neve" className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white" />
                               <input value={stringifyValue(getResellerDraftValue(row, 'tracking_number'))} onChange={(event) => setResellerDraftValue(rowId, 'tracking_number', event.target.value)} onBlur={() => { const draftValue = stringifyValue(getResellerDraftValue(row, 'tracking_number')); const persistedValue = stringifyValue(row.tracking_number); if (draftValue === persistedValue) return; void persistResellerUpdates(rowId, { tracking_number: draftValue }); }} placeholder="Tracking number" className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white" />
                             </div>
-                            <div>
+                            <div className="flex justify-center">
                               <button
                                 type="button"
                                 onClick={() => void sendGiftNotification(rowId)}
@@ -1629,10 +1632,10 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
                               >
                                 Értesítő küldése
                               </button>
-                              {giftNotificationStateByRowId[rowId]?.message ? (
-                                <p className="mt-2 text-xs text-slate-400">{giftNotificationStateByRowId[rowId]?.message}</p>
-                              ) : null}
                             </div>
+                            {giftNotificationStateByRowId[rowId]?.message ? (
+                              <p className="mt-2 text-center text-xs text-slate-400">{giftNotificationStateByRowId[rowId]?.message}</p>
+                            ) : null}
                           </div>
                         </div>
                         <section className="border-t border-slate-800 pt-3">

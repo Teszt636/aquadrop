@@ -169,6 +169,16 @@ async function insertRow(table: string, payload: Record<string, unknown>): Promi
   }
 }
 
+async function getAdminUserIdByName(name: string): Promise<string | null> {
+  const query = new URLSearchParams({
+    select: 'id',
+    name: `eq.${name}`,
+    limit: '1'
+  });
+  const rows = await selectRows<{ id: string }>('admin_users', query);
+  return rows[0]?.id ?? null;
+}
+
 export async function POST(request: Request) {
   let formType: SubmitRequest['formType'] | 'unknown' = 'unknown';
 
@@ -242,6 +252,10 @@ export async function POST(request: Request) {
       const insertSkipped = duplicateDetected;
 
       if (!duplicateDetected) {
+        const createdAt = new Date();
+        const nextActionAt = new Date(createdAt.getTime() + 24 * 60 * 60 * 1000);
+        const defaultAssigneeId = await getAdminUserIdByName('Bartók Csaba');
+
         await insertRow('gift_claims', {
           full_name: normalizedFullName,
           email: normalizedEmail,
@@ -254,7 +268,9 @@ export async function POST(request: Request) {
           receipt_check_status: 'Ellenőrzésre vár',
           shipping_status: 'Nincs előkészítve',
           ai_check_status: 'Nincs ellenőrizve',
-          next_action_at: getNextBusinessDayTenAmIso(),
+          assigned_to: defaultAssigneeId,
+          created_at: createdAt.toISOString(),
+          next_action_at: nextActionAt.toISOString(),
           next_action_description:
             'Ellenőrizd a feltöltött blokkot, a vásárlás adatait és az igénylés jogosultságát.',
           consent: body.payload.consent,
