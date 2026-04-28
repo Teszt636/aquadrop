@@ -39,6 +39,7 @@ type ResellerSubmitRequest = {
     website: string | null;
     sales_channel: string;
     message: string | null;
+    assigned_to?: string | null;
   };
 };
 
@@ -177,6 +178,26 @@ async function getAdminUserIdByName(name: string): Promise<string | null> {
   });
   const rows = await selectRows<{ id: string }>('admin_users', query);
   return rows[0]?.id ?? null;
+}
+
+async function resolveDefaultResellerAssigneeId(explicitAssignedTo: unknown): Promise<string | null> {
+  if (typeof explicitAssignedTo === 'string') {
+    const normalizedAssignedTo = explicitAssignedTo.trim();
+    if (normalizedAssignedTo.length > 0) {
+      return normalizedAssignedTo;
+    }
+    return null;
+  }
+
+  const bartokCsabaId = await getAdminUserIdByName('Bartók Csaba');
+  if (!bartokCsabaId) {
+    console.warn('[forms][submit] Default reseller assignee not found', {
+      assigneeName: 'Bartók Csaba',
+      formType: 'reseller_application'
+    });
+  }
+
+  return bartokCsabaId;
 }
 
 export async function POST(request: Request) {
@@ -335,6 +356,7 @@ export async function POST(request: Request) {
           message: normalizedMessage
         });
         const isHotLead = leadScore >= 60;
+        const assignedTo = await resolveDefaultResellerAssigneeId(body.payload.assigned_to);
 
         await insertRow('reseller_applications', {
           company_name: normalizedCompanyName,
@@ -344,6 +366,7 @@ export async function POST(request: Request) {
           website: normalizedWebsite,
           sales_channel: normalizedSalesChannel,
           message: normalizedMessage,
+          assigned_to: assignedTo,
           lead_score: leadScore,
           is_hot_lead: isHotLead,
           next_action_at: getNextBusinessDayTenAmIso()
