@@ -15,6 +15,11 @@ import {
   type AdminTableViewName
 } from '@/lib/admin/table-config';
 import { type AdminSessionUser } from '@/lib/admin/constants';
+import {
+  buildUtcIsoFromBudapestParts,
+  getBudapestDateKey,
+  getBudapestDateTimeParts
+} from '@/lib/datetime/budapest';
 
 type Row = Record<string, unknown>;
 type AdminUser = { id: string; name: string; email: string };
@@ -103,23 +108,20 @@ function normalizeNextActionParts(value: unknown): { date: string; hour: string;
     return { date: '', hour: '', minute: '' };
   }
 
-  const parsed = new Date(stringifyValue(value));
-  if (Number.isNaN(parsed.getTime())) {
+  const parts = getBudapestDateTimeParts(stringifyValue(value));
+  if (!parts.date) {
     return { date: '', hour: '', minute: '' };
   }
 
-  const yyyy = parsed.getFullYear();
-  const mm = `${parsed.getMonth() + 1}`.padStart(2, '0');
-  const dd = `${parsed.getDate()}`.padStart(2, '0');
-  const hh = `${parsed.getHours()}`.padStart(2, '0');
   const minutes = [0, 15, 30, 45];
+  const currentMinute = Number(parts.minute);
   const roundedMinute = minutes.reduce((previous, current) =>
-    Math.abs(current - parsed.getMinutes()) < Math.abs(previous - parsed.getMinutes()) ? current : previous
+    Math.abs(current - currentMinute) < Math.abs(previous - currentMinute) ? current : previous
   );
 
   return {
-    date: `${yyyy}-${mm}-${dd}`,
-    hour: hh,
+    date: parts.date,
+    hour: parts.hour,
     minute: `${roundedMinute}`.padStart(2, '0')
   };
 }
@@ -140,7 +142,11 @@ function combineNextActionAt(date: string, hour: string, minute: string): string
     return null;
   }
 
-  return `${date}T${normalizedHour}:${normalizedMinute}:00`;
+  try {
+    return buildUtcIsoFromBudapestParts(date, normalizedHour, normalizedMinute);
+  } catch {
+    return null;
+  }
 }
 
 function formatNextActionSummary(value: unknown): string {
@@ -184,11 +190,11 @@ function getNextActionState(value: unknown): 'none' | 'overdue' | 'today' | 'fut
 
   const parsed = new Date(raw);
   if (Number.isNaN(parsed.getTime())) return 'none';
-  const now = new Date();
-  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-  const valueStart = new Date(parsed.getFullYear(), parsed.getMonth(), parsed.getDate()).getTime();
-  if (valueStart < todayStart) return 'overdue';
-  if (valueStart === todayStart) return 'today';
+  const nowDateKey = getBudapestDateKey(new Date().toISOString());
+  const valueDateKey = getBudapestDateKey(parsed.toISOString());
+  if (!nowDateKey || !valueDateKey) return 'none';
+  if (valueDateKey < nowDateKey) return 'overdue';
+  if (valueDateKey === nowDateKey) return 'today';
   return 'future';
 }
 

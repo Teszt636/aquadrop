@@ -1,3 +1,6 @@
+
+import { formatBudapestDateTime } from '@/lib/datetime/budapest';
+
 export type AdminBaseTableName =
   | 'announcement_signups'
   | 'gift_claims'
@@ -51,10 +54,6 @@ function normalizeDateValue(value: unknown): Date | null {
   return parsed;
 }
 
-function pad(value: number): string {
-  return value.toString().padStart(2, '0');
-}
-
 export function formatAdminDate(value: unknown): string {
   const parsed = normalizeDateValue(value);
 
@@ -62,7 +61,7 @@ export function formatAdminDate(value: unknown): string {
     return '-';
   }
 
-  return `${parsed.getFullYear()}.${pad(parsed.getMonth() + 1)}.${pad(parsed.getDate())} ${parsed.getHours()}:${pad(parsed.getMinutes())}`;
+  return formatBudapestDateTime(parsed.toISOString());
 }
 
 export function formatAdminDateShort(value: unknown): string {
@@ -72,7 +71,7 @@ export function formatAdminDateShort(value: unknown): string {
     return '-';
   }
 
-  return `${parsed.getFullYear()}.${pad(parsed.getMonth() + 1)}.${pad(parsed.getDate())}`;
+  return formatBudapestDateTime(parsed.toISOString()).slice(0, 10);
 }
 
 export function formatDownloadedFile(value: unknown): string {

@@ -19,6 +19,11 @@ import {
   GIFT_STATUS_OPTIONS,
   RESELLER_PIPELINE_OPTIONS
 } from '@/lib/admin/table-config';
+import {
+  formatBudapestDateTime,
+  getBudapestDateTimeParts,
+  parseBudapestDateTimeInput
+} from '@/lib/datetime/budapest';
 
 const EDITABLE_FIELDS: Record<AdminTableName, string[]> = {
   announcement_signups: ['name', 'email'],
@@ -181,19 +186,22 @@ function sanitizeValue(key: string, value: unknown): unknown {
     if (typeof value !== 'string') {
       throw new Error('A következő teendő időpontja hibás.');
     }
-    const parsed = new Date(value);
-    if (Number.isNaN(parsed.getTime())) {
+    let nextActionIso: string;
+    try {
+      nextActionIso = parseBudapestDateTimeInput(value);
+    } catch {
       throw new Error('A következő teendő időpontja hibás.');
     }
-    const hour = parsed.getUTCHours();
-    const minute = parsed.getUTCMinutes();
+    const localParts = getBudapestDateTimeParts(nextActionIso);
+    const hour = Number(localParts.hour);
+    const minute = Number(localParts.minute);
     if (hour < 6 || hour > 20) {
       throw new Error('A következő teendő órája csak 06:00 és 20:00 között lehet.');
     }
     if (![0, 15, 30, 45].includes(minute)) {
       throw new Error('A következő teendő perce csak 00, 15, 30 vagy 45 lehet.');
     }
-    return parsed.toISOString();
+    return nextActionIso;
   }
 
   if (key === 'assigned_to') {
@@ -304,16 +312,7 @@ function isValidUuid(value: unknown): value is string {
 
 function formatDateTime(value: unknown): string {
   if (!value) return '—';
-  const parsed = new Date(String(value));
-  if (Number.isNaN(parsed.getTime())) return normalizeText(value);
-
-  return new Intl.DateTimeFormat('hu-HU', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit'
-  }).format(parsed);
+  return formatBudapestDateTime(String(value));
 }
 
 function formatFieldValue(fieldName: string, value: unknown, adminMap: Map<string, { name: string }>): string {
