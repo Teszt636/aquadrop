@@ -215,7 +215,7 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
     Record<string, { isOpen: boolean; date: string; hour: string; minute: string }>
   >({});
   const rowSaveStateTimersRef = useRef<Record<string, number>>({});
-  const rowSaveQueueRef = useRef<Record<string, Promise<void>>>({});
+  const rowSaveQueueRef = useRef<Record<string, Promise<boolean>>>({});
   const expandedHistoryRowsRef = useRef<Record<string, boolean>>({});
   const TABLES = useMemo(
     () => {
@@ -483,13 +483,29 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
     }));
   }
 
+  function updateNextActionDraft(rowId: string, update: Partial<{ date: string; hour: string; minute: string }>) {
+    const current = nextActionEditors[rowId] ?? { isOpen: true, date: '', hour: '', minute: '' };
+    const nextEditor = { ...current, ...update };
+    if (nextEditor.date && !nextEditor.hour) {
+      nextEditor.hour = '10';
+    }
+    if (nextEditor.date && !nextEditor.minute) {
+      nextEditor.minute = '00';
+    }
+    setNextActionEditors((previous) => ({
+      ...previous,
+      [rowId]: nextEditor
+    }));
+  }
+
   const persistResellerUpdates = useCallback(
     (rowId: string, updates: Record<string, unknown>) => {
       if (!rowId || Object.keys(updates).length === 0) {
-        return Promise.resolve();
+        return Promise.resolve(false);
       }
 
       const runSave = async () => {
+        let didSucceed = false;
         setRowSaveState((previous) => ({
           ...previous,
           [rowId]: { status: 'saving', message: 'Mentés...' }
@@ -511,20 +527,21 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
             ...previous,
             [rowId]: { status: 'error', message: body.error ?? 'Hiba a mentéskor' }
           }));
-          return;
+          return false;
         }
         if (!body.success) {
           setRowSaveState((previous) => ({
             ...previous,
             [rowId]: { status: 'error', message: body.error ?? 'Sikertelen mentés.' }
           }));
-          return;
+          return false;
         }
 
         setRowSaveState((previous) => ({
           ...previous,
           [rowId]: { status: 'saved', message: 'Mentve' }
         }));
+        didSucceed = true;
         clearSavedStateLater(rowId);
         if (expandedHistoryRowsRef.current[rowId]) {
           if (Array.isArray(body.newActivityLogs)) {
@@ -543,6 +560,7 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
             await fetchActivityLogs(rowId);
           }
         }
+        return didSucceed;
       };
 
       const queued = (rowSaveQueueRef.current[rowId] ?? Promise.resolve()).then(runSave, runSave);
@@ -552,31 +570,34 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
     [activeTable, fetchActivityLogs, getChangedByPayload]
   );
 
-  function updateAndPersistNextAction(
-    rowId: string,
-    update: Partial<{ date: string; hour: string; minute: string }>
-  ) {
-    const current = nextActionEditors[rowId] ?? { isOpen: true, date: '', hour: '', minute: '' };
-    const nextEditor = { ...current, ...update };
-    if (nextEditor.date && !nextEditor.hour) {
-      nextEditor.hour = '10';
+  async function saveNextActionDraft(rowId: string) {
+    const editor = nextActionEditors[rowId];
+    if (!editor) {
+      return;
     }
-    if (nextEditor.date && !nextEditor.minute) {
-      nextEditor.minute = '00';
+    if (!editor.date || !editor.hour || !editor.minute) {
+      setRowSaveState((previous) => ({
+        ...previous,
+        [rowId]: { status: 'error', message: 'Válassz dátumot, órát és percet.' }
+      }));
+      return;
     }
 
-    setNextActionEditors((previous) => ({
-      ...previous,
-      [rowId]: nextEditor
-    }));
-
-    const nextActionAt = combineNextActionAt(nextEditor.date, nextEditor.hour, nextEditor.minute);
+    const nextActionAt = combineNextActionAt(editor.date, editor.hour, editor.minute);
     if (!nextActionAt) {
+      setRowSaveState((previous) => ({
+        ...previous,
+        [rowId]: { status: 'error', message: 'Érvénytelen időpont. Válassz 06:00–20:45 közötti, 15 perces időt.' }
+      }));
       return;
     }
 
     commitResellerUpdates(rowId, { next_action_at: nextActionAt });
-    void persistResellerUpdates(rowId, { next_action_at: nextActionAt });
+    const didSave = await persistResellerUpdates(rowId, { next_action_at: nextActionAt });
+    if (!didSave) {
+      return;
+    }
+    closeNextActionEditor(rowId);
   }
 
   async function saveRow() {
@@ -1080,7 +1101,7 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
                                     type="date"
                                     value={nextActionEditors[rowId]?.date ?? ''}
                                     onChange={(event) => {
-                                      updateAndPersistNextAction(rowId, { date: event.target.value });
+                                      updateNextActionDraft(rowId, { date: event.target.value });
                                     }}
                                     className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white"
                                   />
@@ -1093,7 +1114,7 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
                                           <button
                                             key={hour}
                                             type="button"
-                                            onClick={() => updateAndPersistNextAction(rowId, { hour })}
+                                            onClick={() => updateNextActionDraft(rowId, { hour })}
                                             className={`rounded-full px-2 py-2 text-sm font-semibold transition ${isActive ? 'bg-cyan-500 text-slate-950' : 'bg-slate-900 text-slate-200 hover:bg-slate-800'}`}
                                           >
                                             {hour}
@@ -1111,7 +1132,7 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
                                           <button
                                             key={minute}
                                             type="button"
-                                            onClick={() => updateAndPersistNextAction(rowId, { minute })}
+                                            onClick={() => updateNextActionDraft(rowId, { minute })}
                                             className={`rounded-full px-3 py-2 text-sm font-semibold transition ${isActive ? 'bg-cyan-500 text-slate-950' : 'bg-slate-900 text-slate-200 hover:bg-slate-800'}`}
                                           >
                                             {minute}
@@ -1120,10 +1141,22 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
                                       })}
                                     </div>
                                   </div>
+                                  {(() => {
+                                    const editor = nextActionEditors[rowId];
+                                    if (!editor) return null;
+                                    const draftIso = combineNextActionAt(editor.date, editor.hour, editor.minute);
+                                    const persistedValue = stringifyValue(getResellerDraftValue(row, 'next_action_at')).trim();
+                                    const hasUnsavedChanges = Boolean(
+                                      editor.date || editor.hour || editor.minute
+                                    ) && (draftIso ?? '') !== persistedValue;
+                                    return hasUnsavedChanges ? (
+                                      <p className="text-[11px] text-amber-300/90">Nem mentett módosítás</p>
+                                    ) : null;
+                                  })()}
                                   <div className="flex justify-end">
                                     <button
                                       type="button"
-                                      onClick={() => closeNextActionEditor(rowId)}
+                                      onClick={() => void saveNextActionDraft(rowId)}
                                       className="rounded-lg bg-cyan-500 px-4 py-2 text-sm font-semibold text-slate-950 hover:bg-cyan-400"
                                     >
                                       Kész
