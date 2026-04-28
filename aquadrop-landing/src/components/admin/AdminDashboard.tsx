@@ -1459,10 +1459,28 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
                       <div className="mt-3 space-y-3">
                         <div className="grid gap-3 md:grid-cols-2">
                           <div className="space-y-2 rounded-lg border border-slate-800/80 bg-slate-900/70 p-3">
-                            <select value={stringifyValue(getResellerDraftValue(row, 'pipeline_status')) || 'Új igénylés'} onChange={(event) => { const updates = { pipeline_status: event.target.value }; commitResellerUpdates(rowId, updates); void persistResellerUpdates(rowId, updates); }} className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white">{GIFT_PIPELINE_STATUS_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}</select>
-                            <select value={stringifyValue(getResellerDraftValue(row, 'receipt_check_status')) || 'Ellenőrzésre vár'} onChange={(event) => { const updates = { receipt_check_status: event.target.value }; commitResellerUpdates(rowId, updates); void persistResellerUpdates(rowId, updates); }} className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white">{GIFT_RECEIPT_CHECK_STATUS_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}</select>
-                            <select value={stringifyValue(getResellerDraftValue(row, 'receipt_is_valid')) === '' ? 'Nincs megadva' : (stringifyValue(getResellerDraftValue(row, 'receipt_is_valid')) === 'true' ? 'Igen' : 'Nem')} onChange={(event) => { const updates = { receipt_is_valid: event.target.value }; commitResellerUpdates(rowId, updates); void persistResellerUpdates(rowId, updates); }} className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white"><option>Nincs megadva</option><option>Igen</option><option>Nem</option></select>
-                            <textarea value={stringifyValue(getResellerDraftValue(row, 'receipt_check_note'))} onChange={(event) => setResellerDraftValue(rowId, 'receipt_check_note', event.target.value)} onBlur={() => void persistResellerUpdates(rowId, { receipt_check_note: stringifyValue(getResellerDraftValue(row, 'receipt_check_note')) })} placeholder="Ellenőrzési megjegyzés" className="min-h-20 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white" />
+                            <div className="grid gap-3 md:grid-cols-2">
+                              <label className="space-y-1 text-xs text-slate-300">
+                                <span className="block uppercase tracking-wide text-slate-500">Státusz</span>
+                                <select value={stringifyValue(getResellerDraftValue(row, 'pipeline_status')) || 'Új igénylés'} onChange={(event) => { const updates = { pipeline_status: event.target.value }; commitResellerUpdates(rowId, updates); void persistResellerUpdates(rowId, updates); }} className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white">{GIFT_PIPELINE_STATUS_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}</select>
+                              </label>
+                              <label className="space-y-1 text-xs text-slate-300">
+                                <span className="block uppercase tracking-wide text-slate-500">Blokk</span>
+                                <select value={stringifyValue(getResellerDraftValue(row, 'receipt_check_status')) || 'Ellenőrzésre vár'} onChange={(event) => { const updates = { receipt_check_status: event.target.value }; commitResellerUpdates(rowId, updates); void persistResellerUpdates(rowId, updates); }} className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white">{GIFT_RECEIPT_CHECK_STATUS_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}</select>
+                              </label>
+                            </div>
+                            <div className="pt-1">
+                              <h4 className="text-sm font-semibold text-white">Szállítási adatok</h4>
+                              <div className="mt-2 space-y-2">
+                                <input value={stringifyValue(getResellerDraftValue(row, 'full_name'))} onChange={(event) => setResellerDraftValue(rowId, 'full_name', event.target.value)} onBlur={() => { const draftValue = stringifyValue(getResellerDraftValue(row, 'full_name')); const persistedValue = stringifyValue(row.full_name); if (draftValue === persistedValue) return; void persistResellerUpdates(rowId, { full_name: draftValue }); }} placeholder="Név" className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white" />
+                                <input value={stringifyValue(getResellerDraftValue(row, 'shipping_address'))} onChange={(event) => setResellerDraftValue(rowId, 'shipping_address', event.target.value)} onBlur={() => { const draftValue = stringifyValue(getResellerDraftValue(row, 'shipping_address')); const persistedValue = stringifyValue(row.shipping_address); if (draftValue === persistedValue) return; void persistResellerUpdates(rowId, { shipping_address: draftValue }); }} placeholder="Szállítási cím" className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white" />
+                                <input value={stringifyValue(getResellerDraftValue(row, 'phone'))} onChange={(event) => setResellerDraftValue(rowId, 'phone', event.target.value)} onBlur={() => { const draftValue = stringifyValue(getResellerDraftValue(row, 'phone')); const persistedValue = stringifyValue(row.phone); if (draftValue === persistedValue) return; void persistResellerUpdates(rowId, { phone: draftValue }); }} placeholder="Telefonszám" className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white" />
+                              </div>
+                            </div>
+                            <div className="pt-1">
+                              <h4 className="mb-2 text-sm font-semibold text-white">Ellenőrzési megjegyzés</h4>
+                              <textarea value={stringifyValue(getResellerDraftValue(row, 'receipt_check_note'))} onChange={(event) => setResellerDraftValue(rowId, 'receipt_check_note', event.target.value)} onBlur={() => { const draftValue = stringifyValue(getResellerDraftValue(row, 'receipt_check_note')); const persistedValue = stringifyValue(row.receipt_check_note); if (draftValue === persistedValue) return; void persistResellerUpdates(rowId, { receipt_check_note: draftValue }); }} placeholder="Ellenőrzési megjegyzés" className="min-h-20 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white" />
+                            </div>
                           </div>
                           <div className="space-y-2 rounded-lg border border-slate-800/80 bg-slate-900/70 p-3">
                             <select value={assignedUserId} onChange={(event) => { const updates = { assigned_to: event.target.value || null }; commitResellerUpdates(rowId, updates); void persistResellerUpdates(rowId, updates); }} className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white"><option value="">Nincs felelős</option>{adminUsers.map((user) => <option key={user.id} value={user.id}>{user.name}</option>)}</select>
@@ -1483,6 +1501,13 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
                           ) : null}
                         </section>
                       </div>
+                    ) : null}
+                    {rowSaveState[rowId]?.status && rowSaveState[rowId]?.status !== 'idle' ? (
+                      <p
+                        className={`mt-2 text-right text-xs ${rowSaveState[rowId]?.status === 'error' ? 'text-rose-300' : rowSaveState[rowId]?.status === 'saved' ? 'text-emerald-300' : 'text-slate-300'}`}
+                      >
+                        {rowSaveState[rowId]?.status === 'error' ? 'Hiba a mentéskor' : rowSaveState[rowId]?.message}
+                      </p>
                     ) : null}
                   </div>
                 </article>
