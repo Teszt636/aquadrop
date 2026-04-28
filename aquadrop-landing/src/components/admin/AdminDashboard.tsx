@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   adminTableConfigs,
   formatAdminDate,
+  formatAdminDateShort,
   GIFT_PIPELINE_STATUS_OPTIONS,
   GIFT_RECEIPT_CHECK_STATUS_OPTIONS,
   GIFT_SHIPPING_STATUS_OPTIONS,
@@ -1401,11 +1402,11 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
                   <div className="grid gap-4 md:grid-cols-2">
                     <div className="space-y-2">
                       <p className="text-lg font-semibold text-white">{stringifyValue(getResellerDraftValue(row, 'full_name')) || 'Névtelen igénylő'}</p>
-                      <div className="space-y-1 text-sm text-slate-300">
-                        <p>📍 <span className="text-slate-200">Szállítási cím:</span> <span className="text-slate-100">{stringifyValue(getResellerDraftValue(row, 'shipping_address')) || '-'}</span></p>
-                        <p>🛒 <span className="text-slate-200">Vásárlás helye:</span> <span className="text-slate-100">{stringifyValue(getResellerDraftValue(row, 'purchase_location')) || '-'}</span></p>
-                        <p>📅 <span className="text-slate-200">Vásárlás dátuma:</span> <span className="text-slate-100">{stringifyValue(getResellerDraftValue(row, 'purchase_date')) || '-'}</span></p>
-                        <p>⏱️ <span className="text-slate-200">Igénylés ideje:</span> <span className="text-slate-100">{formatAdminDate(getResellerDraftValue(row, 'created_at'))}</span></p>
+                      <div className="space-y-1 text-xs text-slate-300">
+                        <p>📍 <span className="text-slate-100">{stringifyValue(getResellerDraftValue(row, 'shipping_address')) || '-'}</span></p>
+                        <p>🛒 <span className="text-slate-100">{stringifyValue(getResellerDraftValue(row, 'purchase_location')) || '-'}</span></p>
+                        <p>📅 <span className="text-slate-100">{formatAdminDateShort(getResellerDraftValue(row, 'purchase_date'))}</span></p>
+                        <p>⏱️ <span className="text-slate-100">{formatAdminDate(getResellerDraftValue(row, 'created_at'))}</span></p>
                       </div>
                       <div className="flex flex-wrap items-center gap-2 text-xs">
                         {email ? (
