@@ -1,3 +1,4 @@
+
 import { formatBudapestDateTime } from '@/lib/datetime/budapest';
 
 export type AdminBaseTableName =
@@ -361,4 +362,3 @@ export const adminTableConfigs: Record<AdminTableViewName, AdminTableConfig> = {
     ]
   }
 };
-import { formatBudapestDateTime } from '@/lib/datetime/budapest';
