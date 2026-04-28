@@ -1362,34 +1362,85 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
               const rowId = getRowId(row);
               const isExpanded = Boolean(expandedRows[rowId]);
               const receiptUrl = getGiftReceiptDisplayUrl(row);
+              const email = stringifyValue(getResellerDraftValue(row, 'email')).trim();
+              const phone = stringifyValue(getResellerDraftValue(row, 'phone')).trim();
               const assignedUserId = stringifyValue(getResellerDraftValue(row, 'assigned_to')).trim();
               const assignedTo =
                 adminUsers.find((user) => user.id === assignedUserId)?.name ||
                 (assignedUserId ? 'Ismeretlen felhasználó' : 'Nincs felelős');
               const nextActionDraft = getResellerDraftValue(row, 'next_action_at');
+              const nextActionState = getNextActionState(nextActionDraft);
+              const nextActionLabel = nextActionDraft ? formatAdminDate(nextActionDraft) : 'Nincs rögzítve';
+              const nextActionDeadlineTone =
+                nextActionState === 'overdue'
+                  ? 'text-rose-300'
+                  : nextActionState === 'today'
+                    ? 'text-amber-300'
+                    : nextActionState === 'none'
+                      ? 'text-slate-400'
+                      : 'text-slate-200';
+              const nextActionDeadlineBadgeTone =
+                nextActionState === 'overdue'
+                  ? 'border-rose-500/60 bg-rose-950/30 text-rose-300'
+                  : nextActionState === 'today'
+                    ? 'border-amber-500/60 bg-amber-950/30 text-amber-300'
+                    : nextActionState === 'none'
+                      ? 'border-slate-600 bg-slate-900 text-slate-400'
+                      : 'border-slate-600 bg-slate-900 text-slate-300';
+              const nextActionDeadlineStatus =
+                nextActionState === 'overdue'
+                  ? 'Lejárt'
+                  : nextActionState === 'today'
+                    ? 'Ma'
+                    : nextActionState === 'none'
+                      ? 'Nincs dátum'
+                      : 'Jövőbeni';
 
               return (
                 <article key={rowId} className="rounded-xl border border-slate-700 bg-slate-950/70 p-4">
                   <div className="grid gap-4 md:grid-cols-2">
-                    <div className="space-y-1 text-sm text-slate-200">
+                    <div className="space-y-2">
                       <p className="text-lg font-semibold text-white">{stringifyValue(getResellerDraftValue(row, 'full_name')) || 'Névtelen igénylő'}</p>
-                      <p>{stringifyValue(getResellerDraftValue(row, 'email')) || '-'}</p>
-                      <p>{stringifyValue(getResellerDraftValue(row, 'phone')) || '-'}</p>
-                      <p>{stringifyValue(getResellerDraftValue(row, 'shipping_address')) || '-'}</p>
-                      <p>Vásárlás helye: {stringifyValue(getResellerDraftValue(row, 'purchase_location')) || '-'}</p>
-                      <p>Vásárlás dátuma: {stringifyValue(getResellerDraftValue(row, 'purchase_date')) || '-'}</p>
-                      <p>Igénylés: {formatAdminDate(getResellerDraftValue(row, 'created_at'))}</p>
+                      <div className="space-y-1 text-sm text-slate-300">
+                        <p>📍 <span className="text-slate-200">Szállítási cím:</span> <span className="text-slate-100">{stringifyValue(getResellerDraftValue(row, 'shipping_address')) || '-'}</span></p>
+                        <p>🛒 <span className="text-slate-200">Vásárlás helye:</span> <span className="text-slate-100">{stringifyValue(getResellerDraftValue(row, 'purchase_location')) || '-'}</span></p>
+                        <p>📅 <span className="text-slate-200">Vásárlás dátuma:</span> <span className="text-slate-100">{stringifyValue(getResellerDraftValue(row, 'purchase_date')) || '-'}</span></p>
+                        <p>⏱️ <span className="text-slate-200">Igénylés ideje:</span> <span className="text-slate-100">{formatAdminDate(getResellerDraftValue(row, 'created_at'))}</span></p>
+                      </div>
+                      <div className="flex flex-wrap items-center gap-2 text-xs">
+                        {email ? (
+                          <a href={`mailto:${email}`} className="rounded border border-cyan-500/40 px-2 py-1 text-cyan-300 hover:bg-cyan-500/10">
+                            ✉️ {email}
+                          </a>
+                        ) : (
+                          <span className="text-slate-500">Nincs email</span>
+                        )}
+                        {phone ? (
+                          <a href={`tel:${phone}`} className="rounded border border-cyan-500/40 px-2 py-1 text-cyan-300 hover:bg-cyan-500/10">
+                            📞 {phone}
+                          </a>
+                        ) : (
+                          <span className="text-slate-500">Nincs telefonszám</span>
+                        )}
+                      </div>
                       <div className="flex flex-wrap gap-2 pt-1">
-                        <span className="rounded-full border border-indigo-700/70 bg-indigo-900/40 px-2 py-1 text-xs text-indigo-200">{stringifyValue(getResellerDraftValue(row, 'pipeline_status')) || 'Új igénylés'}</span>
-                        <span className="rounded-full border border-amber-700/70 bg-amber-900/40 px-2 py-1 text-xs text-amber-200">{stringifyValue(getResellerDraftValue(row, 'receipt_check_status')) || 'Ellenőrzésre vár'}</span>
-                        <span className="rounded-full border border-emerald-700/70 bg-emerald-900/40 px-2 py-1 text-xs text-emerald-200">{stringifyValue(getResellerDraftValue(row, 'shipping_status')) || 'Nincs előkészítve'}</span>
+                        <span className={`rounded-full px-2 py-1 text-xs font-medium ${getPipelineBadgeTone(getResellerDraftValue(row, 'pipeline_status') || 'Új igénylés')}`}>{stringifyValue(getResellerDraftValue(row, 'pipeline_status')) || 'Új igénylés'}</span>
+                        <span className="rounded-full border border-amber-700/70 bg-amber-900/40 px-2 py-1 text-xs font-medium text-amber-200">{stringifyValue(getResellerDraftValue(row, 'receipt_check_status')) || 'Ellenőrzésre vár'}</span>
+                        <span className="rounded-full border border-emerald-700/70 bg-emerald-900/40 px-2 py-1 text-xs font-medium text-emerald-200">{stringifyValue(getResellerDraftValue(row, 'shipping_status')) || 'Nincs előkészítve'}</span>
                       </div>
                     </div>
-                    <div className="space-y-2 text-sm text-slate-200">
-                      <p className="font-semibold text-white">Következő teendő</p>
-                      <p>Felelős: <span className="font-medium text-white">{assignedTo}</span></p>
-                      <p>Határidő: {nextActionDraft ? formatAdminDate(nextActionDraft) : 'Nincs rögzítve'}</p>
-                      <p className="whitespace-pre-wrap text-slate-300">{stringifyValue(getResellerDraftValue(row, 'next_action_description')) || 'Nincs megadva.'}</p>
+                    <div className="space-y-2 text-sm">
+                      <p className="text-sm font-semibold text-white">Következő teendő</p>
+                      <p className="text-xs text-slate-300">
+                        Felelős: <span className="font-medium text-white">{assignedTo}</span>
+                      </p>
+                      <p className="flex flex-wrap items-center gap-2 text-xs">
+                        <span className="text-slate-400">Határidő:</span>
+                        <span className={`font-medium ${nextActionDeadlineTone}`}>{nextActionLabel}</span>
+                        <span className={`rounded-full border px-2 py-0.5 text-[11px] font-semibold ${nextActionDeadlineBadgeTone}`}>{nextActionDeadlineStatus}</span>
+                      </p>
+                      <p className="text-xs text-slate-400">Teendő leírása:</p>
+                      <p className="whitespace-pre-wrap break-words text-sm text-slate-100">{stringifyValue(getResellerDraftValue(row, 'next_action_description')) || 'Nincs megadva.'}</p>
                       {receiptUrl ? (
                         <a href={receiptUrl} target="_blank" rel="noopener noreferrer" className="inline-flex rounded border border-cyan-500/40 px-2 py-1 text-xs text-cyan-300 hover:bg-cyan-500/10">
                           Blokk megnyitása
