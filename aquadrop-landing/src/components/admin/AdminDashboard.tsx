@@ -227,6 +227,9 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
   const [nextActionEditors, setNextActionEditors] = useState<
     Record<string, { isOpen: boolean; date: string; hour: string; minute: string }>
   >({});
+  const [giftNotificationStateByRowId, setGiftNotificationStateByRowId] = useState<
+    Record<string, { status: 'idle' | 'pending' | 'info' | 'error'; message: string | null }>
+  >({});
   const rowSaveStateTimersRef = useRef<Record<string, number>>({});
   const rowSaveQueueRef = useRef<Record<string, Promise<boolean>>>({});
   const expandedHistoryRowsRef = useRef<Record<string, boolean>>({});
@@ -669,6 +672,39 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
     closeNextActionEditor(rowId);
   }
 
+  async function sendGiftNotification(rowId: string) {
+    setGiftNotificationStateByRowId((previous) => ({
+      ...previous,
+      [rowId]: { status: 'pending', message: null }
+    }));
+
+    try {
+      const response = await fetch('/api/admin/gift/send-notification', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ giftClaimId: rowId, ...getChangedByPayload() })
+      });
+
+      if (!response.ok) {
+        setGiftNotificationStateByRowId((previous) => ({
+          ...previous,
+          [rowId]: { status: 'info', message: 'Az értesítő küldés hamarosan elérhető.' }
+        }));
+        return;
+      }
+
+      setGiftNotificationStateByRowId((previous) => ({
+        ...previous,
+        [rowId]: { status: 'info', message: 'Az értesítő küldés hamarosan elérhető.' }
+      }));
+    } catch {
+      setGiftNotificationStateByRowId((previous) => ({
+        ...previous,
+        [rowId]: { status: 'info', message: 'Az értesítő küldés hamarosan elérhető.' }
+      }));
+    }
+  }
+
   async function saveRow() {
     if (!canModifyActiveTable) {
       return;
@@ -1040,7 +1076,6 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
                   : nextActionState === 'today'
                     ? 'border-amber-500/70 bg-amber-950/30 text-amber-200'
                     : 'border-slate-700 bg-slate-900 text-slate-200';
-
               return (
                 <article key={rowId} className="rounded-xl border border-slate-700 bg-slate-950/70 p-4">
                   <div className="grid gap-4 md:grid-cols-2">
@@ -1396,6 +1431,12 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
                     : nextActionState === 'none'
                       ? 'Nincs dátum'
                       : 'Jövőbeni';
+              const nextActionTone =
+                nextActionState === 'overdue'
+                  ? 'border-rose-500/70 bg-rose-950/40 text-rose-200'
+                  : nextActionState === 'today'
+                    ? 'border-amber-500/70 bg-amber-950/30 text-amber-200'
+                    : 'border-slate-700 bg-slate-900 text-slate-200';
 
               return (
                 <article key={rowId} className="rounded-xl border border-slate-700 bg-slate-950/70 p-4">
@@ -1484,12 +1525,114 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
                           </div>
                           <div className="space-y-2 rounded-lg border border-slate-800/80 bg-slate-900/70 p-3">
                             <select value={assignedUserId} onChange={(event) => { const updates = { assigned_to: event.target.value || null }; commitResellerUpdates(rowId, updates); void persistResellerUpdates(rowId, updates); }} className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white"><option value="">Nincs felelős</option>{adminUsers.map((user) => <option key={user.id} value={user.id}>{user.name}</option>)}</select>
-                            <input type="datetime-local" value={stringifyValue(getResellerDraftValue(row, 'next_action_at')).slice(0, 16)} onChange={(event) => { const updates = { next_action_at: event.target.value || null }; commitResellerUpdates(rowId, updates); }} onBlur={() => void persistResellerUpdates(rowId, { next_action_at: getResellerDraftValue(row, 'next_action_at') })} className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white" />
-                            <textarea value={stringifyValue(getResellerDraftValue(row, 'next_action_description'))} onChange={(event) => setResellerDraftValue(rowId, 'next_action_description', event.target.value)} onBlur={() => void persistResellerUpdates(rowId, { next_action_description: stringifyValue(getResellerDraftValue(row, 'next_action_description')) })} placeholder="Következő teendő" className="min-h-20 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white" />
-                            <select value={stringifyValue(getResellerDraftValue(row, 'shipping_status')) || 'Nincs előkészítve'} onChange={(event) => { const updates = { shipping_status: event.target.value }; commitResellerUpdates(rowId, updates); void persistResellerUpdates(rowId, updates); }} className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white">{GIFT_SHIPPING_STATUS_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}</select>
-                            <input value={stringifyValue(getResellerDraftValue(row, 'courier_name'))} onChange={(event) => setResellerDraftValue(rowId, 'courier_name', event.target.value)} onBlur={() => void persistResellerUpdates(rowId, { courier_name: stringifyValue(getResellerDraftValue(row, 'courier_name')) })} placeholder="Futárszolgálat neve" className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white" />
-                            <input value={stringifyValue(getResellerDraftValue(row, 'tracking_number'))} onChange={(event) => setResellerDraftValue(rowId, 'tracking_number', event.target.value)} onBlur={() => void persistResellerUpdates(rowId, { tracking_number: stringifyValue(getResellerDraftValue(row, 'tracking_number')) })} placeholder="Tracking number" className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white" />
-                            <input value={stringifyValue(getResellerDraftValue(row, 'tracking_url'))} onChange={(event) => setResellerDraftValue(rowId, 'tracking_url', event.target.value)} onBlur={() => void persistResellerUpdates(rowId, { tracking_url: stringifyValue(getResellerDraftValue(row, 'tracking_url')) })} placeholder="Tracking URL" className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white" />
+                            <div className="text-xs text-slate-300">
+                              <span className="mb-1 block uppercase tracking-wide text-slate-500">Következő teendő időpontja</span>
+                              <div className={`relative rounded-md border p-2 ${nextActionTone}`}>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    if (nextActionEditors[rowId]?.isOpen) {
+                                      closeNextActionEditor(rowId);
+                                      return;
+                                    }
+                                    openNextActionEditor(rowId, row);
+                                  }}
+                                  className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-left text-sm font-medium text-white hover:border-cyan-500/60"
+                                >
+                                  {formatNextActionSummary(nextActionDraft)}
+                                </button>
+                                {nextActionEditors[rowId]?.isOpen ? (
+                                  <div className="mt-2 space-y-3 rounded-xl border border-slate-700 bg-slate-950/95 p-3 shadow-xl">
+                                    <input
+                                      type="date"
+                                      value={nextActionEditors[rowId]?.date ?? ''}
+                                      onChange={(event) => {
+                                        updateNextActionDraft(rowId, { date: event.target.value });
+                                      }}
+                                      className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white"
+                                    />
+                                    <div>
+                                      <p className="mb-2 text-[11px] uppercase tracking-wide text-slate-400">Óra</p>
+                                      <div className="grid grid-cols-5 gap-2">
+                                        {nextActionHourOptions.map((hour) => {
+                                          const isActive = (nextActionEditors[rowId]?.hour ?? '') === hour;
+                                          return (
+                                            <button
+                                              key={hour}
+                                              type="button"
+                                              onClick={() => updateNextActionDraft(rowId, { hour })}
+                                              className={`rounded-full px-2 py-2 text-sm font-semibold transition ${isActive ? 'bg-cyan-500 text-slate-950' : 'bg-slate-900 text-slate-200 hover:bg-slate-800'}`}
+                                            >
+                                              {hour}
+                                            </button>
+                                          );
+                                        })}
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <p className="mb-2 text-[11px] uppercase tracking-wide text-slate-400">Perc</p>
+                                      <div className="grid grid-cols-4 gap-2">
+                                        {nextActionMinuteOptions.map((minute) => {
+                                          const isActive = (nextActionEditors[rowId]?.minute ?? '') === minute;
+                                          return (
+                                            <button
+                                              key={minute}
+                                              type="button"
+                                              onClick={() => updateNextActionDraft(rowId, { minute })}
+                                              className={`rounded-full px-3 py-2 text-sm font-semibold transition ${isActive ? 'bg-cyan-500 text-slate-950' : 'bg-slate-900 text-slate-200 hover:bg-slate-800'}`}
+                                            >
+                                              {minute}
+                                            </button>
+                                          );
+                                        })}
+                                      </div>
+                                    </div>
+                                    {(() => {
+                                      const editor = nextActionEditors[rowId];
+                                      if (!editor) return null;
+                                      const draftIso = combineNextActionAt(editor.date, editor.hour, editor.minute);
+                                      const persistedValue = stringifyValue(getResellerDraftValue(row, 'next_action_at')).trim();
+                                      const hasUnsavedChanges = Boolean(
+                                        editor.date || editor.hour || editor.minute
+                                      ) && (draftIso ?? '') !== persistedValue;
+                                      return hasUnsavedChanges ? (
+                                        <p className="text-[11px] text-amber-300/90">Nem mentett módosítás</p>
+                                      ) : null;
+                                    })()}
+                                    <div className="flex justify-end">
+                                      <button
+                                        type="button"
+                                        onClick={() => void saveNextActionDraft(rowId)}
+                                        className="rounded-lg bg-cyan-500 px-4 py-2 text-sm font-semibold text-slate-950 hover:bg-cyan-400"
+                                      >
+                                        Kész
+                                      </button>
+                                    </div>
+                                  </div>
+                                ) : null}
+                                <div className="mt-1 text-[11px] text-slate-400">Választható idő: 06:00–20:45, 15 perces lépés.</div>
+                              </div>
+                            </div>
+                            <label className="text-xs text-slate-300">
+                              <span className="mb-1 block uppercase tracking-wide text-slate-500">Következő teendő leírása</span>
+                              <textarea value={stringifyValue(getResellerDraftValue(row, 'next_action_description'))} onChange={(event) => setResellerDraftValue(rowId, 'next_action_description', event.target.value)} onBlur={() => void persistResellerUpdates(rowId, { next_action_description: stringifyValue(getResellerDraftValue(row, 'next_action_description')) })} placeholder="Következő teendő" className="min-h-24 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white" />
+                            </label>
+                            <div className="grid gap-3 md:grid-cols-2">
+                              <input value={stringifyValue(getResellerDraftValue(row, 'courier_name'))} onChange={(event) => setResellerDraftValue(rowId, 'courier_name', event.target.value)} onBlur={() => { const draftValue = stringifyValue(getResellerDraftValue(row, 'courier_name')); const persistedValue = stringifyValue(row.courier_name); if (draftValue === persistedValue) return; void persistResellerUpdates(rowId, { courier_name: draftValue }); }} placeholder="Futárszolgálat neve" className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white" />
+                              <input value={stringifyValue(getResellerDraftValue(row, 'tracking_number'))} onChange={(event) => setResellerDraftValue(rowId, 'tracking_number', event.target.value)} onBlur={() => { const draftValue = stringifyValue(getResellerDraftValue(row, 'tracking_number')); const persistedValue = stringifyValue(row.tracking_number); if (draftValue === persistedValue) return; void persistResellerUpdates(rowId, { tracking_number: draftValue }); }} placeholder="Tracking number" className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white" />
+                            </div>
+                            <div>
+                              <button
+                                type="button"
+                                onClick={() => void sendGiftNotification(rowId)}
+                                className="rounded-lg border border-slate-600 bg-slate-900 px-3 py-2 text-sm font-medium text-slate-100 transition hover:border-cyan-500/60 hover:text-white"
+                              >
+                                Értesítő küldése
+                              </button>
+                              {giftNotificationStateByRowId[rowId]?.message ? (
+                                <p className="mt-2 text-xs text-slate-400">{giftNotificationStateByRowId[rowId]?.message}</p>
+                              ) : null}
+                            </div>
                           </div>
                         </div>
                         <section className="border-t border-slate-800 pt-3">
