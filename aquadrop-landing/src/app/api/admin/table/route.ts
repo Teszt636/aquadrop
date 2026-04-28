@@ -7,15 +7,42 @@ import {
   fetchAdminTableRowById,
   fetchAdminUsers,
   fetchAdminTableRows,
+  insertGiftActivityLogs,
   insertResellerActivityLogs,
   patchAdminTableRow
 } from '@/lib/admin/supabase-admin';
-import { GIFT_STATUS_OPTIONS, RESELLER_PIPELINE_OPTIONS } from '@/lib/admin/table-config';
+import {
+  GIFT_AI_CHECK_STATUS_OPTIONS,
+  GIFT_PIPELINE_STATUS_OPTIONS,
+  GIFT_RECEIPT_CHECK_STATUS_OPTIONS,
+  GIFT_SHIPPING_STATUS_OPTIONS,
+  GIFT_STATUS_OPTIONS,
+  RESELLER_PIPELINE_OPTIONS
+} from '@/lib/admin/table-config';
 
 const EDITABLE_FIELDS: Record<AdminTableName, string[]> = {
   announcement_signups: ['name', 'email'],
   gift_claims: [
     'status',
+    'pipeline_status',
+    'assigned_to',
+    'next_action_at',
+    'next_action_description',
+    'last_contacted_at',
+    'previous_contacted_at',
+    'receipt_check_status',
+    'receipt_check_note',
+    'receipt_is_valid',
+    'purchase_eligible',
+    'shipping_status',
+    'courier_name',
+    'tracking_number',
+    'tracking_url',
+    'shipped_at',
+    'delivered_at',
+    'ai_check_status',
+    'ai_check_result',
+    'ai_confidence',
     'full_name',
     'email',
     'phone',
@@ -58,6 +85,27 @@ const RESSELLER_TRACKED_FIELDS = new Set([
   'previous_contacted_at'
 ]);
 
+const GIFT_TRACKED_FIELDS = new Set([
+  'pipeline_status',
+  'assigned_to',
+  'next_action_at',
+  'next_action_description',
+  'last_contacted_at',
+  'previous_contacted_at',
+  'receipt_check_status',
+  'receipt_check_note',
+  'receipt_is_valid',
+  'purchase_eligible',
+  'shipping_status',
+  'courier_name',
+  'tracking_number',
+  'tracking_url',
+  'shipped_at',
+  'delivered_at',
+  'ai_check_status',
+  'ai_confidence'
+]);
+
 const FIELD_LABELS: Record<string, string> = {
   pipeline_status: 'Státusz',
   assigned_to: 'Felelős',
@@ -66,7 +114,19 @@ const FIELD_LABELS: Record<string, string> = {
   next_action_at: 'Következő teendő időpontja',
   next_action_description: 'Következő teendő',
   last_contacted_at: 'Utolsó kapcsolatfelvétel',
-  previous_contacted_at: 'Előző kapcsolatfelvétel'
+  previous_contacted_at: 'Előző kapcsolatfelvétel',
+  receipt_check_status: 'Blokk státusz',
+  receipt_check_note: 'Ellenőrzési megjegyzés',
+  receipt_is_valid: 'Blokk érvényes',
+  purchase_eligible: 'Jogosult vásárlás',
+  shipping_status: 'Szállítás státusz',
+  courier_name: 'Futárszolgálat',
+  tracking_number: 'Tracking szám',
+  tracking_url: 'Tracking URL',
+  shipped_at: 'Feladási idő',
+  delivered_at: 'Kézbesítési idő',
+  ai_check_status: 'AI ellenőrzés státusz',
+  ai_confidence: 'AI megbízhatóság'
 };
 
 type PatchRequestBody = {
@@ -144,7 +204,7 @@ function sanitizeValue(key: string, value: unknown): unknown {
     return value;
   }
 
-  if (key === 'last_contacted_at' || key === 'previous_contacted_at') {
+  if (key === 'last_contacted_at' || key === 'previous_contacted_at' || key === 'shipped_at' || key === 'delivered_at') {
     if (value === '' || value === null) return null;
     if (typeof value !== 'string') {
       throw new Error('Az utolsó kapcsolatfelvétel hibás.');
@@ -158,10 +218,51 @@ function sanitizeValue(key: string, value: unknown): unknown {
   }
 
   if (key === 'pipeline_status') {
-    if (typeof value !== 'string' || !RESELLER_PIPELINE_OPTIONS.includes(value)) {
+    if (
+      typeof value !== 'string' ||
+      (!RESELLER_PIPELINE_OPTIONS.includes(value) && !GIFT_PIPELINE_STATUS_OPTIONS.includes(value))
+    ) {
       throw new Error('Érvénytelen pipeline státusz.');
     }
     return value;
+  }
+
+  if (key === 'receipt_check_status') {
+    if (typeof value !== 'string' || !GIFT_RECEIPT_CHECK_STATUS_OPTIONS.includes(value)) {
+      throw new Error('Érvénytelen blokk ellenőrzési státusz.');
+    }
+    return value;
+  }
+
+  if (key === 'shipping_status') {
+    if (typeof value !== 'string' || !GIFT_SHIPPING_STATUS_OPTIONS.includes(value)) {
+      throw new Error('Érvénytelen szállítási státusz.');
+    }
+    return value;
+  }
+
+  if (key === 'ai_check_status') {
+    if (typeof value !== 'string' || !GIFT_AI_CHECK_STATUS_OPTIONS.includes(value)) {
+      throw new Error('Érvénytelen AI státusz.');
+    }
+    return value;
+  }
+
+  if (key === 'receipt_is_valid' || key === 'purchase_eligible') {
+    if (value === '' || value === null || value === 'Nincs megadva') return null;
+    if (typeof value === 'boolean') return value;
+    if (value === 'Igen' || value === 'true') return true;
+    if (value === 'Nem' || value === 'false') return false;
+    throw new Error('A mező értéke csak Igen/Nem lehet.');
+  }
+
+  if (key === 'ai_confidence') {
+    if (value === '' || value === null) return null;
+    const parsed = Number(value);
+    if (!Number.isFinite(parsed)) {
+      throw new Error('Az AI confidence csak szám lehet.');
+    }
+    return parsed;
   }
 
   if (key === 'status') {
@@ -224,7 +325,17 @@ function formatFieldValue(fieldName: string, value: unknown, adminMap: Map<strin
   if (fieldName === 'is_hot_lead') {
     return value ? 'Igen' : 'Nem';
   }
-  if (fieldName === 'next_action_at' || fieldName === 'last_contacted_at' || fieldName === 'previous_contacted_at') {
+  if (fieldName === 'receipt_is_valid' || fieldName === 'purchase_eligible') {
+    if (value === null || value === undefined || value === '') return 'Nincs megadva';
+    return value ? 'Igen' : 'Nem';
+  }
+  if (
+    fieldName === 'next_action_at' ||
+    fieldName === 'last_contacted_at' ||
+    fieldName === 'previous_contacted_at' ||
+    fieldName === 'shipped_at' ||
+    fieldName === 'delivered_at'
+  ) {
     return formatDateTime(value);
   }
   if (fieldName === 'lead_score') {
@@ -440,7 +551,8 @@ export async function GET(request: Request) {
 
   try {
     const rows = await fetchAdminTableRows(table);
-    const adminUsers = table === 'reseller_applications' ? await fetchAdminUsers(false) : [];
+    const adminUsers =
+      table === 'reseller_applications' || table === 'gift_claims' ? await fetchAdminUsers(false) : [];
 
     return NextResponse.json({ rows, adminUsers });
   } catch (error) {
@@ -505,7 +617,7 @@ export async function PATCH(request: Request) {
     }
 
     let beforeRow: Record<string, unknown> | null = null;
-    const shouldCreateLog = table === 'reseller_applications';
+    const shouldCreateLog = table === 'reseller_applications' || table === 'gift_claims';
     const changedByUserId = isValidUuid(sessionUser?.id) ? sessionUser.id : null;
     const changedByName = sessionUser?.name ?? null;
     const changedByEmail = sessionUser?.email ?? null;
@@ -547,7 +659,8 @@ export async function PATCH(request: Request) {
           .map((user) => [String(user.id), { name: normalizeText(user.name) }])
       );
 
-      const trackedKeys = Object.keys(sanitizedUpdates).filter((key) => RESSELLER_TRACKED_FIELDS.has(key));
+      const trackedFields = table === 'reseller_applications' ? RESSELLER_TRACKED_FIELDS : GIFT_TRACKED_FIELDS;
+      const trackedKeys = Object.keys(sanitizedUpdates).filter((key) => trackedFields.has(key));
       const logs = trackedKeys
         .map((fieldName) => {
           const oldRawValue = beforeRow?.[fieldName];
@@ -560,7 +673,9 @@ export async function PATCH(request: Request) {
           const newValue = formatFieldValue(fieldName, newRawValue, adminMap);
 
           return {
-            reseller_application_id: String(afterRow?.id ?? body.id),
+            [table === 'reseller_applications' ? 'reseller_application_id' : 'gift_claim_id']: String(
+              afterRow?.id ?? body.id
+            ),
             changed_by_user_id: changedByUserId,
             changed_by_name: changedByName,
             changed_by_email: changedByEmail,
@@ -581,7 +696,11 @@ export async function PATCH(request: Request) {
       if (logs.length > 0) {
         debugActivityLogAttempted = true;
         try {
-          await insertResellerActivityLogs(logs);
+          if (table === 'reseller_applications') {
+            await insertResellerActivityLogs(logs);
+          } else {
+            await insertGiftActivityLogs(logs);
+          }
           debugActivityLogInserted = true;
           debugInsertedActivityLogs = logs;
         } catch (activityLogError) {
