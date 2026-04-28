@@ -30,6 +30,8 @@ create table if not exists public.gift_claims (
   purchase_declaration boolean not null default false,
   status text not null default 'Új' check (status in ('Új', 'Feldolgozás alatt', 'Kész', 'Elutasítva')),
   admin_note text,
+  status_token text not null unique default gen_random_uuid()::text,
+  status_token_created_at timestamptz not null default now(),
   created_at timestamptz default now()
 );
 
@@ -152,6 +154,9 @@ check (
 
 create index if not exists gift_claims_email_idx
   on public.gift_claims (email);
+
+create unique index if not exists gift_claims_status_token_key
+  on public.gift_claims (status_token);
 
 create index if not exists gift_claims_next_action_idx
   on public.gift_claims (next_action_at asc nulls last);

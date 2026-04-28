@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 
 import { sendFormNotifications } from '@/lib/email/notifications';
 import type { EmailNotificationRequest } from '@/lib/email/types';
+import { buildGiftClaimStatusUrl } from '@/lib/gift/status';
 
 type AnnouncementSubmitRequest = {
   formType: 'announcement_signup';
@@ -271,11 +272,14 @@ export async function POST(request: Request) {
       const existingRows = await selectRows<{ id: number }>('gift_claims', duplicateQuery);
       const duplicateDetected = existingRows.length > 0;
       const insertSkipped = duplicateDetected;
+      let createdStatusUrl: string | null = null;
 
       if (!duplicateDetected) {
         const createdAt = new Date();
         const nextActionAt = new Date(createdAt.getTime() + 24 * 60 * 60 * 1000);
         const defaultAssigneeId = await getAdminUserIdByName('Bartók Csaba');
+        const statusToken = crypto.randomUUID();
+        createdStatusUrl = buildGiftClaimStatusUrl(statusToken);
 
         await insertRow('gift_claims', {
           full_name: normalizedFullName,
@@ -297,7 +301,9 @@ export async function POST(request: Request) {
           consent: body.payload.consent,
           purchase_declaration: body.payload.purchase_declaration,
           receipt_url: normalizedReceiptUrl,
-          receipt_path: normalizedReceiptPath
+          receipt_path: normalizedReceiptPath,
+          status_token: statusToken,
+          status_token_created_at: createdAt.toISOString()
         });
       }
 
@@ -321,7 +327,8 @@ export async function POST(request: Request) {
           shippingAddress: normalizedShippingAddress,
           purchaseLocation: normalizedPurchaseLocation,
           purchaseDate: normalizedPurchaseDate,
-          receiptUrl: normalizedReceiptUrl
+          receiptUrl: normalizedReceiptUrl,
+          statusUrl: createdStatusUrl
         }
       });
 
