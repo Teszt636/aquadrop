@@ -57,7 +57,7 @@ function getStatusInfo(pipelineStatus: string): { step: number; variant: Progres
       return { step: 6, variant: 'normal', helperText: 'Az igénylés folyamata lezárult.' };
     case 'Elutasítva':
       return {
-        step: 6,
+        step: 2,
         variant: 'rejected',
         helperText: 'Az igénylés ellenőrzése során olyan eltérést találtunk, ami miatt az ajándék nem küldhető ki.'
       };
@@ -91,7 +91,8 @@ export default async function GiftClaimStatusPage({ params }: { params: Promise<
   }
 
   const statusInfo = getStatusInfo(status.pipeline_status);
-  const progressPercentage = statusInfo.variant === 'rejected' ? 100 : ((statusInfo.step - 1) / (STEPS.length - 1)) * 100;
+  const progressPercentage =
+    statusInfo.variant === 'rejected' ? (statusInfo.step / STEPS.length) * 100 : ((statusInfo.step - 1) / (STEPS.length - 1)) * 100;
 
   const barToneClass =
     statusInfo.variant === 'rejected'
@@ -131,7 +132,9 @@ export default async function GiftClaimStatusPage({ params }: { params: Promise<
               const isActiveOrDone = stepNumber <= statusInfo.step;
               const dotTone =
                 statusInfo.variant === 'rejected'
-                  ? 'border-rose-500 bg-rose-500 text-white'
+                  ? isActiveOrDone
+                    ? 'border-rose-500 bg-rose-500 text-white'
+                    : 'border-slate-300 bg-white text-slate-400'
                   : statusInfo.variant === 'warning' && stepNumber === 2
                     ? 'border-amber-500 bg-amber-500 text-white'
                     : isActiveOrDone
