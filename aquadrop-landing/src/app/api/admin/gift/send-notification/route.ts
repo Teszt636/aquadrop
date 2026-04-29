@@ -55,6 +55,11 @@ function resolveGiftStatusUrl(statusToken: string | null, context: { giftClaimId
   return buildGiftClaimStatusUrl(normalizedToken);
 }
 
+function withGiftToken(subject: string, statusToken: string | null): string {
+  const token = normalizeText(statusToken);
+  return token ? `${subject} [#gift:${token}]` : subject;
+}
+
 function resolveNotificationType(row: GiftClaimNotificationRow):
   | { type: NotificationType; missingConditions: string[] }
   | { type: null; missingConditions: string[] } {
@@ -137,7 +142,7 @@ function buildNotificationEmail(type: NotificationType, row: GiftClaimNotificati
     `;
 
     return {
-      subject,
+      subject: withGiftToken(subject, row.status_token),
       html: renderBrandedEmailLayout({
         subject,
         headline: 'Hiánypótlás szükséges',
@@ -156,7 +161,7 @@ function buildNotificationEmail(type: NotificationType, row: GiftClaimNotificati
     `;
 
     return {
-      subject,
+      subject: withGiftToken(subject, row.status_token),
       html: renderBrandedEmailLayout({
         subject,
         headline: 'Sikeres jóváhagyás',
@@ -178,7 +183,7 @@ function buildNotificationEmail(type: NotificationType, row: GiftClaimNotificati
     `;
 
     return {
-      subject,
+      subject: withGiftToken(subject, row.status_token),
       html: renderBrandedEmailLayout({
         subject,
         headline: 'Csomag feladva',
@@ -201,7 +206,7 @@ function buildNotificationEmail(type: NotificationType, row: GiftClaimNotificati
     `;
 
     return {
-      subject,
+      subject: withGiftToken(subject, row.status_token),
       html: renderBrandedEmailLayout({
         subject,
         headline: 'Igénylés elutasítva',
@@ -217,7 +222,7 @@ function buildNotificationEmail(type: NotificationType, row: GiftClaimNotificati
   `;
 
   return {
-    subject,
+    subject: withGiftToken(subject, row.status_token),
     html: renderBrandedEmailLayout({
       subject,
       headline: 'Igénylés elutasítva',
