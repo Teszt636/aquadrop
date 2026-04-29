@@ -4,7 +4,7 @@ import { isCronRequestAuthorized, runPartnerDailyTasksCron } from '@/lib/cron/pa
 
 export async function GET(request: Request) {
   if (!isCronRequestAuthorized(request)) {
-    return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json({ success: false, error: 'Unauthorized', wouldSendTo: [], sentEmails: 0, skippedReasons: { unauthorized: 1 }, resendAttempted: false }, { status: 401 });
   }
 
   const params = new URL(request.url).searchParams;
@@ -38,7 +38,8 @@ export async function GET(request: Request) {
         wouldSendTo: [],
         sentEmails: 0,
         resendErrors: [error instanceof Error ? error.message : 'Unexpected cron failure'],
-        skippedReasons: {}
+        skippedReasons: {},
+        resendAttempted: false
       },
       { status: 500 }
     );

@@ -3,20 +3,10 @@ import { resolveAquadropSenderEmail } from '@/lib/email/config';
 import { sendEmailWithResend } from '@/lib/email/resend';
 import { buildPartnerDailyTasksEmail, buildPartnerOneHourReminderEmail } from '@/lib/email/templates';
 import { requireAdminSession } from '@/lib/admin/auth';
-
-const DUPLICATE_WINDOW_MS = 5 * 60 * 1000;
-const recentRequests = new Map<string, number>();
+import { checkEmailRateLimit, markEmailSent } from '@/lib/cron/email-safety';
 
 function jsonError(status: number, error: string, details?: unknown) {
-  return NextResponse.json({ success: false, error, details: details ?? null }, { status });
-}
-
-function cleanupRecentRequests(now: number) {
-  for (const [key, ts] of recentRequests.entries()) {
-    if (now - ts > DUPLICATE_WINDOW_MS) {
-      recentRequests.delete(key);
-    }
-  }
+  return NextResponse.json({ success: false, error, details: details ?? null, wouldSendTo: [], sentEmails: 0, skippedReasons: { error: 1 }, resendAttempted: false }, { status });
 }
 
 export async function POST(request: Request){
@@ -32,24 +22,22 @@ export async function POST(request: Request){
  }
 
  const now = Date.now();
- cleanupRecentRequests(now);
- const dedupeKey = `${body.userEmail.trim().toLowerCase()}::${body.type}`;
- const lastSentAt = recentRequests.get(dedupeKey);
- if (lastSentAt && now - lastSentAt < DUPLICATE_WINDOW_MS) {
-  return jsonError(429,'Duplicate request throttled',{retryAfterMs:DUPLICATE_WINDOW_MS - (now - lastSentAt)});
+ const rateLimit = checkEmailRateLimit(body.userEmail, `partner_test_${body.type}`, now);
+ if (rateLimit.blocked) {
+  return jsonError(429,'Duplicate request throttled',{retryAfterMs:rateLimit.retryAfterMs});
  }
 
  const email=body.type==='daily' ? buildPartnerDailyTasksEmail({overdueLeads:[{companyName:'Teszt Kft',contactName:'Teszt Elek',nextActionAt:new Date().toISOString(),nextActionDescription:'Hívás',leadScore:90,pipelineStatus:'Új lead'}],todayLeads:[],hotLeads:[]}) : buildPartnerOneHourReminderEmail({companyName:'Teszt Kft',contactName:'Teszt Elek',nextActionAt:new Date(Date.now()+3600000).toISOString(),nextActionDescription:'Emlékeztető',leadScore:80,pipelineStatus:'Kapcsolatfelvétel'});
 
  const shouldSend = body.send === true;
  if (!shouldSend) {
-  return NextResponse.json({success:true,dryRun:true,message:'Safe mode: explicit send=true nélkül nem küld emailt.',to:body.userEmail,type:body.type});
+  return NextResponse.json({success:true,dryRun:true,message:'Safe mode: explicit send=true nélkül nem küld emailt.',wouldSendTo:[body.userEmail],sentEmails:0,skippedReasons:{safe_mode:1},resendAttempted:false,to:body.userEmail,type:body.type});
  }
 
  try {
   const resend=await sendEmailWithResend({from:resolveAquadropSenderEmail({allowFallback:true}),to:body.userEmail,subject:email.subject,html:email.html,replyTo: ['hello@aquadrop.hu']});
-  recentRequests.set(dedupeKey, now);
-  return NextResponse.json({success:true,dryRun:false,resendAttempted:true,resendId:resend?.id ?? null,resendError:null,to:body.userEmail,type:body.type});
+  markEmailSent(body.userEmail, `partner_test_${body.type}`, now);
+  return NextResponse.json({success:true,dryRun:false,wouldSendTo:[body.userEmail],sentEmails:1,skippedReasons:{},resendAttempted:true,resendId:resend?.id ?? null,resendError:null,to:body.userEmail,type:body.type});
  } catch (error) {
   return jsonError(500,'Failed to send partner test email',error instanceof Error ? error.message : error);
  }
