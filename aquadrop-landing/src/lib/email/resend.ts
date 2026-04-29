@@ -5,7 +5,7 @@ export type SendEmailInput = {
   to: string | string[];
   subject: string;
   html: string;
-  replyTo?: string;
+  replyTo?: string | string[];
 };
 
 export type ResendSendResponse = {
