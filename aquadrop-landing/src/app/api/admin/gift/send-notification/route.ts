@@ -31,6 +31,7 @@ type GiftClaimNotificationRow = {
 
 const REPLY_TO_EMAIL = 'hello@aquadrop.hu';
 const GIFT_STATUS_CTA_TEXT = 'Igénylési folyamat állapota';
+const GOOGLE_REVIEW_URL = 'https://g.page/r/CT2R_at_xJV6EAE/review';
 
 function normalizeText(value: unknown): string {
   return typeof value === 'string' ? value.trim() : '';
@@ -167,7 +168,11 @@ function buildNotificationEmail(type: NotificationType, row: GiftClaimNotificati
     const subject = 'Jóváhagytuk az ajándékigénylésed';
     const bodyHtml = `
       <p style="margin: 0 0 16px;">Szia ${fullName}!</p>
-      <p style="margin: 0;">Örömmel jelezzük, hogy az ajándékigénylésedet jóváhagytuk. Hamarosan küldjük a csomagot.</p>
+      <p style="margin: 0 0 16px;">Örömmel jelezzük, hogy az ajándékigénylésedet jóváhagytuk. Hamarosan küldjük a csomagot.</p>
+      <div style="margin: 0; padding: 12px 14px; border: 1px solid #bae6fd; border-radius: 12px; background: #f0f9ff;">
+        <p style="margin: 0 0 8px;">Mivel az igényléshez már meglévő Aquadrop Expert Pro vásárlás szükséges, örömmel vesszük, ha megírod röviden a tapasztalatodat a mosókapszula használatáról egy Google értékelésben.</p>
+        <p style="margin: 0;"><a href="${GOOGLE_REVIEW_URL}" style="color: #0369a1; font-weight: 600;">Google értékelést írok</a></p>
+      </div>
     `;
 
     return {
@@ -189,7 +194,8 @@ function buildNotificationEmail(type: NotificationType, row: GiftClaimNotificati
       <p style="margin: 0 0 16px;">A csomagod átadásra került a futárszolgálatnak.</p>
       <p style="margin: 0 0 8px;"><strong>Futárszolgálat:</strong> ${courierName}</p>
       <p style="margin: 0 0 8px;"><strong>Tracking szám:</strong> ${trackingNumber}</p>
-      <p style="margin: 0;"><strong>Tracking URL:</strong> ${trackingUrl}</p>
+      <p style="margin: 0 0 16px;"><strong>Tracking URL:</strong> ${trackingUrl}</p>
+      <p style="margin: 0; color: #334155;">Köszönjük, hogy az Aquadrop Expert Pro-t választottad. Ha már használtad a korábban vásárolt terméket, örülünk, ha pár szóban megosztod a tapasztalatodat Google értékelésben. <a href="${GOOGLE_REVIEW_URL}" style="color: #0369a1; font-weight: 600;">Google értékelést írok</a></p>
     `;
 
     return {

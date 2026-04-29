@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+import { GoogleReviewCta } from '@/components/GoogleReviewCta';
 import { fetchGiftClaimPublicStatusByToken } from '@/lib/gift/status';
 
 export const metadata: Metadata = {
@@ -23,6 +24,9 @@ const STEPS = [
 ] as const;
 
 type ProgressVariant = 'normal' | 'warning' | 'rejected';
+
+
+const REVIEW_VISIBLE_STATUSES = new Set(['Jóváhagyva', 'Csomagolás alatt', 'Futárnak átadva', 'Kézbesítve', 'Lezárva']);
 
 function getStatusInfo(pipelineStatus: string): { step: number; variant: ProgressVariant; helperText: string } {
   switch (pipelineStatus) {
@@ -196,6 +200,18 @@ export default async function GiftClaimStatusPage({ params }: { params: Promise<
             </div>
           )}
         </div>
+
+
+        {REVIEW_VISIBLE_STATUSES.has(status.pipeline_status) && (
+          <GoogleReviewCta
+            variant="section"
+            placement="status_page"
+            className="mt-8"
+            title="Már használtad az Aquadrop Expert Pro-t?"
+            description="Ha elégedett vagy a korábban megvásárolt termékkel, egy rövid Google értékelés sokat segít abban, hogy mások is magabiztosabban válasszanak."
+            buttonText="Google értékelést írok"
+          />
+        )}
 
         <div className="mt-6 text-xs text-slate-500">
           <p>Létrehozva: {formatDate(status.created_at)}</p>
