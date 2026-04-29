@@ -6,12 +6,46 @@ const TOKEN_PATTERN = /\[#gift:([a-zA-Z0-9-]+)\]/i;
 
 function safeTrim(value: unknown): string { return typeof value === 'string' ? value.trim() : ''; }
 
+function stripHtml(input: string): string {
+  return input
+    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<[^>]*>/g, ' ');
+}
+
+function sanitizeInboundText(input: string): string {
+  const normalizedWhitespace = input
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
+    .replace(/[\t\f\v]+/g, ' ')
+    .replace(/\u00a0/g, ' ');
+
+  const cutPatterns = [/\nOn\s.+?wrote:\s*$/ims, /\n-{2,}\s*Original Message\s*-{2,}[\s\S]*$/im, /\nFrom:\s.+\nSent:\s.+\nTo:\s.+\nSubject:\s.+$/ims];
+
+  let cleaned = normalizedWhitespace;
+  for (const pattern of cutPatterns) {
+    cleaned = cleaned.replace(pattern, '');
+  }
+
+  return cleaned
+    .replace(/\n{3,}/g, '\n\n')
+    .replace(/[ ]{2,}/g, ' ')
+    .trim();
+}
+
+function shortenText(input: string, maxLength = 300): string {
+  if (input.length <= maxLength) return input;
+  return `${input.slice(0, maxLength).trimEnd()}...`;
+}
+
 function summarizeBody(payload: Record<string, unknown>): string {
   const text = safeTrim(payload.text);
   const html = safeTrim(payload.html);
+  const body = safeTrim(payload.body);
   const preview = safeTrim(payload.preview);
-  const normalized = text || html.replace(/<[^>]*>/g, ' ') || preview;
-  return normalized ? normalized.slice(0, 1200) : 'Ügyfél válasza érkezett, de a teljes tartalom külön lekérést igényel.';
+  const prioritized = text || stripHtml(html) || body || preview;
+  const normalized = sanitizeInboundText(prioritized);
+  return normalized || '';
 }
 
 async function fetchInboundBodyFromResend(emailId: string): Promise<string | null> {
@@ -25,10 +59,10 @@ async function fetchInboundBodyFromResend(emailId: string): Promise<string | nul
   if (!response.ok) return null;
   const payload = (await response.json()) as { text?: string; html?: string; preview?: string; body?: string };
   const text = safeTrim(payload.text);
-  const html = safeTrim(payload.html).replace(/<[^>]*>/g, ' ');
+  const html = stripHtml(safeTrim(payload.html));
   const preview = safeTrim(payload.preview);
   const body = safeTrim(payload.body);
-  const normalized = text || body || html || preview;
+  const normalized = sanitizeInboundText(text || html || body || preview);
   return normalized || null;
 }
 
@@ -90,7 +124,7 @@ export async function POST(request: Request) {
   const sender = safeTrim(data.from) || 'unknown@unknown';
   const hasAttachments = Array.isArray(data.attachments) && data.attachments.length > 0;
   let bodyPreview = summarizeBody(data);
-  const payloadHasBody = Boolean(safeTrim(data.text) || safeTrim(data.html) || safeTrim(data.preview));
+  const payloadHasBody = Boolean(safeTrim(data.text) || safeTrim(data.html) || safeTrim(data.body));
   const subjectTokenMatch = subject.match(TOKEN_PATTERN);
   let statusToken = subjectTokenMatch?.[1] ?? null;
 
@@ -123,7 +157,7 @@ export async function POST(request: Request) {
   };
   if (!statusToken && !payloadHasBody && resendEmailId) {
     const fetchedBodyForToken = await fetchInboundBodyFromResend(resendEmailId);
-    if (fetchedBodyForToken) bodyPreview = fetchedBodyForToken.slice(0, 1200);
+    if (fetchedBodyForToken) bodyPreview = fetchedBodyForToken;
   }
   if (!statusToken) {
     const bodyTokenMatch = bodyPreview.match(TOKEN_PATTERN);
@@ -156,12 +190,13 @@ export async function POST(request: Request) {
     }
     if (!payloadHasBody) {
       const fetchedBody = await fetchInboundBodyFromResend(resendEmailId);
-      if (fetchedBody) bodyPreview = fetchedBody.slice(0, 1200);
+      if (fetchedBody) bodyPreview = fetchedBody;
     }
   }
 
-  const shortBody = bodyPreview.slice(0, 1000);
-  const nextActionDescription = `Ügyfél válaszolt az elutasító emailre.\n\nVálasz tartalma:\n${shortBody}\n\nCsatolmány érkezett: ${hasAttachments ? 'igen' : 'nem'}`;
+  const shortBody = bodyPreview ? shortenText(bodyPreview, 300) : '';
+  const replyContent = shortBody || 'Ügyfél válasza érkezett, de a tartalom nem volt elérhető.';
+  const nextActionDescription = `Ügyfél válaszolt az emailre.\n\nVálasz tartalma:\n${replyContent}\n\nCsatolmány érkezett: ${hasAttachments ? 'igen' : 'nem'}`;
 
   const adminRes = await fetch(`${supabaseUrl}/admin_users?select=id&name=eq.Bartók Csaba&is_active=eq.true&limit=1`, { headers, cache: 'no-store' });
   const adminRows = (await adminRes.json()) as Array<{ id: string }>;
@@ -190,7 +225,7 @@ export async function POST(request: Request) {
     });
   }
 
-  const activityRes = await fetch(`${supabaseUrl}/gift_activity_logs`, { method: 'POST', headers: { ...headers, Prefer: 'return=minimal' }, body: JSON.stringify([{ gift_claim_id: claim.id, field_name: 'inbound_reply', change_summary: 'Ügyfél válaszolt emailben, az ügy újranyitva ellenőrzésre.', old_value: `${safeTrim(claim.pipeline_status)} | ${safeTrim(claim.receipt_check_status)}`, new_value: `Blokk ellenőrzés alatt | Ellenőrzésre vár | ${shortBody.slice(0, 250)} | Csatolmány: ${hasAttachments ? 'igen' : 'nem'}`, changed_by_name: 'Email válasz', changed_by_email: sender, changed_by_user_id: null }]) });
+  const activityRes = await fetch(`${supabaseUrl}/gift_activity_logs`, { method: 'POST', headers: { ...headers, Prefer: 'return=minimal' }, body: JSON.stringify([{ gift_claim_id: claim.id, field_name: 'inbound_reply', change_summary: 'Ügyfél válaszolt emailben, az ügy újranyitva ellenőrzésre.', old_value: `${safeTrim(claim.pipeline_status)} | ${safeTrim(claim.receipt_check_status)}`, new_value: `Blokk ellenőrzés alatt | Ellenőrzésre vár | ${replyContent} | Csatolmány: ${hasAttachments ? 'igen' : 'nem'}`, changed_by_name: 'Email válasz', changed_by_email: sender, changed_by_user_id: null }]) });
 
   const inboundReason = updateRes.ok ? (activityRes.ok ? 'matched_updated' : 'activity_log_failed') : `update_failed: ${debugState.updateError ?? 'unknown_error'}`;
   await logInboundEmail(inboundReason, true, claim.id);
