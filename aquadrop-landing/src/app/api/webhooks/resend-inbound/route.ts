@@ -38,16 +38,6 @@ function shortenText(input: string, maxLength = 300): string {
   return `${input.slice(0, maxLength).trimEnd()}...`;
 }
 
-function summarizeBody(payload: Record<string, unknown>): string {
-  const text = safeTrim(payload.text);
-  const html = safeTrim(payload.html);
-  const body = safeTrim(payload.body);
-  const preview = safeTrim(payload.preview);
-  const prioritized = text || stripHtml(html) || body || preview;
-  const normalized = sanitizeInboundText(prioritized);
-  return normalized || '';
-}
-
 type BodySource = 'payload.text' | 'payload.html' | 'receiving.text' | 'receiving.html' | 'none';
 
 function extractBodyFromPayload(payload: Record<string, unknown>): { body: string; source: BodySource } {
