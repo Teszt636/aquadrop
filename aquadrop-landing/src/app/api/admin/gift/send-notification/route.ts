@@ -189,6 +189,27 @@ function buildNotificationEmail(type: NotificationType, row: GiftClaimNotificati
     };
   }
 
+  const receiptCheckStatus = normalizeText(row.receipt_check_status);
+
+  if (receiptCheckStatus === 'Duplikált blokk gyanú') {
+    const subject = 'Igénylés elutasítva – Aquadrop Expert Pro';
+    const bodyHtml = `
+      <p style="margin: 0 0 16px;">Szia ${fullName}!</p>
+      <p style="margin: 0 0 16px;">Sajnáljuk, de az ajándékigénylésedet nem tudjuk jóváhagyni.</p>
+      <p style="margin: 0 0 16px;">A rendszerünk szerint ezzel a blokkal már korábban igényeltek ajándék terméket.</p>
+      <p style="margin: 0;">Amennyiben úgy gondolod, hogy félreértés történt, kérjük válaszolj erre az emailre, és írd meg észrevételeidet. Ügyfélszolgálatunk kivizsgálja az esetet.</p>
+    `;
+
+    return {
+      subject,
+      html: renderBrandedEmailLayout({
+        subject,
+        headline: 'Igénylés elutasítva',
+        bodyHtml
+      })
+    };
+  }
+
   const subject = 'Sajnáljuk, az ajándékigénylésed elutasításra került';
   const bodyHtml = `
     <p style="margin: 0 0 16px;">Szia ${fullName}!</p>
