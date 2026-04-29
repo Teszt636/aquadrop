@@ -70,6 +70,18 @@ export function FooterSection() {
                   </li>
                 ))}
               </ul>
+
+              <div className="pt-2">
+                <p className="text-xs text-slate-400">Elégedett vagy?</p>
+                <Link
+                  href="https://g.page/r/CT2R_at_xJV6EAE/review"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-1 inline-block text-xs font-medium text-slate-400 transition-colors hover:text-slate-100 hover:underline"
+                >
+                  Írj egy Google értékelést
+                </Link>
+              </div>
             </div>
           </div>
 
