@@ -38,32 +38,35 @@ function shortenText(input: string, maxLength = 300): string {
   return `${input.slice(0, maxLength).trimEnd()}...`;
 }
 
-function summarizeBody(payload: Record<string, unknown>): string {
+type BodySource = 'payload.text' | 'payload.html' | 'receiving.text' | 'receiving.html' | 'none';
+
+function extractBodyFromPayload(payload: Record<string, unknown>): { body: string; source: BodySource } {
   const text = safeTrim(payload.text);
+  if (text) return { body: sanitizeInboundText(text), source: 'payload.text' };
   const html = safeTrim(payload.html);
-  const body = safeTrim(payload.body);
-  const preview = safeTrim(payload.preview);
-  const prioritized = text || stripHtml(html) || body || preview;
-  const normalized = sanitizeInboundText(prioritized);
-  return normalized || '';
+  if (html) return { body: sanitizeInboundText(stripHtml(html)), source: 'payload.html' };
+  return { body: '', source: 'none' };
 }
 
-async function fetchInboundBodyFromResend(emailId: string): Promise<string | null> {
+async function fetchInboundBodyFromResend(emailId: string): Promise<{ body: string | null; source: BodySource; success: boolean }> {
   const apiKey = safeTrim(process.env.RESEND_API_KEY);
-  if (!apiKey) return null;
-  const response = await fetch(`https://api.resend.com/emails/${encodeURIComponent(emailId)}`, {
+  if (!apiKey) return { body: null, source: 'none', success: false };
+
+  // NOTE: resend SDK is currently not installed in this project, therefore we call the Receiving API directly.
+  const response = await fetch(`https://api.resend.com/emails/receiving/${encodeURIComponent(emailId)}`, {
     method: 'GET',
     headers: { Authorization: `Bearer ${apiKey}` },
     cache: 'no-store'
   });
-  if (!response.ok) return null;
+  if (!response.ok) return { body: null, source: 'none', success: false };
   const payload = (await response.json()) as { text?: string; html?: string; preview?: string; body?: string };
   const text = safeTrim(payload.text);
-  const html = stripHtml(safeTrim(payload.html));
-  const preview = safeTrim(payload.preview);
-  const body = safeTrim(payload.body);
-  const normalized = sanitizeInboundText(text || html || body || preview);
-  return normalized || null;
+  if (text) return { body: sanitizeInboundText(text), source: 'receiving.text', success: true };
+
+  const html = safeTrim(payload.html);
+  if (html) return { body: sanitizeInboundText(stripHtml(html)), source: 'receiving.html', success: true };
+
+  return { body: null, source: 'none', success: true };
 }
 
 function computeNextActionAt(now = new Date()): string {
@@ -108,7 +111,12 @@ export async function POST(request: Request) {
     updateAttempted: false,
     updateSuccess: false,
     updateError: null as string | null,
-    reason: null as string | null
+    reason: null as string | null,
+    emailId: null as string | null,
+    receivingFetchAttempted: false,
+    receivingFetchSuccess: false,
+    bodySource: 'none' as BodySource,
+    bodyPreviewLength: 0
   };
 
   if (!authorized(request)) {
@@ -120,11 +128,14 @@ export async function POST(request: Request) {
   const data = (payload.data as Record<string, unknown>) ?? payload;
   const subject = safeTrim(data.subject);
   debugState.subject = subject;
-  const resendEmailId = safeTrim(data.email_id) || safeTrim(data.id) || null;
+  const resendEmailId = safeTrim(data.email_id) || null;
+  debugState.emailId = resendEmailId;
   const sender = safeTrim(data.from) || 'unknown@unknown';
   const hasAttachments = Array.isArray(data.attachments) && data.attachments.length > 0;
-  let bodyPreview = summarizeBody(data);
-  const payloadHasBody = Boolean(safeTrim(data.text) || safeTrim(data.html) || safeTrim(data.body));
+  const payloadBody = extractBodyFromPayload(data);
+  let bodyPreview = payloadBody.body;
+  debugState.bodySource = payloadBody.source;
+  const payloadHasBody = Boolean(bodyPreview);
   const subjectTokenMatch = subject.match(TOKEN_PATTERN);
   let statusToken = subjectTokenMatch?.[1] ?? null;
 
@@ -156,8 +167,13 @@ export async function POST(request: Request) {
     }
   };
   if (!statusToken && !payloadHasBody && resendEmailId) {
+    debugState.receivingFetchAttempted = true;
     const fetchedBodyForToken = await fetchInboundBodyFromResend(resendEmailId);
-    if (fetchedBodyForToken) bodyPreview = fetchedBodyForToken;
+    debugState.receivingFetchSuccess = fetchedBodyForToken.success;
+    if (fetchedBodyForToken.body) {
+      bodyPreview = fetchedBodyForToken.body;
+      debugState.bodySource = fetchedBodyForToken.source;
+    }
   }
   if (!statusToken) {
     const bodyTokenMatch = bodyPreview.match(TOKEN_PATTERN);
@@ -189,12 +205,18 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: true, ...debugState, reason: 'duplicate_event' });
     }
     if (!payloadHasBody) {
+      debugState.receivingFetchAttempted = true;
       const fetchedBody = await fetchInboundBodyFromResend(resendEmailId);
-      if (fetchedBody) bodyPreview = fetchedBody;
+      debugState.receivingFetchSuccess = fetchedBody.success;
+      if (fetchedBody.body) {
+        bodyPreview = fetchedBody.body;
+        debugState.bodySource = fetchedBody.source;
+      }
     }
   }
 
   const shortBody = bodyPreview ? shortenText(bodyPreview, 300) : '';
+  debugState.bodyPreviewLength = shortBody.length;
   const replyContent = shortBody || 'Ügyfél válasza érkezett, de a tartalom nem volt elérhető.';
   const nextActionDescription = `Ügyfél válaszolt az emailre.\n\nVálasz tartalma:\n${replyContent}\n\nCsatolmány érkezett: ${hasAttachments ? 'igen' : 'nem'}`;
 
