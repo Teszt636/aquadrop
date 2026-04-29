@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 import { buildUtcIsoFromBudapestParts, getBudapestDateTimeParts } from '@/lib/datetime/budapest';
 
-const TOKEN_PATTERN = /\[#gift:([a-zA-Z0-9\-]+)\]/;
+const TOKEN_PATTERN = /\[#gift:([a-zA-Z0-9-]+)\]/i;
 
 function safeTrim(value: unknown): string { return typeof value === 'string' ? value.trim() : ''; }
 
@@ -71,12 +71,10 @@ export async function POST(request: Request) {
     subject: '',
     extractedStatusToken: null as string | null,
     matchedGiftClaimId: null as string | null,
-    action: 'ignored',
     updateAttempted: false,
     updateSuccess: false,
     updateError: null as string | null,
-    activityLogInserted: false,
-    inboundEmailLogged: false
+    reason: null as string | null
   };
 
   if (!authorized(request)) {
@@ -88,18 +86,19 @@ export async function POST(request: Request) {
   const data = (payload.data as Record<string, unknown>) ?? payload;
   const subject = safeTrim(data.subject);
   debugState.subject = subject;
-  const tokenMatch = subject.match(TOKEN_PATTERN);
   const resendEmailId = safeTrim(data.email_id) || safeTrim(data.id) || null;
   const sender = safeTrim(data.from) || 'unknown@unknown';
   const hasAttachments = Array.isArray(data.attachments) && data.attachments.length > 0;
   let bodyPreview = summarizeBody(data);
   const payloadHasBody = Boolean(safeTrim(data.text) || safeTrim(data.html) || safeTrim(data.preview));
+  const subjectTokenMatch = subject.match(TOKEN_PATTERN);
+  let statusToken = subjectTokenMatch?.[1] ?? null;
 
   const supabaseUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, '')}/rest/v1`;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY ?? '';
   const headers = { apikey: key, Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' };
-  const logInboundEmail = async (reason: 'no_token' | 'no_matching_claim', matched: boolean, claimId: string | null = null) => {
-    await fetch(`${supabaseUrl}/gift_inbound_emails`, {
+  const logInboundEmail = async (reason: string, matched: boolean, claimId: string | null = null) => {
+    const response = await fetch(`${supabaseUrl}/gift_inbound_emails`, {
       method: 'POST',
       headers: { ...headers, Prefer: 'return=minimal' },
       body: JSON.stringify([{
@@ -113,16 +112,30 @@ export async function POST(request: Request) {
         matched
       }])
     });
-    debugState.inboundEmailLogged = true;
+    if (!response.ok) {
+      console.error('[gift-inbound-webhook] failed to log inbound email', {
+        reason,
+        status: response.status,
+        statusText: response.statusText,
+        body: await response.text()
+      });
+    }
   };
-  if (!tokenMatch) {
+  if (!statusToken && !payloadHasBody && resendEmailId) {
+    const fetchedBodyForToken = await fetchInboundBodyFromResend(resendEmailId);
+    if (fetchedBodyForToken) bodyPreview = fetchedBodyForToken.slice(0, 1200);
+  }
+  if (!statusToken) {
+    const bodyTokenMatch = bodyPreview.match(TOKEN_PATTERN);
+    statusToken = bodyTokenMatch?.[1] ?? null;
+  }
+  debugState.extractedStatusToken = statusToken;
+
+  if (!statusToken) {
     await logInboundEmail('no_token', false);
     console.log('[gift-inbound-webhook]', { ...debugState, reason: 'no_token' });
     return NextResponse.json({ success: true, ...debugState, reason: 'no_token' });
   }
-
-  const statusToken = tokenMatch[1];
-  debugState.extractedStatusToken = statusToken;
   const claimRes = await fetch(`${supabaseUrl}/gift_claims?select=id,pipeline_status,receipt_check_status,assigned_to&status_token=eq.${statusToken}&limit=1`, { headers, cache: 'no-store' });
   const claims = (await claimRes.json()) as Array<{id:string;pipeline_status:string|null;receipt_check_status:string|null;assigned_to:string|null}>;
   const claim = claims[0];
@@ -137,6 +150,7 @@ export async function POST(request: Request) {
     const dedupe = await fetch(`${supabaseUrl}/gift_inbound_emails?select=id&resend_email_id=eq.${encodeURIComponent(resendEmailId)}&limit=1`, { headers, cache: 'no-store' });
     const dedupeRows = (await dedupe.json()) as Array<{ id: string }>;
     if (dedupeRows.length > 0) {
+      await logInboundEmail('duplicate_event', true, claim.id);
       console.log('[gift-inbound-webhook]', { ...debugState, reason: 'duplicate_event' });
       return NextResponse.json({ success: true, ...debugState, reason: 'duplicate_event' });
     }
@@ -146,7 +160,6 @@ export async function POST(request: Request) {
     }
   }
 
-  debugState.action = 'reopened_for_review';
   const shortBody = bodyPreview.slice(0, 1000);
   const nextActionDescription = `Ügyfél válaszolt az elutasító emailre.\n\nVálasz tartalma:\n${shortBody}\n\nCsatolmány érkezett: ${hasAttachments ? 'igen' : 'nem'}`;
 
@@ -166,14 +179,23 @@ export async function POST(request: Request) {
       })
     });
   debugState.updateSuccess = updateRes.ok;
-  if (!updateRes.ok) debugState.updateError = await updateRes.text();
+  if (!updateRes.ok) {
+    const updateErrorText = await updateRes.text();
+    debugState.updateError = updateErrorText;
+    console.error('[gift-inbound-webhook] Failed to update gift claim', {
+      giftClaimId: claim.id,
+      status: updateRes.status,
+      statusText: updateRes.statusText,
+      updateError: updateErrorText
+    });
+  }
 
-  const activityRes = await fetch(`${supabaseUrl}/gift_activity_logs`, { method: 'POST', headers: { ...headers, Prefer: 'return=minimal' }, body: JSON.stringify([{ gift_claim_id: claim.id, field_name: 'inbound_reply', change_summary: `Válaszolt: ${sender}; Időpont: ${new Date().toISOString()}; Csatolmány: ${hasAttachments ? 'igen' : 'nem'}; Tartalom: ${shortBody.slice(0, 250)}`, old_value: `${safeTrim(claim.pipeline_status)} | ${safeTrim(claim.receipt_check_status)}`, new_value: `Blokk ellenőrzés alatt | Ellenőrzésre vár | ${shortBody.slice(0, 250)} | Csatolmány: ${hasAttachments ? 'igen' : 'nem'}`, changed_by_name: 'Email válasz', changed_by_email: sender, changed_by_user_id: null }]) });
-  debugState.activityLogInserted = activityRes.ok;
+  const activityRes = await fetch(`${supabaseUrl}/gift_activity_logs`, { method: 'POST', headers: { ...headers, Prefer: 'return=minimal' }, body: JSON.stringify([{ gift_claim_id: claim.id, field_name: 'inbound_reply', change_summary: 'Ügyfél válaszolt emailben, az ügy újranyitva ellenőrzésre.', old_value: `${safeTrim(claim.pipeline_status)} | ${safeTrim(claim.receipt_check_status)}`, new_value: `Blokk ellenőrzés alatt | Ellenőrzésre vár | ${shortBody.slice(0, 250)} | Csatolmány: ${hasAttachments ? 'igen' : 'nem'}`, changed_by_name: 'Email válasz', changed_by_email: sender, changed_by_user_id: null }]) });
 
-  const inboundLogRes = await fetch(`${supabaseUrl}/gift_inbound_emails`, { method: 'POST', headers: { ...headers, Prefer: 'return=minimal' }, body: JSON.stringify([{ resend_email_id: resendEmailId, gift_claim_id: claim.id, from_email: sender, subject, body_preview: shortBody, has_attachments: hasAttachments, matched: true }]) });
-  debugState.inboundEmailLogged = inboundLogRes.ok;
+  const inboundReason = updateRes.ok ? (activityRes.ok ? 'matched_updated' : 'activity_log_failed') : `update_failed: ${debugState.updateError ?? 'unknown_error'}`;
+  await logInboundEmail(inboundReason, true, claim.id);
 
-  console.log('[gift-inbound-webhook]', { ...debugState, reason: null });
-  return NextResponse.json({ success: true, ...debugState, reason: null });
+  const reason = updateRes.ok ? null : inboundReason;
+  console.log('[gift-inbound-webhook]', { ...debugState, reason });
+  return NextResponse.json({ success: true, ...debugState, reason });
 }
