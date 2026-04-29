@@ -1,5 +1,5 @@
-const NOREPLY_EMAIL = 'noreply@aquadrop.hu';
-const CANONICAL_SENDER = 'Aquadrop Ügyfélszolgálat <noreply@aquadrop.hu>';
+const DEFAULT_EMAIL = 'hello@aquadrop.hu';
+const CANONICAL_SENDER = `Aquadrop Ügyfélszolgálat <${DEFAULT_EMAIL}>`;
 
 type ResolveSenderEmailOptions = {
   allowFallback?: boolean;
@@ -10,10 +10,11 @@ export function getCanonicalAquadropSenderEmail(): string {
 }
 
 export function resolveAquadropSenderEmail(options: ResolveSenderEmailOptions = {}): string {
-  const configuredFrom = process.env.EMAIL_FROM?.trim();
+  const configuredFrom = process.env.RESEND_FROM_EMAIL?.trim() || process.env.EMAIL_FROM?.trim();
 
   if (configuredFrom) {
-    if (configuredFrom.toLowerCase().includes(NOREPLY_EMAIL)) {
+    const normalized = configuredFrom.toLowerCase();
+    if (normalized.includes('noreply@aquadrop.hu') || normalized.includes('no-reply@aquadrop.hu')) {
       return CANONICAL_SENDER;
     }
 
@@ -24,5 +25,5 @@ export function resolveAquadropSenderEmail(options: ResolveSenderEmailOptions = 
     return CANONICAL_SENDER;
   }
 
-  throw new Error('Missing required server environment variable: EMAIL_FROM');
+  throw new Error('Missing required server environment variable: RESEND_FROM_EMAIL (or EMAIL_FROM)');
 }

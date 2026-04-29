@@ -20,7 +20,7 @@ function getSenderEmail(): string {
 
   console.info('[email][notifications] Sender email resolved', {
     from: senderEmail,
-    source: process.env.EMAIL_FROM ? 'EMAIL_FROM' : 'FALLBACK'
+    source: process.env.RESEND_FROM_EMAIL ? 'RESEND_FROM_EMAIL' : process.env.EMAIL_FROM ? 'EMAIL_FROM' : 'FALLBACK'
   });
 
   return senderEmail;
