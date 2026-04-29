@@ -168,7 +168,6 @@ export default function EnergiatakarekosMosasPage() {
       >
 
         <div className="rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5 md:p-6">
-          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-800">Gyors válasz (AI snippet)</p>
           <p className="mt-3">Az energiatakarékos mosás olyan mosási rutin, amely alacsonyabb hőfokon és tudatos beállításokkal csökkenti az energiafelhasználást a tisztaság feladása nélkül.</p>
           <p className="mt-3"><strong>Definíció:</strong> Az energiatakarékos mosás olyan mosási rutin, amely alacsonyabb hőfokon és tudatos beállításokkal csökkenti az energiafelhasználást a tisztaság feladása nélkül.</p>
           <ul className="mt-4">
