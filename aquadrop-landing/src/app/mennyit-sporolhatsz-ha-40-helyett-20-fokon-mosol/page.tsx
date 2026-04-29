@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 
 import { ArticleLayout } from '@/components/article/ArticleLayout';
@@ -6,7 +7,11 @@ import { EnergySavingsCalculator } from '@/components/energy-savings-calculator'
 import { ButtonLink } from '@/components/ui';
 
 const articleTitle = 'Mennyit spórolhatsz, ha 40 helyett 20 fokon mosol?';
+const discoverTitle = 'Sokan nem hiszik el, mennyit spórolhatsz, ha 40 helyett 20 fokon mosol';
 const heroSubtitle = 'A 40 helyett 20 fokos mosás éves szinten meglepően nagy különbséget hozhat a villanyszámlában, főleg rendszeres mosás mellett.';
+const heroImageUrl = 'https://www.aquadrop.hu/20-fokos-mosas-megtakaritas-aquadrop.webp';
+const heroImageAlt = '20 fokos mosás megtakarítás összehasonlítás Aquadrop Expert Pro mosókapszulával';
+const heroImageCaption = 'Ennyit spórolhatsz, ha 40 helyett 20 fokon mosol';
 const articleDescription =
   'Számold ki, mennyit változhat a mosás energiaköltsége, ha alacsonyabb hőfokon mosol. Interaktív kalkulátorral mutatjuk meg a különbséget 20, 30, 40, 60, 80 és 90 fok között.';
 const articleUrl = 'https://www.aquadrop.hu/mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol';
@@ -71,10 +76,10 @@ export const metadata: Metadata = {
     modifiedTime: `${publishedDate}T08:00:00.000Z`,
     images: [
       {
-        url: '/og-image.png',
+        url: heroImageUrl,
         width: 1200,
         height: 630,
-        alt: 'Mennyit spórolhatsz 40 helyett 20 fokos mosással?'
+        alt: heroImageAlt
       }
     ]
   },
@@ -82,7 +87,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Mennyit spórolhatsz, ha 40 helyett 20 fokon mosol? | Aquadrop',
     description: articleDescription,
-    images: ['/og-image.png']
+    images: [heroImageUrl]
   }
 };
 
@@ -92,7 +97,7 @@ export default function MennyitSporolhatsz20FokonPage() {
     '@type': 'BlogPosting',
     headline: articleTitle,
     description: articleDescription,
-    image: 'https://www.aquadrop.hu/og-image.png',
+    image: heroImageUrl,
     author: {
       '@type': 'Organization',
       name: 'Aquadrop',
@@ -136,7 +141,7 @@ export default function MennyitSporolhatsz20FokonPage() {
         slug="mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol"
         category="Energiatudatos mosás"
         readingTime="kb. 8 perc olvasás"
-        title={heroSubtitle}
+        title={discoverTitle}
         intro="Egyre többen keresik, hogyan csökkenthető a háztartási energiafelhasználás anélkül, hogy a tisztaságérzetből engedni kellene. A mosás hőfoka ebben kulcstényező: a 40 helyett 20 fokon történő mosás érzékelhetően alacsonyabb energiaigényt jelenthet, ha a programhossz, a töltet és a mosási megoldás is megfelelően van megválasztva."
         cta={
           <div className="rounded-[28px] border border-cyan-100/80 bg-gradient-to-br from-white via-cyan-50/80 to-teal-50/80 p-7 shadow-[0_22px_65px_rgba(15,23,42,0.1)] md:p-10">
@@ -158,6 +163,19 @@ export default function MennyitSporolhatsz20FokonPage() {
           </div>
         }
       >
+        <figure className="overflow-hidden rounded-2xl border border-cyan-100 bg-white/80 shadow-sm">
+          <Image
+            src="/20-fokos-mosas-megtakaritas-aquadrop.webp"
+            alt={heroImageAlt}
+            title={heroImageCaption}
+            width={1600}
+            height={900}
+            className="h-auto w-full object-cover"
+            sizes="(max-width: 768px) 100vw, 896px"
+            priority
+          />
+          <figcaption className="px-4 py-3 text-sm text-slate-600 md:px-5">{heroImageCaption}</figcaption>
+        </figure>
 
         <div className="rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5 md:p-6">
           <p className="mt-3">A 40-ről 20 fokra váltott mosás költségelőnye azonos mosási gyakoriság mellett az alacsonyabb vízmelegítési energiaigényből adódik.</p>
