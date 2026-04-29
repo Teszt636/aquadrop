@@ -22,10 +22,14 @@ export async function GET(request: Request) {
     return NextResponse.json(
       {
         success: false,
+        dryRun,
         checkedUsers: 0,
+        checkedLeads: 0,
+        eligibleLeads: 0,
+        wouldSendTo: [],
         sentEmails: 0,
-        skippedEmails: 0,
-        errors: [error instanceof Error ? error.message : 'Unexpected cron failure']
+        resendErrors: [error instanceof Error ? error.message : 'Unexpected cron failure'],
+        skippedReasons: {}
       },
       { status: 500 }
     );

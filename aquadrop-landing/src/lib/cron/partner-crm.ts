@@ -246,17 +246,19 @@ export async function runPartnerDailyTasksCron(params: { dryRun: boolean }) {
     todayBudapest: localDate,
     todayRangeUtc,
     checkedUsers: admins.length,
+    checkedLeads: 0,
     usersWithTasks: 0,
     overdueCount: 0,
     todayCount: 0,
     hotCount: 0,
     sentEmails: 0,
     skippedEmails: 0,
-    errors: [] as string[],
+    resendErrors: [] as string[],
     dryRun: params.dryRun,
     skippedByTimeWindow: false,
     skippedReasons: {} as Record<string, number>,
-    wouldSendTo: [] as Array<{ userEmail: string; overdue: number; today: number; hot: number }>
+    wouldSendTo: [] as Array<{ userEmail: string; overdue: number; today: number; hot: number }>,
+    resendResponses: [] as Array<{ userEmail: string; resendId: string | null }>
   };
 
   if (hour !== 8) {
@@ -269,6 +271,7 @@ export async function runPartnerDailyTasksCron(params: { dryRun: boolean }) {
   for (const admin of admins) {
     try {
       const leads = await fetchAssignedOpenLeads(admin.id);
+      summary.checkedLeads += leads.length;
       const overdue = leads.filter((lead) => {
         if (!lead.next_action_at) return false;
         const dueDate = getBudapestDateKey(lead.next_action_at);
@@ -314,12 +317,16 @@ export async function runPartnerDailyTasksCron(params: { dryRun: boolean }) {
         hotLeads: hot.map(toLeadItem)
       });
 
-      await sendEmailWithResend({
+      const resendResponse = await sendEmailWithResend({
         from: senderEmail,
         to: admin.email,
         subject: email.subject,
         html: email.html,
         replyTo: REPLY_TO_EMAIL
+      });
+      summary.resendResponses.push({
+        userEmail: admin.email,
+        resendId: typeof resendResponse.id === 'string' ? resendResponse.id : null
       });
 
       await insertNotificationLogs([
@@ -341,7 +348,7 @@ export async function runPartnerDailyTasksCron(params: { dryRun: boolean }) {
         resendError: message,
         supabaseError: message
       });
-      summary.errors.push(`${admin.email}: ${message}`);
+      summary.resendErrors.push(`${admin.email}: ${message}`);
     }
   }
 
@@ -369,10 +376,11 @@ export async function runPartnerTaskReminderCron(params: { dryRun: boolean }) {
     eligibleLeads: 0,
     sentEmails: 0,
     skippedEmails: 0,
-    errors: [] as string[],
+    resendErrors: [] as string[],
     dryRun: params.dryRun,
     skippedReasons: {} as Record<string, number>,
-    wouldSendTo: [] as Array<{ userEmail: string; resellerId: string; nextActionAt: string | null }>
+    wouldSendTo: [] as Array<{ userEmail: string; resellerId: string; nextActionAt: string | null }>,
+    resendResponses: [] as Array<{ userEmail: string; resellerId: string; resendId: string | null }>
   };
 
   const leads = await fetchLeadsDueWithinOneHour(windowStartIso, windowEndIso);
@@ -422,12 +430,17 @@ export async function runPartnerTaskReminderCron(params: { dryRun: boolean }) {
       }
 
       const email = buildPartnerOneHourReminderEmail(toLeadItem(lead));
-      await sendEmailWithResend({
+      const resendResponse = await sendEmailWithResend({
         from: senderEmail,
         to: adminEmail,
         subject: email.subject,
         html: email.html,
         replyTo: REPLY_TO_EMAIL
+      });
+      summary.resendResponses.push({
+        userEmail: adminEmail,
+        resellerId: lead.id,
+        resendId: typeof resendResponse.id === 'string' ? resendResponse.id : null
       });
 
       await insertNotificationLogs([
@@ -451,7 +464,7 @@ export async function runPartnerTaskReminderCron(params: { dryRun: boolean }) {
         resendError: message,
         supabaseError: message
       });
-      summary.errors.push(`${lead.id}: ${message}`);
+      summary.resendErrors.push(`${lead.id}: ${message}`);
     }
   }
 
