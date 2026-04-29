@@ -23,9 +23,10 @@ const DEFAULT_DESCRIPTION =
 const DEFAULT_BUTTON_TEXT = 'Google értékelést írok';
 
 const variantClasses: Record<NonNullable<GoogleReviewCtaProps['variant']>, string> = {
-  section: 'rounded-2xl border border-cyan-100 bg-gradient-to-br from-white to-cyan-50/70 p-5 sm:p-6',
-  compact: 'rounded-2xl border border-sky-100 bg-white/90 p-4 sm:p-5',
-  'email-style': 'rounded-2xl border border-cyan-100 bg-cyan-50/50 p-4 sm:p-5'
+  section:
+    'rounded-2xl border border-cyan-100 bg-gradient-to-br from-white to-cyan-50/70 p-5 text-center sm:p-6',
+  compact: 'rounded-2xl border border-sky-100 bg-white/90 p-4 text-center sm:p-5',
+  'email-style': 'rounded-2xl border border-cyan-100 bg-cyan-50/50 p-4 text-left sm:p-5'
 };
 
 function cn(...classes: Array<string | undefined>) {
@@ -40,6 +41,8 @@ export function GoogleReviewCta({
   buttonText = DEFAULT_BUTTON_TEXT,
   placement
 }: GoogleReviewCtaProps) {
+  const isEmailStyle = variant === 'email-style';
+
   const handleClick = () => {
     if (!placement) {
       return;
@@ -50,16 +53,33 @@ export function GoogleReviewCta({
 
   return (
     <section className={cn(variantClasses[variant], className)}>
-      <h2 className="text-lg font-semibold leading-snug text-slate-900 sm:text-xl">{title}</h2>
-      <p className="mt-2 text-sm leading-6 text-slate-700 sm:text-base">{description}</p>
+      <h2
+        className={cn(
+          'text-lg font-semibold leading-snug text-slate-900 sm:text-xl',
+          !isEmailStyle ? 'mx-auto max-w-2xl' : undefined
+        )}
+      >
+        {title}
+      </h2>
+      <p
+        className={cn(
+          'mt-2 text-sm leading-6 text-slate-700 sm:text-base',
+          !isEmailStyle ? 'mx-auto max-w-3xl' : undefined
+        )}
+      >
+        {description}
+      </p>
 
-      <div className="mt-4">
+      <div className={cn('mt-4', !isEmailStyle ? 'mx-auto flex justify-center' : undefined)}>
         <Link
           href={GOOGLE_REVIEW_URL}
           target="_blank"
           rel="noopener noreferrer"
           onClick={handleClick}
-          className="inline-flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:from-cyan-600 hover:to-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 sm:w-auto"
+          className={cn(
+            'inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:from-cyan-600 hover:to-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500',
+            isEmailStyle ? 'mt-1' : 'w-full sm:w-auto'
+          )}
         >
           {buttonText}
         </Link>
