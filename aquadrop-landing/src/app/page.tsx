@@ -44,6 +44,7 @@ import {
   GiftConversionSection,
   GiftSection,
   HeroSection,
+  HeroTrustStripSection,
   MicrocapsuleMagicSection,
   ProblemSection,
   SeoSection,
@@ -170,6 +171,7 @@ export default function Home() {
         <main className="relative isolate flex w-full flex-col">
           <ScrollDepthTracker />
           <HeroSection />
+          <HeroTrustStripSection />
           <GiftConversionSection />
           <EnergySavingsSection />
           <DubaiSection />
