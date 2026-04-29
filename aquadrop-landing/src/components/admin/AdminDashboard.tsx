@@ -423,6 +423,17 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
     });
   }, [assignedFilter, filteredRows, hotLeadFilter, isResellerTable, nextActionFilter, query, rows, statusFilter]);
 
+  const getResellerDraftValue = useCallback(
+    (row: Row, key: string): unknown => {
+      const rowId = getRowId(row);
+      if (rowId && rowEdits[rowId] && key in rowEdits[rowId]) {
+        return rowEdits[rowId][key];
+      }
+      return row[key];
+    },
+    [rowEdits]
+  );
+
   const giftSearchRows = useMemo(() => {
     if (!isGiftClaimsTable) {
       return filteredRows;
@@ -469,7 +480,8 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
     nextActionFilter,
     query,
     rows,
-    statusFilter
+    statusFilter,
+    getResellerDraftValue
   ]);
 
   const editableFields = useMemo(
@@ -501,14 +513,6 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
     }
 
     setEditValues(nextValues);
-  }
-
-  function getResellerDraftValue(row: Row, key: string): unknown {
-    const rowId = getRowId(row);
-    if (rowId && rowEdits[rowId] && key in rowEdits[rowId]) {
-      return rowEdits[rowId][key];
-    }
-    return row[key];
   }
 
   function setResellerDraftValue(rowId: string, key: string, value: unknown) {

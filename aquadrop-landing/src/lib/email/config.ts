@@ -1,5 +1,5 @@
-const HELLO_EMAIL = 'hello@aquadrop.hu';
-const CANONICAL_SENDER = 'Aquadrop Ügyfélszolgálat <hello@aquadrop.hu>';
+const DEFAULT_EMAIL = 'hello@aquadrop.hu';
+const CANONICAL_SENDER = `Aquadrop Ügyfélszolgálat <${DEFAULT_EMAIL}>`;
 
 type ResolveSenderEmailOptions = {
   allowFallback?: boolean;
