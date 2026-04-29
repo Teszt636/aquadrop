@@ -157,6 +157,15 @@ export default function MennyitSporolhatsz20FokonPage() {
           </div>
         }
       >
+        <h2>Mennyit lehet reálisan spórolni, ha 40 helyett 20 fokon mosol?</h2>
+        <p>
+          Az alacsonyabb hőfok sok háztartásban mérhető éves különbséget adhat, főleg akkor, ha gyakran mosol. A
+          pontos érték géptípustól és programtól függ, ezért érdemes saját adatokkal becslést futtatni.
+        </p>
+        <p>
+          Kiindulásként nézd át az <Link href="/energiatakarekos-mosas">energiatakarékos mosás</Link> alapelveit, majd
+          a kalkulátorban ellenőrizd a te heti rutinodra vetített számokat.
+        </p>
         <p>
           Amikor a háztartási költségek optimalizálásáról beszélünk, a figyelem gyakran a fűtésre vagy a főzésre
           irányul. Pedig a rendszeres mosás is olyan terület, ahol a napi rutinból éves szinten jelentős különbség
@@ -221,6 +230,10 @@ export default function MennyitSporolhatsz20FokonPage() {
           A modell kalibrációja úgy készült, hogy modern, energiacímkés gépnél a 40 °C / 180 perces tartományban
           körülbelül 0,44 kWh/ciklus körüli becslést adjon. A rövidebb, hidegebb programok ehhez képest alacsonyabb,
           a magasabb hőfokok pedig érzékelhetően magasabb költséget mutatnak.
+        </p>
+        <p>
+          Konkrét példa: évi 220 mosásnál a 40 °C-ról 30 °C-ra váltás már látható megtakarítást adhat. 40 °C-ról 20
+          °C-ra váltva a különbség tovább nőhet, ezért a havi költségtervezésben is kézzel fogható lehet az eltérés.
         </p>
 
         <EnergySavingsCalculator />

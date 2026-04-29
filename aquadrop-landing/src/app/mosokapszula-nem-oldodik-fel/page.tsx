@@ -108,6 +108,29 @@ export default function MosokapszulaNemOldodikFelPage() {
           </div>
         }
       >
+        <h2>Miért nem oldódik fel a mosókapszula, és mi a leggyorsabb megoldás?</h2>
+        <p>
+          A probléma jellemzően túl rövid program, túlzsúfolt dob vagy rossz kapszulaelhelyezés miatt jelentkezik.
+          A legtöbbször gyorsan javítható: kapszula a dob aljára, lazább töltet, hosszabb ciklus.
+        </p>
+        <p>
+          A teljes rendszer megértéséhez nézd meg az <Link href="/energiatakarekos-mosas">energiatakarékos mosás</Link>{' '}
+          pillar oldalt is, ahol a hőfok–programidő–adagolás kapcsolatát is bemutatjuk.
+        </p>
+
+        <h2>Mi a probléma, miért történik, és mit tegyél?</h2>
+        <p>
+          <strong>Mi a probléma:</strong> a kapszula részben bent marad, nyomot hagyhat a ruhán, vagy a tisztaságérzet
+          gyengül.
+        </p>
+        <p>
+          <strong>Miért történik:</strong> hidegebb víznél kisebb hibahatár marad, ezért a rossz elhelyezés, a rövid
+          program és a túl nagy töltet együtt könnyen oldódási gondot okoz.
+        </p>
+        <p>
+          <strong>Mit tegyél:</strong> használd a megfelelő programhosszt, csökkentsd a dob töltését, és ellenőrizd a
+          kapszula tárolását is.
+        </p>
         <p>
           A „<strong>mosókapszula nem oldódik fel</strong>” probléma jóval gyakoribb keresés, mint azt sokan elsőre
           gondolnák. A felhasználó oldaláról ez érthető: amikor mosás után kapszulamaradványt látsz a ruhán vagy a
