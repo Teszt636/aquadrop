@@ -697,7 +697,10 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
 
       const body = (await response.json()) as {
         success?: boolean;
-        type?: 'hianypotlas' | 'jovahagyas' | 'szallitas' | 'elutasitas';
+        notificationType?: 'hianypotlas' | 'jovahagyas' | 'szallitas' | 'elutasitas';
+        resendAttempted?: boolean;
+        resendResponse?: { id?: string } | null;
+        resendError?: string | null;
         error?: string;
         missingConditions?: string[];
       };
@@ -707,7 +710,9 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
         if (missing.length > 0) {
           setGiftNotificationModal({ rowId, missingConditions: missing });
         }
-        const message = body.error ?? 'Sikertelen email küldés.';
+        const message = body.resendError
+          ? `Email küldési hiba: ${body.resendError}`
+          : body.error ?? 'Sikertelen email küldés.';
         setGiftNotificationStateByRowId((previous) => ({
           ...previous,
           [rowId]: { status: 'error', message }
@@ -715,18 +720,22 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
         return;
       }
 
-      const typeLabelMap: Record<NonNullable<typeof body.type>, string> = {
+      const typeLabelMap: Record<NonNullable<typeof body.notificationType>, string> = {
         hianypotlas: 'Hiánypótlás',
         jovahagyas: 'Jóváhagyás',
         szallitas: 'Szállítás',
         elutasitas: 'Elutasítás'
       };
+      const resendId = body.resendResponse?.id;
+      const attemptedLabel = body.resendAttempted ? 'true' : 'false';
 
       setGiftNotificationStateByRowId((previous) => ({
         ...previous,
         [rowId]: {
           status: 'info',
-          message: `Értesítő elküldve: ${typeLabelMap[body.type ?? 'jovahagyas']}`
+          message: resendId
+            ? `Email elküldve. Resend ID: ${resendId} (resendAttempted=${attemptedLabel})`
+            : `Értesítő elküldve: ${typeLabelMap[body.notificationType ?? 'jovahagyas']} (resendAttempted=${attemptedLabel})`
         }
       }));
     } catch {

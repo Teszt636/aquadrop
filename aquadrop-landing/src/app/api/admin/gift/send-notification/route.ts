@@ -206,10 +206,23 @@ function buildNotificationEmail(type: NotificationType, row: GiftClaimNotificati
 }
 
 export async function POST(request: Request) {
+  const debugResponse = {
+    success: false,
+    notificationType: null as NotificationType | null,
+    recipientEmail: null as string | null,
+    resendAttempted: false,
+    resendResponse: null as Record<string, unknown> | null,
+    resendError: null as string | null,
+    validationPassed: false,
+    missingConditions: [] as string[]
+  };
   const sessionUser = await requireAdminSession(['admin', 'crm_user']);
 
   if (!sessionUser) {
-    return NextResponse.json({ success: false, error: 'Nincs CRM jogosultság.' }, { status: 403 });
+    return NextResponse.json(
+      { ...debugResponse, missingConditions: ['crm_session_missing_or_unauthorized'], error: 'Nincs CRM jogosultság.' },
+      { status: 403 }
+    );
   }
 
   let body: SendNotificationRequest;
@@ -218,25 +231,35 @@ export async function POST(request: Request) {
     body = (await request.json()) as SendNotificationRequest;
   } catch (error) {
     console.error('[gift-notification] Invalid JSON payload', error);
-    return NextResponse.json({ success: false, error: 'Hibás kérés.' }, { status: 400 });
+    return NextResponse.json(
+      { ...debugResponse, missingConditions: ['invalid_json_payload'], error: 'Hibás kérés.' },
+      { status: 400 }
+    );
   }
 
   if (!body.giftClaimId) {
-    return NextResponse.json({ success: false, error: 'Hiányzó giftClaimId.' }, { status: 400 });
+    return NextResponse.json(
+      { ...debugResponse, missingConditions: ['giftClaimId_missing'], error: 'Hiányzó giftClaimId.' },
+      { status: 400 }
+    );
   }
 
   try {
     const row = (await fetchAdminTableRowById('gift_claims', body.giftClaimId)) as GiftClaimNotificationRow | null;
 
     if (!row) {
-      return NextResponse.json({ success: false, error: 'A rekord nem található.' }, { status: 404 });
+      return NextResponse.json(
+        { ...debugResponse, missingConditions: ['gift_claim_not_found'], error: 'A rekord nem található.' },
+        { status: 404 }
+      );
     }
 
     const recipientEmail = normalizeText(row.email);
+    debugResponse.recipientEmail = recipientEmail || null;
     if (!recipientEmail) {
       return NextResponse.json(
         {
-          success: false,
+          ...debugResponse,
           error: 'Nem teljesülnek az email küldés feltételei',
           missingConditions: ['email nem lehet üres']
         },
@@ -245,11 +268,13 @@ export async function POST(request: Request) {
     }
 
     const resolved = resolveNotificationType(row);
+    debugResponse.notificationType = resolved.type;
+    debugResponse.missingConditions = resolved.missingConditions;
 
     if (!resolved.type) {
       return NextResponse.json(
         {
-          success: false,
+          ...debugResponse,
           error: 'Nem teljesülnek az email küldés feltételei',
           missingConditions: resolved.missingConditions
         },
@@ -259,14 +284,30 @@ export async function POST(request: Request) {
 
     const from = resolveAquadropSenderEmail({ allowFallback: true });
     const template = buildNotificationEmail(resolved.type, row);
+    debugResponse.validationPassed = Boolean(template.subject && template.html);
+    if (!row.status_token && resolved.type !== 'elutasitas') {
+      debugResponse.missingConditions.push('status_token missing (email sent without status CTA)');
+    }
 
-    await sendEmailWithResend({
-      from,
-      to: recipientEmail,
-      subject: template.subject,
-      html: template.html,
-      replyTo: REPLY_TO_EMAIL
-    });
+    try {
+      debugResponse.resendAttempted = true;
+      debugResponse.resendResponse = await sendEmailWithResend({
+        from,
+        to: recipientEmail,
+        subject: template.subject,
+        html: template.html,
+        replyTo: REPLY_TO_EMAIL
+      });
+    } catch (error) {
+      debugResponse.resendError = error instanceof Error ? error.message : 'Unknown Resend error';
+      return NextResponse.json(
+        {
+          ...debugResponse,
+          error: 'Sikertelen email küldés.'
+        },
+        { status: 502 }
+      );
+    }
 
     try {
       await insertGiftActivityLogs([
@@ -290,8 +331,8 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({
-      success: true,
-      type: resolved.type
+      ...debugResponse,
+      success: true
     });
   } catch (error) {
     console.error('[gift-notification] Unexpected failure', {
@@ -299,6 +340,6 @@ export async function POST(request: Request) {
       error
     });
 
-    return NextResponse.json({ success: false, error: 'Sikertelen email küldés.' }, { status: 500 });
+    return NextResponse.json({ ...debugResponse, error: 'Sikertelen email küldés.' }, { status: 500 });
   }
 }
