@@ -20,7 +20,7 @@ function sanitizeInboundText(input: string): string {
     .replace(/[\t\f\v]+/g, ' ')
     .replace(/\u00a0/g, ' ');
 
-  const cutPatterns = [/\nOn\s.+?wrote:\s*$/ims, /\n-{2,}\s*Original Message\s*-{2,}[\s\S]*$/im, /\nFrom:\s.+\nSent:\s.+\nTo:\s.+\nSubject:\s.+$/ims];
+  const cutPatterns = [/\nOn\s[\s\S]+?wrote:\s*$/im, /\n-{2,}\s*Original Message\s*-{2,}[\s\S]*$/im, /\nFrom:\s[\s\S]+?\nSent:\s[\s\S]+?\nTo:\s[\s\S]+?\nSubject:\s[\s\S]*$/im];
 
   let cleaned = normalizedWhitespace;
   for (const pattern of cutPatterns) {
