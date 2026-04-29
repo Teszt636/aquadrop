@@ -79,14 +79,14 @@ async function fetchEligibleGiftClaims(daysAfterDelivery: number): Promise<Eligi
 }
 
 function buildReviewEmail(name: string): { subject: string; html: string } {
-  const subject = 'Segítenél egy rövid Google értékeléssel?';
+  const subject = 'Köszönjük a bizalmad – megírnád a tapasztalatod?';
   const bodyHtml = `
     <p style="margin: 0 0 16px;">Szia ${name}!</p>
     <p style="margin: 0 0 16px;">Reméljük, rendben megérkezett az Aquadrop ajándékcsomagod.</p>
-    <p style="margin: 0 0 16px;">Mivel az ajándék igénylés előtt is használtad nagy valószínűséggel az Aquadrop Expert Pro prémium mosókapszulát, örömmel vennénk, ha pár szóban megírnád a tapasztalatodat Google értékelésben.</p>
+    <p style="margin: 0 0 16px;">Mivel az ajándékigényléshez korábbi Aquadrop Expert Pro vásárlás szükséges, örömmel vennénk, ha pár szóban megírnád a tapasztalatodat a termékről Google értékelésben.</p>
     <p style="margin: 0 0 16px;">Ez nekünk nagyon sokat segít, más vásárlóknak pedig megkönnyíti a döntést.</p>
-    <p style="margin: 0 0 16px;"><a href="${GOOGLE_REVIEW_URL}" style="color: #0369a1; font-weight: 600;">Google értékelést írok</a></p>
-    <p style="margin: 0;">Köszönjük, hogy az Aquadrop Expert Pro-t választottad!<br/>Üdvözlettel:<br/>Aquadrop Ügyfélszolgálat</p>
+    <p style="margin: 0 0 16px;">Köszönjük, hogy az Aquadrop Expert Pro-t választottad!</p>
+    <p style="margin: 0;">Üdvözlettel:<br/>Aquadrop Ügyfélszolgálat</p>
   `;
 
   return {
