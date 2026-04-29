@@ -7,10 +7,12 @@ export async function GET(request: Request) {
     return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
   }
 
-  const dryRun = new URL(request.url).searchParams.get('dryRun') === '1';
+  const params = new URL(request.url).searchParams;
+  const dryRun = params.get('dryRun') === '1';
+  const debug = params.get('debug') === '1';
 
   try {
-    const result = await runPartnerTaskReminderCron({ dryRun });
+    const result = await runPartnerTaskReminderCron({ dryRun, debug });
 
     return NextResponse.json(result);
   } catch (error) {

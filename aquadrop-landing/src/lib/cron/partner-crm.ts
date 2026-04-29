@@ -45,6 +45,7 @@ type NotificationLogRow = {
 
 const CLOSED_STATUSES = new Set(['Partner lett', 'Elutasítva']);
 const REPLY_TO_EMAIL = 'hello@aquadrop.hu';
+const CC_ADMIN_EMAIL = 'admin@aquadrop.hu';
 
 function getSupabaseUrl(): string {
   const value = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -234,7 +235,7 @@ export function isCronRequestAuthorized(request: Request): boolean {
   return vercelCronHeader === '1';
 }
 
-export async function runPartnerDailyTasksCron(params: { dryRun: boolean }) {
+export async function runPartnerDailyTasksCron(params: { dryRun: boolean; debug?: boolean }) {
   const nowSnapshot = getBudapestNow();
   const localDate = nowSnapshot.date;
   const hour = nowSnapshot.hour;
@@ -261,11 +262,21 @@ export async function runPartnerDailyTasksCron(params: { dryRun: boolean }) {
     resendResponses: [] as Array<{ userEmail: string; resendId: string | null }>
   };
 
+  const budapestWeekday = new Intl.DateTimeFormat('en-US',{timeZone:'Europe/Budapest',weekday:'short'}).format(new Date(nowSnapshot.nowUtc));
+  const isWeekday = !['Sat','Sun'].includes(budapestWeekday);
+
+  if (!isWeekday) {
+    summary.skippedByTimeWindow = true;
+    summary.skippedEmails = admins.length;
+    summary.skippedReasons.weekend = admins.length;
+    return { ...summary, nowUtc: nowSnapshot.nowUtc, nowBudapest: nowSnapshot.nowBudapest };
+  }
+
   if (hour !== 8) {
     summary.skippedByTimeWindow = true;
     summary.skippedEmails = admins.length;
     summary.skippedReasons.outside_daily_window = admins.length;
-    return summary;
+    return { ...summary, nowUtc: nowSnapshot.nowUtc, nowBudapest: nowSnapshot.nowBudapest };
   }
 
   for (const admin of admins) {
@@ -319,10 +330,10 @@ export async function runPartnerDailyTasksCron(params: { dryRun: boolean }) {
 
       const resendResponse = await sendEmailWithResend({
         from: senderEmail,
-        to: admin.email,
+        to: [admin.email, CC_ADMIN_EMAIL],
         subject: email.subject,
         html: email.html,
-        replyTo: REPLY_TO_EMAIL
+        replyTo: [REPLY_TO_EMAIL]
       });
       summary.resendResponses.push({
         userEmail: admin.email,
@@ -352,14 +363,14 @@ export async function runPartnerDailyTasksCron(params: { dryRun: boolean }) {
     }
   }
 
-  return summary;
+  return { ...summary, nowUtc: nowSnapshot.nowUtc, nowBudapest: nowSnapshot.nowBudapest };
 }
 
-export async function runPartnerTaskReminderCron(params: { dryRun: boolean }) {
+export async function runPartnerTaskReminderCron(params: { dryRun: boolean; debug?: boolean }) {
   const senderEmail = resolveAquadropSenderEmail({ allowFallback: true });
   const now = new Date();
-  const windowStartIso = now.toISOString();
-  const windowEndIso = new Date(now.getTime() + 60 * 60 * 1000).toISOString();
+  const windowStartIso = new Date(now.getTime() + 55 * 60 * 1000).toISOString();
+  const windowEndIso = new Date(now.getTime() + 65 * 60 * 1000).toISOString();
 
   const users = await fetchAdminUsers();
   const userById = new Map(users.map((user) => [user.id, user]));
@@ -435,7 +446,7 @@ export async function runPartnerTaskReminderCron(params: { dryRun: boolean }) {
         to: adminEmail,
         subject: email.subject,
         html: email.html,
-        replyTo: REPLY_TO_EMAIL
+        replyTo: [REPLY_TO_EMAIL]
       });
       summary.resendResponses.push({
         userEmail: adminEmail,
