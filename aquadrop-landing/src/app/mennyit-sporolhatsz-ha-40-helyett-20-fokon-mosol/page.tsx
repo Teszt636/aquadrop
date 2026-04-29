@@ -8,7 +8,6 @@ import { ButtonLink } from '@/components/ui';
 
 const articleTitle = 'Mennyit spórolhatsz, ha 40 helyett 20 fokon mosol?';
 const discoverTitle = 'Sokan nem hiszik el, mennyit spórolhatsz, ha 40 helyett 20 fokon mosol';
-const heroSubtitle = 'A 40 helyett 20 fokos mosás éves szinten meglepően nagy különbséget hozhat a villanyszámlában, főleg rendszeres mosás mellett.';
 const heroImageUrl = 'https://www.aquadrop.hu/20-fokos-mosas-megtakaritas-aquadrop.webp';
 const heroImageAlt = '20 fokos mosás megtakarítás összehasonlítás Aquadrop Expert Pro mosókapszulával';
 const heroImageCaption = 'Ennyit spórolhatsz, ha 40 helyett 20 fokon mosol';
