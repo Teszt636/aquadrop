@@ -64,6 +64,12 @@ function buildSubject(type: NotificationType, subject: string, statusToken: stri
   return type === 'elutasitas' ? withGiftToken(subject, statusToken) : subject;
 }
 
+function buildReplyTo(type: NotificationType): string | string[] {
+  if (type !== 'elutasitas') return REPLY_TO_EMAIL;
+  const inboundReplyTo = normalizeText(process.env.GIFT_INBOUND_REPLY_TO);
+  return inboundReplyTo ? [REPLY_TO_EMAIL, inboundReplyTo] : REPLY_TO_EMAIL;
+}
+
 function resolveNotificationType(row: GiftClaimNotificationRow):
   | { type: NotificationType; missingConditions: string[] }
   | { type: null; missingConditions: string[] } {
@@ -326,7 +332,7 @@ export async function POST(request: Request) {
         to: recipientEmail,
         subject: template.subject,
         html: template.html,
-        replyTo: REPLY_TO_EMAIL
+        replyTo: buildReplyTo(resolved.type)
       });
     } catch (error) {
       debugResponse.resendError = error instanceof Error ? error.message : 'Unknown Resend error';
