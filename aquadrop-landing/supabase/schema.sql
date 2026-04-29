@@ -71,6 +71,8 @@ alter table public.gift_claims
   add column if not exists tracking_url text,
   add column if not exists shipped_at timestamptz,
   add column if not exists delivered_at timestamptz,
+  add column if not exists review_request_sent_at timestamptz,
+  add column if not exists review_request_email_status text,
   add column if not exists ai_check_status text not null default 'Nincs ellenőrizve',
   add column if not exists ai_check_result jsonb,
   add column if not exists ai_confidence numeric,

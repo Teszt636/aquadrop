@@ -140,6 +140,11 @@ type PatchRequestBody = {
   updates?: Record<string, unknown>;
 };
 
+
+function isDeliveredPipelineStatus(value: unknown): boolean {
+  return value === 'Kézbesítve' || value === 'Lezárva';
+}
+
 type SupabaseErrorDetails = {
   code?: string | null;
   message?: string | null;
@@ -609,6 +614,17 @@ export async function PATCH(request: Request) {
 
     if ('pipeline_status' in sanitizedUpdates) {
       sanitizedUpdates.next_action_description = null;
+    }
+
+    if (
+      table === 'gift_claims' &&
+      isDeliveredPipelineStatus(sanitizedUpdates.pipeline_status) &&
+      sanitizedUpdates.delivered_at === undefined
+    ) {
+      const beforeRowForDeliveredAt = await fetchAdminTableRowById(table, body.id);
+      if (!beforeRowForDeliveredAt?.delivered_at) {
+        sanitizedUpdates.delivered_at = new Date().toISOString();
+      }
     }
 
     if (Object.keys(sanitizedUpdates).length === 0) {
