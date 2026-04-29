@@ -23,7 +23,7 @@ export async function POST(request: Request){
  const body=await request.json().catch(()=>null) as {userEmail?:string;type?:'daily'|'reminder';secret?:string;send?:boolean} | null;
  if(!body?.userEmail || !body?.type) return jsonError(400,'Missing userEmail or type',{required:['userEmail','type']});
 
- const adminSession = await requireAdminSession(['owner', 'manager', 'operator']);
+ const adminSession = await requireAdminSession(['admin']);
  const expectedSecret = process.env.TEST_EMAIL_SECRET?.trim();
  const providedSecret = body.secret?.trim() || request.headers.get('x-test-email-secret')?.trim() || undefined;
  const isSecretAuthorized = Boolean(expectedSecret && providedSecret && providedSecret === expectedSecret);
