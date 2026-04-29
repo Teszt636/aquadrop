@@ -749,16 +749,16 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
   function getGiftNotificationMissingConditionLabel(condition: string): string {
     const normalized = condition.trim();
     const labels: Record<string, string> = {
-      'pipeline_status legyen az alábbiak egyike: Hianypotlas, Jovahagyva, Futarnak atadva, Elutasitva':
+      'pipeline_status legyen az alábbiak egyike: Hiánypótlás szükséges, Jóváhagyva, Futárnak átadva, Elutasítva':
         'A státusz legyen: Hiánypótlás szükséges / Jóváhagyva / Futárnak átadva / Elutasítva',
       'receipt_check_status legyen "Nem olvasható" vagy "Nem megfelelő termék"':
         'A blokk állapota legyen: Nem olvasható vagy Nem megfelelő termék',
       'receipt_check_note nem lehet üres': 'Az ellenőrzési megjegyzés legyen kitöltve',
-      'receipt_check_status legyen "Ervenyes"': 'A blokk állapota legyen: Érvényes',
+      'receipt_check_status legyen "Érvényes blokk"': 'A blokk állapota legyen: Érvényes blokk',
       'courier_name nem lehet üres': 'A futárszolgálat neve legyen kitöltve',
       'tracking_number nem lehet üres': 'A tracking szám legyen kitöltve',
-      'receipt_check_status legyen "Duplikalt blokk" vagy "Elutasitva"':
-        'A blokk állapota legyen: Duplikált blokk vagy Elutasítva',
+      'receipt_check_status legyen "Duplikált blokk gyanú" vagy "Elutasítva"':
+        'A blokk állapota legyen: Duplikált blokk gyanú vagy Elutasítva',
       'email nem lehet üres': 'Az email cím legyen kitöltve'
     };
     return labels[normalized] ?? normalized;

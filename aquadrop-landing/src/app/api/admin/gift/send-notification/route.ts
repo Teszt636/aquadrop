@@ -64,7 +64,7 @@ function resolveNotificationType(row: GiftClaimNotificationRow):
   const courierName = normalizeText(row.courier_name);
   const trackingNumber = normalizeText(row.tracking_number);
 
-  if (pipelineStatus === 'Hianypotlas') {
+  if (pipelineStatus === 'Hiánypótlás szükséges') {
     const missingConditions: string[] = [];
 
     if (!['Nem olvasható', 'Nem megfelelő termék'].includes(receiptCheckStatus)) {
@@ -78,17 +78,17 @@ function resolveNotificationType(row: GiftClaimNotificationRow):
     return missingConditions.length > 0 ? { type: null, missingConditions } : { type: 'hianypotlas', missingConditions: [] };
   }
 
-  if (pipelineStatus === 'Jovahagyva') {
+  if (pipelineStatus === 'Jóváhagyva') {
     const missingConditions: string[] = [];
 
-    if (receiptCheckStatus !== 'Ervenyes') {
-      missingConditions.push('receipt_check_status legyen "Ervenyes"');
+    if (receiptCheckStatus !== 'Érvényes blokk') {
+      missingConditions.push('receipt_check_status legyen "Érvényes blokk"');
     }
 
     return missingConditions.length > 0 ? { type: null, missingConditions } : { type: 'jovahagyas', missingConditions: [] };
   }
 
-  if (pipelineStatus === 'Futarnak atadva') {
+  if (pipelineStatus === 'Futárnak átadva') {
     const missingConditions: string[] = [];
 
     if (!courierName) {
@@ -102,11 +102,11 @@ function resolveNotificationType(row: GiftClaimNotificationRow):
     return missingConditions.length > 0 ? { type: null, missingConditions } : { type: 'szallitas', missingConditions: [] };
   }
 
-  if (pipelineStatus === 'Elutasitva') {
+  if (pipelineStatus === 'Elutasítva') {
     const missingConditions: string[] = [];
 
-    if (!['Duplikalt blokk', 'Elutasitva'].includes(receiptCheckStatus)) {
-      missingConditions.push('receipt_check_status legyen "Duplikalt blokk" vagy "Elutasitva"');
+    if (!['Duplikált blokk gyanú', 'Elutasítva'].includes(receiptCheckStatus)) {
+      missingConditions.push('receipt_check_status legyen "Duplikált blokk gyanú" vagy "Elutasítva"');
     }
 
     return missingConditions.length > 0 ? { type: null, missingConditions } : { type: 'elutasitas', missingConditions: [] };
@@ -115,7 +115,7 @@ function resolveNotificationType(row: GiftClaimNotificationRow):
   return {
     type: null,
     missingConditions: [
-      'pipeline_status legyen az alábbiak egyike: Hianypotlas, Jovahagyva, Futarnak atadva, Elutasitva'
+      'pipeline_status legyen az alábbiak egyike: Hiánypótlás szükséges, Jóváhagyva, Futárnak átadva, Elutasítva'
     ]
   };
 }
