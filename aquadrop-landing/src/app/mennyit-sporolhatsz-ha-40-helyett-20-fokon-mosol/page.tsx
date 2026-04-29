@@ -6,6 +6,7 @@ import { EnergySavingsCalculator } from '@/components/energy-savings-calculator'
 import { ButtonLink } from '@/components/ui';
 
 const articleTitle = 'Mennyit spórolhatsz, ha 40 helyett 20 fokon mosol?';
+const heroSubtitle = 'A 40 helyett 20 fokos mosás éves szinten meglepően nagy különbséget hozhat a villanyszámlában, főleg rendszeres mosás mellett.';
 const articleDescription =
   'Számold ki, mennyit változhat a mosás energiaköltsége, ha alacsonyabb hőfokon mosol. Interaktív kalkulátorral mutatjuk meg a különbséget 20, 30, 40, 60, 80 és 90 fok között.';
 const articleUrl = 'https://www.aquadrop.hu/mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol';
@@ -135,7 +136,7 @@ export default function MennyitSporolhatsz20FokonPage() {
         slug="mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol"
         category="Energiatudatos mosás"
         readingTime="kb. 8 perc olvasás"
-        title={articleTitle}
+        title={heroSubtitle}
         intro="Egyre többen keresik, hogyan csökkenthető a háztartási energiafelhasználás anélkül, hogy a tisztaságérzetből engedni kellene. A mosás hőfoka ebben kulcstényező: a 40 helyett 20 fokon történő mosás érzékelhetően alacsonyabb energiaigényt jelenthet, ha a programhossz, a töltet és a mosási megoldás is megfelelően van megválasztva."
         cta={
           <div className="rounded-[28px] border border-cyan-100/80 bg-gradient-to-br from-white via-cyan-50/80 to-teal-50/80 p-7 shadow-[0_22px_65px_rgba(15,23,42,0.1)] md:p-10">
@@ -157,6 +158,19 @@ export default function MennyitSporolhatsz20FokonPage() {
           </div>
         }
       >
+
+        <div className="rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5 md:p-6">
+          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-800">Gyors válasz (AI snippet)</p>
+          <p className="mt-3">A 40-ről 20 fokra váltott mosás költségelőnye azonos mosási gyakoriság mellett az alacsonyabb vízmelegítési energiaigényből adódik.</p>
+          <p className="mt-3"><strong>Definíció:</strong> A 40-ről 20 fokra váltott mosás költségelőnye azonos mosási gyakoriság mellett az alacsonyabb vízmelegítési energiaigényből adódik.</p>
+          <ul className="mt-4">
+            <li>Minél több mosásod van hetente, annál látványosabb az éves különbség.</li>
+            <li>A valós megtakarítás géptípustól és programtól is függ.</li>
+            <li>A költségelőny akkor marad tartós, ha nem kell újramosni a ruhákat.</li>
+          </ul>
+          <p className="mt-3 font-semibold text-slate-800">Rövid konklúzió: a hőfokcsökkentés kis döntésnek tűnik, de rendszeresen mosva komoly éves megtakarítást adhat.</p>
+        </div>
+
         <h2>Mennyit lehet reálisan spórolni, ha 40 helyett 20 fokon mosol?</h2>
         <p>
           Az alacsonyabb hőfok sok háztartásban mérhető éves különbséget adhat, főleg akkor, ha gyakran mosol. A

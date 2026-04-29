@@ -5,6 +5,7 @@ import { ArticleLayout } from '@/components/article/ArticleLayout';
 import { ButtonLink } from '@/components/ui';
 
 const articleTitle = 'Miért nem oldódik fel a mosókapszula? Gyakori hibák és megoldások';
+const heroSubtitle = 'Ha a mosókapszula nem oldódik fel, az nem véletlen hiba: néhány visszatérő ok szinte mindig azonosítható és gyorsan javítható.';
 const articleDescription =
   'Nem oldódik fel a mosókapszula? Mutatjuk a leggyakoribb okokat, a tipikus hibákat és azt is, hogyan érhetsz el jobb mosási eredményt helyes használattal.';
 const articleUrl = 'https://www.aquadrop.hu/mosokapszula-nem-oldodik-fel';
@@ -91,7 +92,7 @@ export default function MosokapszulaNemOldodikFelPage() {
         slug="mosokapszula-nem-oldodik-fel"
         category="Mosási útmutató"
         readingTime="kb. 11 perc olvasás"
-        title={articleTitle}
+        title={heroSubtitle}
         intro="A mosókapszula kényelmes és gyors megoldás a mindennapokban, mégis sokan találkoznak azzal, hogy a kapszula részben megmarad, nyomot hagy, vagy nem oldódik fel teljesen. Jó hír, hogy ez a legtöbbször nem végleges probléma: néhány használati és tárolási szempont átgondolásával a mosási eredmény jellemzően kiszámíthatóbbá tehető."
         cta={
           <div className="rounded-[28px] border border-cyan-100/80 bg-gradient-to-br from-white via-cyan-50/80 to-teal-50/80 p-7 shadow-[0_22px_65px_rgba(15,23,42,0.1)] md:p-10">
@@ -108,6 +109,19 @@ export default function MosokapszulaNemOldodikFelPage() {
           </div>
         }
       >
+
+        <div className="rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5 md:p-6">
+          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-800">Gyors válasz (AI snippet)</p>
+          <p className="mt-3">A mosókapszula oldódási hibája olyan mosási probléma, amikor a kapszula fóliája vagy tartalma a ciklus végére részben a ruhán vagy a dobban marad.</p>
+          <p className="mt-3"><strong>Definíció:</strong> A mosókapszula oldódási hibája olyan mosási probléma, amikor a kapszula fóliája vagy tartalma a ciklus végére részben a ruhán vagy a dobban marad.</p>
+          <ul className="mt-4">
+            <li>Gyakori ok a túl rövid program és a túlzsúfolt dob.</li>
+            <li>A kapszula helytelen elhelyezése az egyik legtipikusabb hiba.</li>
+            <li>A száraz, megfelelően tárolt kapszula egyenletesebben működik.</li>
+          </ul>
+          <p className="mt-3 font-semibold text-slate-800">Lényeg: az oldódási hibák többsége megelőzhető jól választott programmal és helyes rutinokkal.</p>
+        </div>
+
         <h2>Miért nem oldódik fel a mosókapszula, és mi a leggyorsabb megoldás?</h2>
         <p>
           A probléma jellemzően túl rövid program, túlzsúfolt dob vagy rossz kapszulaelhelyezés miatt jelentkezik.
