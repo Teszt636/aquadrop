@@ -201,14 +201,14 @@ export async function POST(request: Request) {
   console.info('[media-kit-email] Route called');
 
   const hasResendKey = Boolean(process.env.RESEND_API_KEY);
-  const hasEmailFrom = Boolean(process.env.EMAIL_FROM);
+  const hasResendFromEmail = Boolean(process.env.RESEND_FROM_EMAIL || process.env.EMAIL_FROM);
   const hasAdminEmail = Boolean(process.env.ADMIN_NOTIFICATION_EMAIL);
   const hasSupabaseUrl = Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL);
   const hasServiceRole = Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY);
 
   console.info('[media-kit-email] Configuration diagnostics', {
     hasResendKey,
-    hasEmailFrom,
+    hasResendFromEmail,
     hasAdminEmail,
     hasSupabaseUrl,
     hasServiceRole
