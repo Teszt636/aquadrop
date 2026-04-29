@@ -47,7 +47,7 @@ function isAuthorizedBySecret(request: Request): boolean {
 }
 
 async function authorizeAdmin(request: Request): Promise<boolean> {
-  const sessionUser = await requireAdminSession(['admin', 'editor']);
+  const sessionUser = await requireAdminSession(['admin']);
   if (sessionUser) return true;
   return isAuthorizedBySecret(request);
 }
