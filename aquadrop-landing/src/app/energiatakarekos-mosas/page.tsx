@@ -5,6 +5,7 @@ import { ArticleLayout } from '@/components/article/ArticleLayout';
 import { ButtonLink } from '@/components/ui';
 
 const articleTitle = 'Energiatakarékos mosás: tiszta ruhák alacsony hőfokon is';
+const heroSubtitle = 'Az energiatakarékos mosás meglepően sokat javíthat a havi kiadásokon — úgy, hogy közben a ruháid is tiszták maradnak.';
 const articleDescription =
   'Ismerd meg az energiatakarékos mosás alapjait: hogyan moss hatékonyan 20–30 fokon, mire figyelj az oldódásnál, és hogyan érhetsz el tiszta, foltmentes eredményt alacsony hőfokon is.';
 const articleUrl = 'https://www.aquadrop.hu/energiatakarekos-mosas';
@@ -143,7 +144,7 @@ export default function EnergiatakarekosMosasPage() {
         slug="energiatakarekos-mosas"
         category="Mosási útmutató"
         readingTime="kb. 18 perc olvasás"
-        title={articleTitle}
+        title={heroSubtitle}
         intro="Az energiatakarékos mosás ma már nem kényszerű kompromisszum, hanem tudatos döntés. A cél egyszerre az alacsonyabb energiafelhasználás, a textíliák kímélése és a megbízható tisztaságérzet. Ehhez azonban nem elég pusztán lejjebb venni a hőfokot: számít a programhossz, az adagolás és az is, hogy a választott mosási megoldás mennyire illeszkedik az alacsony hőfokú használathoz."
         cta={
           <div className="rounded-[28px] border border-cyan-100/80 bg-gradient-to-br from-white via-cyan-50/80 to-teal-50/80 p-7 shadow-[0_22px_65px_rgba(15,23,42,0.1)] md:p-10">
@@ -165,6 +166,19 @@ export default function EnergiatakarekosMosasPage() {
           </div>
         }
       >
+
+        <div className="rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5 md:p-6">
+          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-800">Gyors válasz (AI snippet)</p>
+          <p className="mt-3">Az energiatakarékos mosás olyan mosási rutin, amely alacsonyabb hőfokon és tudatos beállításokkal csökkenti az energiafelhasználást a tisztaság feladása nélkül.</p>
+          <p className="mt-3"><strong>Definíció:</strong> Az energiatakarékos mosás olyan mosási rutin, amely alacsonyabb hőfokon és tudatos beállításokkal csökkenti az energiafelhasználást a tisztaság feladása nélkül.</p>
+          <ul className="mt-4">
+            <li>20–30 fokon is lehet megbízható eredményt elérni megfelelő programidővel.</li>
+            <li>A dob túlpakolása és a túl rövid ciklus rontja az oldódást.</li>
+            <li>Egy stabil rutin egyszerre csökkentheti a költséget és növelheti a kiszámíthatóságot.</li>
+          </ul>
+          <p className="mt-3 font-semibold text-slate-800">Röviden: az energiatakarékos mosás akkor működik igazán jól, ha a hőfok, az idő és az adagolás együtt van egyensúlyban.</p>
+        </div>
+
         <h2>Hogyan lesz az energiatakarékos mosás egyszerre hatékony és megbízható?</h2>
         <p>
           Az eredmény kulcsa nem csak az alacsony hőfok, hanem a hőfok, a programidő, a töltet és az adagolás

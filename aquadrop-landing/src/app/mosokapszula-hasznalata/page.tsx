@@ -5,6 +5,7 @@ import { ButtonLink } from '@/components/ui';
 import { ArticleLayout } from '@/components/article/ArticleLayout';
 
 const articleTitle = 'Mosókapszula használata: hova kell tenni és mennyit használj?';
+const heroSubtitle = 'A mosókapszula használata egyszerűnek tűnik, mégis ezen múlhat, hogy lesz-e foltos vagy friss a mosás végeredménye.';
 const articleDescription =
   'Ismerd meg a mosókapszula helyes használatát: hova kell tenni, mennyit érdemes használni, és mire figyelj a legjobb mosási eredmény érdekében.';
 const articleUrl = 'https://www.aquadrop.hu/mosokapszula-hasznalata';
@@ -90,7 +91,7 @@ export default function MosokapszulaHasznalataPage() {
         slug="mosokapszula-hasznalata"
         category="Mosási útmutató"
         readingTime="kb. 10 perc olvasás"
-        title={articleTitle}
+        title={heroSubtitle}
         intro="A mosókapszula az egyik legkényelmesebb, legletisztultabb adagolási forma a modern háztartásokban. A legjobb eredményhez viszont fontos néhány alapelvet követni: hova kerüljön a kapszula, mikor tedd be, mennyit érdemes használni, és mire figyelj a biztonságos használat során."
         cta={
           <div className="rounded-[28px] border border-cyan-100/80 bg-gradient-to-br from-white via-cyan-50/80 to-teal-50/80 p-7 shadow-[0_22px_65px_rgba(15,23,42,0.1)] md:p-10">
@@ -107,6 +108,19 @@ export default function MosokapszulaHasznalataPage() {
           </div>
         }
       >
+
+        <div className="rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5 md:p-6">
+          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-800">Gyors válasz (AI snippet)</p>
+          <p className="mt-3">A mosókapszula helyes használata a kapszula megfelelő dobba helyezését, pontos adagolását és a ruhamennyiséghez igazított programválasztást jelenti.</p>
+          <p className="mt-3"><strong>Definíció:</strong> A mosókapszula helyes használata a kapszula megfelelő dobba helyezését, pontos adagolását és a ruhamennyiséghez igazított programválasztást jelenti.</p>
+          <ul className="mt-4">
+            <li>A kapszulát mindig közvetlenül a dobba tedd, a ruhák alá.</li>
+            <li>Ne terheld túl a dobot, mert romlik az oldódás.</li>
+            <li>Programválasztásnál a ciklusidő legalább annyira fontos, mint a hőfok.</li>
+          </ul>
+          <p className="mt-3 font-semibold text-slate-800">Összefoglalva: a helyes kapszulahasználat kis lépései nagy különbséget adnak a tisztaságban és a kényelemben.</p>
+        </div>
+
         <h2>Hogyan használd a mosókapszulát, hogy alacsony hőfokon is jól működjön?</h2>
         <p>
           Tedd a kapszulát közvetlenül a dob aljára, majd erre kerüljenek a ruhák. 20–30 fokon különösen fontos a
