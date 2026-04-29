@@ -36,56 +36,108 @@ function authorized(request: Request): boolean {
 }
 
 export async function POST(request: Request) {
+  const debugState = {
+    webhookReceived: true,
+    subject: '',
+    extractedStatusToken: null as string | null,
+    matchedGiftClaimId: null as string | null,
+    action: 'ignored',
+    updateAttempted: false,
+    updateSuccess: false,
+    updateError: null as string | null,
+    activityLogInserted: false,
+    inboundEmailLogged: false
+  };
+
   if (!authorized(request)) {
-    return NextResponse.json({ success: false, matched: false, action: 'ignored', reason: 'unauthorized' }, { status: 401 });
+    console.log('[gift-inbound-webhook]', { ...debugState, reason: 'unauthorized' });
+    return NextResponse.json({ success: false, ...debugState, reason: 'unauthorized' }, { status: 401 });
   }
 
   const payload = (await request.json()) as Record<string, unknown>;
   const data = (payload.data as Record<string, unknown>) ?? payload;
   const subject = safeTrim(data.subject);
+  debugState.subject = subject;
   const tokenMatch = subject.match(TOKEN_PATTERN);
-  if (!tokenMatch) return NextResponse.json({ success: true, matched: false, giftClaimId: null, action: 'ignored', reason: 'token_not_found' });
-
-  const statusToken = tokenMatch[1];
-  const supabaseUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, '')}/rest/v1`;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY ?? '';
-  const headers = { apikey: key, Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' };
-
-  const claimRes = await fetch(`${supabaseUrl}/gift_claims?select=id,pipeline_status,receipt_check_status,assigned_to&status_token=eq.${statusToken}&limit=1`, { headers, cache: 'no-store' });
-  const claims = (await claimRes.json()) as Array<{id:string;pipeline_status:string|null;receipt_check_status:string|null;assigned_to:string|null}>;
-  const claim = claims[0];
-  if (!claim) return NextResponse.json({ success: true, matched: false, giftClaimId: null, action: 'ignored', reason: 'gift_claim_not_found' });
-
   const resendEmailId = safeTrim(data.email_id) || safeTrim(data.id) || null;
-  if (resendEmailId) {
-    const dedupe = await fetch(`${supabaseUrl}/gift_inbound_emails?select=id&resend_email_id=eq.${encodeURIComponent(resendEmailId)}&limit=1`, { headers, cache: 'no-store' });
-    const dedupeRows = (await dedupe.json()) as Array<{ id: string }>;
-    if (dedupeRows.length > 0) return NextResponse.json({ success: true, matched: true, giftClaimId: claim.id, action: 'ignored', reason: 'duplicate_event' });
-  }
-
   const sender = safeTrim(data.from) || 'unknown@unknown';
   const hasAttachments = Array.isArray(data.attachments) && data.attachments.length > 0;
   const bodyPreview = summarizeBody(data);
-  const nextActionDescription = `Ügyfél válaszolt az emailre.\n\nVálasz tartalma:\n${bodyPreview}\n\nCsatolmány érkezett: ${hasAttachments ? 'igen' : 'nem'}`;
+
+  const supabaseUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, '')}/rest/v1`;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY ?? '';
+  const headers = { apikey: key, Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' };
+  const logInboundEmail = async (reason: 'no_token' | 'no_matching_claim', matched: boolean, claimId: string | null = null) => {
+    await fetch(`${supabaseUrl}/gift_inbound_emails`, {
+      method: 'POST',
+      headers: { ...headers, Prefer: 'return=minimal' },
+      body: JSON.stringify([{
+        resend_email_id: resendEmailId,
+        gift_claim_id: claimId,
+        from_email: sender,
+        subject,
+        body_preview: bodyPreview.slice(0, 1000),
+        has_attachments: hasAttachments,
+        reason,
+        matched
+      }])
+    });
+    debugState.inboundEmailLogged = true;
+  };
+  if (!tokenMatch) {
+    await logInboundEmail('no_token', false);
+    console.log('[gift-inbound-webhook]', { ...debugState, reason: 'no_token' });
+    return NextResponse.json({ success: true, ...debugState, reason: 'no_token' });
+  }
+
+  const statusToken = tokenMatch[1];
+  debugState.extractedStatusToken = statusToken;
+  const claimRes = await fetch(`${supabaseUrl}/gift_claims?select=id,pipeline_status,receipt_check_status,assigned_to&status_token=eq.${statusToken}&limit=1`, { headers, cache: 'no-store' });
+  const claims = (await claimRes.json()) as Array<{id:string;pipeline_status:string|null;receipt_check_status:string|null;assigned_to:string|null}>;
+  const claim = claims[0];
+  if (!claim) {
+    await logInboundEmail('no_matching_claim', false);
+    console.log('[gift-inbound-webhook]', { ...debugState, reason: 'no_matching_claim' });
+    return NextResponse.json({ success: true, ...debugState, reason: 'no_matching_claim' });
+  }
+  debugState.matchedGiftClaimId = claim.id;
+
+  if (resendEmailId) {
+    const dedupe = await fetch(`${supabaseUrl}/gift_inbound_emails?select=id&resend_email_id=eq.${encodeURIComponent(resendEmailId)}&limit=1`, { headers, cache: 'no-store' });
+    const dedupeRows = (await dedupe.json()) as Array<{ id: string }>;
+    if (dedupeRows.length > 0) {
+      console.log('[gift-inbound-webhook]', { ...debugState, reason: 'duplicate_event' });
+      return NextResponse.json({ success: true, ...debugState, reason: 'duplicate_event' });
+    }
+  }
+
+  debugState.action = 'reopened_for_review';
+  const nextActionDescription = `Ügyfél válaszolt az elutasító emailre.\n\nVálasz tartalma:\n${bodyPreview}\n\nCsatolmány érkezett: ${hasAttachments ? 'igen' : 'nem'}`;
 
   const adminRes = await fetch(`${supabaseUrl}/admin_users?select=id&name=eq.Bartók Csaba&is_active=eq.true&limit=1`, { headers, cache: 'no-store' });
   const adminRows = (await adminRes.json()) as Array<{ id: string }>;
 
-  await fetch(`${supabaseUrl}/gift_claims?id=eq.${claim.id}`, {
-    method: 'PATCH',
-    headers: { ...headers, Prefer: 'return=minimal' },
-    body: JSON.stringify({
-      pipeline_status: 'Blokk ellenőrzés alatt',
-      receipt_check_status: 'Ellenőrzésre vár',
-      next_action_description: nextActionDescription,
-      assigned_to: claim.assigned_to ?? adminRows[0]?.id ?? null,
-      next_action_at: computeNextActionAt()
-    })
-  });
+  debugState.updateAttempted = true;
+  const updateRes = await fetch(`${supabaseUrl}/gift_claims?id=eq.${claim.id}`, {
+      method: 'PATCH',
+      headers: { ...headers, Prefer: 'return=minimal' },
+      body: JSON.stringify({
+        pipeline_status: 'Blokk ellenőrzés alatt',
+        receipt_check_status: 'Ellenőrzésre vár',
+        next_action_description: nextActionDescription,
+        assigned_to: claim.assigned_to ?? adminRows[0]?.id ?? null,
+        next_action_at: computeNextActionAt()
+      })
+    });
+  debugState.updateSuccess = updateRes.ok;
+  if (!updateRes.ok) debugState.updateError = await updateRes.text();
 
-  await fetch(`${supabaseUrl}/gift_activity_logs`, { method: 'POST', headers: { ...headers, Prefer: 'return=minimal' }, body: JSON.stringify([{ gift_claim_id: claim.id, field_name: 'inbound_reply', change_summary: 'Ügyfél válaszolt emailben, az ügy újranyitva ellenőrzésre.', old_value: `${safeTrim(claim.pipeline_status)} | ${safeTrim(claim.receipt_check_status)}`, new_value: `Blokk ellenőrzés alatt | Ellenőrzésre vár | ${bodyPreview.slice(0, 250)}`, changed_by_name: 'Email válasz', changed_by_email: sender, changed_by_user_id: null }]) });
+  const activityRes = await fetch(`${supabaseUrl}/gift_activity_logs`, { method: 'POST', headers: { ...headers, Prefer: 'return=minimal' }, body: JSON.stringify([{ gift_claim_id: claim.id, field_name: 'inbound_reply', change_summary: 'Ügyfél válaszolt emailben, az ügy újranyitva ellenőrzésre.', old_value: `${safeTrim(claim.pipeline_status)} | ${safeTrim(claim.receipt_check_status)}`, new_value: `Blokk ellenőrzés alatt | Ellenőrzésre vár | ${bodyPreview.slice(0, 250)}`, changed_by_name: 'Email válasz', changed_by_email: sender, changed_by_user_id: null }]) });
+  debugState.activityLogInserted = activityRes.ok;
 
-  await fetch(`${supabaseUrl}/gift_inbound_emails`, { method: 'POST', headers: { ...headers, Prefer: 'return=minimal' }, body: JSON.stringify([{ resend_email_id: resendEmailId, gift_claim_id: claim.id, from_email: sender, subject, body_preview: bodyPreview.slice(0, 1000), has_attachments: hasAttachments }]) });
+  const inboundLogRes = await fetch(`${supabaseUrl}/gift_inbound_emails`, { method: 'POST', headers: { ...headers, Prefer: 'return=minimal' }, body: JSON.stringify([{ resend_email_id: resendEmailId, gift_claim_id: claim.id, from_email: sender, subject, body_preview: bodyPreview.slice(0, 1000), has_attachments: hasAttachments, matched: true }]) });
+  debugState.inboundEmailLogged = inboundLogRes.ok;
 
-  return NextResponse.json({ success: true, matched: true, giftClaimId: claim.id, action: 'reopened_for_review', reason: null });
+  console.log('[gift-inbound-webhook]', { ...debugState, reason: null });
+  return NextResponse.json({ success: true, ...debugState, reason: null });
 }

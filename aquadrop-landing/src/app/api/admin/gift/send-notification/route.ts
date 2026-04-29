@@ -60,6 +60,10 @@ function withGiftToken(subject: string, statusToken: string | null): string {
   return token ? `${subject} [#gift:${token}]` : subject;
 }
 
+function buildSubject(type: NotificationType, subject: string, statusToken: string | null): string {
+  return type === 'elutasitas' ? withGiftToken(subject, statusToken) : subject;
+}
+
 function resolveNotificationType(row: GiftClaimNotificationRow):
   | { type: NotificationType; missingConditions: string[] }
   | { type: null; missingConditions: string[] } {
@@ -142,7 +146,7 @@ function buildNotificationEmail(type: NotificationType, row: GiftClaimNotificati
     `;
 
     return {
-      subject: withGiftToken(subject, row.status_token),
+      subject: buildSubject(type, subject, row.status_token),
       html: renderBrandedEmailLayout({
         subject,
         headline: 'Hiánypótlás szükséges',
@@ -161,7 +165,7 @@ function buildNotificationEmail(type: NotificationType, row: GiftClaimNotificati
     `;
 
     return {
-      subject: withGiftToken(subject, row.status_token),
+      subject: buildSubject(type, subject, row.status_token),
       html: renderBrandedEmailLayout({
         subject,
         headline: 'Sikeres jóváhagyás',
@@ -183,7 +187,7 @@ function buildNotificationEmail(type: NotificationType, row: GiftClaimNotificati
     `;
 
     return {
-      subject: withGiftToken(subject, row.status_token),
+      subject: buildSubject(type, subject, row.status_token),
       html: renderBrandedEmailLayout({
         subject,
         headline: 'Csomag feladva',
@@ -206,7 +210,7 @@ function buildNotificationEmail(type: NotificationType, row: GiftClaimNotificati
     `;
 
     return {
-      subject: withGiftToken(subject, row.status_token),
+      subject: buildSubject(type, subject, row.status_token),
       html: renderBrandedEmailLayout({
         subject,
         headline: 'Igénylés elutasítva',
@@ -222,7 +226,7 @@ function buildNotificationEmail(type: NotificationType, row: GiftClaimNotificati
   `;
 
   return {
-    subject: withGiftToken(subject, row.status_token),
+    subject: buildSubject(type, subject, row.status_token),
     html: renderBrandedEmailLayout({
       subject,
       headline: 'Igénylés elutasítva',
