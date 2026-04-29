@@ -1,3 +1,4 @@
+import { GoogleReviewCta } from '@/components/GoogleReviewCta';
 import { SectionDescription, SectionHeading } from '@/components/ui/SectionHeading';
 
 const testimonials = [
@@ -81,6 +82,16 @@ export function SocialProofSection() {
               ))}
             </div>
           </div>
+
+          <GoogleReviewCta
+            variant="compact"
+            placement="social_proof"
+            className="mx-auto mt-8 max-w-3xl"
+            title="Te is kipróbáltad már?"
+            description="Írd meg röviden a tapasztalatodat Google-ben, és segíts más vásárlóknak a döntésben."
+            buttonText="Értékelést írok"
+          />
+
         </div>
       </div>
     </section>

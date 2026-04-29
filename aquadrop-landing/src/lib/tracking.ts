@@ -16,7 +16,8 @@ export const TRACKING_EVENT_NAMES = [
   'scroll_depth_25',
   'scroll_depth_50',
   'scroll_depth_75',
-  'scroll_depth_100'
+  'scroll_depth_100',
+  'google_review_cta_click'
 ] as const;
 
 export type TrackingEventName = (typeof TRACKING_EVENT_NAMES)[number];

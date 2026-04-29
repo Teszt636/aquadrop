@@ -1,3 +1,4 @@
+import { GoogleReviewCta } from '@/components/GoogleReviewCta';
 import { ButtonLink } from '@/components/ui/Button';
 
 type ThankYouPageProps = {
@@ -19,6 +20,15 @@ export function ThankYouPage({ title, message }: ThankYouPageProps) {
           </p>
           <h1 className="mt-6 text-3xl leading-tight md:text-5xl">{title}</h1>
           <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-slate-700">{message}</p>
+
+          <GoogleReviewCta
+            variant="section"
+            placement="thank_you"
+            className="mx-auto mt-8 max-w-2xl text-left"
+            title="Köszönjük az igénylésed – és a bizalmad!"
+            description="Mivel az ajándékigényléshez már meglévő Aquadrop Expert Pro vásárlás szükséges, örömmel vesszük, ha pár szóban megírod a tapasztalatodat a Google értékelésben."
+            buttonText="Értékelem Google-ben"
+          />
 
           <div className="mt-8">
             <ButtonLink className="px-8 py-3 text-sm md:text-base" href="/">
