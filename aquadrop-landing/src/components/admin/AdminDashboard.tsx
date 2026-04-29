@@ -51,6 +51,7 @@ const TABLE_ORDER: AdminTableViewName[] = [
   'admin_users'
 ];
 const CRM_EDITABLE_TABLES: AdminTableViewName[] = ['reseller_applications', 'gift_claims'];
+const GIFT_CLOSED_PIPELINE_STATUSES = new Set(['Elutasítva', 'Lezárva', 'Kézbesítve']);
 const CRM_GIFT_CLAIMS_EDITABLE_FIELDS = new Set([
   'status',
   'admin_note',
@@ -464,8 +465,16 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
     });
 
     return [...filtered].sort((left, right) => {
-      const leftValue = stringifyValue(getResellerDraftValue(left, 'next_action_at')).trim();
-      const rightValue = stringifyValue(getResellerDraftValue(right, 'next_action_at')).trim();
+      const leftStatus = stringifyValue(left.pipeline_status).trim() || 'Új igénylés';
+      const rightStatus = stringifyValue(right.pipeline_status).trim() || 'Új igénylés';
+      const leftIsClosed = GIFT_CLOSED_PIPELINE_STATUSES.has(leftStatus);
+      const rightIsClosed = GIFT_CLOSED_PIPELINE_STATUSES.has(rightStatus);
+      if (leftIsClosed !== rightIsClosed) {
+        return leftIsClosed ? 1 : -1;
+      }
+
+      const leftValue = stringifyValue(left.next_action_at).trim();
+      const rightValue = stringifyValue(right.next_action_at).trim();
       if (!leftValue && !rightValue) return 0;
       if (!leftValue) return 1;
       if (!rightValue) return -1;
