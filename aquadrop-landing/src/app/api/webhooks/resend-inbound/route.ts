@@ -10,26 +10,63 @@ function stripHtml(input: string): string {
   return input
     .replace(/<style[\s\S]*?<\/style>/gi, ' ')
     .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<\/p>/gi, '\n')
+    .replace(/<\/div>/gi, '\n')
+    .replace(/<\/li>/gi, '\n')
     .replace(/<[^>]*>/g, ' ');
 }
 
-function sanitizeInboundText(input: string): string {
-  const normalizedWhitespace = input
+function decodeBasicHtmlEntities(input: string): string {
+  return input
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/gi, "'")
+    .replace(/&#x2F;/gi, '/');
+}
+
+function cleanInboundReplyText(input: string): string {
+  const withoutHtml = stripHtml(input);
+  const decoded = decodeBasicHtmlEntities(withoutHtml);
+  const normalizedWhitespace = decoded
     .replace(/\r\n/g, '\n')
     .replace(/\r/g, '\n')
     .replace(/[\t\f\v]+/g, ' ')
     .replace(/\u00a0/g, ' ');
 
-  const cutPatterns = [/\nOn\s[\s\S]+?wrote:\s*$/im, /\n-{2,}\s*Original Message\s*-{2,}[\s\S]*$/im, /\nFrom:\s[\s\S]+?\nSent:\s[\s\S]+?\nTo:\s[\s\S]+?\nSubject:\s[\s\S]*$/im];
+  const cutPatterns = [
+    /^On\s.+wrote:\s*$/im,
+    /^Ekkor:\s.+írta:\s*$/im,
+    /^From:\s*$/im,
+    /^Feladó:\s*$/im,
+    /^Sent:\s*$/im,
+    /^Küldve:\s*$/im,
+    /^To:\s*$/im,
+    /^Címzett:\s*$/im,
+    /^Subject:\s*$/im,
+    /^Tárgy:\s*$/im,
+    /^-{2,}\s*Original Message\s*-{2,}\s*$/im,
+    /^Eredeti üzenet\s*$/im,
+    /Aquadrop Expert Pro/i,
+    /Aquadrop Ügyfélszolgálat/i
+  ];
 
-  let cleaned = normalizedWhitespace;
+  let cutIndex = -1;
   for (const pattern of cutPatterns) {
-    cleaned = cleaned.replace(pattern, '');
+    const match = pattern.exec(normalizedWhitespace);
+    if (!match || match.index < 0) continue;
+    if (cutIndex === -1 || match.index < cutIndex) cutIndex = match.index;
   }
 
-  return cleaned
+  const sliced = cutIndex >= 0 ? normalizedWhitespace.slice(0, cutIndex) : normalizedWhitespace;
+
+  return sliced
     .replace(/\n{3,}/g, '\n\n')
     .replace(/[ ]{2,}/g, ' ')
+    .replace(/[ \n]+\n/g, '\n')
     .trim();
 }
 
@@ -42,9 +79,9 @@ type BodySource = 'payload.text' | 'payload.html' | 'receiving.text' | 'receivin
 
 function extractBodyFromPayload(payload: Record<string, unknown>): { body: string; source: BodySource } {
   const text = safeTrim(payload.text);
-  if (text) return { body: sanitizeInboundText(text), source: 'payload.text' };
+  if (text) return { body: cleanInboundReplyText(text), source: 'payload.text' };
   const html = safeTrim(payload.html);
-  if (html) return { body: sanitizeInboundText(stripHtml(html)), source: 'payload.html' };
+  if (html) return { body: cleanInboundReplyText(html), source: 'payload.html' };
   return { body: '', source: 'none' };
 }
 
@@ -61,10 +98,10 @@ async function fetchInboundBodyFromResend(emailId: string): Promise<{ body: stri
   if (!response.ok) return { body: null, source: 'none', success: false };
   const payload = (await response.json()) as { text?: string; html?: string; preview?: string; body?: string };
   const text = safeTrim(payload.text);
-  if (text) return { body: sanitizeInboundText(text), source: 'receiving.text', success: true };
+  if (text) return { body: cleanInboundReplyText(text), source: 'receiving.text', success: true };
 
   const html = safeTrim(payload.html);
-  if (html) return { body: sanitizeInboundText(stripHtml(html)), source: 'receiving.html', success: true };
+  if (html) return { body: cleanInboundReplyText(html), source: 'receiving.html', success: true };
 
   return { body: null, source: 'none', success: true };
 }
@@ -217,7 +254,7 @@ export async function POST(request: Request) {
 
   const shortBody = bodyPreview ? shortenText(bodyPreview, 300) : '';
   debugState.bodyPreviewLength = shortBody.length;
-  const replyContent = shortBody || 'Ügyfél válasza érkezett, de a tartalom nem volt elérhető.';
+  const replyContent = shortBody || 'Ügyfél válasza érkezett, de a friss válasz szövege nem volt egyértelműen kinyerhető.';
   const nextActionDescription = `Ügyfél válaszolt az emailre.\n\nVálasz tartalma:\n${replyContent}\n\nCsatolmány érkezett: ${hasAttachments ? 'igen' : 'nem'}`;
 
   const adminRes = await fetch(`${supabaseUrl}/admin_users?select=id&name=eq.Bartók Csaba&is_active=eq.true&limit=1`, { headers, cache: 'no-store' });
