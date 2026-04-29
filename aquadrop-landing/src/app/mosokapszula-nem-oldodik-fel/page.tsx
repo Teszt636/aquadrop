@@ -111,7 +111,6 @@ export default function MosokapszulaNemOldodikFelPage() {
       >
 
         <div className="rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5 md:p-6">
-          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-800">Gyors válasz (AI snippet)</p>
           <p className="mt-3">A mosókapszula oldódási hibája olyan mosási probléma, amikor a kapszula fóliája vagy tartalma a ciklus végére részben a ruhán vagy a dobban marad.</p>
           <p className="mt-3"><strong>Definíció:</strong> A mosókapszula oldódási hibája olyan mosási probléma, amikor a kapszula fóliája vagy tartalma a ciklus végére részben a ruhán vagy a dobban marad.</p>
           <ul className="mt-4">
