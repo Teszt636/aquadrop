@@ -2,6 +2,7 @@ import { getBudapestNow } from '@/lib/datetime/budapest';
 import { resolveAquadropSenderEmail } from '@/lib/email/config';
 import { sendEmailWithResend } from '@/lib/email/resend';
 import { renderBrandedEmailLayout } from '@/lib/email/templates';
+import { checkEmailRateLimit, markEmailSent } from '@/lib/cron/email-safety';
 
 const STATUSES = ['Új igénylés', 'Blokk ellenőrzés alatt', 'Hiánypótlás szükséges', 'Csomagolás alatt'] as const;
 type GiftPipelineStatus = (typeof STATUSES)[number];
@@ -103,7 +104,8 @@ export async function runGiftDailySummaryCron(params: { dryRun: boolean; debug?:
     sentEmails: 0,
     skippedReasons: {},
     resendErrors: [],
-    dryRun: params.dryRun
+    dryRun: params.dryRun,
+    resendAttempted: false
   };
 
   if (!(now.hour === 8 || now.hour === 13)) {
@@ -157,6 +159,12 @@ export async function runGiftDailySummaryCron(params: { dryRun: boolean; debug?:
     return { ...summary, counts };
   }
 
+  const rateLimit = checkEmailRateLimit('admin@aquadrop.hu', 'gift_daily_summary');
+  if (rateLimit.blocked) {
+    summary.skippedReasons.rate_limited = 1;
+    return { ...summary, counts };
+  }
+
   const from = resolveAquadropSenderEmail({ allowFallback: true });
   const resend = await sendEmailWithResend({
     from,
@@ -166,6 +174,7 @@ export async function runGiftDailySummaryCron(params: { dryRun: boolean; debug?:
     replyTo: ['hello@aquadrop.hu']
   });
 
+  markEmailSent('admin@aquadrop.hu', 'gift_daily_summary');
   summary.sentEmails = 1;
   summary.resendAttempted = true;
   summary.resendId = resend?.id ?? null;

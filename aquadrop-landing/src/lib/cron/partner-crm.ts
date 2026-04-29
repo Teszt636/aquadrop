@@ -11,6 +11,7 @@ import {
   getBudapestDayRange,
   getBudapestNow
 } from '@/lib/datetime/budapest';
+import { checkEmailRateLimit, markEmailSent } from '@/lib/cron/email-safety';
 
 type AdminUser = {
   id: string;
@@ -259,7 +260,8 @@ export async function runPartnerDailyTasksCron(params: { dryRun: boolean; debug?
     skippedByTimeWindow: false,
     skippedReasons: {} as Record<string, number>,
     wouldSendTo: [] as Array<{ userEmail: string; overdue: number; today: number; hot: number }>,
-    resendResponses: [] as Array<{ userEmail: string; resendId: string | null }>
+    resendResponses: [] as Array<{ userEmail: string; resendId: string | null }>,
+    resendAttempted: false
   };
 
   const budapestWeekday = new Intl.DateTimeFormat('en-US',{timeZone:'Europe/Budapest',weekday:'short'}).format(new Date(nowSnapshot.nowUtc));
@@ -322,12 +324,20 @@ export async function runPartnerDailyTasksCron(params: { dryRun: boolean; debug?
         continue;
       }
 
+      const rateLimit = checkEmailRateLimit(admin.email, 'partner_daily_tasks');
+      if (rateLimit.blocked) {
+        summary.skippedEmails += 1;
+        summary.skippedReasons.rate_limited = (summary.skippedReasons.rate_limited ?? 0) + 1;
+        continue;
+      }
+
       const email = buildPartnerDailyTasksEmail({
         overdueLeads: overdue.map(toLeadItem),
         todayLeads: today.map(toLeadItem),
         hotLeads: hot.map(toLeadItem)
       });
 
+      summary.resendAttempted = true;
       const resendResponse = await sendEmailWithResend({
         from: senderEmail,
         to: [admin.email, CC_ADMIN_EMAIL],
@@ -350,6 +360,7 @@ export async function runPartnerDailyTasksCron(params: { dryRun: boolean; debug?
         }
       ]);
 
+      markEmailSent(admin.email, 'partner_daily_tasks');
       summary.sentEmails += 1;
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Ismeretlen hiba';
@@ -391,7 +402,8 @@ export async function runPartnerTaskReminderCron(params: { dryRun: boolean; debu
     dryRun: params.dryRun,
     skippedReasons: {} as Record<string, number>,
     wouldSendTo: [] as Array<{ userEmail: string; resellerId: string; nextActionAt: string | null }>,
-    resendResponses: [] as Array<{ userEmail: string; resellerId: string; resendId: string | null }>
+    resendResponses: [] as Array<{ userEmail: string; resellerId: string; resendId: string | null }>,
+    resendAttempted: false
   };
 
   const leads = await fetchLeadsDueWithinOneHour(windowStartIso, windowEndIso);
@@ -440,7 +452,15 @@ export async function runPartnerTaskReminderCron(params: { dryRun: boolean; debu
         continue;
       }
 
+      const rateLimit = checkEmailRateLimit(adminEmail, 'partner_1h_reminder');
+      if (rateLimit.blocked) {
+        summary.skippedEmails += 1;
+        summary.skippedReasons.rate_limited = (summary.skippedReasons.rate_limited ?? 0) + 1;
+        continue;
+      }
+
       const email = buildPartnerOneHourReminderEmail(toLeadItem(lead));
+      summary.resendAttempted = true;
       const resendResponse = await sendEmailWithResend({
         from: senderEmail,
         to: adminEmail,
@@ -465,6 +485,7 @@ export async function runPartnerTaskReminderCron(params: { dryRun: boolean; debu
         }
       ]);
 
+      markEmailSent(adminEmail, 'partner_1h_reminder');
       summary.sentEmails += 1;
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Ismeretlen hiba';
