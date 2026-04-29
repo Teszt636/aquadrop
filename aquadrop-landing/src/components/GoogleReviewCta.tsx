@@ -56,7 +56,7 @@ export function GoogleReviewCta({
       <h2
         className={cn(
           'text-lg font-semibold leading-snug text-slate-900 sm:text-xl',
-          !isEmailStyle && 'mx-auto max-w-2xl'
+          !isEmailStyle ? 'mx-auto max-w-2xl' : undefined
         )}
       >
         {title}
@@ -64,13 +64,13 @@ export function GoogleReviewCta({
       <p
         className={cn(
           'mt-2 text-sm leading-6 text-slate-700 sm:text-base',
-          !isEmailStyle && 'mx-auto max-w-3xl'
+          !isEmailStyle ? 'mx-auto max-w-3xl' : undefined
         )}
       >
         {description}
       </p>
 
-      <div className={cn('mt-4', !isEmailStyle && 'mx-auto flex justify-center')}>
+      <div className={cn('mt-4', !isEmailStyle ? 'mx-auto flex justify-center' : undefined)}>
         <Link
           href={GOOGLE_REVIEW_URL}
           target="_blank"
