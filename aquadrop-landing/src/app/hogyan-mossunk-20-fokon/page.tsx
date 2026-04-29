@@ -155,6 +155,15 @@ export default function HogyanMossunk20FokonPage() {
           </div>
         }
       >
+        <h2>Hogyan moss hatékonyan 20 fokon úgy, hogy a ruhák valóban tiszták maradjanak?</h2>
+        <p>
+          A 20 fokos mosás akkor stabil, ha a hőfok mellé megfelelő programidő, jó kapszulaelhelyezés és nem túlzsúfolt
+          dob társul. Így egyszerre csökkentheted az energiaigényt és tarthatod meg a tisztaságérzetet.
+        </p>
+        <p>
+          Kiinduláshoz olvasd el az <Link href="/energiatakarekos-mosas">energiatakarékos mosás</Link> áttekintőt, majd
+          ehhez igazítsd a saját 20 fokos rutinodat.
+        </p>
         <p>
           Sokan azért kezdenek el a <strong>20 fokos mosás</strong> iránt érdeklődni, mert szeretnének kevesebb energiát
           használni és közben a ruháikat is kímélni. Az alacsonyabb hőfok elsőre logikus döntésnek tűnik, mégis gyakori

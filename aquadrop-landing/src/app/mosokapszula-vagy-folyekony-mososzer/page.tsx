@@ -107,6 +107,16 @@ export default function MosokapszulaVagyFolyekonyMososerPage() {
           </div>
         }
       >
+        <h2>Mosókapszula vagy folyékony mosószer: melyik működik jobban a mindennapi rutinodban?</h2>
+        <p>
+          Nincs mindenkire érvényes egyetlen válasz: a legjobb választás az, ami a saját ruhatípusaidhoz, időbeosztásodhoz
+          és mosási szokásaidhoz passzol. Kapszulával általában egyszerűbb a napi adagolás, folyékonnyal rugalmasabb a
+          finomhangolás.
+        </p>
+        <p>
+          Döntés előtt érdemes átnézni az <Link href="/energiatakarekos-mosas">energiatakarékos mosás</Link> alapelveit
+          is, mert a hőfok és a programidő sokszor többet számít, mint maga a forma.
+        </p>
         <p>
           A modern háztartásokban a mosás már nem egyetlen, merev séma szerint történik. A programok, hőfokok,
           textiltípusok és élethelyzetek változatossága miatt természetes, hogy sokan keresik azt a mosószerformát,

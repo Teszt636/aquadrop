@@ -165,6 +165,19 @@ export default function EnergiatakarekosMosasPage() {
           </div>
         }
       >
+        <h2>Hogyan lesz az energiatakarékos mosás egyszerre hatékony és megbízható?</h2>
+        <p>
+          Az eredmény kulcsa nem csak az alacsony hőfok, hanem a hőfok, a programidő, a töltet és az adagolás
+          egyensúlya. Ha ez a négy elem együtt jól működik, a ruhák tiszták maradnak, miközben a mosás energiaigénye
+          is csökkenhet.
+        </p>
+
+        <h2>Spórolási kalkulátor: mennyit jelenthet a hőfokváltás?</h2>
+        <p>
+          Ha konkrét számokat szeretnél, használd a <Link href="/mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol">mosási
+          költség kalkulátort</Link>. Például heti 4–5 mosásnál a 40 °C-ról 20–30 °C-ra váltás éves szinten már jól
+          látható különbséget adhat a becsült energiaköltségben.
+        </p>
         <div className="rounded-2xl border border-cyan-100 bg-cyan-50/60 p-5 md:p-7">
           <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-800">Rövid összefoglaló</p>
           <ul className="mt-4 space-y-3">

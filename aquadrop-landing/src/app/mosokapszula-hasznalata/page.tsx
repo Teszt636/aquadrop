@@ -107,6 +107,15 @@ export default function MosokapszulaHasznalataPage() {
           </div>
         }
       >
+        <h2>Hogyan használd a mosókapszulát, hogy alacsony hőfokon is jól működjön?</h2>
+        <p>
+          Tedd a kapszulát közvetlenül a dob aljára, majd erre kerüljenek a ruhák. 20–30 fokon különösen fontos a
+          megfelelő programhossz és a dob helyes töltése, hogy a kapszula maradéktalanul feloldódjon.
+        </p>
+        <p>
+          Ha átlátható alaprutint szeretnél, indulj az <Link href="/energiatakarekos-mosas">energiatakarékos mosás</Link>{' '}
+          összefoglalóval, és onnan finomhangold a napi beállításaidat.
+        </p>
         <p>
           A kapszulás mosás népszerűsége nem véletlen: gyors, tiszta és jól tervezhető megoldás. Nem kell külön méricskélni
           a mosószert, ritkábban fordul elő túladagolás, és a napi rutin is egyszerűbbé válik. Ugyanakkor a
