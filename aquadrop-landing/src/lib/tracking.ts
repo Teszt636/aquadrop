@@ -1,3 +1,5 @@
+import { hasAnalyticsConsent, hasMarketingConsent } from '@/lib/consent';
+
 export const TRACKING_EVENT_NAMES = [
   'hero_primary_cta_click',
   'hero_secondary_cta_click',
@@ -27,7 +29,7 @@ export type TrackingPayload = Record<string, string | number | boolean | null | 
 declare global {
   interface Window {
     dataLayer?: Array<Record<string, unknown>>;
-    gtag?: (command: 'event', eventName: string, params?: Record<string, unknown>) => void;
+    gtag?: (command: 'event' | 'consent', eventName: string, params?: Record<string, unknown>) => void;
     fbq?: (command: 'trackCustom', eventName: string, params?: Record<string, unknown>) => void;
   }
 }
@@ -51,8 +53,13 @@ export function trackEvent(eventName: TrackingEventName, payload: TrackingPayloa
     ...eventPayload
   });
 
-  window.gtag?.('event', eventName, eventPayload);
-  window.fbq?.('trackCustom', eventName, eventPayload);
+  if (hasAnalyticsConsent()) {
+    window.gtag?.('event', eventName, eventPayload);
+  }
+
+  if (hasMarketingConsent()) {
+    window.fbq?.('trackCustom', eventName, eventPayload);
+  }
 
   if (process.env.NODE_ENV !== 'production') {
     console.debug('[tracking]', eventName, eventPayload);

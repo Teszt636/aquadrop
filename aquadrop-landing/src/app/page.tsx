@@ -167,8 +167,10 @@ export default function Home() {
 
         <main className="relative isolate flex w-full flex-col">
           <ScrollDepthTracker />
-          <HeroSection />
-          <HeroTrustStripSection />
+          <header>
+            <HeroSection />
+            <HeroTrustStripSection />
+          </header>
           <GiftConversionSection />
           <EnergySavingsSection />
           <DubaiSection />
@@ -186,7 +188,9 @@ export default function Home() {
           <SeoSection />
           <FaqSection items={faqItems} />
           <HomeResellerCta />
-          <FooterSection />
+          <footer>
+            <FooterSection />
+          </footer>
         </main>
       </div>
     </>
