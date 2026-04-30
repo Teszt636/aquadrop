@@ -23,9 +23,6 @@ export const metadata: Metadata = {
     'mosókapszula mosógépbe',
     'mosókapszula helyes használata'
   ],
-  alternates: {
-    canonical: '/mosokapszula-hasznalata'
-  },
   openGraph: {
     title: 'Mosókapszula használata: hova kell tenni és mennyit használj? | Aquadrop',
     description: articleDescription,

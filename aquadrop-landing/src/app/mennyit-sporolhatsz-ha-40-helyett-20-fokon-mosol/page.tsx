@@ -61,9 +61,6 @@ export const metadata: Metadata = {
     'alacsony hőfokú mosás',
     'mosás éves költsége'
   ],
-  alternates: {
-    canonical: '/mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol'
-  },
   openGraph: {
     title: 'Mennyit spórolhatsz, ha 40 helyett 20 fokon mosol? | Aquadrop',
     description: articleDescription,

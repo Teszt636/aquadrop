@@ -5,9 +5,6 @@ export const metadata: Metadata = {
   title: 'Adatvédelmi tájékoztató | Aquadrop',
   description:
     'Az Aquadrop weboldal adatvédelmi tájékoztatója a személyes adatok kezeléséről, sütikről, kapcsolatfelvételről és statisztikai mérésről.',
-  alternates: {
-    canonical: '/adatvedelmi-tajekoztato',
-  }
 };
 
 export default function PrivacyPolicyPage() {

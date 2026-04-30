@@ -24,9 +24,6 @@ export const metadata: Metadata = {
     'hogyan oldódik fel rendesen a mosókapszula',
     'mosókapszula helyes használata'
   ],
-  alternates: {
-    canonical: '/mosokapszula-nem-oldodik-fel'
-  },
   openGraph: {
     title: 'Miért nem oldódik fel a mosókapszula? Gyakori hibák és megoldások | Aquadrop',
     description: articleDescription,
