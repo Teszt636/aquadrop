@@ -7,9 +7,6 @@ export const metadata: Metadata = {
   title: 'Süti tájékoztató | Aquadrop',
   description:
     'Az Aquadrop weboldal süti tájékoztatója a használt sütikről, azok céljáról, időtartamáról és a hozzájárulás kezeléséről.',
-  alternates: {
-    canonical: '/suti-tajekoztato',
-  }
 };
 
 export default function CookiePolicyPage() {
