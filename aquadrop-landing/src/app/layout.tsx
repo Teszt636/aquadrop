@@ -33,8 +33,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="hu" data-scroll-behavior="smooth">
       <body>
-        {children}
-        <CookieConsentBanner />
+        <Script
+          id="google-consent-default"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              window.gtag = window.gtag || gtag;
+              gtag('consent', 'default', {
+                ad_storage: 'denied',
+                analytics_storage: 'denied',
+                ad_user_data: 'denied',
+                ad_personalization: 'denied',
+                wait_for_update: 500
+              });
+            `,
+          }}
+        />
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-KE6Z8CCYL4"
           strategy="afterInteractive"
@@ -46,11 +62,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             __html: `
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
+              window.gtag = window.gtag || gtag;
               gtag('js', new Date());
               gtag('config', 'G-KE6Z8CCYL4');
             `,
           }}
         />
+        {children}
+        <CookieConsentBanner />
       </body>
     </html>
   );
