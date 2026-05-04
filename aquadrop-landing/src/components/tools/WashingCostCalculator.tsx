@@ -110,10 +110,12 @@ function WashingCostCalculatorInner({
   return (
     <section className="rounded-[30px] border-2 border-cyan-200/70 bg-gradient-to-br from-white via-cyan-50/85 to-sky-50/90 p-6 shadow-[0_30px_80px_rgba(6,182,212,0.18)] ring-1 ring-cyan-200/40 md:p-10">
       <div className="space-y-6">
-        {showIntroBadge && <p className="mx-auto inline-flex rounded-full border border-cyan-200 bg-cyan-100/80 px-4 py-1 text-center text-xs font-semibold uppercase tracking-[0.2em] text-cyan-700">Interaktív kalkulátor</p>}
-        <div className="mx-auto max-w-3xl space-y-3 text-center">
-          <h3 className="text-2xl leading-tight text-slate-900 md:text-3xl">Becsült mosási költség hőfok és program szerint</h3>
-          <p className="text-slate-700">Válaszd ki a hőfokot, programhosszt és heti mosási rutint, majd hasonlítsd a becsült éves költséget a 20 °C / 18 perces baseline-hoz.</p>
+        <div className="space-y-3 text-center">
+          {showIntroBadge && <p className="mx-auto inline-flex justify-center rounded-full border border-cyan-200 bg-cyan-100/80 px-4 py-1 text-center text-xs font-semibold uppercase tracking-[0.2em] text-cyan-700">Interaktív kalkulátor</p>}
+          <div className="mx-auto max-w-3xl space-y-3 text-center">
+            <h3 className="text-center text-2xl leading-tight text-slate-900 md:text-3xl">Becsült mosási költség hőfok és program szerint</h3>
+            <p className="mx-auto max-w-2xl text-center text-slate-700">Válaszd ki a hőfokot, programhosszt és heti mosási rutint, majd hasonlítsd a becsült éves költséget a 20 °C / 18 perces baseline-hoz.</p>
+          </div>
         </div>
 
         <div className="grid gap-4">
