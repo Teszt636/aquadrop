@@ -1,44 +1,72 @@
+import Image from 'next/image';
+
 import { SectionHeading } from '@/components/ui';
 
 const steps = [
   {
     title: 'A textilhez tapad',
-    description: 'Az illatanyagokat mikroszkopikus kapszulák védik a textil felületén.'
+    description:
+      'Az illatanyagokat mikroszkopikus kapszulák védik, amelyek a textilszálak felületén maradnak.'
   },
   {
     title: 'Mozgásra aktiválódik',
-    description: 'A ruha mozgása és a súrlódás finoman megnyitja a kapszulákat.'
+    description:
+      'A ruha viselése, mozgása és finom súrlódása fokozatosan megnyitja a kapszulákat.'
   },
   {
     title: 'Újra érezhető az illat',
-    description: 'Az illat fokozatosan újra felszabadul, amikor a ruha mozgásba kerül.'
+    description:
+      'A friss illat nem egyszerre illan el, hanem a nap folyamán több hullámban szabadulhat fel.'
   }
 ];
 
-const benefits = [
-  'Hosszan tartó frissesség',
-  'Prémium illatélmény',
-  'Mozgásra aktiválódó technológia'
+const premiumBenefits = [
+  {
+    title: 'Érintésre ébredő illat',
+    description: 'Egy ölelés, mozgás vagy a ruha felvétele is új illathullámot szabadíthat fel.'
+  },
+  {
+    title: 'Hosszan tartó frissesség',
+    description:
+      'A kapszulák segítenek megóvni az illatanyagot, így a ruhák a tárolás után is frissebb érzetet adhatnak.'
+  },
+  {
+    title: 'Prémium illatélmény',
+    description:
+      'A fejlett illattechnológia a tisztaság mellé kifinomult, luxusérzetű frissességet ad.'
+  }
 ];
 
 export function MicrocapsuleMagicSection() {
   return (
     <section className="ds-section">
       <div className="ds-container">
-        <div className="ds-floating-panel space-y-7 px-5 py-7 sm:px-7 md:px-10 md:py-10">
+        <div className="ds-floating-panel space-y-7 px-5 py-7 sm:px-7 md:space-y-8 md:px-10 md:py-10">
           <div className="mx-auto max-w-3xl space-y-3 text-center">
             <SectionHeading>
               <span className="mt-4 block break-words text-center text-4xl leading-tight md:text-5xl">
                 Mikrokapszula varázslat
               </span>
               <span className="mt-4 block break-words text-center text-3xl leading-tight md:text-4xl">
-                az illat, ami újra és újra aktiválódik
+                Ahol a tudomány és a luxus találkozik
               </span>
             </SectionHeading>
-            <p className="text-lg font-semibold leading-relaxed text-brand-secondary md:text-xl">
-              Nem csak illatosít: a mikrokapszulás technológia mozgás közben újra és újra
-              felszabadítja a friss illatot.
+            <p className="text-base leading-relaxed text-brand-secondary md:text-lg">
+              Az Aquadropnál hisszük, hogy a tisztaság nemcsak látható, hanem érezhető is. A modern
+              mikrokapszulás illattechnológia segít abban, hogy a friss illat ne csak a mosás után
+              legyen jelen, hanem a ruhák viselése közben is újra és újra életre keljen.
             </p>
+          </div>
+
+          <div className="mx-auto mt-8 w-full max-w-5xl overflow-hidden rounded-3xl border border-cyan-100 bg-white/80 p-2 shadow-sm md:p-3">
+            <Image
+              src="/mikrokapszulas-mosokapszula-technologia.webp"
+              alt="Mikrokapszulás mosókapszula illattechnológia működése textilszálakon"
+              width={1536}
+              height={864}
+              className="h-auto w-full rounded-2xl object-contain"
+              sizes="(max-width: 768px) 100vw, 960px"
+            />
           </div>
 
           <div className="grid gap-4 md:grid-cols-3 md:gap-5">
@@ -56,26 +84,42 @@ export function MicrocapsuleMagicSection() {
             ))}
           </div>
 
-          <p className="text-center text-lg font-semibold leading-relaxed text-brand-secondary md:text-xl">
-            A “Friction Brings Fragrance” elven működő technológiával az illatanyagokat mikroszkopikus kapszulák zárják magukba, amelyek a textilszálakhoz tapadnak. Amikor az anyag súrlódik, ezek a kapszulák felnyílnak és friss illatot szabadítanak fel.
-          </p>
+          <article className="rounded-2xl border border-sky-100 bg-sky-50/40 p-5 text-center shadow-sm md:p-6">
+            <h3 className="text-xl font-bold text-slate-900">Miért különleges ez a technológia?</h3>
+            <p className="mx-auto mt-3 max-w-4xl text-sm leading-6 text-slate-700 md:text-base">
+              A hagyományos illatosítással szemben a mikrokapszulás megoldás nem egyszerre engedi el
+              az illatot. Az illatmolekulákat apró kapszulák védik, amelyek a textilszálakhoz
+              tapadnak, majd mozgás vagy súrlódás hatására fokozatosan nyílnak meg. Így a frissesség
+              érzete hosszabb ideig megmaradhat.
+            </p>
+          </article>
 
-          <ul className="grid gap-3 sm:grid-cols-3">
-            {benefits.map((benefit) => (
-              <li
-                key={benefit}
-                className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white/80 px-4 py-3 text-sm font-semibold text-slate-800 shadow-sm"
+          <div className="grid gap-3 md:grid-cols-3 md:gap-4">
+            {premiumBenefits.map((benefit) => (
+              <article
+                key={benefit.title}
+                className="rounded-2xl border border-slate-200 bg-white/85 p-4 shadow-sm md:p-5"
               >
-                <span
-                  aria-hidden="true"
-                  className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-primary/10 text-brand-primary"
-                >
-                  ✓
-                </span>
-                {benefit}
-              </li>
+                <div className="inline-flex items-center rounded-full bg-brand-primary/10 px-3 py-1 text-xs font-semibold text-brand-primary">
+                  Prémium előny
+                </div>
+                <h3 className="mt-3 text-base font-bold text-slate-900 md:text-lg">{benefit.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-700">{benefit.description}</p>
+              </article>
             ))}
-          </ul>
+          </div>
+
+          <article className="rounded-2xl border border-slate-200 bg-white/90 p-5 text-center shadow-sm md:p-7">
+            <h3 className="text-2xl font-bold text-slate-900 md:text-3xl">Dubai elegancia, svájci precizitás</h3>
+            <p className="mx-auto mt-3 max-w-4xl text-sm leading-6 text-slate-700 md:text-base">
+              Az Aquadrop Expert Pro nemcsak tisztításra készült. A koncentrált formula, a 4 kamrás
+              technológia és a szabályozott illatkibocsátás együtt olyan mosási élményt ad, ahol a
+              hatékonyság és a kényeztető frissesség egyszerre van jelen.
+            </p>
+            <p className="mt-4 text-base font-semibold text-brand-secondary md:text-lg">
+              Több mint tisztítás: élmény minden rostban.
+            </p>
+          </article>
         </div>
       </div>
     </section>

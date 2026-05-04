@@ -3,19 +3,16 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Mosókapszula – Aquadrop Expert Pro | 2+1 ajándék kapszula',
   description:
-    'Prémium mosókapszula Dubai gyártói háttérrel. Vásárolj 2 dobozt, a 3.-at ajándékba adjuk. Erős tisztítás, tartós illat, modern formula.',
-  alternates: {
-    canonical: '/',
-  },
+    'Fedezze fel az Aquadrop prémium világát! Dubai gyártói szakértelem és svájci Givaudan mikrokapszulás technológia találkozása a hosszan tartó, exkluzív illatélményért.',
   openGraph: {
     title: 'Mosókapszula – Aquadrop Expert Pro | 2+1 ajándék kapszula',
     description:
-      'Prémium mosókapszula Dubai gyártói háttérrel. Vásárolj 2 dobozt, a 3.-at ajándékba adjuk. Erős tisztítás, tartós illat, modern formula.',
+      'Fedezze fel az Aquadrop prémium világát! Dubai gyártói szakértelem és svájci Givaudan mikrokapszulás technológia találkozása a hosszan tartó, exkluzív illatélményért.',
     url: 'https://www.aquadrop.hu',
     siteName: 'Aquadrop Expert Pro',
     images: [
       {
-        url: '/og-image.png',
+        url: '/aquadrop-mosokapszula-og-kep.webp',
         width: 1200,
         height: 630,
         alt: 'Aquadrop Expert Pro mosókapszula'
@@ -28,8 +25,8 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Mosókapszula – Aquadrop Expert Pro | 2+1 ajándék kapszula',
     description:
-      'Prémium mosókapszula Dubai gyártói háttérrel. Vásárolj 2 dobozt, a 3.-at ajándékba adjuk. Erős tisztítás, tartós illat, modern formula.',
-    images: ['/og-image.png']
+      'Fedezze fel az Aquadrop prémium világát! Dubai gyártói szakértelem és svájci Givaudan mikrokapszulás technológia találkozása a hosszan tartó, exkluzív illatélményért.',
+    images: ['/aquadrop-mosokapszula-og-kep.webp']
   }
 };
 
@@ -44,6 +41,7 @@ import {
   GiftConversionSection,
   GiftSection,
   HeroSection,
+  HeroTrustStripSection,
   MicrocapsuleMagicSection,
   ProblemSection,
   SeoSection,
@@ -169,7 +167,10 @@ export default function Home() {
 
         <main className="relative isolate flex w-full flex-col">
           <ScrollDepthTracker />
-          <HeroSection />
+          <header>
+            <HeroSection />
+            <HeroTrustStripSection />
+          </header>
           <GiftConversionSection />
           <EnergySavingsSection />
           <DubaiSection />
@@ -187,7 +188,9 @@ export default function Home() {
           <SeoSection />
           <FaqSection items={faqItems} />
           <HomeResellerCta />
-          <FooterSection />
+          <footer>
+            <FooterSection />
+          </footer>
         </main>
       </div>
     </>

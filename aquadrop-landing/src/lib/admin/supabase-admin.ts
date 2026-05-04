@@ -1,4 +1,14 @@
 import { type AdminBaseTableName, type AdminTableViewName } from '@/lib/admin/table-config';
+import { type AdminRole } from '@/lib/admin/constants';
+
+type AdminUserRecord = {
+  id: string;
+  name: string;
+  email: string;
+  role: AdminRole;
+  is_active: boolean;
+  password_hash?: string | null;
+};
 
 function getSupabaseUrl(): string {
   const value = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -70,6 +80,8 @@ export async function fetchAdminTableRows(table: AdminTableViewName): Promise<Re
   const defaultOrder =
     table === 'reseller_applications'
       ? 'next_action_at.asc.nullslast,updated_at.desc.nullslast,created_at.desc.nullslast'
+      : table === 'gift_claims'
+        ? 'next_action_at.asc.nullslast,updated_at.desc.nullslast,created_at.desc.nullslast'
       : 'updated_at.desc.nullslast,created_at.desc.nullslast';
 
   let response = await fetchRowsWithOrder(sourceTable, defaultOrder, filters);
@@ -97,12 +109,42 @@ export async function fetchAdminTableRows(table: AdminTableViewName): Promise<Re
   return (await response.json()) as Record<string, unknown>[];
 }
 
-export async function fetchAdminUsers(): Promise<Record<string, unknown>[]> {
+export async function fetchAdminTableRowById(
+  table: AdminTableViewName,
+  id: string
+): Promise<Record<string, unknown> | null> {
+  const sourceTable = resolveSourceTable(table);
   const query = new URLSearchParams({
-    select: 'id,name,email',
+    select: '*',
+    id: `eq.${id}`,
+    limit: '1'
+  });
+
+  const response = await fetch(`${getRestUrl()}/${sourceTable}?${query.toString()}`, {
+    method: 'GET',
+    headers: getServiceHeaders(),
+    cache: 'no-store'
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to read ${sourceTable} row: ${response.status} ${await response.text()}`);
+  }
+
+  const rows = (await response.json()) as Record<string, unknown>[];
+  return rows[0] ?? null;
+}
+
+export async function fetchAdminUsers(includeInactive = true): Promise<AdminUserRecord[]> {
+  const query = new URLSearchParams({
+    select: 'id,name,email,role,is_active,created_at,updated_at',
     order: 'name.asc',
     limit: '200'
   });
+
+  if (!includeInactive) {
+    query.set('is_active', 'eq.true');
+  }
+
   const response = await fetch(`${getRestUrl()}/admin_users?${query.toString()}`, {
     method: 'GET',
     headers: getServiceHeaders(),
@@ -113,7 +155,147 @@ export async function fetchAdminUsers(): Promise<Record<string, unknown>[]> {
     throw new Error(`Failed to read admin_users: ${response.status} ${await response.text()}`);
   }
 
+  return (await response.json()) as AdminUserRecord[];
+}
+
+export async function fetchAdminUserByEmail(email: string): Promise<AdminUserRecord | null> {
+  const query = new URLSearchParams({
+    select: 'id,name,email,role,is_active,password_hash',
+    email: `eq.${email.toLowerCase()}`,
+    limit: '1'
+  });
+
+  const response = await fetch(`${getRestUrl()}/admin_users?${query.toString()}`, {
+    method: 'GET',
+    headers: getServiceHeaders(),
+    cache: 'no-store'
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to read admin user by email: ${response.status} ${await response.text()}`);
+  }
+
+  const rows = (await response.json()) as AdminUserRecord[];
+  return rows[0] ?? null;
+}
+
+export async function insertAdminUser(row: Record<string, unknown>): Promise<void> {
+  const response = await fetch(`${getRestUrl()}/admin_users`, {
+    method: 'POST',
+    headers: getServiceHeaders({ Prefer: 'return=minimal' }),
+    body: JSON.stringify([row])
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to insert admin user: ${response.status} ${await response.text()}`);
+  }
+}
+
+export async function findOrCreateAdminUser(params: {
+  email: string;
+  name: string;
+  role: AdminRole;
+  isActive?: boolean;
+}): Promise<AdminUserRecord> {
+  const normalizedEmail = params.email.trim().toLowerCase();
+  const isActive = params.isActive ?? true;
+
+  const existingUser = await fetchAdminUserByEmail(normalizedEmail);
+  if (existingUser) {
+    return existingUser;
+  }
+
+  try {
+    await insertAdminUser({
+      email: normalizedEmail,
+      name: params.name,
+      role: params.role,
+      is_active: isActive
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message.toLowerCase() : '';
+    const isConflict = message.includes('409') || message.includes('duplicate key');
+    if (!isConflict) {
+      throw error;
+    }
+  }
+
+  const createdUser = await fetchAdminUserByEmail(normalizedEmail);
+  if (createdUser) {
+    return createdUser;
+  }
+
+  throw new Error(`Failed to find or create admin user for ${normalizedEmail}.`);
+}
+
+export async function fetchResellerActivityLogs(resellerId: string): Promise<Record<string, unknown>[]> {
+  const query = new URLSearchParams({
+    select: '*',
+    reseller_application_id: `eq.${resellerId}`,
+    order: 'created_at.desc',
+    limit: '200'
+  });
+
+  const response = await fetch(`${getRestUrl()}/reseller_activity_logs?${query.toString()}`, {
+    method: 'GET',
+    headers: getServiceHeaders(),
+    cache: 'no-store'
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to read reseller_activity_logs: ${response.status} ${await response.text()}`);
+  }
+
   return (await response.json()) as Record<string, unknown>[];
+}
+
+export async function insertResellerActivityLogs(rows: Record<string, unknown>[]): Promise<void> {
+  if (rows.length === 0) return;
+
+  const response = await fetch(`${getRestUrl()}/reseller_activity_logs`, {
+    method: 'POST',
+    headers: getServiceHeaders({ Prefer: 'return=minimal' }),
+    body: JSON.stringify(rows)
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to insert reseller_activity_logs: ${response.status} ${await response.text()}`);
+  }
+}
+
+export async function fetchGiftActivityLogs(giftClaimId: string): Promise<Record<string, unknown>[]> {
+  const query = new URLSearchParams({
+    select: '*',
+    gift_claim_id: `eq.${giftClaimId}`,
+    order: 'created_at.desc',
+    limit: '200'
+  });
+
+  const response = await fetch(`${getRestUrl()}/gift_activity_logs?${query.toString()}`, {
+    method: 'GET',
+    headers: getServiceHeaders(),
+    cache: 'no-store'
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to read gift_activity_logs: ${response.status} ${await response.text()}`);
+  }
+
+  return (await response.json()) as Record<string, unknown>[];
+}
+
+export async function insertGiftActivityLogs(rows: Record<string, unknown>[]): Promise<void> {
+  if (rows.length === 0) return;
+
+  const response = await fetch(`${getRestUrl()}/gift_activity_logs`, {
+    method: 'POST',
+    headers: getServiceHeaders({ Prefer: 'return=minimal' }),
+    body: JSON.stringify(rows)
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to insert gift_activity_logs: ${response.status} ${await response.text()}`);
+  }
 }
 
 export async function patchAdminTableRow(

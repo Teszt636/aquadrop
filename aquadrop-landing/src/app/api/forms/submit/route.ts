@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 
 import { sendFormNotifications } from '@/lib/email/notifications';
 import type { EmailNotificationRequest } from '@/lib/email/types';
+import { buildGiftClaimStatusUrl } from '@/lib/gift/status';
 
 type AnnouncementSubmitRequest = {
   formType: 'announcement_signup';
@@ -39,6 +40,7 @@ type ResellerSubmitRequest = {
     website: string | null;
     sales_channel: string;
     message: string | null;
+    assigned_to?: string | null;
   };
 };
 
@@ -64,8 +66,6 @@ type SupabaseOperation = 'select' | 'insert';
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, '');
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const FREE_EMAIL_DOMAINS = ['gmail.com', 'freemail.hu', 'citromail.hu', 'yahoo.com', 'hotmail.com'];
-const DEFAULT_NEXT_ACTION_DESCRIPTION =
-  'A mai napon ellenőrizd a jelentkezőt és vedd fel vele a kapcsolatot a viszonteladói értékesítéssel kapcsolatban.';
 
 function getNextBusinessDayTenAmIso(from = new Date()): string {
   const next = new Date(Date.UTC(from.getUTCFullYear(), from.getUTCMonth(), from.getUTCDate(), 10, 0, 0, 0));
@@ -171,6 +171,36 @@ async function insertRow(table: string, payload: Record<string, unknown>): Promi
   }
 }
 
+async function getAdminUserIdByName(name: string): Promise<string | null> {
+  const query = new URLSearchParams({
+    select: 'id',
+    name: `eq.${name}`,
+    limit: '1'
+  });
+  const rows = await selectRows<{ id: string }>('admin_users', query);
+  return rows[0]?.id ?? null;
+}
+
+async function resolveDefaultResellerAssigneeId(explicitAssignedTo: unknown): Promise<string | null> {
+  if (typeof explicitAssignedTo === 'string') {
+    const normalizedAssignedTo = explicitAssignedTo.trim();
+    if (normalizedAssignedTo.length > 0) {
+      return normalizedAssignedTo;
+    }
+    return null;
+  }
+
+  const bartokCsabaId = await getAdminUserIdByName('Bartók Csaba');
+  if (!bartokCsabaId) {
+    console.warn('[forms][submit] Default reseller assignee not found', {
+      assigneeName: 'Bartók Csaba',
+      formType: 'reseller_application'
+    });
+  }
+
+  return bartokCsabaId;
+}
+
 export async function POST(request: Request) {
   let formType: SubmitRequest['formType'] | 'unknown' = 'unknown';
 
@@ -242,8 +272,15 @@ export async function POST(request: Request) {
       const existingRows = await selectRows<{ id: number }>('gift_claims', duplicateQuery);
       const duplicateDetected = existingRows.length > 0;
       const insertSkipped = duplicateDetected;
+      let createdStatusUrl: string | null = null;
 
       if (!duplicateDetected) {
+        const createdAt = new Date();
+        const nextActionAt = new Date(createdAt.getTime() + 24 * 60 * 60 * 1000);
+        const defaultAssigneeId = await getAdminUserIdByName('Bartók Csaba');
+        const statusToken = crypto.randomUUID();
+        createdStatusUrl = buildGiftClaimStatusUrl(statusToken);
+
         await insertRow('gift_claims', {
           full_name: normalizedFullName,
           email: normalizedEmail,
@@ -252,10 +289,21 @@ export async function POST(request: Request) {
           purchase_location: normalizedPurchaseLocation,
           purchase_date: normalizedPurchaseDate,
           status: 'Új',
+          pipeline_status: 'Új igénylés',
+          receipt_check_status: 'Ellenőrzésre vár',
+          shipping_status: 'Nincs előkészítve',
+          ai_check_status: 'Nincs ellenőrizve',
+          assigned_to: defaultAssigneeId,
+          created_at: createdAt.toISOString(),
+          next_action_at: nextActionAt.toISOString(),
+          next_action_description:
+            'Ellenőrizd a feltöltött blokkot, a vásárlás adatait és az igénylés jogosultságát.',
           consent: body.payload.consent,
           purchase_declaration: body.payload.purchase_declaration,
           receipt_url: normalizedReceiptUrl,
-          receipt_path: normalizedReceiptPath
+          receipt_path: normalizedReceiptPath,
+          status_token: statusToken,
+          status_token_created_at: createdAt.toISOString()
         });
       }
 
@@ -279,7 +327,8 @@ export async function POST(request: Request) {
           shippingAddress: normalizedShippingAddress,
           purchaseLocation: normalizedPurchaseLocation,
           purchaseDate: normalizedPurchaseDate,
-          receiptUrl: normalizedReceiptUrl
+          receiptUrl: normalizedReceiptUrl,
+          statusUrl: createdStatusUrl
         }
       });
 
@@ -314,6 +363,7 @@ export async function POST(request: Request) {
           message: normalizedMessage
         });
         const isHotLead = leadScore >= 60;
+        const assignedTo = await resolveDefaultResellerAssigneeId(body.payload.assigned_to);
 
         await insertRow('reseller_applications', {
           company_name: normalizedCompanyName,
@@ -323,10 +373,10 @@ export async function POST(request: Request) {
           website: normalizedWebsite,
           sales_channel: normalizedSalesChannel,
           message: normalizedMessage,
+          assigned_to: assignedTo,
           lead_score: leadScore,
           is_hot_lead: isHotLead,
-          next_action_at: getNextBusinessDayTenAmIso(),
-          next_action_description: DEFAULT_NEXT_ACTION_DESCRIPTION
+          next_action_at: getNextBusinessDayTenAmIso()
         });
       }
 

@@ -5,6 +5,7 @@ import { ArticleLayout } from '@/components/article/ArticleLayout';
 import { ButtonLink } from '@/components/ui';
 
 const articleTitle = 'Mosókapszula vagy folyékony mosószer – melyik a jobb választás?';
+const heroSubtitle = 'Mosókapszula vagy folyékony mosószer? A választás meglepően sokat elárul arról, mennyire kényelmes és kiszámítható a mosási rutinod.';
 const articleDescription =
   'Mosókapszula vagy folyékony mosószer? Összehasonlítjuk az előnyöket, hátrányokat és segítünk eldönteni, melyik megoldás illik leginkább a mindennapi mosáshoz.';
 const articleUrl = 'https://www.aquadrop.hu/mosokapszula-vagy-folyekony-mososzer';
@@ -22,9 +23,6 @@ export const metadata: Metadata = {
     'mosószer összehasonlítás',
     'kapszula vs folyékony mosószer'
   ],
-  alternates: {
-    canonical: '/mosokapszula-vagy-folyekony-mososzer'
-  },
   openGraph: {
     title: 'Mosókapszula vagy folyékony mosószer – melyik a jobb választás? | Aquadrop',
     description: articleDescription,
@@ -36,7 +34,7 @@ export const metadata: Metadata = {
     modifiedTime: `${publishedDate}T08:00:00.000Z`,
     images: [
       {
-        url: '/og-image.png',
+        url: '/aquadrop-mosokapszula-og-kep.webp',
         width: 1200,
         height: 630,
         alt: 'Aquadrop Expert Pro mosókapszula'
@@ -47,7 +45,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Mosókapszula vagy folyékony mosószer – melyik a jobb választás? | Aquadrop',
     description: articleDescription,
-    images: ['/og-image.png']
+    images: ['/aquadrop-mosokapszula-og-kep.webp']
   }
 };
 
@@ -57,7 +55,7 @@ export default function MosokapszulaVagyFolyekonyMososerPage() {
     '@type': 'BlogPosting',
     headline: articleTitle,
     description: articleDescription,
-    image: 'https://www.aquadrop.hu/og-image.png',
+    image: 'https://www.aquadrop.hu/aquadrop-mosokapszula-og-kep.webp',
     author: {
       '@type': 'Organization',
       name: 'Aquadrop',
@@ -90,7 +88,7 @@ export default function MosokapszulaVagyFolyekonyMososerPage() {
         slug="mosokapszula-vagy-folyekony-mososzer"
         category="Mosási útmutató"
         readingTime="kb. 12 perc olvasás"
-        title={articleTitle}
+        title={heroSubtitle}
         intro="Mosókapszula vagy folyékony mosószer? Ez az egyik leggyakoribb kérdés azok között, akik tudatosabban szeretnék kialakítani a mindennapi mosási rutinjukat. A döntés elsőre egyszerűnek tűnhet, valójában azonban több szempontot is érdemes mérlegelni: kényelmet, adagolhatóságot, hibalehetőségeket és azt, mennyire kiszámítható a végeredmény. Ebben az útmutatóban objektíven, érthetően és gyakorlati nézőpontból segítünk eldönteni, melyik megoldás illik leginkább hozzád."
         cta={
           <div className="rounded-[28px] border border-cyan-100/80 bg-gradient-to-br from-white via-cyan-50/80 to-teal-50/80 p-7 shadow-[0_22px_65px_rgba(15,23,42,0.1)] md:p-10">
@@ -107,6 +105,28 @@ export default function MosokapszulaVagyFolyekonyMososerPage() {
           </div>
         }
       >
+
+        <div className="rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5 md:p-6">
+          <p className="mt-3">A mosókapszula és folyékony mosószer közötti különbség főként az adagolás pontosságában, használati kényelemben és a célzott foltkezelési rugalmasságban jelenik meg.</p>
+          <p className="mt-3"><strong>Definíció:</strong> A mosókapszula és folyékony mosószer közötti különbség főként az adagolás pontosságában, használati kényelemben és a célzott foltkezelési rugalmasságban jelenik meg.</p>
+          <ul className="mt-4">
+            <li>A kapszula kényelmes és gyors, fix adagolással működik.</li>
+            <li>A folyékony mosószer rugalmasabb erősen szennyezett ruháknál.</li>
+            <li>A döntésnél a háztartási rutin és a mosási szokás a kulcs.</li>
+          </ul>
+          <p className="mt-3 font-semibold text-slate-800">Röviden: nincs egyetlen univerzális győztes, a legjobb választás az, ami a saját mosási ritmusodhoz illeszkedik.</p>
+        </div>
+
+        <h2>Mosókapszula vagy folyékony mosószer: melyik működik jobban a mindennapi rutinodban?</h2>
+        <p>
+          Nincs mindenkire érvényes egyetlen válasz: a legjobb választás az, ami a saját ruhatípusaidhoz, időbeosztásodhoz
+          és mosási szokásaidhoz passzol. Kapszulával általában egyszerűbb a napi adagolás, folyékonnyal rugalmasabb a
+          finomhangolás.
+        </p>
+        <p>
+          Döntés előtt érdemes átnézni az <Link href="/energiatakarekos-mosas">energiatakarékos mosás</Link> alapelveit
+          is, mert a hőfok és a programidő sokszor többet számít, mint maga a forma.
+        </p>
         <p>
           A modern háztartásokban a mosás már nem egyetlen, merev séma szerint történik. A programok, hőfokok,
           textiltípusok és élethelyzetek változatossága miatt természetes, hogy sokan keresik azt a mosószerformát,

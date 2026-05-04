@@ -22,3 +22,5 @@ export * from './FaqSection';
 export * from './EnergySavingsSection';
 
 export * from './PartnerMediaKitSection';
+
+export * from './HeroTrustStripSection';

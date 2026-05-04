@@ -20,6 +20,7 @@ export type GiftNotificationPayload = {
   purchaseLocation: string;
   purchaseDate: string;
   receiptUrl: string | null;
+  statusUrl?: string | null;
 };
 
 export type ResellerNotificationPayload = {

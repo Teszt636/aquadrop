@@ -1,3 +1,5 @@
+import { formatBudapestDateTime } from '@/lib/datetime/budapest';
+
 export type AnnouncementSignupEmailData = {
   name: string;
   email: string;
@@ -15,6 +17,8 @@ export type GiftClaimEmailData = {
   receiptUrl: string | null;
   submittedAt: string;
 };
+
+const GIFT_STATUS_CTA_TEXT = 'Igénylési folyamat állapota';
 
 export type ResellerApplicationEmailData = {
   companyName: string;
@@ -134,7 +138,8 @@ function buildUserEmailTemplate(params: {
   greetingName: string;
   title: string;
   paragraphs: string[];
-  ctaText: string;
+  ctaText?: string;
+  ctaUrl?: string;
 }): EmailTemplate {
   const bodyParagraphs = params.paragraphs
     .map(
@@ -152,7 +157,7 @@ function buildUserEmailTemplate(params: {
       headline: params.title,
       bodyHtml,
       ctaText: params.ctaText,
-      ctaUrl: getSiteUrl()
+      ctaUrl: params.ctaUrl ?? getSiteUrl()
     })
   };
 }
@@ -229,7 +234,7 @@ export function buildAnnouncementAdminEmail(data: AnnouncementSignupEmailData): 
   });
 }
 
-export function buildGiftUserEmail(name: string): EmailTemplate {
+export function buildGiftUserEmail(name: string, statusUrl?: string | null): EmailTemplate {
   return buildUserEmailTemplate({
     subject: 'Megkaptuk az ajándékigénylésed',
     greetingName: name,
@@ -237,7 +242,8 @@ export function buildGiftUserEmail(name: string): EmailTemplate {
     paragraphs: [
       'Köszönjük, hogy igényelted az Aquadrop ajándék mosókapszulát. Az igénylésed rendben megérkezett, jelenleg feldolgozás alatt van.'
     ],
-    ctaText: 'Megnézem az Aquadrop Expert Prót'
+    ctaText: statusUrl ? GIFT_STATUS_CTA_TEXT : undefined,
+    ctaUrl: statusUrl ?? undefined
   });
 }
 
@@ -313,4 +319,106 @@ export function buildResellerAdminEmail(data: ResellerApplicationEmailData): Ema
     ctaText: ADMIN_CTA_TEXT,
     ctaUrl: ADMIN_DASHBOARD_URL
   });
+}
+
+export type PartnerTaskLeadItem = {
+  companyName: string;
+  contactName: string;
+  nextActionAt: string | null;
+  nextActionDescription: string | null;
+  leadScore: number | null;
+  pipelineStatus: string | null;
+};
+
+const PARTNER_ADMIN_URL = 'https://www.aquadrop.hu/admin?tab=reseller_applications';
+
+function formatPartnerDate(value: string | null): string {
+  if (!value) {
+    return 'Nincs határidő';
+  }
+  return formatBudapestDateTime(value);
+}
+
+function renderPartnerLeadList(
+  title: string,
+  leads: PartnerTaskLeadItem[],
+  rowMapper: (lead: PartnerTaskLeadItem) => string
+): string {
+  if (leads.length === 0) {
+    return '';
+  }
+
+  const rows = leads
+    .map((lead) => {
+      return `<li style="margin: 0 0 10px; color: #1e293b;">${rowMapper(lead)}</li>`;
+    })
+    .join('');
+
+  return `
+    <h2 style="margin: 18px 0 10px; color: #0f172a; font-size: 19px;">${escapeHtml(title)}</h2>
+    <ul style="margin: 0; padding: 0 0 0 18px; color: #1e293b;">
+      ${rows}
+    </ul>
+  `;
+}
+
+export function buildPartnerDailyTasksEmail(params: {
+  overdueLeads: PartnerTaskLeadItem[];
+  todayLeads: PartnerTaskLeadItem[];
+  hotLeads: PartnerTaskLeadItem[];
+}): EmailTemplate {
+  const subject = '🔥 Mai teendőid – Aquadrop CRM Partner';
+
+  const summaryHtml = `
+    <p style="margin: 0 0 8px;"><strong>${params.overdueLeads.length}</strong> lead lejárt határidővel</p>
+    <p style="margin: 0 0 8px;"><strong>${params.todayLeads.length}</strong> mai teendő</p>
+    <p style="margin: 0 0 8px;"><strong>${params.hotLeads.length}</strong> hot lead</p>
+  `;
+
+  const overdueHtml = renderPartnerLeadList('Lejárt határidők', params.overdueLeads, (lead) => {
+    return `<strong>${escapeHtml(lead.companyName)}</strong> · ${escapeHtml(lead.contactName)} · Határidő: ${escapeHtml(formatPartnerDate(lead.nextActionAt))} · Teendő: ${escapeHtml(formatOptional(lead.nextActionDescription))}`;
+  });
+
+  const todayHtml = renderPartnerLeadList('Mai teendők', params.todayLeads, (lead) => {
+    return `<strong>${escapeHtml(lead.companyName)}</strong> · ${escapeHtml(lead.contactName)} · Határidő: ${escapeHtml(formatPartnerDate(lead.nextActionAt))} · Teendő: ${escapeHtml(formatOptional(lead.nextActionDescription))}`;
+  });
+
+  const hotHtml = renderPartnerLeadList('Hot leadek', params.hotLeads, (lead) => {
+    const leadScore = typeof lead.leadScore === 'number' ? String(lead.leadScore) : 'N/A';
+    return `<strong>${escapeHtml(lead.companyName)}</strong> · ${escapeHtml(lead.contactName)} · Lead score: ${escapeHtml(leadScore)} · Státusz: ${escapeHtml(formatOptional(lead.pipelineStatus))}`;
+  });
+
+  return {
+    subject,
+    html: renderBrandedEmailLayout({
+      subject,
+      headline: 'Mai partner CRM teendőid',
+      bodyHtml: `${summaryHtml}${overdueHtml}${todayHtml}${hotHtml}`,
+      ctaText: 'Admin megnyitása',
+      ctaUrl: PARTNER_ADMIN_URL
+    })
+  };
+}
+
+export function buildPartnerOneHourReminderEmail(lead: PartnerTaskLeadItem): EmailTemplate {
+  const subject = '🔥 Teendőd határideje 1 óra múlva lejár – Aquadrop CRM Partner';
+
+  const bodyHtml = `
+    <p style="margin: 0 0 12px; color: #475569;">Közeledik egy viszonteladói CRM teendő határideje:</p>
+    <p style="margin: 0 0 8px;"><strong>Cégnév:</strong> ${escapeHtml(lead.companyName)}</p>
+    <p style="margin: 0 0 8px;"><strong>Kapcsolattartó:</strong> ${escapeHtml(lead.contactName)}</p>
+    <p style="margin: 0 0 8px;"><strong>Határidő:</strong> ${escapeHtml(formatPartnerDate(lead.nextActionAt))}</p>
+    <p style="margin: 0;"><strong>Teendő:</strong> ${escapeHtml(formatOptional(lead.nextActionDescription))}</p>
+  `;
+
+  return {
+    subject,
+    html: renderBrandedEmailLayout({
+      subject,
+      headline: '1 órán belül lejáró teendő',
+      bodyHtml,
+      ctaText: 'Admin megnyitása',
+      ctaUrl: PARTNER_ADMIN_URL
+    })
+  };
 }

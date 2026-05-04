@@ -7,9 +7,6 @@ export const metadata: Metadata = {
   title: 'Prémium viszonteladói partnerprogram | Aquadrop',
   description:
     'Aquadrop B2B partner oldal viszonteladóknak: kevesebb reklamáció, elégedettebb vevők, könnyebb értékesítés. Jelentkezz partneri egyeztetésre.',
-  alternates: {
-    canonical: '/partner'
-  },
   openGraph: {
     title: 'Prémium viszonteladói partnerprogram | Aquadrop',
     description:

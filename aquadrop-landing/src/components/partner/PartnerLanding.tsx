@@ -284,7 +284,7 @@ export function PartnerLanding() {
               <div className="my-8 flex justify-center">
                 <div className="w-full max-w-md overflow-hidden rounded-2xl border border-white/15 bg-slate-900/60 shadow-[0_16px_28px_-26px_rgba(8,145,178,0.7)]">
                   <Image
-                    src="/aquadrop-partner-performance.png"
+                    src="/aquadrop-viszontelado-ertekesites-tamogatas.webp"
                     alt="Aquadrop partner teljesítmény vizuális összefoglaló"
                     width={920}
                     height={620}
@@ -323,7 +323,7 @@ export function PartnerLanding() {
               <div className="my-4 flex justify-center">
                 <div className="w-full max-w-lg overflow-hidden rounded-2xl border border-white/15 bg-slate-900/60 shadow-[0_16px_28px_-26px_rgba(8,145,178,0.7)]">
                   <Image
-                    src="/aquadrop-partner-performance.png"
+                    src="/aquadrop-viszontelado-ertekesites-tamogatas.webp"
                     alt="Aquadrop partner teljesítmény vizuális összefoglaló"
                     width={920}
                     height={620}

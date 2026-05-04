@@ -3,9 +3,6 @@ import { ThankYouPage } from '@/components/thank-you';
 
 export const metadata: Metadata = {
   title: 'Köszönjük a jelentkezést | Aquadrop',
-  alternates: {
-    canonical: '/koszonjuk/viszontelado',
-  }
 };
 
 export default function ResellerThankYouPage() {

@@ -2,8 +2,6 @@
 
 import Image from 'next/image';
 
-const miniTrustItems = ['8x tisztítóerő', 'Mikrokapszula varázslat', '4 az 1-ben hatás'];
-
 export function HeroSection() {
   return (
     <section className="ds-section bg-transparent">
@@ -37,8 +35,8 @@ export function HeroSection() {
             <div className="relative w-full rounded-[2rem] border border-white/40 bg-white/70 p-4 shadow-[0_20px_60px_rgba(15,23,42,0.10)] backdrop-blur-sm">
               <div className="relative aspect-[5/4] overflow-hidden rounded-[1.5rem]">
                 <Image
-                  src="/hero-aquadrop.png"
-                  alt="Aquadrop Expert Pro mosókapszula modern mosógép mellett"
+                  src="/aquadrop-mosokapszula-hero.webp"
+                  alt="Aquadrop mosókapszula 20 fokon is hatékony mosás"
                   fill
                   className="object-cover"
                   sizes="(max-width: 767px) 100vw, 50vw"
@@ -49,16 +47,7 @@ export function HeroSection() {
           </div>
         </div>
 
-        <div className="mt-6 grid w-full gap-3 rounded-3xl border border-white/35 bg-white/60 px-4 py-4 shadow-[0_16px_45px_rgba(15,23,42,0.08)] backdrop-blur-sm sm:grid-cols-3 sm:gap-4 sm:px-6">
-          {miniTrustItems.map((item) => (
-            <p
-              key={item}
-              className="text-center text-base font-bold text-slate-900 sm:border-r sm:border-slate-200 sm:last:border-r-0"
-            >
-              {item}
-            </p>
-          ))}
-        </div>
+
 
         {/* Mobilon csak itt jelenjen meg */}
         <p className="mt-10 max-w-2xl text-center text-sm leading-6 text-slate-600 md:hidden">

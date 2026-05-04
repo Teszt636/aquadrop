@@ -30,6 +30,8 @@ create table if not exists public.gift_claims (
   purchase_declaration boolean not null default false,
   status text not null default 'Új' check (status in ('Új', 'Feldolgozás alatt', 'Kész', 'Elutasítva')),
   admin_note text,
+  status_token text not null unique default gen_random_uuid()::text,
+  status_token_created_at timestamptz not null default now(),
   created_at timestamptz default now()
 );
 
@@ -53,8 +55,119 @@ alter table public.gift_claims
 add constraint gift_claims_status_check
 check (status in ('Új', 'Feldolgozás alatt', 'Kész', 'Elutasítva'));
 
+alter table public.gift_claims
+  add column if not exists pipeline_status text not null default 'Új igénylés',
+  add column if not exists next_action_at timestamptz,
+  add column if not exists next_action_description text,
+  add column if not exists last_contacted_at timestamptz,
+  add column if not exists previous_contacted_at timestamptz,
+  add column if not exists receipt_check_status text not null default 'Ellenőrzésre vár',
+  add column if not exists receipt_check_note text,
+  add column if not exists receipt_is_valid boolean,
+  add column if not exists purchase_eligible boolean,
+  add column if not exists shipping_status text not null default 'Nincs előkészítve',
+  add column if not exists courier_name text,
+  add column if not exists tracking_number text,
+  add column if not exists tracking_url text,
+  add column if not exists shipped_at timestamptz,
+  add column if not exists delivered_at timestamptz,
+  add column if not exists review_request_sent_at timestamptz,
+  add column if not exists review_request_email_status text,
+  add column if not exists ai_check_status text not null default 'Nincs ellenőrizve',
+  add column if not exists ai_check_result jsonb,
+  add column if not exists ai_confidence numeric,
+  add column if not exists updated_at timestamptz not null default now();
+
+update public.gift_claims
+set pipeline_status = case
+  when status = 'Új' then 'Új igénylés'
+  when status = 'Feldolgozás alatt' then 'Blokk ellenőrzés alatt'
+  when status = 'Kész' then 'Lezárva'
+  when status = 'Elutasítva' then 'Elutasítva'
+  else coalesce(nullif(pipeline_status, ''), 'Új igénylés')
+end;
+
+alter table public.gift_claims
+drop constraint if exists gift_claims_pipeline_status_check;
+
+alter table public.gift_claims
+add constraint gift_claims_pipeline_status_check
+check (
+  pipeline_status in (
+    'Új igénylés',
+    'Blokk ellenőrzés alatt',
+    'Hiánypótlás szükséges',
+    'Jóváhagyva',
+    'Csomagolás alatt',
+    'Futárnak átadva',
+    'Kézbesítve',
+    'Elutasítva',
+    'Lezárva'
+  )
+);
+
+alter table public.gift_claims
+drop constraint if exists gift_claims_receipt_check_status_check;
+
+alter table public.gift_claims
+add constraint gift_claims_receipt_check_status_check
+check (
+  receipt_check_status in (
+    'Ellenőrzésre vár',
+    'Érvényes blokk',
+    'Nem olvasható',
+    'Nem megfelelő termék',
+    'Duplikált blokk gyanú',
+    'Elutasítva'
+  )
+);
+
+alter table public.gift_claims
+drop constraint if exists gift_claims_shipping_status_check;
+
+alter table public.gift_claims
+add constraint gift_claims_shipping_status_check
+check (
+  shipping_status in (
+    'Nincs előkészítve',
+    'Csomagolásra vár',
+    'Csomagolva',
+    'Futárnak átadva',
+    'Kézbesítve',
+    'Sikertelen kézbesítés'
+  )
+);
+
+alter table public.gift_claims
+drop constraint if exists gift_claims_ai_check_status_check;
+
+alter table public.gift_claims
+add constraint gift_claims_ai_check_status_check
+check (
+  ai_check_status in (
+    'Nincs ellenőrizve',
+    'Ellenőrzés alatt',
+    'Elfogadva',
+    'Gyanús',
+    'Hibás',
+    'Kézi ellenőrzés szükséges'
+  )
+);
+
 create index if not exists gift_claims_email_idx
   on public.gift_claims (email);
+
+create unique index if not exists gift_claims_status_token_key
+  on public.gift_claims (status_token);
+
+create index if not exists gift_claims_next_action_idx
+  on public.gift_claims (next_action_at asc nulls last);
+
+create index if not exists gift_claims_assigned_to_idx
+  on public.gift_claims (assigned_to);
+
+create index if not exists gift_claims_pipeline_status_idx
+  on public.gift_claims (pipeline_status);
 
 create table if not exists public.reseller_applications (
   id uuid primary key default gen_random_uuid(),
@@ -74,8 +187,16 @@ create index if not exists reseller_applications_email_idx
 create table if not exists public.admin_users (
   id uuid primary key default gen_random_uuid(),
   name text not null,
-  email text not null unique
+  email text not null unique,
+  role text not null default 'crm_user' check (role in ('admin', 'crm_user')),
+  password_hash text,
+  is_active boolean not null default true,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
 );
+
+alter table public.gift_claims
+  add column if not exists assigned_to uuid references public.admin_users(id) on delete set null;
 
 alter table public.reseller_applications
   add column if not exists pipeline_status text not null default 'Új lead',
@@ -141,6 +262,27 @@ drop trigger if exists set_reseller_applications_updated_at on public.reseller_a
 create trigger set_reseller_applications_updated_at
 before update on public.reseller_applications
 for each row execute function public.set_updated_at_column();
+
+drop trigger if exists set_gift_claims_updated_at on public.gift_claims;
+create trigger set_gift_claims_updated_at
+before update on public.gift_claims
+for each row execute function public.set_updated_at_column();
+
+create table if not exists public.gift_activity_logs (
+  id uuid primary key default gen_random_uuid(),
+  gift_claim_id uuid not null references public.gift_claims(id) on delete cascade,
+  changed_by_user_id uuid references public.admin_users(id) on delete set null,
+  changed_by_name text,
+  changed_by_email text,
+  field_name text not null,
+  old_value text,
+  new_value text,
+  change_summary text,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists gift_activity_logs_claim_idx
+  on public.gift_activity_logs (gift_claim_id, created_at desc);
 
 create table if not exists public.media_kit_downloads (
   id uuid primary key default gen_random_uuid(),
@@ -300,3 +442,34 @@ on public.reseller_applications
 for delete
 to anon
 using (false);
+
+alter table public.reseller_applications
+  add column if not exists daily_task_email_sent_at timestamptz,
+  add column if not exists reminder_1h_email_sent_at timestamptz;
+
+create table if not exists public.crm_email_notifications (
+  id uuid primary key default gen_random_uuid(),
+  notification_type text not null check (notification_type in ('partner_daily_tasks', 'partner_1h_reminder')),
+  crm_type text not null default 'partner',
+  recipient_user_id uuid references public.admin_users(id) on delete set null,
+  recipient_email text not null,
+  reseller_application_id uuid references public.reseller_applications(id) on delete set null,
+  notification_date date,
+  next_action_at_snapshot timestamptz,
+  sent_at timestamptz not null default now(),
+  created_at timestamptz not null default now()
+);
+
+create index if not exists crm_email_notifications_recipient_user_idx
+  on public.crm_email_notifications (recipient_user_id, notification_type, notification_date desc);
+
+create index if not exists crm_email_notifications_reseller_idx
+  on public.crm_email_notifications (reseller_application_id, notification_type, next_action_at_snapshot desc);
+
+create unique index if not exists crm_email_notifications_daily_dedupe_idx
+  on public.crm_email_notifications (notification_type, crm_type, recipient_user_id, notification_date)
+  where notification_type = 'partner_daily_tasks';
+
+create unique index if not exists crm_email_notifications_reminder_dedupe_idx
+  on public.crm_email_notifications (notification_type, crm_type, reseller_application_id, next_action_at_snapshot)
+  where notification_type = 'partner_1h_reminder';

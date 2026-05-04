@@ -1,22 +1,50 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { CONSENT_KEY, type ConsentChoice } from '@/lib/consent';
 
-const CONSENT_KEY = 'aquadrop_cookie_consent';
+function updateGoogleConsent(choice: ConsentChoice) {
+  if (typeof window === 'undefined' || typeof window.gtag !== 'function') {
+    return;
+  }
+
+  const deniedState = {
+    ad_storage: 'denied',
+    analytics_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied'
+  } as const;
+
+  if (choice === 'accepted') {
+    window.gtag('consent', 'update', {
+      ad_storage: 'granted',
+      analytics_storage: 'granted',
+      ad_user_data: 'granted',
+      ad_personalization: 'granted'
+    });
+    return;
+  }
+
+  window.gtag('consent', 'update', deniedState);
+}
 
 export default function CookieConsentBanner() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const storedConsent = window.localStorage.getItem(CONSENT_KEY);
+    const storedConsent = window.localStorage.getItem(CONSENT_KEY) as ConsentChoice | null;
 
     if (!storedConsent) {
       setIsVisible(true);
+      return;
     }
+
+    updateGoogleConsent(storedConsent);
   }, []);
 
-  const handleChoice = (value: 'accepted' | 'rejected') => {
+  const handleChoice = (value: ConsentChoice) => {
     window.localStorage.setItem(CONSENT_KEY, value);
+    updateGoogleConsent(value);
     setIsVisible(false);
   };
 

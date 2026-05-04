@@ -1,3 +1,4 @@
+import { GoogleReviewCta } from '@/components/GoogleReviewCta';
 import { SectionDescription, SectionHeading } from '@/components/ui/SectionHeading';
 
 const testimonials = [
@@ -53,11 +54,15 @@ export function SocialProofSection() {
           <div className="mx-auto max-w-3xl text-center">
             <SectionHeading id="social-proof-heading">Miért szeretik sokan az Aquadrop Expert Pro-t?</SectionHeading>
             <SectionDescription className="mx-auto mt-4 text-base leading-7 sm:text-lg">
-              Valódi előnyök, amelyek a mindennapi használatban számítanak.
+              Valódi vásárlói visszajelzések és mindennapi használatban fontos előnyök.
             </SectionDescription>
           </div>
 
-          <div className="testimonials-carousel mx-auto mt-10 max-w-6xl overflow-x-auto rounded-2xl [-webkit-overflow-scrolling:touch] [scrollbar-width:none] touch-pan-x">
+          <p className="mt-6 text-center text-xs text-slate-500 sm:text-sm">
+            Vásárlói tapasztalatok alapján összeállított visszajelzések.
+          </p>
+
+          <div className="testimonials-carousel mx-auto mt-6 max-w-6xl overflow-x-auto rounded-2xl [-webkit-overflow-scrolling:touch] [scrollbar-width:none] touch-pan-x">
             <div className="testimonials-track flex w-max gap-4 pb-2">
               {carouselTestimonials.map((testimonial, index) => (
                 <article
@@ -81,6 +86,16 @@ export function SocialProofSection() {
               ))}
             </div>
           </div>
+
+          <GoogleReviewCta
+            variant="compact"
+            placement="social_proof"
+            className="mx-auto mt-8 max-w-2xl text-center"
+            title="Te is kipróbáltad már?"
+            description="Írd meg röviden a tapasztalatodat Google-ben, és segíts más vásárlóknak a döntésben."
+            buttonText="Értékelést írok"
+          />
+
         </div>
       </div>
     </section>

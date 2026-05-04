@@ -2,10 +2,9 @@ import type { Metadata } from 'next';
 import Script from 'next/script';
 import CookieConsentBanner from '@/components/CookieConsentBanner';
 import './globals.css';
-import { PRIMARY_ORIGIN } from '@/lib/site';
 
 export const metadata: Metadata = {
-  metadataBase: new URL(PRIMARY_ORIGIN),
+  metadataBase: new URL('https://www.aquadrop.hu'),
   title: {
     default: 'Mosókapszula – Aquadrop Expert Pro | 2+1 ajándék kapszula',
     template: '%s | Aquadrop Expert Pro',
@@ -14,6 +13,9 @@ export const metadata: Metadata = {
     'Prémium mosókapszula Dubai gyártói háttérrel. Vásárolj 2 dobozt, a 3.-at ajándékba adjuk. Erős tisztítás, tartós illat, modern formula.',
   alternates: {
     canonical: '/',
+  },
+  openGraph: {
+    url: 'https://www.aquadrop.hu/',
   },
   robots: {
     index: true,
@@ -31,8 +33,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="hu" data-scroll-behavior="smooth">
       <body>
-        {children}
-        <CookieConsentBanner />
+        <Script
+          id="google-consent-default"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              window.gtag = window.gtag || gtag;
+              gtag('consent', 'default', {
+                ad_storage: 'denied',
+                analytics_storage: 'denied',
+                ad_user_data: 'denied',
+                ad_personalization: 'denied',
+                wait_for_update: 500
+              });
+            `,
+          }}
+        />
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-KE6Z8CCYL4"
           strategy="afterInteractive"
@@ -44,11 +62,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             __html: `
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
+              window.gtag = window.gtag || gtag;
               gtag('js', new Date());
               gtag('config', 'G-KE6Z8CCYL4');
             `,
           }}
         />
+        {children}
+        <CookieConsentBanner />
       </body>
     </html>
   );

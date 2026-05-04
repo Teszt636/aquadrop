@@ -5,6 +5,7 @@ import { ArticleLayout } from '@/components/article/ArticleLayout';
 import { ButtonLink } from '@/components/ui';
 
 const articleTitle = 'Hogyan mossunk hatékonyan 20 fokon?';
+const heroSubtitle = 'A 20 fokos mosás nem kompromisszum: jól beállítva meglepően hatékony, miközben kíméli az anyagokat és az energiát is.';
 const articleDescription =
   'Ismerd meg, hogyan lehet 20 fokon is hatékonyan mosni. Megmutatjuk, mire figyelj az alacsony hőfokú mosásnál, hogy a ruhák tiszták, a mosás pedig energiatakarékos maradjon.';
 const articleUrl = 'https://www.aquadrop.hu/hogyan-mossunk-20-fokon';
@@ -54,9 +55,6 @@ export const metadata: Metadata = {
     'textilkímélő mosás',
     'foltmentes mosás alacsony hőfokon'
   ],
-  alternates: {
-    canonical: '/hogyan-mossunk-20-fokon'
-  },
   openGraph: {
     title: 'Hogyan mossunk hatékonyan 20 fokon? | Aquadrop',
     description: articleDescription,
@@ -68,7 +66,7 @@ export const metadata: Metadata = {
     modifiedTime: `${publishedDate}T08:00:00.000Z`,
     images: [
       {
-        url: '/og-image.png',
+        url: '/aquadrop-mosokapszula-og-kep.webp',
         width: 1200,
         height: 630,
         alt: 'Hogyan mossunk hatékonyan 20 fokon? - Aquadrop útmutató'
@@ -79,7 +77,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Hogyan mossunk hatékonyan 20 fokon? | Aquadrop',
     description: articleDescription,
-    images: ['/og-image.png']
+    images: ['/aquadrop-mosokapszula-og-kep.webp']
   }
 };
 
@@ -89,7 +87,7 @@ export default function HogyanMossunk20FokonPage() {
     '@type': 'Article',
     headline: articleTitle,
     description: articleDescription,
-    image: 'https://www.aquadrop.hu/og-image.png',
+    image: 'https://www.aquadrop.hu/aquadrop-mosokapszula-og-kep.webp',
     author: {
       '@type': 'Organization',
       name: 'Aquadrop',
@@ -133,7 +131,7 @@ export default function HogyanMossunk20FokonPage() {
         slug="hogyan-mossunk-20-fokon"
         category="Mosási útmutató"
         readingTime="kb. 8 perc olvasás"
-        title={articleTitle}
+        title={heroSubtitle}
         intro="A 20 fokos mosás ma már nem különleges megoldás, hanem egyre több energiatudatos háztartás alapbeállítása. A jó eredmény azonban nem csak a hőfokon múlik: a programidő, a kapszula elhelyezése, az adagolás és a dob töltöttsége együtt adja azt a stabil mosási folyamatot, amely alacsony hőfokon is megbízható tisztaságot tud biztosítani."
         cta={
           <div className="rounded-[28px] border border-cyan-100/80 bg-gradient-to-br from-white via-cyan-50/80 to-teal-50/80 p-7 shadow-[0_22px_65px_rgba(15,23,42,0.1)] md:p-10">
@@ -155,6 +153,27 @@ export default function HogyanMossunk20FokonPage() {
           </div>
         }
       >
+
+        <div className="rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5 md:p-6">
+          <p className="mt-3">A 20 fokos mosás olyan alacsony hőfokú tisztítási módszer, amely megfelelő programidővel és adagolással mindennapi ruháknál is jó eredményt adhat.</p>
+          <p className="mt-3"><strong>Definíció:</strong> A 20 fokos mosás olyan alacsony hőfokú tisztítási módszer, amely megfelelő programidővel és adagolással mindennapi ruháknál is jó eredményt adhat.</p>
+          <ul className="mt-4">
+            <li>A programidő legyen elég hosszú a megfelelő oldódáshoz.</li>
+            <li>A dob töltöttsége maradjon egyenletes, ne legyen túlzsúfolt.</li>
+            <li>A kapszula elhelyezése és a stabil rutin döntő jelentőségű.</li>
+          </ul>
+          <p className="mt-3 font-semibold text-slate-800">Egy mondatban: 20 fokon is lehet tiszta, friss eredményt elérni, ha a rutin minden eleme tudatos.</p>
+        </div>
+
+        <h2>Hogyan moss hatékonyan 20 fokon úgy, hogy a ruhák valóban tiszták maradjanak?</h2>
+        <p>
+          A 20 fokos mosás akkor stabil, ha a hőfok mellé megfelelő programidő, jó kapszulaelhelyezés és nem túlzsúfolt
+          dob társul. Így egyszerre csökkentheted az energiaigényt és tarthatod meg a tisztaságérzetet.
+        </p>
+        <p>
+          Kiinduláshoz olvasd el az <Link href="/energiatakarekos-mosas">energiatakarékos mosás</Link> áttekintőt, majd
+          ehhez igazítsd a saját 20 fokos rutinodat.
+        </p>
         <p>
           Sokan azért kezdenek el a <strong>20 fokos mosás</strong> iránt érdeklődni, mert szeretnének kevesebb energiát
           használni és közben a ruháikat is kímélni. Az alacsonyabb hőfok elsőre logikus döntésnek tűnik, mégis gyakori

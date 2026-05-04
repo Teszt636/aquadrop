@@ -1,8 +1,12 @@
+
+import { formatBudapestDateTime } from '@/lib/datetime/budapest';
+
 export type AdminBaseTableName =
   | 'announcement_signups'
   | 'gift_claims'
   | 'reseller_applications'
-  | 'media_kit_downloads';
+  | 'media_kit_downloads'
+  | 'admin_users';
 
 export type AdminTableViewName = AdminBaseTableName | 'unsubscribed';
 
@@ -50,10 +54,6 @@ function normalizeDateValue(value: unknown): Date | null {
   return parsed;
 }
 
-function pad(value: number): string {
-  return value.toString().padStart(2, '0');
-}
-
 export function formatAdminDate(value: unknown): string {
   const parsed = normalizeDateValue(value);
 
@@ -61,7 +61,17 @@ export function formatAdminDate(value: unknown): string {
     return '-';
   }
 
-  return `${parsed.getFullYear()}.${pad(parsed.getMonth() + 1)}.${pad(parsed.getDate())} ${parsed.getHours()}:${pad(parsed.getMinutes())}`;
+  return formatBudapestDateTime(parsed.toISOString());
+}
+
+export function formatAdminDateShort(value: unknown): string {
+  const parsed = normalizeDateValue(value);
+
+  if (!parsed) {
+    return '-';
+  }
+
+  return formatBudapestDateTime(parsed.toISOString()).slice(0, 10);
 }
 
 export function formatDownloadedFile(value: unknown): string {
@@ -94,6 +104,41 @@ export function formatUsageType(value: unknown): string {
 }
 
 export const GIFT_STATUS_OPTIONS = ['Új', 'Feldolgozás alatt', 'Kész', 'Elutasítva'];
+export const GIFT_PIPELINE_STATUS_OPTIONS = [
+  'Új igénylés',
+  'Blokk ellenőrzés alatt',
+  'Hiánypótlás szükséges',
+  'Jóváhagyva',
+  'Csomagolás alatt',
+  'Futárnak átadva',
+  'Kézbesítve',
+  'Elutasítva',
+  'Lezárva'
+];
+export const GIFT_RECEIPT_CHECK_STATUS_OPTIONS = [
+  'Ellenőrzésre vár',
+  'Érvényes blokk',
+  'Nem olvasható',
+  'Nem megfelelő termék',
+  'Duplikált blokk gyanú',
+  'Elutasítva'
+];
+export const GIFT_SHIPPING_STATUS_OPTIONS = [
+  'Nincs előkészítve',
+  'Csomagolásra vár',
+  'Csomagolva',
+  'Futárnak átadva',
+  'Kézbesítve',
+  'Sikertelen kézbesítés'
+];
+export const GIFT_AI_CHECK_STATUS_OPTIONS = [
+  'Nincs ellenőrizve',
+  'Ellenőrzés alatt',
+  'Elfogadva',
+  'Gyanús',
+  'Hibás',
+  'Kézi ellenőrzés szükséges'
+];
 export const RESELLER_PIPELINE_OPTIONS = [
   'Új lead',
   'Felhívandó',
@@ -176,12 +221,58 @@ export const adminTableConfigs: Record<AdminTableViewName, AdminTableConfig> = {
     newRowHighlight: (row) => getGiftStatusValue(row) === 'Új',
     columns: [
       {
+        key: 'pipeline_status',
+        label: 'Pipeline státusz',
+        editable: true,
+        inputType: 'select',
+        type: 'badge',
+        options: GIFT_PIPELINE_STATUS_OPTIONS
+      },
+      {
+        key: 'receipt_check_status',
+        label: 'Blokk státusz',
+        editable: true,
+        inputType: 'select',
+        type: 'badge',
+        options: GIFT_RECEIPT_CHECK_STATUS_OPTIONS
+      },
+      {
+        key: 'shipping_status',
+        label: 'Szállítás státusz',
+        editable: true,
+        inputType: 'select',
+        type: 'badge',
+        options: GIFT_SHIPPING_STATUS_OPTIONS
+      },
+      { key: 'assigned_to', label: 'Felelős', editable: true, hiddenInTable: true },
+      { key: 'next_action_at', label: 'Határidő', editable: true, inputType: 'datetime-local', type: 'date' },
+      {
+        key: 'next_action_description',
+        label: 'Következő teendő',
+        editable: true,
+        inputType: 'textarea',
+        hiddenInTable: true
+      },
+      { key: 'last_contacted_at', label: 'Utolsó kapcsolat', editable: true, inputType: 'datetime-local', type: 'date', hiddenInTable: true },
+      { key: 'previous_contacted_at', label: 'Előző kapcsolat', type: 'date', hiddenInTable: true },
+      { key: 'receipt_is_valid', label: 'Blokk érvényes', editable: true, inputType: 'select', options: ['Nincs megadva', 'Igen', 'Nem'], hiddenInTable: true },
+      { key: 'purchase_eligible', label: 'Jogosult vásárlás', editable: true, inputType: 'select', options: ['Nincs megadva', 'Igen', 'Nem'], hiddenInTable: true },
+      { key: 'receipt_check_note', label: 'Ellenőrzési megjegyzés', editable: true, inputType: 'textarea', hiddenInTable: true },
+      { key: 'courier_name', label: 'Futárszolgálat', editable: true, hiddenInTable: true },
+      { key: 'tracking_number', label: 'Tracking number', editable: true },
+      { key: 'tracking_url', label: 'Tracking URL', editable: true, hiddenInTable: true },
+      { key: 'shipped_at', label: 'Feladva', editable: true, inputType: 'datetime-local', type: 'date', hiddenInTable: true },
+      { key: 'delivered_at', label: 'Kézbesítve', editable: true, inputType: 'datetime-local', type: 'date', hiddenInTable: true },
+      { key: 'ai_check_status', label: 'AI ellenőrzés', editable: true, inputType: 'select', options: GIFT_AI_CHECK_STATUS_OPTIONS, hiddenInTable: true },
+      { key: 'ai_confidence', label: 'AI confidence', editable: true, inputType: 'number', hiddenInTable: true },
+      {
         key: 'status',
         label: 'Státusz',
         editable: true,
         inputType: 'select',
         options: GIFT_STATUS_OPTIONS,
-        formatter: (value) => (typeof value === 'string' && value.trim() ? value : 'Új')
+        formatter: (value) => (typeof value === 'string' && value.trim() ? value : 'Új'),
+        hiddenInTable: true
       },
       { key: 'full_name', label: 'Név', editable: true },
       { key: 'email', label: 'Email', editable: true },
@@ -254,6 +345,19 @@ export const adminTableConfigs: Record<AdminTableViewName, AdminTableConfig> = {
       { key: 'usage_type', label: 'Felület', formatter: formatUsageType },
       { key: 'downloaded_file', label: 'Letöltve', type: 'mapped', formatter: formatDownloadedFile },
       { key: 'created_at', label: 'Letöltés ideje', type: 'date' },
+      { key: 'id', label: 'ID', hiddenInTable: true, hiddenInDetails: true }
+    ]
+  },
+  admin_users: {
+    label: 'Felhasználók',
+    sourceTable: 'admin_users',
+    columns: [
+      { key: 'name', label: 'Név', editable: true },
+      { key: 'email', label: 'Email', editable: true },
+      { key: 'role', label: 'Jogosultság' },
+      { key: 'is_active', label: 'Aktív', type: 'boolean', editable: true, inputType: 'checkbox' },
+      { key: 'created_at', label: 'Létrehozva', type: 'date' },
+      { key: 'updated_at', label: 'Módosítva', type: 'date' },
       { key: 'id', label: 'ID', hiddenInTable: true, hiddenInDetails: true }
     ]
   }
