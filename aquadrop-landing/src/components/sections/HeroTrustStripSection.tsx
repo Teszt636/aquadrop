@@ -3,15 +3,15 @@ import { Droplets, ShieldCheck, Sparkles } from 'lucide-react';
 const trustItems = [
   {
     icon: Sparkles,
-    text: 'Prémium 4 az 1-ben mosókapszula'
-  },
-  {
-    icon: ShieldCheck,
-    text: 'Vásárlói tapasztalatokra épített termékkommunikáció'
+    text: '4 az 1-ben prémium mosókapszula'
   },
   {
     icon: Droplets,
-    text: 'Hatékony mosási élmény már alacsony hőfokon is'
+    text: 'Mikrokapszulás technológia'
+  },
+  {
+    icon: ShieldCheck,
+    text: 'Hatékony mosás alacsony hőfokon is'
   }
 ];
 
