@@ -58,16 +58,15 @@ export function MicrocapsuleMagicSection() {
             </p>
           </div>
 
-          <div className="relative mx-auto w-full max-w-4xl overflow-hidden rounded-2xl border border-slate-200 bg-white/80 p-3 shadow-sm">
-            <div className="relative aspect-[16/9] overflow-hidden rounded-xl">
-              <Image
-                src="/mikrokapszulas-mosokapszula-technologia.webp"
-                alt="Mikrokapszulás mosókapszula illattechnológia működése"
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 1024px"
-              />
-            </div>
+          <div className="mx-auto mt-8 w-full max-w-5xl overflow-hidden rounded-3xl border border-cyan-100 bg-white/80 p-2 shadow-sm md:p-3">
+            <Image
+              src="/mikrokapszulas-mosokapszula-technologia.webp"
+              alt="Mikrokapszulás mosókapszula illattechnológia működése textilszálakon"
+              width={1536}
+              height={864}
+              className="h-auto w-full rounded-2xl object-contain"
+              sizes="(max-width: 768px) 100vw, 960px"
+            />
           </div>
 
           <div className="grid gap-4 md:grid-cols-3 md:gap-5">
