@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: 'https://www.aquadrop.hu/20-fokos-mosas-megtakaritas-aquadrop.jpg',
+        url: 'https://www.aquadrop.hu/20-fokos-mosas-megtakaritas-aquadrop-og.jpg',
         width: 1200,
         height: 630,
         alt: 'Mosási költség kalkulátor 20 fokos mosás megtakarítás'
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Mosási költség kalkulátor – 20 fokos mosás megtakarítás',
     description: 'Számold ki, mennyit spórolhatsz alacsony hőfokú mosással.',
-    images: ['https://www.aquadrop.hu/20-fokos-mosas-megtakaritas-aquadrop.jpg']
+    images: ['https://www.aquadrop.hu/20-fokos-mosas-megtakaritas-aquadrop-og.jpg']
   }
 };
 
