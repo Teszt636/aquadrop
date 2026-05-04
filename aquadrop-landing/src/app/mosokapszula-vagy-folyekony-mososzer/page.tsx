@@ -23,6 +23,9 @@ export const metadata: Metadata = {
     'mosószer összehasonlítás',
     'kapszula vs folyékony mosószer'
   ],
+  alternates: {
+    canonical: articleUrl,
+  },
   openGraph: {
     title: 'Mosókapszula vagy folyékony mosószer – melyik a jobb választás? | Aquadrop',
     description: articleDescription,
