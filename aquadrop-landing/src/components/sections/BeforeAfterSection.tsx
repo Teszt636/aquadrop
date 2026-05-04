@@ -117,8 +117,8 @@ export function BeforeAfterSection() {
               aria-hidden="true"
             >
               <Image
-                src="/shirt-after.jpg"
-                alt="Tiszta ing a tisztítás után"
+                src="/tiszta-ruha-mosas-utan.webp"
+                alt="Tiszta ruha mosás után Aquadrop használatával"
                 fill
                 priority
                 sizes="(max-width: 768px) 100vw, 768px"
@@ -135,8 +135,8 @@ export function BeforeAfterSection() {
               aria-hidden="true"
             >
               <Image
-                src="/shirt-before.jpg"
-                alt="Koszos ing a tisztítás előtt"
+                src="/foltos-ruha-mosas-elott.webp"
+                alt="Foltos ruha mosás előtt"
                 fill
                 priority
                 sizes="(max-width: 768px) 100vw, 768px"

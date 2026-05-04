@@ -73,7 +73,7 @@ export const metadata: Metadata = {
     modifiedTime: `${publishedDate}T08:00:00.000Z`,
     images: [
       {
-        url: '/og-image.png',
+        url: '/aquadrop-mosokapszula-og-kep.webp',
         width: 1200,
         height: 630,
         alt: 'Energiatakarékos mosás Aquadrop Expert Pro megoldással'
@@ -84,7 +84,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Energiatakarékos mosás: tiszta ruhák alacsony hőfokon is | Aquadrop',
     description: articleDescription,
-    images: ['/og-image.png']
+    images: ['/aquadrop-mosokapszula-og-kep.webp']
   }
 };
 
@@ -94,7 +94,7 @@ export default function EnergiatakarekosMosasPage() {
     '@type': 'BlogPosting',
     headline: articleTitle,
     description: articleDescription,
-    image: 'https://www.aquadrop.hu/og-image.png',
+    image: 'https://www.aquadrop.hu/aquadrop-mosokapszula-og-kep.webp',
     author: {
       '@type': 'Organization',
       name: 'Aquadrop',

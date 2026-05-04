@@ -46,8 +46,8 @@ export function TechnologySection() {
               <div className="relative mx-auto w-full max-w-[420px] overflow-hidden rounded-3xl border border-slate-200/80 bg-white/80 p-4 shadow-card sm:p-5">
                 <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-slate-50">
                   <Image
-                    src="/aquadrop-product.jpg"
-                    alt="Aquadrop Expert Pro mosókapszula dobozos kiszerelésben"
+                    src="/aquadrop-expert-pro-mosokapszula.webp"
+                    alt="Aquadrop Expert Pro mosókapszula 4 kamrás technológia"
                     fill
                     className="object-cover"
                     sizes="(max-width: 1023px) 100vw, 420px"

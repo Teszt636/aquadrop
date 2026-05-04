@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 import { SectionHeading } from '@/components/ui';
 
 const steps = [
@@ -54,6 +56,18 @@ export function MicrocapsuleMagicSection() {
               mikrokapszulás illattechnológia segít abban, hogy a friss illat ne csak a mosás után
               legyen jelen, hanem a ruhák viselése közben is újra és újra életre keljen.
             </p>
+          </div>
+
+          <div className="relative mx-auto w-full max-w-4xl overflow-hidden rounded-2xl border border-slate-200 bg-white/80 p-3 shadow-sm">
+            <div className="relative aspect-[16/9] overflow-hidden rounded-xl">
+              <Image
+                src="/mikrokapszulas-mosokapszula-technologia.webp"
+                alt="Mikrokapszulás mosókapszula illattechnológia működése"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 1024px"
+              />
+            </div>
           </div>
 
           <div className="grid gap-4 md:grid-cols-3 md:gap-5">

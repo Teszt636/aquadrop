@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     modifiedTime: `${publishedDate}T08:00:00.000Z`,
     images: [
       {
-        url: '/og-image.png',
+        url: '/aquadrop-mosokapszula-og-kep.webp',
         width: 1200,
         height: 630,
         alt: 'Aquadrop Expert Pro mosókapszula'
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Miért nem oldódik fel a mosókapszula? Gyakori hibák és megoldások | Aquadrop',
     description: articleDescription,
-    images: ['/og-image.png']
+    images: ['/aquadrop-mosokapszula-og-kep.webp']
   }
 };
 
@@ -56,7 +56,7 @@ export default function MosokapszulaNemOldodikFelPage() {
     '@type': 'BlogPosting',
     headline: articleTitle,
     description: articleDescription,
-    image: 'https://www.aquadrop.hu/og-image.png',
+    image: 'https://www.aquadrop.hu/aquadrop-mosokapszula-og-kep.webp',
     author: {
       '@type': 'Organization',
       name: 'Aquadrop',

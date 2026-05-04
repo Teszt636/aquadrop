@@ -35,8 +35,8 @@ export function HeroSection() {
             <div className="relative w-full rounded-[2rem] border border-white/40 bg-white/70 p-4 shadow-[0_20px_60px_rgba(15,23,42,0.10)] backdrop-blur-sm">
               <div className="relative aspect-[5/4] overflow-hidden rounded-[1.5rem]">
                 <Image
-                  src="/hero-aquadrop.png"
-                  alt="Aquadrop Expert Pro mosókapszula modern mosógép mellett"
+                  src="/aquadrop-mosokapszula-hero.webp"
+                  alt="Aquadrop mosókapszula 20 fokon is hatékony mosás"
                   fill
                   className="object-cover"
                   sizes="(max-width: 767px) 100vw, 50vw"
