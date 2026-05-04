@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 
 import { ArticleLayout } from '@/components/article/ArticleLayout';
@@ -108,6 +109,17 @@ export default function MosokapszulaVagyFolyekonyMososerPage() {
           </div>
         }
       >
+        <figure className="overflow-hidden rounded-2xl border border-cyan-100 bg-white/80 shadow-sm">
+          <Image
+            src="/mosokapszula-vagy-folyekony-mososzer.webp"
+            alt="Mosókapszula és folyékony mosószer összehasonlítása"
+            width={1600}
+            height={900}
+            className="h-auto w-full object-cover"
+            sizes="(max-width: 768px) 100vw, 896px"
+            priority
+          />
+        </figure>
 
         <div className="rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5 md:p-6">
           <p className="mt-3">A mosókapszula és folyékony mosószer közötti különbség főként az adagolás pontosságában, használati kényelemben és a célzott foltkezelési rugalmasságban jelenik meg.</p>
