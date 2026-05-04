@@ -6,11 +6,13 @@ import { ArticleLayout } from '@/components/article/ArticleLayout';
 import { ButtonLink } from '@/components/ui';
 
 const articleTitle = 'Hogyan mossunk hatékonyan 20 fokon?';
-const heroSubtitle = 'A 20 fokos mosás nem kompromisszum: jól beállítva meglepően hatékony, miközben kíméli az anyagokat és az energiát is.';
+const discoverTitle = 'A 20 fokos mosás nem kompromisszum: jól beállítva meglepően hatékony, miközben kíméli az anyagokat és az energiát is.';
 const articleDescription =
   'Ismerd meg, hogyan lehet 20 fokon is hatékonyan mosni. Megmutatjuk, mire figyelj az alacsony hőfokú mosásnál, hogy a ruhák tiszták, a mosás pedig energiatakarékos maradjon.';
 const articleUrl = 'https://www.aquadrop.hu/hogyan-mossunk-20-fokon';
 const publishedDate = '2026-04-23';
+const modifiedDate = '2026-04-23';
+const heroImageUrl = 'https://www.aquadrop.hu/20-fokos-mosas.webp';
 const heroImageAlt = '20 fokos mosás hatékony tisztítással Aquadrop Expert Pro mosókapszulával';
 const heroImageCaption = '20 fokos mosás hatékony tisztítással Aquadrop Expert Pro mosókapszulával';
 
@@ -69,13 +71,13 @@ export const metadata: Metadata = {
     locale: 'hu_HU',
     type: 'article',
     publishedTime: `${publishedDate}T08:00:00.000Z`,
-    modifiedTime: `${publishedDate}T08:00:00.000Z`,
+    modifiedTime: `${modifiedDate}T08:00:00.000Z`,
     images: [
       {
-        url: '/aquadrop-mosokapszula-og-kep.webp',
+        url: heroImageUrl,
         width: 1200,
         height: 630,
-        alt: 'Hogyan mossunk hatékonyan 20 fokon? - Aquadrop útmutató'
+        alt: heroImageAlt
       }
     ]
   },
@@ -83,17 +85,17 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Hogyan mossunk hatékonyan 20 fokon? | Aquadrop',
     description: articleDescription,
-    images: ['/aquadrop-mosokapszula-og-kep.webp']
+    images: [heroImageUrl]
   }
 };
 
 export default function HogyanMossunk20FokonPage() {
   const articleStructuredData = {
     '@context': 'https://schema.org',
-    '@type': 'Article',
+    '@type': 'BlogPosting',
     headline: articleTitle,
     description: articleDescription,
-    image: 'https://www.aquadrop.hu/aquadrop-mosokapszula-og-kep.webp',
+    image: heroImageUrl,
     author: {
       '@type': 'Organization',
       name: 'Aquadrop',
@@ -112,7 +114,7 @@ export default function HogyanMossunk20FokonPage() {
       '@id': articleUrl
     },
     datePublished: `${publishedDate}T08:00:00.000Z`,
-    dateModified: `${publishedDate}T08:00:00.000Z`
+    dateModified: `${modifiedDate}T08:00:00.000Z`
   };
 
   const faqStructuredData = {
@@ -137,7 +139,7 @@ export default function HogyanMossunk20FokonPage() {
         slug="hogyan-mossunk-20-fokon"
         category="Mosási útmutató"
         readingTime="kb. 8 perc olvasás"
-        title={heroSubtitle}
+        title={discoverTitle}
         intro="A 20 fokos mosás ma már nem különleges megoldás, hanem egyre több energiatudatos háztartás alapbeállítása. A jó eredmény azonban nem csak a hőfokon múlik: a programidő, a kapszula elhelyezése, az adagolás és a dob töltöttsége együtt adja azt a stabil mosási folyamatot, amely alacsony hőfokon is megbízható tisztaságot tud biztosítani."
         cta={
           <div className="rounded-[28px] border border-cyan-100/80 bg-gradient-to-br from-white via-cyan-50/80 to-teal-50/80 p-7 shadow-[0_22px_65px_rgba(15,23,42,0.1)] md:p-10">

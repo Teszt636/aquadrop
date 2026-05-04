@@ -6,11 +6,21 @@ import { ArticleLayout } from '@/components/article/ArticleLayout';
 import { ButtonLink } from '@/components/ui';
 
 const articleTitle = 'Miért nem oldódik fel a mosókapszula? Gyakori hibák és megoldások';
-const heroSubtitle = 'Ha a mosókapszula nem oldódik fel, az nem véletlen hiba: néhány visszatérő ok szinte mindig azonosítható és gyorsan javítható.';
+const discoverTitle = 'Ha a mosókapszula nem oldódik fel, az nem véletlen hiba: néhány visszatérő ok szinte mindig azonosítható és gyorsan javítható.';
 const articleDescription =
   'Nem oldódik fel a mosókapszula? Mutatjuk a leggyakoribb okokat, a tipikus hibákat és azt is, hogyan érhetsz el jobb mosási eredményt helyes használattal.';
 const articleUrl = 'https://www.aquadrop.hu/mosokapszula-nem-oldodik-fel';
 const publishedDate = '2026-04-22';
+const modifiedDate = '2026-04-22';
+const heroImageUrl = 'https://www.aquadrop.hu/mosokapszula-nem-oldodik-fel-megoldas-aquadrop.webp';
+const heroImageAlt = 'Mosókapszula nem oldódik fel probléma megoldása Aquadrop Expert Pro használatával';
+const heroImageCaption = 'Mosókapszula oldódási probléma megoldása Aquadrop Expert Pro használatával';
+
+const faqItems = [
+  { question: 'Miért nem oldódik fel a mosókapszula?', answer: 'Leggyakrabban túl rövid program, túlzsúfolt dob, rossz kapszulaelhelyezés vagy nem megfelelő tárolás miatt.' },
+  { question: 'Hova tegyem a kapszulát, hogy rendesen oldódjon?', answer: 'Közvetlenül a dob aljára tedd, még a ruhák előtt. Így a program elején egyenletesebb vízkapcsolatot kap.' },
+  { question: 'Mit tegyek, ha maradvány marad a ruhán?', answer: 'Szárítás előtt ellenőrizd a ruhát, szükség esetén öblítsd át vagy mosd újra, majd a következő mosásnál optimalizáld az elhelyezést és a töltetet.' }
+];
 
 export const metadata: Metadata = {
   title: 'Miért nem oldódik fel a mosókapszula? Gyakori hibák és megoldások | Aquadrop',
@@ -36,13 +46,13 @@ export const metadata: Metadata = {
     locale: 'hu_HU',
     type: 'article',
     publishedTime: `${publishedDate}T08:00:00.000Z`,
-    modifiedTime: `${publishedDate}T08:00:00.000Z`,
+    modifiedTime: `${modifiedDate}T08:00:00.000Z`,
     images: [
       {
-        url: '/aquadrop-mosokapszula-og-kep.webp',
+        url: heroImageUrl,
         width: 1200,
         height: 630,
-        alt: 'Aquadrop Expert Pro mosókapszula'
+        alt: heroImageAlt
       }
     ]
   },
@@ -50,7 +60,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Miért nem oldódik fel a mosókapszula? Gyakori hibák és megoldások | Aquadrop',
     description: articleDescription,
-    images: ['/aquadrop-mosokapszula-og-kep.webp']
+    images: [heroImageUrl]
   }
 };
 
@@ -60,7 +70,7 @@ export default function MosokapszulaNemOldodikFelPage() {
     '@type': 'BlogPosting',
     headline: articleTitle,
     description: articleDescription,
-    image: 'https://www.aquadrop.hu/aquadrop-mosokapszula-og-kep.webp',
+    image: heroImageUrl,
     author: {
       '@type': 'Organization',
       name: 'Aquadrop',
@@ -79,7 +89,7 @@ export default function MosokapszulaNemOldodikFelPage() {
       '@id': articleUrl
     },
     datePublished: `${publishedDate}T08:00:00.000Z`,
-    dateModified: `${publishedDate}T08:00:00.000Z`
+    dateModified: `${modifiedDate}T08:00:00.000Z`
   };
 
   return (
@@ -88,12 +98,17 @@ export default function MosokapszulaNemOldodikFelPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingStructuredData) }}
       />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: faqItems.map((item) => ({ "@type": "Question", name: item.question, acceptedAnswer: { "@type": "Answer", text: item.answer } }))
+      }) }} />
 
       <ArticleLayout
         slug="mosokapszula-nem-oldodik-fel"
         category="Mosási útmutató"
         readingTime="kb. 11 perc olvasás"
-        title={heroSubtitle}
+        title={discoverTitle}
         intro="A mosókapszula kényelmes és gyors megoldás a mindennapokban, mégis sokan találkoznak azzal, hogy a kapszula részben megmarad, nyomot hagy, vagy nem oldódik fel teljesen. Jó hír, hogy ez a legtöbbször nem végleges probléma: néhány használati és tárolási szempont átgondolásával a mosási eredmény jellemzően kiszámíthatóbbá tehető."
         cta={
           <div className="rounded-[28px] border border-cyan-100/80 bg-gradient-to-br from-white via-cyan-50/80 to-teal-50/80 p-7 shadow-[0_22px_65px_rgba(15,23,42,0.1)] md:p-10">
@@ -114,13 +129,15 @@ export default function MosokapszulaNemOldodikFelPage() {
         <figure className="overflow-hidden rounded-2xl border border-cyan-100 bg-white/80 shadow-sm">
           <Image
             src="/mosokapszula-nem-oldodik-fel-megoldas-aquadrop.webp"
-            alt="Mosókapszula nem oldódik fel probléma megoldása Aquadrop Expert Pro használatával"
+            alt={heroImageAlt}
             width={1600}
             height={900}
             className="h-auto w-full object-cover"
             sizes="(max-width: 768px) 100vw, 896px"
             priority
+          title={heroImageCaption}
           />
+          <figcaption className="px-4 py-3 text-sm text-slate-600 md:px-5">{heroImageCaption}</figcaption>
         </figure>
 
         <div className="rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5 md:p-6">

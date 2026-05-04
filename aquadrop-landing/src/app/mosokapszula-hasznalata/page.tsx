@@ -6,11 +6,21 @@ import { ButtonLink } from '@/components/ui';
 import { ArticleLayout } from '@/components/article/ArticleLayout';
 
 const articleTitle = 'Mosókapszula használata: hova kell tenni és mennyit használj?';
-const heroSubtitle = 'A mosókapszula használata egyszerűnek tűnik, mégis ezen múlhat, hogy lesz-e foltos vagy friss a mosás végeredménye.';
+const discoverTitle = 'A mosókapszula használata egyszerűnek tűnik, mégis ezen múlhat, hogy lesz-e foltos vagy friss a mosás végeredménye.';
 const articleDescription =
   'Ismerd meg a mosókapszula helyes használatát: hova kell tenni, mennyit érdemes használni, és mire figyelj a legjobb mosási eredmény érdekében.';
 const articleUrl = 'https://www.aquadrop.hu/mosokapszula-hasznalata';
 const publishedDate = '2026-04-22';
+const modifiedDate = '2026-04-22';
+const heroImageUrl = 'https://www.aquadrop.hu/mosokapszula-hasznalata.webp';
+const heroImageAlt = 'Mosókapszula helyes használata mosógépben Aquadrop Expert Pro kapszulával';
+const heroImageCaption = 'Mosókapszula helyes használata Aquadrop Expert Pro kapszulával';
+
+const faqItems = [
+  { question: 'Hova kell tenni a mosókapszulát?', answer: 'A kapszulát közvetlenül a dobba, lehetőleg alulra tedd, még a ruhák behelyezése előtt. Az adagolófiók általában nem kapszulához készült.' },
+  { question: 'Hány mosókapszula kell egy mosáshoz?', answer: 'A legtöbb átlagos mosásnál 1 kapszula elegendő. Nagyobb töltetnél vagy erősebb szennyezettségnél csak indokolt esetben mérlegelj eltérést.' },
+  { question: 'Mikor tegyem be a kapszulát?', answer: 'Először tedd be a kapszulát a dobba, és csak utána pakold rá a ruhákat. Így a program elején hamarabb és egyenletesebben éri víz.' }
+];
 
 export const metadata: Metadata = {
   title: 'Mosókapszula használata: hova kell tenni és mennyit használj? | Aquadrop',
@@ -35,13 +45,13 @@ export const metadata: Metadata = {
     locale: 'hu_HU',
     type: 'article',
     publishedTime: `${publishedDate}T08:00:00.000Z`,
-    modifiedTime: `${publishedDate}T08:00:00.000Z`,
+    modifiedTime: `${modifiedDate}T08:00:00.000Z`,
     images: [
       {
-        url: '/aquadrop-mosokapszula-og-kep.webp',
+        url: heroImageUrl,
         width: 1200,
         height: 630,
-        alt: 'Aquadrop Expert Pro mosókapszula'
+        alt: heroImageAlt
       }
     ]
   },
@@ -49,7 +59,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Mosókapszula használata: hova kell tenni és mennyit használj? | Aquadrop',
     description: articleDescription,
-    images: ['/aquadrop-mosokapszula-og-kep.webp']
+    images: [heroImageUrl]
   }
 };
 
@@ -59,7 +69,7 @@ export default function MosokapszulaHasznalataPage() {
     '@type': 'BlogPosting',
     headline: articleTitle,
     description: articleDescription,
-    image: 'https://www.aquadrop.hu/aquadrop-mosokapszula-og-kep.webp',
+    image: heroImageUrl,
     author: {
       '@type': 'Organization',
       name: 'Aquadrop',
@@ -78,7 +88,7 @@ export default function MosokapszulaHasznalataPage() {
       '@id': articleUrl
     },
     datePublished: `${publishedDate}T08:00:00.000Z`,
-    dateModified: `${publishedDate}T08:00:00.000Z`
+    dateModified: `${modifiedDate}T08:00:00.000Z`
   };
 
   return (
@@ -87,12 +97,17 @@ export default function MosokapszulaHasznalataPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingStructuredData) }}
       />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: faqItems.map((item) => ({ "@type": "Question", name: item.question, acceptedAnswer: { "@type": "Answer", text: item.answer } }))
+      }) }} />
 
       <ArticleLayout
         slug="mosokapszula-hasznalata"
         category="Mosási útmutató"
         readingTime="kb. 10 perc olvasás"
-        title={heroSubtitle}
+        title={discoverTitle}
         intro="A mosókapszula az egyik legkényelmesebb, legletisztultabb adagolási forma a modern háztartásokban. A legjobb eredményhez viszont fontos néhány alapelvet követni: hova kerüljön a kapszula, mikor tedd be, mennyit érdemes használni, és mire figyelj a biztonságos használat során."
         cta={
           <div className="rounded-[28px] border border-cyan-100/80 bg-gradient-to-br from-white via-cyan-50/80 to-teal-50/80 p-7 shadow-[0_22px_65px_rgba(15,23,42,0.1)] md:p-10">
@@ -113,13 +128,15 @@ export default function MosokapszulaHasznalataPage() {
         <figure className="overflow-hidden rounded-2xl border border-cyan-100 bg-white/80 shadow-sm">
           <Image
             src="/mosokapszula-hasznalata.webp"
-            alt="Mosókapszula helyes használata mosógépben Aquadrop Expert Pro kapszulával"
+            alt={heroImageAlt}
             width={1600}
             height={900}
             className="h-auto w-full object-cover"
             sizes="(max-width: 768px) 100vw, 896px"
             priority
+          title={heroImageCaption}
           />
+          <figcaption className="px-4 py-3 text-sm text-slate-600 md:px-5">{heroImageCaption}</figcaption>
         </figure>
 
         <div className="rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5 md:p-6">

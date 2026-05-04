@@ -6,11 +6,15 @@ import { ArticleLayout } from '@/components/article/ArticleLayout';
 import { ButtonLink } from '@/components/ui';
 
 const articleTitle = 'Energiatakarékos mosás: tiszta ruhák alacsony hőfokon is';
-const heroSubtitle = 'Az energiatakarékos mosás meglepően sokat javíthat a havi kiadásokon — úgy, hogy közben a ruháid is tiszták maradnak.';
+const discoverTitle = 'Az energiatakarékos mosás meglepően sokat javíthat a havi kiadásokon — úgy, hogy közben a ruháid is tiszták maradnak.';
 const articleDescription =
   'Ismerd meg az energiatakarékos mosás alapjait: hogyan moss hatékonyan 20–30 fokon, mire figyelj az oldódásnál, és hogyan érhetsz el tiszta, foltmentes eredményt alacsony hőfokon is.';
 const articleUrl = 'https://www.aquadrop.hu/energiatakarekos-mosas';
 const publishedDate = '2026-04-23';
+const modifiedDate = '2026-04-23';
+const heroImageUrl = 'https://www.aquadrop.hu/energiatakarekos-mosas-aquadrop-expert-pro.webp';
+const heroImageAlt = 'Energiatakarékos mosás modern mosógépben Aquadrop Expert Pro mosókapszulával';
+const heroImageCaption = 'Energiatakarékos mosás Aquadrop Expert Pro mosókapszulával';
 
 const faqItems = [
   {
@@ -74,13 +78,13 @@ export const metadata: Metadata = {
     locale: 'hu_HU',
     type: 'article',
     publishedTime: `${publishedDate}T08:00:00.000Z`,
-    modifiedTime: `${publishedDate}T08:00:00.000Z`,
+    modifiedTime: `${modifiedDate}T08:00:00.000Z`,
     images: [
       {
-        url: '/aquadrop-mosokapszula-og-kep.webp',
+        url: heroImageUrl,
         width: 1200,
         height: 630,
-        alt: 'Energiatakarékos mosás Aquadrop Expert Pro megoldással'
+        alt: heroImageAlt
       }
     ]
   },
@@ -88,7 +92,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Energiatakarékos mosás: tiszta ruhák alacsony hőfokon is | Aquadrop',
     description: articleDescription,
-    images: ['/aquadrop-mosokapszula-og-kep.webp']
+    images: [heroImageUrl]
   }
 };
 
@@ -98,7 +102,7 @@ export default function EnergiatakarekosMosasPage() {
     '@type': 'BlogPosting',
     headline: articleTitle,
     description: articleDescription,
-    image: 'https://www.aquadrop.hu/aquadrop-mosokapszula-og-kep.webp',
+    image: heroImageUrl,
     author: {
       '@type': 'Organization',
       name: 'Aquadrop',
@@ -117,7 +121,7 @@ export default function EnergiatakarekosMosasPage() {
       '@id': articleUrl
     },
     datePublished: `${publishedDate}T08:00:00.000Z`,
-    dateModified: `${publishedDate}T08:00:00.000Z`
+    dateModified: `${modifiedDate}T08:00:00.000Z`
   };
 
   const faqStructuredData = {
@@ -145,7 +149,7 @@ export default function EnergiatakarekosMosasPage() {
         slug="energiatakarekos-mosas"
         category="Mosási útmutató"
         readingTime="kb. 18 perc olvasás"
-        title={heroSubtitle}
+        title={discoverTitle}
         intro="Az energiatakarékos mosás ma már nem kényszerű kompromisszum, hanem tudatos döntés. A cél egyszerre az alacsonyabb energiafelhasználás, a textíliák kímélése és a megbízható tisztaságérzet. Ehhez azonban nem elég pusztán lejjebb venni a hőfokot: számít a programhossz, az adagolás és az is, hogy a választott mosási megoldás mennyire illeszkedik az alacsony hőfokú használathoz."
         cta={
           <div className="rounded-[28px] border border-cyan-100/80 bg-gradient-to-br from-white via-cyan-50/80 to-teal-50/80 p-7 shadow-[0_22px_65px_rgba(15,23,42,0.1)] md:p-10">
@@ -171,15 +175,15 @@ export default function EnergiatakarekosMosasPage() {
         <figure className="overflow-hidden rounded-2xl border border-cyan-100 bg-white/80 shadow-sm">
           <Image
             src="/energiatakarekos-mosas-aquadrop-expert-pro.webp"
-            alt="Energiatakarékos mosás modern mosógépben Aquadrop Expert Pro mosókapszulával"
-            title="Energiatakarékos mosás Aquadrop Expert Pro mosókapszulával"
+            alt={heroImageAlt}
+            title={heroImageCaption}
             width={1600}
             height={900}
             className="h-auto w-full object-cover"
             sizes="(max-width: 768px) 100vw, 896px"
             priority
           />
-          <figcaption className="px-4 py-3 text-sm text-slate-600 md:px-5">Energiatakarékos mosás Aquadrop Expert Pro mosókapszulával</figcaption>
+          <figcaption className="px-4 py-3 text-sm text-slate-600 md:px-5">{heroImageCaption}</figcaption>
         </figure>
 
         <div className="rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5 md:p-6">
