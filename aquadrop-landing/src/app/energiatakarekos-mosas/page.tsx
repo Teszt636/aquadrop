@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 
 import { ArticleLayout } from '@/components/article/ArticleLayout';
@@ -166,6 +167,20 @@ export default function EnergiatakarekosMosasPage() {
           </div>
         }
       >
+
+        <figure className="overflow-hidden rounded-2xl border border-cyan-100 bg-white/80 shadow-sm">
+          <Image
+            src="/energiatakarekos-mosas-aquadrop-expert-pro.webp"
+            alt="Energiatakarékos mosás modern mosógépben Aquadrop Expert Pro mosókapszulával"
+            title="Energiatakarékos mosás Aquadrop Expert Pro mosókapszulával"
+            width={1600}
+            height={900}
+            className="h-auto w-full object-cover"
+            sizes="(max-width: 768px) 100vw, 896px"
+            priority
+          />
+          <figcaption className="px-4 py-3 text-sm text-slate-600 md:px-5">Energiatakarékos mosás Aquadrop Expert Pro mosókapszulával</figcaption>
+        </figure>
 
         <div className="rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5 md:p-6">
           <p className="mt-3">Az energiatakarékos mosás olyan mosási rutin, amely alacsonyabb hőfokon és tudatos beállításokkal csökkenti az energiafelhasználást a tisztaság feladása nélkül.</p>
