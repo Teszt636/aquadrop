@@ -169,13 +169,17 @@ export default function EnergiatakarekosMosasPage() {
     ]
   };
 
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@graph': [blogPostingStructuredData, faqStructuredData, breadcrumbStructuredData]
+  };
+
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingStructuredData) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData) }} />
 
       <ArticleLayout
         slug="energiatakarekos-mosas"
