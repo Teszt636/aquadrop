@@ -10,6 +10,7 @@ const basePaths = [
   '/mosokapszula-vagy-folyekony-mososzer',
   '/hogyan-mossunk-20-fokon',
   '/mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol',
+  '/mosasi-koltseg-kalkulator',
   '/adatvedelmi-tajekoztato',
   '/suti-tajekoztato',
   '/partner'

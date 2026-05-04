@@ -247,7 +247,7 @@ export default function MennyitSporolhatsz20FokonPage() {
           ruhán, és kiszámítható, kényelmes használatot támogasson.
         </p>
 
-        <h2>Interaktív mosási költség kalkulátor</h2>
+        <h2>Számold ki a saját megtakarításodat</h2>
         <p>
           Az alábbi kalkulátor nem hivatalos mérőműszer, hanem átlátható összehasonlító modell. Két tényezőt vesz
           figyelembe: a mosógép alapműködésének energiaigényét és a hőfokfüggő melegítési komponenst. A programhossz
@@ -264,6 +264,14 @@ export default function MennyitSporolhatsz20FokonPage() {
         </p>
 
         <EnergySavingsCalculator />
+
+<p>
+          A megtakarítás háztartásonként eltérhet, ezért érdemes saját mosási szokásokkal is kipróbálni a kalkulátort. Add meg, milyen gyakran mosol, milyen programot használsz, és nézd meg, mekkora különbséget jelenthet az alacsonyabb hőfok.
+        </p>
+        <p>
+          <Link href="https://www.aquadrop.hu/mosasi-koltseg-kalkulator">Megnyitom külön oldalon a mosási költség kalkulátort</Link>
+        </p>
+
 
         <h2>Mire figyelj, ha 20 fokon szeretnél jól mosni?</h2>
         <ul>
