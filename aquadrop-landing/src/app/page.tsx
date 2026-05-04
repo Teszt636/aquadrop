@@ -1,14 +1,18 @@
 import type { Metadata } from 'next';
+import { SITE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
   title: 'Mosókapszula – Aquadrop Expert Pro | 2+1 ajándék kapszula',
   description:
     'Fedezze fel az Aquadrop prémium világát! Dubai gyártói szakértelem és svájci Givaudan mikrokapszulás technológia találkozása a hosszan tartó, exkluzív illatélményért.',
+  alternates: {
+    canonical: `${SITE_URL}/`,
+  },
   openGraph: {
     title: 'Mosókapszula – Aquadrop Expert Pro | 2+1 ajándék kapszula',
     description:
       'Fedezze fel az Aquadrop prémium világát! Dubai gyártói szakértelem és svájci Givaudan mikrokapszulás technológia találkozása a hosszan tartó, exkluzív illatélményért.',
-    url: 'https://www.aquadrop.hu',
+    url: `${SITE_URL}/`,
     siteName: 'Aquadrop Expert Pro',
     images: [
       {
@@ -95,13 +99,13 @@ export default function Home() {
         '@type': 'Organization',
         '@id': 'https://www.aquadrop.hu/#organization',
         name: 'Aquadrop Expert Pro',
-        url: 'https://www.aquadrop.hu',
+        url: `${SITE_URL}/`,
         logo: 'https://www.aquadrop.hu/logo.png'
       },
       {
         '@type': 'WebSite',
         '@id': 'https://www.aquadrop.hu/#website',
-        url: 'https://www.aquadrop.hu',
+        url: `${SITE_URL}/`,
         name: 'Aquadrop Expert Pro',
         publisher: {
           '@id': 'https://www.aquadrop.hu/#organization'

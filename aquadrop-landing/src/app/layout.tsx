@@ -1,21 +1,19 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
 import CookieConsentBanner from '@/components/CookieConsentBanner';
+import { SITE_URL } from '@/lib/constants';
 import './globals.css';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://www.aquadrop.hu'),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: 'Mosókapszula – Aquadrop Expert Pro | 2+1 ajándék kapszula',
     template: '%s | Aquadrop Expert Pro',
   },
   description:
     'Prémium mosókapszula Dubai gyártói háttérrel. Vásárolj 2 dobozt, a 3.-at ajándékba adjuk. Erős tisztítás, tartós illat, modern formula.',
-  alternates: {
-    canonical: '/',
-  },
   openGraph: {
-    url: 'https://www.aquadrop.hu/',
+    url: `${SITE_URL}/`,
   },
   robots: {
     index: true,

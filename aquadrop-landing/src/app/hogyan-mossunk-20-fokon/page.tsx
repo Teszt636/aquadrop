@@ -55,6 +55,9 @@ export const metadata: Metadata = {
     'textilkímélő mosás',
     'foltmentes mosás alacsony hőfokon'
   ],
+  alternates: {
+    canonical: articleUrl,
+  },
   openGraph: {
     title: 'Hogyan mossunk hatékonyan 20 fokon? | Aquadrop',
     description: articleDescription,
