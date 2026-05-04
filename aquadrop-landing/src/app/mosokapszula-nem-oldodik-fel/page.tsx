@@ -13,6 +13,8 @@ const articleUrl = 'https://www.aquadrop.hu/mosokapszula-nem-oldodik-fel';
 const publishedDate = '2026-04-22';
 const modifiedDate = '2026-04-22';
 const heroImageUrl = 'https://www.aquadrop.hu/mosokapszula-nem-oldodik-fel-megoldas-aquadrop.webp';
+const heroImageWidth = 1536;
+const heroImageHeight = 1024;
 const heroImageAlt = 'Mosókapszula nem oldódik fel probléma megoldása Aquadrop Expert Pro használatával';
 const heroImageCaption = 'Mosókapszula oldódási probléma megoldása Aquadrop Expert Pro használatával';
 
@@ -70,7 +72,12 @@ export default function MosokapszulaNemOldodikFelPage() {
     '@type': 'BlogPosting',
     headline: articleTitle,
     description: articleDescription,
-    image: heroImageUrl,
+    image: {
+      '@type': 'ImageObject',
+      url: heroImageUrl,
+      width: heroImageWidth,
+      height: heroImageHeight
+    },
     author: {
       '@type': 'Organization',
       name: 'Aquadrop',
@@ -81,7 +88,9 @@ export default function MosokapszulaNemOldodikFelPage() {
       name: 'Aquadrop',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://www.aquadrop.hu/logo.png'
+        url: 'https://www.aquadrop.hu/logo.png',
+        width: 1182,
+        height: 1182
       }
     },
     mainEntityOfPage: {
@@ -92,17 +101,37 @@ export default function MosokapszulaNemOldodikFelPage() {
     dateModified: `${modifiedDate}T08:00:00.000Z`
   };
 
+  const breadcrumbStructuredData = {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Főoldal', item: 'https://www.aquadrop.hu/' },
+      { '@type': 'ListItem', position: 2, name: 'Mosási tudástár', item: 'https://www.aquadrop.hu/#tudastar' },
+      { '@type': 'ListItem', position: 3, name: articleTitle, item: articleUrl }
+    ]
+  };
+
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingStructuredData) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@graph': [
+              blogPostingStructuredData,
+              {
+                '@type': 'FAQPage',
+                mainEntity: faqItems.map((item) => ({
+                  '@type': 'Question',
+                  name: item.question,
+                  acceptedAnswer: { '@type': 'Answer', text: item.answer }
+                }))
+              },
+              breadcrumbStructuredData
+            ]
+          })
+        }}
       />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        mainEntity: faqItems.map((item) => ({ "@type": "Question", name: item.question, acceptedAnswer: { "@type": "Answer", text: item.answer } }))
-      }) }} />
 
       <ArticleLayout
         slug="mosokapszula-nem-oldodik-fel"
