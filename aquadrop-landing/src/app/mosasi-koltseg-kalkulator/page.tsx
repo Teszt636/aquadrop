@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   }
 };
 
-export default async function Page({ searchParams }: { searchParams: Promise<{ embed?: string }> }) {
+export default async function WashingCostCalculatorPage({ searchParams }: { searchParams: Promise<{ embed?: string }> }) {
   const params = await searchParams;
   const isEmbed = params.embed === 'true';
   const webAppSchema = { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Mosási költség kalkulátor', applicationCategory: 'UtilityApplication', operatingSystem: 'Web', description: 'Ingyenes kalkulátor, amellyel kiszámolható a 20 fokos mosás lehetséges energiamegtakarítása.', url: 'https://www.aquadrop.hu/mosasi-koltseg-kalkulator', publisher: { '@type': 'Organization', name: 'Aquadrop' } };
@@ -31,7 +31,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ e
           </header>
         )}
 
-        <WashingCostCalculator placement="calculator_page" showShare={!isEmbed} showEmbed={!isEmbed} isEmbed={isEmbed} />
+        <WashingCostCalculator placement="calculator_page" showShare={!isEmbed} showEmbed={!isEmbed} showIntroBadge={true} isEmbed={isEmbed} />
 
         {!isEmbed && (
           <>
