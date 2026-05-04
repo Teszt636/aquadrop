@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 
 import { ButtonLink } from '@/components/ui';
@@ -108,6 +109,18 @@ export default function MosokapszulaHasznalataPage() {
           </div>
         }
       >
+
+        <figure className="overflow-hidden rounded-2xl border border-cyan-100 bg-white/80 shadow-sm">
+          <Image
+            src="/mosokapszula-hasznalata.webp"
+            alt="Mosókapszula helyes használata mosógépben Aquadrop Expert Pro kapszulával"
+            width={1600}
+            height={900}
+            className="h-auto w-full object-cover"
+            sizes="(max-width: 768px) 100vw, 896px"
+            priority
+          />
+        </figure>
 
         <div className="rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5 md:p-6">
           <p className="mt-3">A mosókapszula helyes használata a kapszula megfelelő dobba helyezését, pontos adagolását és a ruhamennyiséghez igazított programválasztást jelenti.</p>
