@@ -3,11 +3,11 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Mosókapszula – Aquadrop Expert Pro | 2+1 ajándék kapszula',
   description:
-    'Prémium mosókapszula Dubai gyártói háttérrel. Vásárolj 2 dobozt, a 3.-at ajándékba adjuk. Erős tisztítás, tartós illat, modern formula.',
+    'Fedezze fel az Aquadrop prémium világát! Dubai gyártói szakértelem és svájci Givaudan mikrokapszulás technológia találkozása a hosszan tartó, exkluzív illatélményért.',
   openGraph: {
     title: 'Mosókapszula – Aquadrop Expert Pro | 2+1 ajándék kapszula',
     description:
-      'Prémium mosókapszula Dubai gyártói háttérrel. Vásárolj 2 dobozt, a 3.-at ajándékba adjuk. Erős tisztítás, tartós illat, modern formula.',
+      'Fedezze fel az Aquadrop prémium világát! Dubai gyártói szakértelem és svájci Givaudan mikrokapszulás technológia találkozása a hosszan tartó, exkluzív illatélményért.',
     url: 'https://www.aquadrop.hu',
     siteName: 'Aquadrop Expert Pro',
     images: [
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Mosókapszula – Aquadrop Expert Pro | 2+1 ajándék kapszula',
     description:
-      'Prémium mosókapszula Dubai gyártói háttérrel. Vásárolj 2 dobozt, a 3.-at ajándékba adjuk. Erős tisztítás, tartós illat, modern formula.',
+      'Fedezze fel az Aquadrop prémium világát! Dubai gyártói szakértelem és svájci Givaudan mikrokapszulás technológia találkozása a hosszan tartó, exkluzív illatélményért.',
     images: ['/og-image.png']
   }
 };
