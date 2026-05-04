@@ -154,27 +154,29 @@ function WashingCostCalculatorInner({
         </div>
 
         {showShare && (
-          <div className="rounded-2xl border border-cyan-100 bg-white/85 p-4">
-            <h4 className="font-semibold">Eredmény megosztása</h4>
-            <button type="button" className="mt-2 rounded-xl bg-cyan-600 px-4 py-2 text-white" onClick={async () => { await navigator.clipboard.writeText(shareUrl); setLinkCopied(true); trackEvent('calculator_share_link_click', { placement }); setTimeout(() => setLinkCopied(false), 1500); }}>
+          <div className="rounded-2xl border border-cyan-100 bg-white/85 p-5 shadow-sm">
+            <h4 className="text-lg font-semibold text-slate-900">Oszd meg az eredményed</h4>
+            <p className="mt-1 text-sm text-slate-700">Másold ki a beállításaiddal együtt mentett linket, vagy oszd meg közösségi felületen.</p>
+            <button type="button" className="mt-4 rounded-xl bg-cyan-600 px-4 py-2 font-semibold text-white transition hover:bg-cyan-700" onClick={async () => { await navigator.clipboard.writeText(shareUrl); setLinkCopied(true); trackEvent('calculator_share_link_click', { placement }); setTimeout(() => setLinkCopied(false), 1500); }}>
               Link másolása
             </button>
-            {linkCopied && <p className="text-sm text-emerald-700">Link másolva</p>}
-            <div className="mt-2 flex gap-3 text-sm">
-              <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`} target="_blank" rel="noreferrer">Facebook megosztás</a>
-              <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`} target="_blank" rel="noreferrer">LinkedIn megosztás</a>
+            {linkCopied && <p className="mt-2 text-sm text-emerald-700">Link másolva</p>}
+            <div className="mt-3 flex flex-wrap gap-4 text-sm font-medium text-cyan-700">
+              <a className="underline-offset-4 hover:underline" href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`} target="_blank" rel="noreferrer">Facebook</a>
+              <a className="underline-offset-4 hover:underline" href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`} target="_blank" rel="noreferrer">LinkedIn</a>
             </div>
           </div>
         )}
 
         {showEmbed && (
-          <div className="rounded-2xl border border-cyan-100 bg-white/85 p-4">
-            <h4 className="font-semibold">Ágyazd be a kalkulátort a saját oldaladra</h4>
-            <pre className="mt-2 overflow-x-auto rounded-lg bg-slate-900 p-3 text-xs text-cyan-100">{iframeCode}</pre>
-            <button type="button" onClick={async () => { await navigator.clipboard.writeText(iframeCode); setEmbedCopied(true); trackEvent('calculator_embed_copy_click', { placement }); setTimeout(() => setEmbedCopied(false), 1500); }} className="mt-2 rounded-xl border border-cyan-200 px-4 py-2">
+          <div className="rounded-2xl border border-cyan-100 bg-white/85 p-5 shadow-sm">
+            <h4 className="text-lg font-semibold text-slate-900">Ágyazd be a kalkulátort a saját oldaladra</h4>
+            <p className="mt-1 text-sm text-slate-700">Blogcikkhez, magazinoldalhoz vagy háztartási tippeket gyűjtő oldalhoz is használható. A beágyazott verzió automatikusan visszamutat az Aquadrop kalkulátorra.</p>
+            <pre className="mt-3 overflow-x-auto whitespace-pre-wrap break-words rounded-lg bg-slate-900 p-4 text-xs leading-relaxed text-cyan-100">{iframeCode}</pre>
+            <button type="button" onClick={async () => { await navigator.clipboard.writeText(iframeCode); setEmbedCopied(true); trackEvent('calculator_embed_copy_click', { placement }); setTimeout(() => setEmbedCopied(false), 1500); }} className="mt-3 rounded-xl border border-cyan-200 px-4 py-2 font-semibold text-slate-800 transition hover:border-cyan-400">
               Iframe kód másolása
             </button>
-            {embedCopied && <p className="text-sm text-emerald-700">Iframe kód másolva</p>}
+            {embedCopied && <p className="mt-2 text-sm text-emerald-700">Iframe kód másolva</p>}
           </div>
         )}
 
