@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { useMemo, useState, type Dispatch, type SetStateAction } from 'react';
+import { Suspense, useMemo, useState, type Dispatch, type SetStateAction } from 'react';
 
 import { trackEvent } from '@/lib/tracking';
 
@@ -57,17 +57,27 @@ function parseOption(raw: string | null, allowed: readonly number[], fallback: n
   return allowed.includes(value as never) ? value : fallback;
 }
 
-export function WashingCostCalculator({
-  placement = 'article',
-  showShare = false,
-  showEmbed = false,
-  isEmbed = false
-}: {
+type WashingCostCalculatorProps = {
   placement?: 'calculator_page' | 'article';
   showShare?: boolean;
   showEmbed?: boolean;
   isEmbed?: boolean;
-}) {
+};
+
+export function WashingCostCalculator(props: WashingCostCalculatorProps) {
+  return (
+    <Suspense fallback={<CalculatorFallback />}>
+      <WashingCostCalculatorInner {...props} />
+    </Suspense>
+  );
+}
+
+function WashingCostCalculatorInner({
+  placement = 'article',
+  showShare = false,
+  showEmbed = false,
+  isEmbed = false
+}: WashingCostCalculatorProps) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
@@ -186,6 +196,15 @@ export function WashingCostCalculator({
           </p>
         )}
       </div>
+    </section>
+  );
+}
+
+
+function CalculatorFallback() {
+  return (
+    <section className="rounded-[28px] border border-cyan-100/90 bg-gradient-to-br from-white via-cyan-50/70 to-teal-50/80 p-5 md:p-8">
+      <p className="text-slate-700">Kalkulátor betöltése...</p>
     </section>
   );
 }
