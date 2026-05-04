@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 
 import { ArticleLayout } from '@/components/article/ArticleLayout';
@@ -10,6 +11,8 @@ const articleDescription =
   'Ismerd meg, hogyan lehet 20 fokon is hatékonyan mosni. Megmutatjuk, mire figyelj az alacsony hőfokú mosásnál, hogy a ruhák tiszták, a mosás pedig energiatakarékos maradjon.';
 const articleUrl = 'https://www.aquadrop.hu/hogyan-mossunk-20-fokon';
 const publishedDate = '2026-04-23';
+const heroImageAlt = '20 fokos mosás hatékony tisztítással Aquadrop Expert Pro mosókapszulával';
+const heroImageCaption = '20 fokos mosás hatékony tisztítással Aquadrop Expert Pro mosókapszulával';
 
 const faqItems = [
   {
@@ -156,6 +159,19 @@ export default function HogyanMossunk20FokonPage() {
           </div>
         }
       >
+        <figure className="overflow-hidden rounded-2xl border border-cyan-100 bg-white/80 shadow-sm">
+          <Image
+            src="/20-fokos-mosas.webp"
+            alt={heroImageAlt}
+            title={heroImageCaption}
+            width={1600}
+            height={900}
+            className="h-auto w-full object-cover"
+            sizes="(max-width: 768px) 100vw, 896px"
+            priority
+          />
+          <figcaption className="px-4 py-3 text-sm text-slate-600 md:px-5">{heroImageCaption}</figcaption>
+        </figure>
 
         <div className="rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5 md:p-6">
           <p className="mt-3">A 20 fokos mosás olyan alacsony hőfokú tisztítási módszer, amely megfelelő programidővel és adagolással mindennapi ruháknál is jó eredményt adhat.</p>
