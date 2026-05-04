@@ -108,10 +108,10 @@ function WashingCostCalculatorInner({
   ];
 
   return (
-    <section className="rounded-[30px] border border-cyan-100/90 bg-gradient-to-br from-white via-cyan-50/80 to-teal-50/80 p-5 shadow-[0_22px_65px_rgba(15,23,42,0.10)] md:p-8">
+    <section className="rounded-[30px] border-2 border-cyan-200/70 bg-gradient-to-br from-white via-cyan-50/85 to-sky-50/90 p-6 shadow-[0_30px_80px_rgba(6,182,212,0.18)] ring-1 ring-cyan-200/40 md:p-10">
       <div className="space-y-6">
-        {showIntroBadge && <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-700">Interaktív kalkulátor</p>}
-        <div className="space-y-3">
+        {showIntroBadge && <p className="mx-auto inline-flex rounded-full border border-cyan-200 bg-cyan-100/80 px-4 py-1 text-center text-xs font-semibold uppercase tracking-[0.2em] text-cyan-700">Interaktív kalkulátor</p>}
+        <div className="mx-auto max-w-3xl space-y-3 text-center">
           <h3 className="text-2xl leading-tight text-slate-900 md:text-3xl">Becsült mosási költség hőfok és program szerint</h3>
           <p className="text-slate-700">Válaszd ki a hőfokot, programhosszt és heti mosási rutint, majd hasonlítsd a becsült éves költséget a 20 °C / 18 perces baseline-hoz.</p>
         </div>
@@ -128,8 +128,8 @@ function WashingCostCalculatorInner({
                     onClick={() => setValue(option)}
                     className={`rounded-xl border px-3 py-2 text-sm font-semibold transition ${
                       option === value
-                        ? 'border-cyan-500 bg-cyan-500 text-white shadow-sm'
-                        : 'border-cyan-100 bg-white/90 text-slate-700 hover:border-cyan-300'
+                        ? 'border-cyan-500 bg-gradient-to-r from-cyan-500 to-teal-500 text-white shadow-sm'
+                        : 'border-cyan-100 bg-white/90 text-slate-700 hover:border-cyan-300 hover:shadow-sm'
                     }`}
                   >
                     {option}
@@ -145,7 +145,7 @@ function WashingCostCalculatorInner({
           <MetricCard label="Becsült energiafogyasztás / mosás" value={`${formatDecimal(metrics.estimatedKwhPerWash)} kWh`} />
           <MetricCard label="Becsült költség / mosás" value={`${formatNumber(metrics.estimatedCostPerWash)} Ft`} />
           <MetricCard label="Becsült éves költség" value={`${formatNumber(metrics.estimatedAnnualCost)} Ft/év`} />
-          <div className="rounded-2xl border border-cyan-400/40 bg-gradient-to-br from-cyan-600 to-sky-700 p-5 text-white shadow-md">
+          <div className="rounded-2xl border border-cyan-300/50 bg-gradient-to-br from-cyan-500 to-blue-600 p-5 text-white shadow-md">
             <p className="text-xs font-semibold uppercase tracking-wide text-cyan-100">Különbség a 20 °C / 18 perces baseline-hoz képest</p>
             <p className="mt-2 text-2xl font-semibold md:text-3xl">
               {isBaseline ? 'Ez a legalacsonyabb becsült költségű beállítás' : `+${formatNumber(metrics.annualDifferenceFromBaseline)} Ft/év`}
@@ -154,14 +154,14 @@ function WashingCostCalculatorInner({
         </div>
 
         {showShare && (
-          <div className="rounded-2xl border border-cyan-100 bg-white/85 p-5 shadow-sm">
+          <div className="rounded-2xl border border-cyan-100 bg-white/85 p-5 text-center shadow-sm">
             <h4 className="text-lg font-semibold text-slate-900">Oszd meg az eredményed</h4>
             <p className="mt-1 text-sm text-slate-700">Másold ki a beállításaiddal együtt mentett linket, vagy oszd meg közösségi felületen.</p>
-            <button type="button" className="mt-4 rounded-xl bg-cyan-600 px-4 py-2 font-semibold text-white transition hover:bg-cyan-700" onClick={async () => { await navigator.clipboard.writeText(shareUrl); setLinkCopied(true); trackEvent('calculator_share_link_click', { placement }); setTimeout(() => setLinkCopied(false), 1500); }}>
+            <button type="button" className="mt-4 inline-flex rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 px-5 py-2.5 font-semibold text-white shadow-[0_10px_24px_rgba(8,145,178,0.30)] transition hover:from-cyan-500 hover:to-blue-500" onClick={async () => { await navigator.clipboard.writeText(shareUrl); setLinkCopied(true); trackEvent('calculator_share_link_click', { placement }); setTimeout(() => setLinkCopied(false), 1500); }}>
               Link másolása
             </button>
             {linkCopied && <p className="mt-2 text-sm text-emerald-700">Link másolva</p>}
-            <div className="mt-3 flex flex-wrap gap-4 text-sm font-medium text-cyan-700">
+            <div className="mt-3 flex flex-wrap justify-center gap-4 text-sm font-medium text-cyan-700">
               <a className="underline-offset-4 hover:underline" href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`} target="_blank" rel="noreferrer">Facebook</a>
               <a className="underline-offset-4 hover:underline" href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`} target="_blank" rel="noreferrer">LinkedIn</a>
             </div>
@@ -169,11 +169,11 @@ function WashingCostCalculatorInner({
         )}
 
         {showEmbed && (
-          <div className="rounded-2xl border border-cyan-100 bg-white/85 p-5 shadow-sm">
+          <div className="rounded-2xl border border-cyan-100 bg-white/85 p-5 text-center shadow-sm">
             <h4 className="text-lg font-semibold text-slate-900">Ágyazd be a kalkulátort a saját oldaladra</h4>
             <p className="mt-1 text-sm text-slate-700">Blogcikkhez, magazinoldalhoz vagy háztartási tippeket gyűjtő oldalhoz is használható. A beágyazott verzió automatikusan visszamutat az Aquadrop kalkulátorra.</p>
-            <pre className="mt-3 overflow-x-auto whitespace-pre-wrap break-words rounded-lg bg-slate-900 p-4 text-xs leading-relaxed text-cyan-100">{iframeCode}</pre>
-            <button type="button" onClick={async () => { await navigator.clipboard.writeText(iframeCode); setEmbedCopied(true); trackEvent('calculator_embed_copy_click', { placement }); setTimeout(() => setEmbedCopied(false), 1500); }} className="mt-3 rounded-xl border border-cyan-200 px-4 py-2 font-semibold text-slate-800 transition hover:border-cyan-400">
+            <pre className="mt-3 max-h-72 overflow-x-auto whitespace-pre-wrap break-words rounded-lg bg-slate-900 p-4 text-left text-xs leading-relaxed text-cyan-100">{iframeCode}</pre>
+            <button type="button" onClick={async () => { await navigator.clipboard.writeText(iframeCode); setEmbedCopied(true); trackEvent('calculator_embed_copy_click', { placement }); setTimeout(() => setEmbedCopied(false), 1500); }} className="mt-3 inline-flex rounded-xl border border-cyan-200 px-5 py-2.5 font-semibold text-slate-800 transition hover:border-cyan-400">
               Iframe kód másolása
             </button>
             {embedCopied && <p className="mt-2 text-sm text-emerald-700">Iframe kód másolva</p>}
@@ -197,7 +197,7 @@ function MetricCard({ label, value }: { label: string; value: string }) {
 
 function CalculatorFallback() {
   return (
-    <section className="rounded-[30px] border border-cyan-100/90 bg-gradient-to-br from-white via-cyan-50/80 to-teal-50/80 p-5 shadow-[0_22px_65px_rgba(15,23,42,0.10)] md:p-8">
+    <section className="rounded-[30px] border-2 border-cyan-200/70 bg-gradient-to-br from-white via-cyan-50/85 to-sky-50/90 p-6 shadow-[0_30px_80px_rgba(6,182,212,0.18)] ring-1 ring-cyan-200/40 md:p-10">
       <p className="text-slate-700">Kalkulátor betöltése...</p>
     </section>
   );
