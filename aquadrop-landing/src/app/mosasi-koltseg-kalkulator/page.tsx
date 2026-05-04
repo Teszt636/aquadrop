@@ -75,9 +75,6 @@ export default async function WashingCostCalculatorPage({ searchParams }: { sear
               <ul className="mt-5 grid gap-3 text-sm font-medium text-cyan-900 md:grid-cols-3 md:text-base">
                 {['Gyors becslés saját mosási szokások alapján', 'Megosztható eredménylink', 'Beágyazható kalkulátor más weboldalakhoz'].map((item) => (
                   <li key={item} className="flex min-h-28 items-center justify-center rounded-2xl border border-cyan-100 bg-white/85 px-4 py-3 text-center">
-                    <span className="mr-2 text-base" aria-hidden>
-                      ✦
-                    </span>
                     <span>{item}</span>
                   </li>
                 ))}
