@@ -66,7 +66,7 @@ export const metadata: Metadata = {
     modifiedTime: `${publishedDate}T08:00:00.000Z`,
     images: [
       {
-        url: '/og-image.png',
+        url: '/aquadrop-mosokapszula-og-kep.webp',
         width: 1200,
         height: 630,
         alt: 'Hogyan mossunk hatékonyan 20 fokon? - Aquadrop útmutató'
@@ -77,7 +77,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Hogyan mossunk hatékonyan 20 fokon? | Aquadrop',
     description: articleDescription,
-    images: ['/og-image.png']
+    images: ['/aquadrop-mosokapszula-og-kep.webp']
   }
 };
 
@@ -87,7 +87,7 @@ export default function HogyanMossunk20FokonPage() {
     '@type': 'Article',
     headline: articleTitle,
     description: articleDescription,
-    image: 'https://www.aquadrop.hu/og-image.png',
+    image: 'https://www.aquadrop.hu/aquadrop-mosokapszula-og-kep.webp',
     author: {
       '@type': 'Organization',
       name: 'Aquadrop',

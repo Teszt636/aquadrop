@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     siteName: 'Aquadrop Expert Pro',
     images: [
       {
-        url: '/og-image.png',
+        url: '/aquadrop-mosokapszula-og-kep.webp',
         width: 1200,
         height: 630,
         alt: 'Aquadrop Expert Pro mosókapszula'
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     title: 'Mosókapszula – Aquadrop Expert Pro | 2+1 ajándék kapszula',
     description:
       'Fedezze fel az Aquadrop prémium világát! Dubai gyártói szakértelem és svájci Givaudan mikrokapszulás technológia találkozása a hosszan tartó, exkluzív illatélményért.',
-    images: ['/og-image.png']
+    images: ['/aquadrop-mosokapszula-og-kep.webp']
   }
 };
 
