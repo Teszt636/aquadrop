@@ -6,11 +6,21 @@ import { ArticleLayout } from '@/components/article/ArticleLayout';
 import { ButtonLink } from '@/components/ui';
 
 const articleTitle = 'Mosókapszula vagy folyékony mosószer – melyik a jobb választás?';
-const heroSubtitle = 'Mosókapszula vagy folyékony mosószer? A választás meglepően sokat elárul arról, mennyire kényelmes és kiszámítható a mosási rutinod.';
+const discoverTitle = 'Mosókapszula vagy folyékony mosószer? A választás meglepően sokat elárul arról, mennyire kényelmes és kiszámítható a mosási rutinod.';
 const articleDescription =
   'Mosókapszula vagy folyékony mosószer? Összehasonlítjuk az előnyöket, hátrányokat és segítünk eldönteni, melyik megoldás illik leginkább a mindennapi mosáshoz.';
 const articleUrl = 'https://www.aquadrop.hu/mosokapszula-vagy-folyekony-mososzer';
 const publishedDate = '2026-04-22';
+const modifiedDate = '2026-04-22';
+const heroImageUrl = 'https://www.aquadrop.hu/mosokapszula-vagy-folyekony-mososzer.webp';
+const heroImageAlt = 'Mosókapszula és folyékony mosószer összehasonlítása';
+const heroImageCaption = 'Mosókapszula vagy folyékony mosószer összehasonlítása';
+
+const faqItems = [
+  { question: 'Mosókapszula vagy folyékony mosószer: melyik a jobb?', answer: 'Nincs univerzális győztes: kapszulával egyszerűbb a napi adagolás, folyékonnyal rugalmasabb a finomhangolás.' },
+  { question: 'Mi a mosókapszula fő előnye?', answer: 'Az előre adagolt, kényelmes használat és a kisebb adagolási hibalehetőség a mindennapi rutinban.' },
+  { question: 'Mikor lehet jobb a folyékony mosószer?', answer: 'Ha egyedi adagolást szeretnél, vagy célzott előkezelést végzel eltérő szennyezettségű ruháknál.' }
+];
 
 export const metadata: Metadata = {
   title: 'Mosókapszula vagy folyékony mosószer – melyik a jobb választás? | Aquadrop',
@@ -35,13 +45,13 @@ export const metadata: Metadata = {
     locale: 'hu_HU',
     type: 'article',
     publishedTime: `${publishedDate}T08:00:00.000Z`,
-    modifiedTime: `${publishedDate}T08:00:00.000Z`,
+    modifiedTime: `${modifiedDate}T08:00:00.000Z`,
     images: [
       {
-        url: '/aquadrop-mosokapszula-og-kep.webp',
+        url: heroImageUrl,
         width: 1200,
         height: 630,
-        alt: 'Aquadrop Expert Pro mosókapszula'
+        alt: heroImageAlt
       }
     ]
   },
@@ -49,7 +59,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Mosókapszula vagy folyékony mosószer – melyik a jobb választás? | Aquadrop',
     description: articleDescription,
-    images: ['/aquadrop-mosokapszula-og-kep.webp']
+    images: [heroImageUrl]
   }
 };
 
@@ -59,7 +69,7 @@ export default function MosokapszulaVagyFolyekonyMososerPage() {
     '@type': 'BlogPosting',
     headline: articleTitle,
     description: articleDescription,
-    image: 'https://www.aquadrop.hu/aquadrop-mosokapszula-og-kep.webp',
+    image: heroImageUrl,
     author: {
       '@type': 'Organization',
       name: 'Aquadrop',
@@ -78,7 +88,7 @@ export default function MosokapszulaVagyFolyekonyMososerPage() {
       '@id': articleUrl
     },
     datePublished: `${publishedDate}T08:00:00.000Z`,
-    dateModified: `${publishedDate}T08:00:00.000Z`
+    dateModified: `${modifiedDate}T08:00:00.000Z`
   };
 
   return (
@@ -87,12 +97,17 @@ export default function MosokapszulaVagyFolyekonyMososerPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingStructuredData) }}
       />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: faqItems.map((item) => ({ "@type": "Question", name: item.question, acceptedAnswer: { "@type": "Answer", text: item.answer } }))
+      }) }} />
 
       <ArticleLayout
         slug="mosokapszula-vagy-folyekony-mososzer"
         category="Mosási útmutató"
         readingTime="kb. 12 perc olvasás"
-        title={heroSubtitle}
+        title={discoverTitle}
         intro="Mosókapszula vagy folyékony mosószer? Ez az egyik leggyakoribb kérdés azok között, akik tudatosabban szeretnék kialakítani a mindennapi mosási rutinjukat. A döntés elsőre egyszerűnek tűnhet, valójában azonban több szempontot is érdemes mérlegelni: kényelmet, adagolhatóságot, hibalehetőségeket és azt, mennyire kiszámítható a végeredmény. Ebben az útmutatóban objektíven, érthetően és gyakorlati nézőpontból segítünk eldönteni, melyik megoldás illik leginkább hozzád."
         cta={
           <div className="rounded-[28px] border border-cyan-100/80 bg-gradient-to-br from-white via-cyan-50/80 to-teal-50/80 p-7 shadow-[0_22px_65px_rgba(15,23,42,0.1)] md:p-10">
@@ -112,13 +127,15 @@ export default function MosokapszulaVagyFolyekonyMososerPage() {
         <figure className="overflow-hidden rounded-2xl border border-cyan-100 bg-white/80 shadow-sm">
           <Image
             src="/mosokapszula-vagy-folyekony-mososzer.webp"
-            alt="Mosókapszula és folyékony mosószer összehasonlítása"
+            alt={heroImageAlt}
             width={1600}
             height={900}
             className="h-auto w-full object-cover"
             sizes="(max-width: 768px) 100vw, 896px"
             priority
+          title={heroImageCaption}
           />
+          <figcaption className="px-4 py-3 text-sm text-slate-600 md:px-5">{heroImageCaption}</figcaption>
         </figure>
 
         <div className="rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5 md:p-6">
