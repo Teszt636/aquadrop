@@ -20,9 +20,36 @@ const heroImageAlt = 'Mosókapszula nem oldódik fel probléma megoldása Aquadr
 const heroImageCaption = 'Mosókapszula oldódási probléma megoldása Aquadrop Expert Pro használatával';
 
 const faqItems = [
-  { question: 'Miért nem oldódik fel a mosókapszula?', answer: 'Leggyakrabban túl rövid program, túlzsúfolt dob, rossz kapszulaelhelyezés vagy nem megfelelő tárolás miatt.' },
-  { question: 'Hova tegyem a kapszulát, hogy rendesen oldódjon?', answer: 'Közvetlenül a dob aljára tedd, még a ruhák előtt. Így a program elején egyenletesebb vízkapcsolatot kap.' },
-  { question: 'Mit tegyek, ha maradvány marad a ruhán?', answer: 'Szárítás előtt ellenőrizd a ruhát, szükség esetén öblítsd át vagy mosd újra, majd a következő mosásnál optimalizáld az elhelyezést és a töltetet.' }
+  {
+    question: 'Miért nem oldódik fel a mosókapszula?',
+    answer:
+      'Leggyakrabban túl rövid program, túlzsúfolt dob, rossz kapszulaelhelyezés vagy túl kevés vízmozgás miatt. A kapszulát mindig a dob aljára tedd, még a ruhák előtt.',
+  },
+  {
+    question: 'Hova tegyem a kapszulát, hogy rendesen feloldódjon?',
+    answer:
+      'Közvetlenül a dob aljára tedd, és csak utána pakold rá a ruhákat. Így a program elején hamarabb éri víz, és kisebb eséllyel ragad be a textíliák közé.',
+  },
+  {
+    question: 'Mit tegyek, ha mosókapszula-maradvány marad a ruhán?',
+    answer:
+      'Szárítás előtt ellenőrizd a ruhát, és ha maradványt látsz, öblítsd át vagy mosd újra. A következő mosásnál figyelj a kapszula helyére, a dob telítettségére és a program hosszára.',
+  },
+  {
+    question: 'A túl rövid program miatt zselés maradhat a mosókapszula?',
+    answer:
+      'Igen, a nagyon rövid programoknál kevesebb ideje van a kapszulának feloldódni. Alacsony hőfoknál különösen fontos, hogy a program ne legyen túl rövid.',
+  },
+  {
+    question: 'A hideg víz miatt nem oldódik fel a mosókapszula?',
+    answer:
+      'A hidegebb víz önmagában nem feltétlenül gond, ha a kapszula erre alkalmas és a program elég hosszú. Probléma inkább akkor jelentkezik, ha hideg víz, rövid program és túltöltött dob egyszerre fordul elő.',
+  },
+  {
+    question: 'Hogyan előzhető meg a mosókapszula oldódási hibája?',
+    answer:
+      'Tedd a kapszulát a dob aljára, ne töltsd túl a mosógépet, válassz megfelelő hosszúságú programot, és száraz kézzel kezeld a kapszulát. Így jelentősen csökkenthető az oldódási hiba esélye.',
+  },
 ];
 
 export const metadata: Metadata = {

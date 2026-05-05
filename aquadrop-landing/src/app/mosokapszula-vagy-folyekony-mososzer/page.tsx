@@ -21,9 +21,36 @@ const heroImageAlt = 'Mosókapszula és folyékony mosószer összehasonlítása
 const heroImageCaption = 'Mosókapszula vagy folyékony mosószer összehasonlítása';
 
 const faqItems = [
-  { question: 'Mosókapszula vagy folyékony mosószer: melyik a jobb?', answer: 'Nincs univerzális győztes: kapszulával egyszerűbb a napi adagolás, folyékonnyal rugalmasabb a finomhangolás.' },
-  { question: 'Mi a mosókapszula fő előnye?', answer: 'Az előre adagolt, kényelmes használat és a kisebb adagolási hibalehetőség a mindennapi rutinban.' },
-  { question: 'Mikor lehet jobb a folyékony mosószer?', answer: 'Ha egyedi adagolást szeretnél, vagy célzott előkezelést végzel eltérő szennyezettségű ruháknál.' }
+  {
+    question: 'Mosókapszula vagy folyékony mosószer: melyik a jobb?',
+    answer:
+      'Nincs minden helyzetre érvényes győztes. A mosókapszula kényelmes és előre adagolt, a folyékony mosószer pedig rugalmasabban adagolható különböző ruhamennyiséghez és szennyezettséghez.',
+  },
+  {
+    question: 'Mi a mosókapszula fő előnye?',
+    answer:
+      'A legnagyobb előnye az egyszerű használat: nem kell mérni vagy adagolni, egy kapszula általában elég egy átlagos mosáshoz. Ez csökkenti a túladagolás esélyét is.',
+  },
+  {
+    question: 'Mikor lehet jobb a folyékony mosószer?',
+    answer:
+      'A folyékony mosószer akkor lehet praktikusabb, ha nagyon pontos adagolást szeretnél, előkezeled a foltokat, vagy eltérő mennyiségű ruhát mosol gyakran.',
+  },
+  {
+    question: 'Melyik kényelmesebb a mindennapi mosásban?',
+    answer:
+      'A mosókapszula általában kényelmesebb, mert előre adagolt és gyorsan használható. Folyékony mosószernél több kontrollod van, de több méricskélésre is szükség lehet.',
+  },
+  {
+    question: 'Melyik működik jobban alacsony hőfokon?',
+    answer:
+      'Mindkét típus működhet jól alacsony hőfokon, ha a termék erre alkalmas. Mosókapszulánál különösen fontos a helyes elhelyezés és a megfelelő programhossz.',
+  },
+  {
+    question: 'Melyik éri meg jobban ár-érték arányban?',
+    answer:
+      'Ez a mosási szokásoktól függ. A kapszula kényelme és pontos adagolása sok háztartásban előny, míg a folyékony mosószer nagy kiszerelésben rugalmasabb költségkontrollt adhat.',
+  },
 ];
 
 export const metadata: Metadata = {

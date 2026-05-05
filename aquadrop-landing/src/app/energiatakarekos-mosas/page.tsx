@@ -22,35 +22,35 @@ const heroImageCaption = 'Energiatakarékos mosás Aquadrop Expert Pro mosókaps
 
 const faqItems = [
   {
-    question: 'Elég a 20 fokos mosás a mindennapi ruhákhoz?',
+    question: 'Mi az energiatakarékos mosás lényege?',
     answer:
-      'Sok hétköznapi, enyhén vagy közepesen szennyezett ruhánál igen, ha megfelelő programot, helyes adagolást és jó mosási megoldást választasz. Erősebb szennyezettségnél vagy speciális textileknél a ruhacímke útmutatása az elsődleges.'
+      'Az energiatakarékos mosás alacsonyabb hőfokon, jól megválasztott programmal és megfelelő mosószerrel történik. A cél, hogy kevesebb energia fogyjon, miközben a ruhák tiszták maradnak.',
   },
   {
-    question: 'Miért nem oldódik fel néha a mosókapszula?',
+    question: 'Elég a 20–30°C-os mosás a mindennapi ruhákhoz?',
     answer:
-      'A leggyakoribb ok a túl rövid program, a túlzsúfolt dob, a nem megfelelő elhelyezés vagy a helytelen tárolás. Alacsony hőfokon különösen számít, hogy a kapszula közvetlenül a dobba kerüljön, és legyen elég idő az oldódásra.'
+      'Sok hétköznapi, enyhén vagy közepesen szennyezett ruhához a 20–30°C-os mosás is elegendő lehet. Erősen szennyezett textíliáknál, törölközőknél vagy higiéniai okból időnként magasabb hőfok is indokolt lehet.',
   },
   {
-    question: 'Hova kell tenni a kapszulát?',
+    question: 'Mivel lehet spórolni mosás közben?',
     answer:
-      'Közvetlenül a mosógép dobjába, lehetőleg alulra, még a ruhák bepakolása előtt. Az adagolófiók általában nem kapszulához készült, ezért ez ronthatja az oldódás egyenletességét.'
+      'A legtöbbet általában az alacsonyabb hőfok, a teljesebb dob, a megfelelő programhossz és a túlmosás elkerülése segíthet. A mosási költséget főleg a vízmelegítés energiaigénye befolyásolja.',
   },
   {
-    question: 'Számít a program hossza?',
+    question: 'Miért fontos a program hossza alacsony hőfokon?',
     answer:
-      'Igen. A hőfok mellett a programidő kulcstényező. Alacsony hőfokú mosásnál a túl rövid ciklusok növelhetik a maradványok esélyét. Az Aquadrop Expert Pro esetében 20–30 fokon legalább 18 perces program javasolt az egyenletes oldódás és a foltmentesebb végeredmény érdekében.'
+      'Alacsonyabb hőfokon több időre lehet szükség ahhoz, hogy a mosószer megfelelően oldódjon és dolgozzon. A túl rövid program ronthatja a tisztaságot és növelheti az oldódási hibák esélyét.',
   },
   {
-    question: 'Lehet 20 fokon is foltmentesen mosni?',
+    question: 'Milyen mosószer működik jól energiatakarékos mosáshoz?',
     answer:
-      'Megfelelő körülmények között igen: tudatos programválasztás, helyes töltet, megfelelő adagolás és olyan formula, amelyet alacsonyabb hőfokra is optimalizáltak. A cél a kiszámítható, kompromisszummentes rutin kialakítása.'
+      'Olyan mosószer előnyös, amely alacsonyabb hőfokon is jól oldódik és hatékonyan dolgozik. Mosókapszulánál különösen fontos, hogy a kapszula a dob aljára kerüljön, még a ruhák betöltése előtt.',
   },
   {
-    question: 'Milyen mosószer való alacsony hőfokhoz?',
+    question: 'Az energiatakarékos mosás kíméli a ruhákat?',
     answer:
-      'Olyan minőségi, korszerű megoldás, amely alacsony hőfokon is megbízható oldódást és tisztító teljesítményt támogat. A több komponensű, funkcionálisan felépített formulák előnye, hogy egyszerre több mosási igényt képesek kezelni.'
-  }
+      'Az alacsonyabb hőfok sok anyagnál kíméletesebb lehet, mert kevésbé terheli a szálakat és a színeket. A megfelelő program és mosószer kiválasztása azonban ugyanilyen fontos a jó eredményhez.',
+  },
 ];
 
 

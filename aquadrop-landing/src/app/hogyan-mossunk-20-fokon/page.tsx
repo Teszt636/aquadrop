@@ -23,28 +23,33 @@ const faqItems = [
   {
     question: 'Tiszták lesznek a ruhák 20 fokon?',
     answer:
-      'Sok mindennapi ruhánál igen, ha a szennyezettséghez illő programot választasz, megfelelő mennyiségű mosószert használsz, és nem zsúfolod túl a dobot. Erős, beszáradt foltoknál szükség lehet célzott előkezelésre vagy eltérő programra.'
+      'A 20 fokos mosás sok hétköznapi, enyhén vagy közepesen szennyezett ruhánál jó eredményt adhat. Erősen koszos textíliáknál, törölközőknél vagy higiéniai mosásnál magasabb hőfok is szükséges lehet.',
   },
   {
     question: 'Feloldódik a mosókapszula 20 fokon?',
     answer:
-      'Igen, megfelelő használat mellett feloldódhat maradék nélkül. Az Aquadrop Expert Pro belső tesztjeiben a teljes oldódás 20 fokon körülbelül 8 perc volt, ezért gyakorlatban legalább 20 fokos és legalább 18 perces program javasolt.'
+      'Feloldódhat, ha a kapszulát a dob aljára teszed, nem töltöd túl a gépet, és nem túl rövid programot választasz. Nagyon rövid vagy kevés vízmozgással járó programnál nagyobb az oldódási hiba esélye.',
   },
   {
-    question: 'Számít, hova teszem a kapszulát?',
+    question: 'Hova kell tenni a mosókapszulát 20 fokos mosásnál?',
     answer:
-      'Igen. A kapszulát közvetlenül a dobba, lehetőleg a ruhák alá érdemes tenni, nem az adagolófiókba. Így a program elején hamarabb és egyenletesebben éri víz, ami alacsony hőfokon különösen fontos.'
+      'A mosókapszulát mindig közvetlenül a dob aljára tedd, még a ruhák betöltése előtt. Így hamarabb éri víz, és nagyobb eséllyel tud egyenletesen feloldódni.',
   },
   {
-    question: 'Miért fontos a program hossza?',
+    question: 'Milyen programot válassz 20 fokos mosáshoz?',
     answer:
-      'Az oldódás és a tisztító hatás nem csak a hőfokon múlik, hanem az időn is. Túl rövid ciklusnál nem mindig áll rendelkezésre elég idő a kapszula teljes feloldódásához és az összetevők egyenletes eloszlásához.'
+      'Olyan programot érdemes választani, amely nem túl rövid, és elegendő vízmozgást ad a mosáshoz. A legalább 18 perces program általában biztonságosabb, mint a nagyon rövid gyorsmosás.',
   },
   {
-    question: 'Milyen ruháknál lehet jó választás a 20 fokos mosás?',
+    question: 'Milyen ruháknál jó választás a 20 fokos mosás?',
     answer:
-      'Általában a mindennapi, enyhén vagy közepesen szennyezett ruháknál lehet praktikus megoldás. A végső döntésnél mindig a textil címkéje és a mosógép programajánlása legyen az elsődleges.'
-  }
+      'Pólóknál, ingeknél, könnyű hétköznapi ruháknál és enyhén szennyezett textíliáknál gyakran jó választás lehet. Fehérneműknél, törölközőknél vagy erős szennyeződésnél mérlegelni kell a magasabb hőfokot.',
+  },
+  {
+    question: 'Mikor nem ajánlott 20 fokon mosni?',
+    answer:
+      'Nem ideális erősen szennyezett munkaruháknál, zsíros foltoknál, betegséggel érintett textíliáknál vagy olyan ruháknál, ahol a címke magasabb hőfokú mosást ír elő.',
+  },
 ];
 
 
