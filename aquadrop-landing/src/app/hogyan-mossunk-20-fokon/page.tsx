@@ -292,7 +292,7 @@ export default function HogyanMossunk20FokonPage() {
           hogy ne egyetlen beállítást optimalizálj, hanem a teljes folyamatot.
         </p>
 
-        <h2>Miért számít ennyit a program hossza?</h2>
+        <h2>Miért fontos a programhossz 20 fokos mosásnál?</h2>
         <p>
           Alacsony hőfokon különösen fontos megérteni, hogy az oldódás és a tisztító hatás nem kizárólag a fokszámon
           múlik. A programidő adja meg azt az időablakot, amely alatt a kapszula filmje feloldódik, az összetevők
@@ -353,7 +353,7 @@ export default function HogyanMossunk20FokonPage() {
           </li>
         </ul>
 
-        <h2>Mit adhat hozzá ehhez egy 4 kamrás prémium mosókapszula?</h2>
+        <h2>Használható a mosókapszula 20 fokon is megbízhatóan?</h2>
         <p>
           A mindennapi mosásnál sokat számít, mennyire összetett és jól szervezett a használt formula. Az Aquadrop
           Expert Pro 4 kamrás prémium fejlesztése úgy épül fel, hogy egy kapszulán belül több funkció összehangoltan
@@ -371,7 +371,7 @@ export default function HogyanMossunk20FokonPage() {
           hőfokon mosol.
         </p>
 
-        <h2>20 fokos mosás és energiatudatos háztartás</h2>
+        <h2>Mikor nem ajánlott a 20 fokos mosás?</h2>
         <p>
           A 20 fokos mosás mögött valójában egy átgondolt háztartási stratégia állhat. Nem pusztán a spórolásról szól,
           hanem arról is, hogy a mosás textilkímélőbb, tervezhetőbb és napi szinten kényelmesebb legyen; ehhez jó kiindulópont a <Link href="/mosasi-koltseg-kalkulator">mosási költség kalkulátor</Link>.

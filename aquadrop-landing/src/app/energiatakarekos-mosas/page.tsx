@@ -235,14 +235,14 @@ export default function EnergiatakarekosMosasPage() {
           </ul>
         </div>
 
-        <h2>Hogyan lesz az energiatakarékos mosás egyszerre hatékony és megbízható?</h2>
+        <h2>Mi az energiatakarékos mosás, és mikor működik jól?</h2>
         <p>
           Az eredmény kulcsa nem csak az alacsony hőfok, hanem a hőfok, a programidő, a töltet és az adagolás
           egyensúlya. Ha ez a négy elem együtt jól működik, a ruhák tiszták maradnak, miközben a mosás energiaigénye
           is csökkenhet.
         </p>
 
-        <h2>Spórolási kalkulátor: mennyit jelenthet a hőfokváltás?</h2>
+        <h2>Mennyi pénzt takaríthatsz meg energiatakarékos mosással?</h2>
         <p>
           Ha konkrét számokat szeretnél, használd a <Link href="/mosasi-koltseg-kalkulator">mosási költség kalkulátort</Link>. Például heti 4–5 mosásnál a 40 °C-ról 20–30 °C-ra váltás éves szinten már jól
           látható különbséget adhat a becsült energiaköltségben.
@@ -356,7 +356,7 @@ export default function EnergiatakarekosMosasPage() {
           és mentálisan is könnyebb, mert nem minden mosás egy külön döntési helyzet.
         </p>
 
-        <h2>Milyen problémák jelentkezhetnek alacsony hőfokú mosásnál?</h2>
+        <h2>Milyen hibák rontják az energiatakarékos mosás eredményét?</h2>
         <p>
           Az alacsony hőfokú mosás sok előnyt kínál, de néhány tipikus hibaforrásra érdemes felkészülni. A leggyakoribb
           panasz, hogy a kapszula nem oldódik fel teljesen, és maradvány marad a ruhán vagy a dobban — ennek részleteit a <Link href="/mosokapszula-nem-oldodik-fel">miért nem oldódik fel a mosókapszula</Link> cikkben bontjuk ki. Ez kellemetlen,
@@ -417,7 +417,7 @@ export default function EnergiatakarekosMosasPage() {
           finomhangolás így nem időrabló, hanem rövid távon is megtérülő módszer lesz.
         </p>
 
-        <h2>Miért számít a mosási program hossza?</h2>
+        <h2>Miért spórolhatsz a 20–30°C-os mosással?</h2>
         <p>
           Az oldódás és az egyenletes tisztító hatás nem kizárólag a hőfoktól függ. A programidő legalább ennyire
           meghatározó, mert a mosásnak idő kell ahhoz, hogy a kapszula burka feloldódjon, a hatóanyagok eloszoljanak,
@@ -444,7 +444,7 @@ export default function EnergiatakarekosMosasPage() {
           meggyőzőbb lesz.
         </p>
 
-        <h2>Milyen szerepe van ebben a megfelelő mosószernek?</h2>
+        <h2>Milyen mosószer működik jól alacsony hőfokon?</h2>
         <p>
           Alacsony hőfokú mosásnál a mosószer minősége és kialakítása különösen sokat számít. Míg magasabb hőfokon
           több folyamat „magától” intenzívebben történik, 20–30 fokon nagyobb jelentőséget kap, hogy a formula
