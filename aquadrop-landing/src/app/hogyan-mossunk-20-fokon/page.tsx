@@ -7,6 +7,7 @@ import { ButtonLink } from '@/components/ui';
 
 const articleTitle = 'Hogyan mossunk hatékonyan 20 fokon?';
 const discoverTitle = 'A 20 fokos mosás nem kompromisszum: jól beállítva meglepően hatékony, miközben kíméli az anyagokat és az energiát is.';
+const h1Title = '20 fokos mosás: hogyan moss hatékonyan alacsony hőfokon?';
 const articleDescription =
   '20 fokos mosás: így lesz tiszta a ruha alacsony hőfokon is. Spórolj energiát és kerüld el a mosókapszula hibákat.';
 const articleUrl = 'https://www.aquadrop.hu/hogyan-mossunk-20-fokon';
@@ -167,7 +168,7 @@ export default function HogyanMossunk20FokonPage() {
         slug="hogyan-mossunk-20-fokon"
         category="Mosási útmutató"
         readingTime="kb. 8 perc olvasás"
-        title={discoverTitle}
+        title={h1Title}
         intro="A 20 fokos mosás ma már nem különleges megoldás, hanem egyre több energiatudatos háztartás alapbeállítása. A jó eredmény azonban nem csak a hőfokon múlik: a programidő, a kapszula elhelyezése, az adagolás és a dob töltöttsége együtt adja azt a stabil mosási folyamatot, amely alacsony hőfokon is megbízható tisztaságot tud biztosítani."
         cta={
           <div className="rounded-[28px] border border-cyan-100/80 bg-gradient-to-br from-white via-cyan-50/80 to-teal-50/80 p-7 shadow-[0_22px_65px_rgba(15,23,42,0.1)] md:p-10">

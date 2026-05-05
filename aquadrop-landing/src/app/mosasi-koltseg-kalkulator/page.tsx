@@ -45,7 +45,7 @@ export default async function WashingCostCalculatorPage({ searchParams }: { sear
               <p className="inline-flex rounded-full border border-cyan-200/80 bg-cyan-100/80 px-4 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-800">
                 INGYENES MOSÁSI KALKULÁTOR
               </p>
-              <h1 className="text-3xl font-semibold tracking-tight text-slate-900 md:text-5xl">Mosási költség kalkulátor</h1>
+              <h1 className="text-3xl font-semibold tracking-tight text-slate-900 md:text-5xl">Mosási költség kalkulátor 20 és 40 fokos mosáshoz</h1>
               <p className="text-lg font-medium text-slate-800 md:text-xl">Számold ki, mennyit spórolhatsz 20 fokos mosással</p>
               <p className="text-slate-700">
                 Add meg a mosási szokásaidat, és nézd meg, mekkora különbséget jelenthet az alacsonyabb hőfok a villanyszámlában.
