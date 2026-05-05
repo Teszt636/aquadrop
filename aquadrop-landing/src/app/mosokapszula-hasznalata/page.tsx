@@ -17,7 +17,7 @@ const modifiedDate = '2026-04-22';
 const heroImageUrl = 'https://www.aquadrop.hu/mosokapszula-hasznalata.webp';
 const heroImageWidth = 1731;
 const heroImageHeight = 909;
-const heroImageAlt = 'Mosókapszula helyes használata mosógépben Aquadrop Expert Pro kapszulával';
+const heroImageAlt = 'Mosókapszula helyes használata a mosógép dobjában Aquadrop Expert Pro termékkel';
 const heroImageCaption = 'Mosókapszula helyes használata Aquadrop Expert Pro kapszulával';
 
 const faqItems = [

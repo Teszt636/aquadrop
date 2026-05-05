@@ -18,7 +18,7 @@ const heroImageUrl = 'https://www.aquadrop.hu/energiatakarekos-mosas-aquadrop-ex
 const socialImageUrl = 'https://www.aquadrop.hu/og/energiatakarekos-mosas-aquadrop-og.webp';
 const heroImageWidth = 1536;
 const heroImageHeight = 1024;
-const heroImageAlt = 'Energiatakarékos mosás modern mosógépben Aquadrop Expert Pro mosókapszulával';
+const heroImageAlt = 'Energiatakarékos mosás Aquadrop Expert Pro mosókapszulával alacsony hőfokon';
 const heroImageCaption = 'Energiatakarékos mosás Aquadrop Expert Pro mosókapszulával';
 
 const faqItems = [

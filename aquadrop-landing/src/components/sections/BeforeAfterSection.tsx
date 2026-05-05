@@ -118,7 +118,7 @@ export function BeforeAfterSection() {
             >
               <Image
                 src="/tiszta-ruha-mosas-utan.webp"
-                alt="Tiszta ruha mosás után Aquadrop használatával"
+                alt="Mosás utáni tiszta ruha eredménye Aquadrop mosókapszulával"
                 fill
                 loading="lazy"
                 sizes="(max-width: 768px) 100vw, 768px"
@@ -136,7 +136,7 @@ export function BeforeAfterSection() {
             >
               <Image
                 src="/foltos-ruha-mosas-elott.webp"
-                alt="Foltos ruha mosás előtt"
+                alt="Mosás előtti foltos ruha tisztítási példa Aquadrop mosókapszulához"
                 fill
                 loading="lazy"
                 sizes="(max-width: 768px) 100vw, 768px"

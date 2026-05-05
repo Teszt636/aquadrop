@@ -17,7 +17,7 @@ const modifiedDate = '2026-04-22';
 const heroImageUrl = 'https://www.aquadrop.hu/mosokapszula-nem-oldodik-fel-megoldas-aquadrop.webp';
 const heroImageWidth = 1536;
 const heroImageHeight = 1024;
-const heroImageAlt = 'Mosókapszula nem oldódik fel probléma megoldása Aquadrop Expert Pro használatával';
+const heroImageAlt = 'Mosókapszula oldódási hiba megelőzése megfelelő elhelyezéssel és programválasztással';
 const heroImageCaption = 'Mosókapszula oldódási probléma megoldása Aquadrop Expert Pro használatával';
 
 const faqItems = [

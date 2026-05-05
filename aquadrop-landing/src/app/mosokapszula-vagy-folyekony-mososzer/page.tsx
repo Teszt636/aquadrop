@@ -18,7 +18,7 @@ const heroImageUrl = 'https://www.aquadrop.hu/mosokapszula-vagy-folyekony-mososz
 const socialImageUrl = 'https://www.aquadrop.hu/og/mosokapszula-vagy-folyekony-mososzer-aquadrop-og.webp';
 const heroImageWidth = 1536;
 const heroImageHeight = 1024;
-const heroImageAlt = 'Mosókapszula és folyékony mosószer összehasonlítása';
+const heroImageAlt = 'Mosókapszula és folyékony mosószer összehasonlítása mindennapi mosáshoz';
 const heroImageCaption = 'Mosókapszula vagy folyékony mosószer összehasonlítása';
 
 const faqItems = [
