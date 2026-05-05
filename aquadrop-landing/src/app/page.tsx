@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import dynamic from 'next/dynamic';
 import { SITE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
@@ -42,7 +43,6 @@ import {
   FooterSection,
   FaqSection,
   GiftConversionSection,
-  GiftSection,
   HeroSection,
   HeroTrustStripSection,
   MicrocapsuleMagicSection,
@@ -57,6 +57,8 @@ import { ScrollDepthTracker } from '@/components/analytics';
 import { HomeKnowledgeHub } from '@/components/home-knowledge-hub';
 import { HomeResellerCta } from '@/components/home-reseller-cta';
 import { BeforeAfterSectionDynamic } from '@/components/sections/BeforeAfterSectionDynamic';
+
+const GiftSectionDynamic = dynamic(() => import('@/components/sections').then((module) => module.GiftSection));
 
 export default function Home() {
 
@@ -179,7 +181,7 @@ export default function Home() {
           <EnergySavingsSection />
           <DubaiSection />
           <HomeKnowledgeHub />
-          <GiftSection />
+          <GiftSectionDynamic />
           <ProblemSection />
           <BenefitsSection />
           <TechnologySection />
