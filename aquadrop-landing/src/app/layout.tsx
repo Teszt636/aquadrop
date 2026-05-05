@@ -51,11 +51,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-KE6Z8CCYL4"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
         <Script
-          id="google-analytics"
-          strategy="afterInteractive"
+          id="gtag-init"
+          strategy="lazyOnload"
           dangerouslySetInnerHTML={{
             __html: `
               window.dataLayer = window.dataLayer || [];
