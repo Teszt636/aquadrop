@@ -217,7 +217,7 @@ export default function MennyitSporolhatsz20FokonPage() {
           </ul>
         </div>
 
-        <h2>Mennyit lehet reálisan spórolni, ha 40 helyett 20 fokon mosol?</h2>
+        <h2>Mennyit spórolhatsz 40 helyett 20 fokos mosással?</h2>
         <p>
           Az alacsonyabb hőfok sok háztartásban mérhető éves különbséget adhat, főleg akkor, ha gyakran mosol. A
           pontos érték géptípustól és programtól függ, ezért érdemes saját adatokkal becslést futtatni.
@@ -261,7 +261,10 @@ export default function MennyitSporolhatsz20FokonPage() {
           stratégia.
         </p>
 
-        <h2>Mikor éri meg 40 helyett 20 fokon mosni? A részletes lépésekért nézd meg, <Link href="/hogyan-mossunk-20-fokon">hogyan moss hatékonyan 20 fokon</Link>.</h2>
+        <h2>Mikor éri meg 40 helyett 20 fokon mosni?</h2>
+        <p>
+          A részletes gyakorlati lépéseket a <Link href="/hogyan-mossunk-20-fokon">hogyan moss hatékonyan 20 fokon</Link> útmutatóban találod.
+        </p>
         <p>
           Sok háztartásban igen, de nem automatikusan minden helyzetben. A hétköznapi, enyhén vagy közepesen
           szennyezett ruháknál a 20 fok jó választás lehet, ha a teljes mosási folyamat megfelelően van felépítve.
@@ -306,7 +309,10 @@ export default function MennyitSporolhatsz20FokonPage() {
         </p>
 
 
-        <h2>Mikor nem a 20 fokos mosás a jó választás? Kezdd a <Link href="/mosokapszula-hasznalata">mosókapszula helyes használata</Link> alapjaival.</h2>
+        <h2>Mikor nem a 20 fokos mosás a jó választás?</h2>
+        <p>
+          Ha kapszulát használsz, érdemes először a <Link href="/mosokapszula-hasznalata">mosókapszula helyes használata</Link> alapjaival kezdeni.
+        </p>
         <ul>
           <li>
             <strong>Válassz megfelelő programhosszt:</strong> alacsony hőfokon különösen fontos az idő, ezért a

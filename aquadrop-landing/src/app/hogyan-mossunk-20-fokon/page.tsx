@@ -215,7 +215,7 @@ export default function HogyanMossunk20FokonPage() {
           </ul>
         </div>
 
-        <h2>Hogyan moss hatékonyan 20 fokon úgy, hogy a ruhák valóban tiszták maradjanak?</h2>
+        <h2>Hogyan moss hatékonyan 20 fokon?</h2>
         <p>
           A 20 fokos mosás akkor stabil, ha a hőfok mellé megfelelő programidő, jó kapszulaelhelyezés és nem túlzsúfolt
           dob társul. Így egyszerre csökkentheted az energiaigényt és tarthatod meg a tisztaságérzetet.
@@ -274,7 +274,7 @@ export default function HogyanMossunk20FokonPage() {
           fokon, amit pedig a textília vagy a szennyezettség indokol, kezeld célzottabban.
         </p>
 
-        <h2>Mi kell ahhoz, hogy a 20 fokos mosás jól működjön?</h2>
+        <h2>Mitől működik jól a 20 fokos mosás?</h2>
         <div className="rounded-2xl border border-cyan-100 bg-cyan-50/60 p-5 md:p-7">
           <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-800">Rövid, gyakorlati lista</p>
           <ul className="mt-4 space-y-3">
@@ -353,7 +353,7 @@ export default function HogyanMossunk20FokonPage() {
           </li>
         </ul>
 
-        <h2>Használható a mosókapszula 20 fokon is megbízhatóan?</h2>
+        <h2>Feloldódik a mosókapszula 20 fokon?</h2>
         <p>
           A mindennapi mosásnál sokat számít, mennyire összetett és jól szervezett a használt formula. Az Aquadrop
           Expert Pro 4 kamrás prémium fejlesztése úgy épül fel, hogy egy kapszulán belül több funkció összehangoltan

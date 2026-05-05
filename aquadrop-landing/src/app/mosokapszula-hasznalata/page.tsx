@@ -229,7 +229,7 @@ export default function MosokapszulaHasznalataPage() {
           speciálisabb helyzetekben is nyugodtan tudsz építeni.
         </p>
 
-        <h2>Hova kell tenni a mosókapszulát?</h2>
+        <h2>Hova kell tenni a mosókapszulát a dobban?</h2>
         <p>
           A legfontosabb alapelv: a mosókapszulát <strong>közvetlenül a mosógép dobjába</strong> kell tenni, nem az
           adagolófiókba. Ez a gyakorlat az esetek túlnyomó részében biztosítja, hogy a kapszula megfelelően
@@ -251,7 +251,7 @@ export default function MosokapszulaHasznalataPage() {
           túlzottan összenyomja. A cél az, hogy a mosás elején minél hamarabb érje a víz.
         </p>
 
-        <h2>Hova és mikor kell tenni a mosókapszulát?</h2>
+        <h2>Mikor kell betenni a mosókapszulát?</h2>
         <p>
           A sorrend sokat számít. A jó gyakorlat az, hogy először a kapszula kerüljön a dobba, és csak utána jöjjenek a
           ruhák. Ez a sorrend segít abban, hogy a kapszula ne maradjon a textíliák tetején vagy egy kevésbé kedvező
@@ -294,7 +294,10 @@ export default function MosokapszulaHasznalataPage() {
           elegendő mozgásteret a ruha. Így 1 kapszula is stabilan tud működni a legtöbb átlagos mosási helyzetben.
         </p>
 
-        <h2>Milyen hibákat érdemes elkerülni? A tipikus oldódási gondokról itt olvashatsz: <Link href="/mosokapszula-nem-oldodik-fel">miért nem oldódik fel a mosókapszula</Link>.</h2>
+        <h2>Milyen hibákat kerülj el mosókapszula használatakor?</h2>
+        <p>
+          A tipikus oldódási gondokról külön útmutatóban is írtunk: <Link href="/mosokapszula-nem-oldodik-fel">miért nem oldódik fel a mosókapszula</Link>.
+        </p>
         <p>
           A mosókapszula használata egyszerű, de néhány gyakori hiba ronthatja az élményt. Ezekre érdemes tudatosan
           figyelni:
@@ -331,7 +334,10 @@ export default function MosokapszulaHasznalataPage() {
           gyorsan átfutható, mégis jelentősen javítja a következetességet.
         </p>
 
-        <h2>Használható a mosókapszula 20–30°C-on? Ha alacsony hőfokon mosol, nézd meg ezt is: <Link href="/hogyan-mossunk-20-fokon">hogyan moss hatékonyan 20 fokon</Link>.</h2>
+        <h2>Használható a mosókapszula 20–30°C-on?</h2>
+        <p>
+          Ha alacsony hőfokon mosol, nézd meg ezt is: <Link href="/hogyan-mossunk-20-fokon">hogyan moss hatékonyan 20 fokon</Link>.
+        </p>
         <p>
           Erre nincs minden helyzetre azonos, kőbe vésett szám. A kapszulás mosószerek általában többféle hétköznapi
           hőfoktartományban használhatók, de az optimális választás a ruha anyagától, színétől és szennyezettségétől is
@@ -353,7 +359,10 @@ export default function MosokapszulaHasznalataPage() {
           indulj ki.
         </p>
 
-        <h2>Kell-e öblítő a mosókapszula mellé? A döntéshez hasznos összevetés: <Link href="/mosokapszula-vagy-folyekony-mososzer">mosókapszula vagy folyékony mosószer</Link>.</h2>
+        <h2>Kell-e öblítő a mosókapszula mellé?</h2>
+        <p>
+          A mosószerválasztáshoz hasznos összevetés: <Link href="/mosokapszula-vagy-folyekony-mososzer">mosókapszula vagy folyékony mosószer</Link>.
+        </p>
         <p>
           Röviden: részben preferencia kérdése. Sokan azért választják a kapszulát, mert egyetlen lépésben szeretnék
           megoldani a mosást, és ez sok helyzetben működőképes, kényelmes út.
@@ -463,7 +472,7 @@ export default function MosokapszulaHasznalataPage() {
           rutinná váljon.
         </p>
 
-        <h2>Összefoglalás</h2>
+        <h2>Összefoglalás: így használd jól a mosókapszulát</h2>
         <p>
           A <strong>mosókapszula használata</strong> akkor adja a legjobb, legkiszámíthatóbb eredményt, ha néhány fontos
           alapelvet követünk: a kapszula a dobba kerüljön, lehetőleg a ruhák alá; először a kapszula, utána a ruha; normál
