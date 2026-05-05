@@ -180,7 +180,7 @@ export default function MosokapszulaVagyFolyekonyMososerPage() {
           </ul>
         </div>
 
-        <h2>Mosókapszula vagy folyékony mosószer: melyik működik jobban a mindennapi rutinodban?</h2>
+        <h2>Mosókapszula vagy folyékony mosószer a mindennapi mosásban?</h2>
         <p>
           Nincs mindenkire érvényes egyetlen válasz: a legjobb választás az, ami a saját ruhatípusaidhoz, időbeosztásodhoz
           és mosási szokásaidhoz passzol. Kapszulával általában egyszerűbb a napi adagolás, folyékonnyal rugalmasabb a
@@ -330,7 +330,7 @@ export default function MosokapszulaVagyFolyekonyMososerPage() {
           figyelmet fordítani.
         </p>
 
-        <h2>Melyik adagolása egyszerűbb a mindennapi mosásban?</h2>
+        <h2>Melyik adagolása egyszerűbb?</h2>
         <p>
           Az objektív <strong>mosószer összehasonlítás</strong> része az is, hogy ne csak az előnyökről beszéljünk.
           Mindkét forma hordoz kompromisszumokat, ezért érdemes tisztán látni a korlátokat.
@@ -372,7 +372,7 @@ export default function MosokapszulaVagyFolyekonyMososerPage() {
           egyszerűbb rendszer hosszú távon stabilabb eredményt adhat csak azért, mert könnyebb következetesen használni.
         </p>
 
-        <h2>Melyik működik jobban alacsony hőfokon?</h2>
+        <h2>Mosókapszula vagy folyékony mosószer alacsony hőfokon?</h2>
         <p>
           A „<strong>melyik jobb mosókapszula vagy folyékony</strong>” kérdésre nincs egyetlen, mindenkire igaz válasz.
           A döntés kulcsa, hogy te mit értékelsz jobban a mindennapi használatban.
@@ -462,7 +462,7 @@ export default function MosokapszulaVagyFolyekonyMososerPage() {
           ami hosszú távon nem segíti a kényelmes rutint.
         </p>
 
-        <h2>Melyik éri meg jobban a mindennapi mosásban?</h2>
+        <h2>Melyik éri meg jobban?</h2>
         <p>
           Az Aquadrop Expert Pro egy olyan mosókapszula, amely a modern mosási igényekhez igazodva készült, és egy
           többkomponensű, 4 szegmensből álló prémium fejlesztés eredménye. A kapszulában különálló rétegekben található

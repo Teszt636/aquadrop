@@ -181,7 +181,7 @@ export default function MosokapszulaNemOldodikFelPage() {
           </ul>
         </div>
 
-        <h2>Miért nem oldódik fel a mosókapszula, és mi a leggyorsabb megoldás?</h2>
+        <h2>Miért nem oldódik fel a mosókapszula?</h2>
         <p>
           A probléma jellemzően túl rövid program, túlzsúfolt dob vagy rossz kapszulaelhelyezés miatt jelentkezik.
           A legtöbbször gyorsan javítható: kapszula a dob aljára, lazább töltet, hosszabb ciklus.
@@ -191,7 +191,7 @@ export default function MosokapszulaNemOldodikFelPage() {
           pillar oldalt is, ahol a hőfok–programidő–adagolás kapcsolatát is bemutatjuk.
         </p>
 
-        <h2>Miért nem oldódik fel a mosókapszula, és mit tegyél ilyenkor?</h2>
+        <h2>Mit tegyél, ha zselés marad a mosókapszula?</h2>
         <p>
           <strong>Mi a probléma:</strong> a kapszula részben bent marad, nyomot hagyhat a ruhán, vagy a tisztaságérzet
           gyengül.
@@ -229,7 +229,7 @@ export default function MosokapszulaNemOldodikFelPage() {
           helyzetek, és a kapszulás mosás valóban azt adja, amiért sokan választják: egyszerűséget és kiszámíthatóságot.
         </p>
 
-        <h2>Miért nem oldódik fel a mosókapszula?</h2>
+        <h2>A leggyakoribb okok, amiért a kapszula nem oldódik fel</h2>
         <p>
           Röviden: több tényező együttes hatása miatt. A legtöbb esetben nem egyetlen „hiba” áll a háttérben, hanem
           több kisebb körülmény adódik össze. Ilyen lehet például a túl alacsony vízmennyiség, a túlzsúfolt dob,
@@ -252,7 +252,7 @@ export default function MosokapszulaNemOldodikFelPage() {
           lépés hozza a legnagyobb különbséget a saját gépedben és a saját textiljeiddel.
         </p>
 
-        <h2>Melyek a leggyakoribb mosókapszula-oldódási hibák?</h2>
+        <h2>Gyakori mosókapszula-oldódási hibák</h2>
 
         <h3>A kapszula nem a dob aljába került</h3>
         <p>
@@ -291,7 +291,7 @@ export default function MosokapszulaNemOldodikFelPage() {
           segít abban, hogy használatkor kiszámíthatóbb legyen a működés.
         </p>
 
-        <h3>A ruhaanyag vagy a töltet elhelyezkedése miatt nem tudott időben oldódni</h3>
+        <h3>A ruhaanyag elzárta a kapszulát a víztől</h3>
         <p>
           Vastagabb textilek, nagyobb textilcsomók, illetve egyenetlenül pakolt töltet esetén előfordulhat, hogy a
           kapszula ideiglenesen „bezáródik” a ruhák közé. Ilyenkor késve juthat hozzá elegendő vízhez.
@@ -322,7 +322,10 @@ export default function MosokapszulaNemOldodikFelPage() {
           cikkünket: <Link href="/mosokapszula-hasznalata">mosókapszula használata</Link>.
         </p>
 
-        <h2>Számít a mosási program is? Igen, és ehhez gyakorlati segítség a <Link href="/hogyan-mossunk-20-fokon">hogyan moss hatékonyan 20 fokon</Link> útmutató.</h2>
+        <h2>Számít a mosási program hossza?</h2>
+        <p>
+          Gyakorlati segítségként nézd meg a <Link href="/hogyan-mossunk-20-fokon">hogyan moss hatékonyan 20 fokon</Link> útmutatót is.
+        </p>
         <p>
           Igen, számíthat. Nem minden program ad azonos körülményeket a kapszula oldódásához. Egyes rövidebb vagy
           speciális ciklusoknál a vízfelvétel és a mechanikai mozgás más lehet, ami bizonyos tölteteknél befolyásolhatja
@@ -373,7 +376,7 @@ export default function MosokapszulaNemOldodikFelPage() {
           a helyzet a következő mosásnál.
         </p>
 
-        <h2>Hogyan előzheted meg, hogy a mosókapszula ne oldódjon fel?</h2>
+        <h2>Hogyan előzheted meg az oldódási hibákat?</h2>
         <p>
           A megelőzés kulcsa néhány egyszerű, de következetesen betartott rutinlépés. Ha ezeket beépíted a mindennapi
           mosásba, jelentősen csökkenthető a kellemetlen meglepetések esélye.

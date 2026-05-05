@@ -300,7 +300,7 @@ export default function EnergiatakarekosMosasPage() {
           hatékonyabb, kényelmesebb és tudatosabb.
         </p>
 
-        <h2>Mit jelent az energiatakarékos mosás?</h2>
+        <h2>Az energiatakarékos mosás alapjai a gyakorlatban</h2>
         <p>
           Az energiatakarékos mosás lényege, hogy a ruhák tisztán tartását alacsonyabb energiaigény mellett valósítod
           meg. A legtöbben ezt automatikusan a hőfok csökkentésével azonosítják, ami részben igaz, de önmagában nem
@@ -510,7 +510,7 @@ export default function EnergiatakarekosMosasPage() {
           természetes módon épül a bizalom és a márkához kötődés.
         </p>
 
-        <h2>Hogyan kapcsolódik össze az energiatakarékosság, a textilkímélés és a tisztaság?</h2>
+        <h2>Miért kíméli a ruhákat az alacsony hőfokú mosás?</h2>
         <p>
           Sokáig úgy kezelték ezeket a célokat, mintha választani kellene közöttük. A modern mosási szemlélet viszont
           azt mutatja, hogy a három szempont együtt is működhet: alacsonyabb hőfok, kíméletesebb bánásmód és stabil

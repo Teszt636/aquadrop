@@ -78,7 +78,7 @@ export default async function WashingCostCalculatorPage({ searchParams }: { sear
         {!isEmbed && (
           <>
             <section className="rounded-3xl border border-cyan-100/70 bg-white/80 p-7 shadow-[0_18px_55px_rgba(14,116,144,0.09)] backdrop-blur-sm md:p-8">
-              <h2 className="text-center text-2xl font-semibold text-slate-900">Mosási költség kalkulátor: hogyan működik?</h2>
+              <h2 className="text-center text-2xl font-semibold text-slate-900">Hogyan működik a mosási költség kalkulátor?</h2>
               <p className="mx-auto mt-3 max-w-3xl text-center text-slate-700">
                 A mosási hőfok és a program hossza látványosan befolyásolhatja az energiafelhasználást. A kalkulátor segít megérteni,
                 hogy ugyanazzal a heti mosásszámmal mekkora különbséget okozhat egy energiatudatosabb beállítás.
