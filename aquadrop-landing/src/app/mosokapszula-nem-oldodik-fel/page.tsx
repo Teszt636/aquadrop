@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { ArticleLayout } from '@/components/article/ArticleLayout';
+import { RelatedGuides } from '@/components/RelatedGuides';
 import { ButtonLink } from '@/components/ui';
 
 const articleTitle = 'Miért nem oldódik fel a mosókapszula? Gyakori hibák és megoldások';
@@ -478,6 +479,18 @@ export default function MosokapszulaNemOldodikFelPage() {
           nyugodtan, informáltan dönthess: előbb értsd meg a helyes használatot, és csak utána válassz olyan megoldást,
           ami tényleg passzol a háztartásod ritmusához.
         </p>
+
+
+        <RelatedGuides
+          title='Kapcsolódó útmutatók mosókapszula oldódási hibákhoz'
+          intro='Ha a kapszula nem oldódik fel, a használati sorrend, a programhossz és az alacsony hőfokú mosási rutin együtt számít.'
+          items={[
+            { label: 'Használat', title: 'Mosókapszula használata helyesen', description: 'Nézd meg, hova kell tenni a kapszulát, mennyit használj, és milyen hibákat kerülj el.', href: '/mosokapszula-hasznalata' },
+            { label: '20 fokos mosás', title: 'Hogyan moss hatékonyan 20 fokon?', description: 'Alacsony hőfoknál különösen fontos a megfelelő programhossz és a dob helyes töltése.', href: '/hogyan-mossunk-20-fokon' },
+            { label: 'Összehasonlítás', title: 'Mosókapszula vagy folyékony mosószer?', description: 'Ismerd meg, mikor jobb a kapszula kényelme, és mikor ad több kontrollt a folyékony mosószer.', href: '/mosokapszula-vagy-folyekony-mososzer' },
+            { label: 'Pillar útmutató', title: 'Energiatakarékos mosás lépésről lépésre', description: 'Tudd meg, hogyan kapcsolódik az alacsony hőfok, a programhossz és a mosószerhasználat.', href: '/energiatakarekos-mosas' },
+          ]}
+        />
 
         <h2>Gyakori kérdések a mosókapszula oldódásáról</h2>
         <p>

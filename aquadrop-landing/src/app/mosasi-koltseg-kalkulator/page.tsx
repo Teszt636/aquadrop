@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
+import { RelatedGuides } from '@/components/RelatedGuides';
 import { WashingCostCalculator } from '@/components/tools/WashingCostCalculator';
 
 const faqItems = [
@@ -135,51 +136,16 @@ export default async function WashingCostCalculatorPage({ searchParams }: { sear
               </ul>
             </section>
 
-            <section className="rounded-3xl border border-cyan-100 bg-white/80 p-6 text-center shadow-sm md:p-8">
-              <h2 className="text-xl font-semibold text-slate-900">Kapcsolódó útmutatók a mosási költségek csökkentéséhez</h2>
-              <p className="mx-auto mt-3 max-w-3xl text-slate-700">
-                Ha szeretnéd csökkenteni a mosás energiafogyasztását, ezek az útmutatók segítenek a hőfok, a programhossz és a
-                mosókapszula használatának optimalizálásában.
-              </p>
-              <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                {[
-                  {
-                    title: 'Energiatakarékos mosás lépésről lépésre',
-                    description: 'Alacsonyabb hőfok, tudatos programválasztás és kevesebb energiafelhasználás a mindennapi mosásban.',
-                    href: '/energiatakarekos-mosas',
-                    label: 'Pillar útmutató'
-                  },
-                  {
-                    title: 'Hogyan moss hatékonyan 20 fokon?',
-                    description: 'Gyakorlati tanácsok ahhoz, hogy a 20 fokos mosás tiszta eredményt adjon a hétköznapi ruháknál.',
-                    href: '/hogyan-mossunk-20-fokon',
-                    label: '20 fokos mosás'
-                  },
-                  {
-                    title: 'Mennyit spórolhatsz 20 fokos mosással?',
-                    description: 'Nézd meg, miért csökkentheti a mosási költséget, ha 40 helyett 20 fokon mosol.',
-                    href: '/mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol',
-                    label: 'Megtakarítás'
-                  },
-                  {
-                    title: 'Mosókapszula használata helyesen',
-                    description: 'Hova tedd a kapszulát, mennyit használj, és mire figyelj alacsony hőfokú mosásnál?',
-                    href: '/mosokapszula-hasznalata',
-                    label: 'Mosókapszula tippek'
-                  }
-                ].map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className="group rounded-3xl border border-cyan-100 bg-white/75 p-5 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-md"
-                  >
-                    <p className="text-xs font-semibold uppercase tracking-wide text-cyan-700">{item.label}</p>
-                    <h3 className="mt-3 text-lg font-semibold text-slate-900">{item.title}</h3>
-                    <p className="mt-2 text-sm text-slate-600">{item.description}</p>
-                  </Link>
-                ))}
-              </div>
-            </section>
+            <RelatedGuides
+              title="Kapcsolódó útmutatók a mosási költségek csökkentéséhez"
+              intro="Ha szeretnéd csökkenteni a mosás energiafogyasztását, ezek az útmutatók segítenek a hőfok, a programhossz és a mosókapszula használatának optimalizálásában."
+              items={[
+                { label: 'Pillar útmutató', title: 'Energiatakarékos mosás lépésről lépésre', description: 'Alacsonyabb hőfok, tudatos programválasztás és kevesebb energiafelhasználás a mindennapi mosásban.', href: '/energiatakarekos-mosas' },
+                { label: '20 fokos mosás', title: 'Hogyan moss hatékonyan 20 fokon?', description: 'Gyakorlati tanácsok ahhoz, hogy a 20 fokos mosás tiszta eredményt adjon a hétköznapi ruháknál.', href: '/hogyan-mossunk-20-fokon' },
+                { label: 'Megtakarítás', title: 'Mennyit spórolhatsz 20 fokos mosással?', description: 'Nézd meg, miért csökkentheti a mosási költséget, ha 40 helyett 20 fokon mosol.', href: '/mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol' },
+                { label: 'Mosókapszula tippek', title: 'Mosókapszula használata helyesen', description: 'Hova tedd a kapszulát, mennyit használj, és mire figyelj alacsony hőfokú mosásnál?', href: '/mosokapszula-hasznalata' }
+              ]}
+            />
 
             <section className="rounded-3xl border border-cyan-100 bg-white/80 p-6 shadow-sm md:p-8">
               <h2 className="text-center text-2xl font-semibold text-slate-900">Gyakori kérdések a mosási költség kalkulátorról</h2>
