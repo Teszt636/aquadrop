@@ -25,7 +25,7 @@ const faqItems = [
 ];
 
 export const metadata: Metadata = {
-  title: 'Miért nem oldódik fel a mosókapszula? Gyakori hibák és megoldások | Aquadrop',
+  title: 'Nem oldódik fel a mosókapszula? Ez a megoldás',
   description: articleDescription,
   keywords: [
     'mosókapszula nem oldódik fel',
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     canonical: articleUrl,
   },
   openGraph: {
-    title: 'Miért nem oldódik fel a mosókapszula? Gyakori hibák és megoldások | Aquadrop',
+    title: 'Nem oldódik fel a mosókapszula? Ezért történik',
     description: articleDescription,
     url: articleUrl,
     siteName: 'Aquadrop Expert Pro',
@@ -60,7 +60,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Miért nem oldódik fel a mosókapszula? Gyakori hibák és megoldások | Aquadrop',
+    title: 'Nem oldódik fel a mosókapszula? Ez a megoldás',
     description: articleDescription,
     images: [heroImageUrl]
   }
