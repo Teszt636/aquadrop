@@ -8,6 +8,7 @@ import { ButtonLink } from '@/components/ui';
 
 const articleTitle = 'Mennyit spórolhatsz, ha 40 helyett 20 fokon mosol?';
 const discoverTitle = 'Sokan nem hiszik el, mennyit spórolhatsz, ha 40 helyett 20 fokon mosol';
+const h1Title = '20 fokos mosás: mennyit spórolhatsz 40 fok helyett?';
 const heroImageUrl = 'https://www.aquadrop.hu/20-fokos-mosas-megtakaritas-aquadrop.webp';
 const socialImageUrl = 'https://www.aquadrop.hu/og/20-fokos-mosas-megtakaritas-aquadrop-og.webp';
 const heroImageWidth = 1536;
@@ -94,6 +95,8 @@ export const metadata: Metadata = {
 };
 
 export default function MennyitSporolhatsz20FokonPage() {
+  void discoverTitle;
+
   const articleStructuredData = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
@@ -169,7 +172,7 @@ export default function MennyitSporolhatsz20FokonPage() {
         slug="mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol"
         category="Energiatudatos mosás"
         readingTime="kb. 8 perc olvasás"
-        title={discoverTitle}
+        title={h1Title}
         intro="Egyre többen keresik, hogyan csökkenthető a háztartási energiafelhasználás anélkül, hogy a tisztaságérzetből engedni kellene. A mosás hőfoka ebben kulcstényező: a 40 helyett 20 fokon történő mosás érzékelhetően alacsonyabb energiaigényt jelenthet, ha a programhossz, a töltet és a mosási megoldás is megfelelően van megválasztva."
         cta={
           <div className="rounded-[28px] border border-cyan-100/80 bg-gradient-to-br from-white via-cyan-50/80 to-teal-50/80 p-7 shadow-[0_22px_65px_rgba(15,23,42,0.1)] md:p-10">

@@ -7,6 +7,7 @@ import { ButtonLink } from '@/components/ui';
 
 const articleTitle = 'Miért nem oldódik fel a mosókapszula? Gyakori hibák és megoldások';
 const discoverTitle = 'Ha a mosókapszula nem oldódik fel, az nem véletlen hiba: néhány visszatérő ok szinte mindig azonosítható és gyorsan javítható.';
+const h1Title = 'Mosókapszula nem oldódik fel: okok és megoldások';
 const articleDescription =
   'Nem oldódik fel a mosókapszula? Mutatjuk a leggyakoribb okokat, a tipikus hibákat és azt is, hogyan érhetsz el jobb mosási eredményt helyes használattal.';
 const articleUrl = 'https://www.aquadrop.hu/mosokapszula-nem-oldodik-fel';
@@ -67,6 +68,8 @@ export const metadata: Metadata = {
 };
 
 export default function MosokapszulaNemOldodikFelPage() {
+  void discoverTitle;
+
   const blogPostingStructuredData = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
@@ -137,7 +140,7 @@ export default function MosokapszulaNemOldodikFelPage() {
         slug="mosokapszula-nem-oldodik-fel"
         category="Mosási útmutató"
         readingTime="kb. 11 perc olvasás"
-        title={discoverTitle}
+        title={h1Title}
         intro="A mosókapszula kényelmes és gyors megoldás a mindennapokban, mégis sokan találkoznak azzal, hogy a kapszula részben megmarad, nyomot hagy, vagy nem oldódik fel teljesen. Jó hír, hogy ez a legtöbbször nem végleges probléma: néhány használati és tárolási szempont átgondolásával a mosási eredmény jellemzően kiszámíthatóbbá tehető."
         cta={
           <div className="rounded-[28px] border border-cyan-100/80 bg-gradient-to-br from-white via-cyan-50/80 to-teal-50/80 p-7 shadow-[0_22px_65px_rgba(15,23,42,0.1)] md:p-10">

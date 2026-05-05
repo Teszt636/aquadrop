@@ -7,6 +7,7 @@ import { ArticleLayout } from '@/components/article/ArticleLayout';
 
 const articleTitle = 'Mosókapszula használata: hova kell tenni és mennyit használj?';
 const discoverTitle = 'A mosókapszula használata egyszerűnek tűnik, mégis ezen múlhat, hogy lesz-e foltos vagy friss a mosás végeredménye.';
+const h1Title = 'Mosókapszula használata: hova tedd és mennyit használj?';
 const articleDescription =
   'Ismerd meg a mosókapszula helyes használatát: hova kell tenni, mennyit érdemes használni, és mire figyelj a legjobb mosási eredmény érdekében.';
 const articleUrl = 'https://www.aquadrop.hu/mosokapszula-hasznalata';
@@ -66,6 +67,8 @@ export const metadata: Metadata = {
 };
 
 export default function MosokapszulaHasznalataPage() {
+  void discoverTitle;
+
   const blogPostingStructuredData = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
@@ -136,7 +139,7 @@ export default function MosokapszulaHasznalataPage() {
         slug="mosokapszula-hasznalata"
         category="Mosási útmutató"
         readingTime="kb. 10 perc olvasás"
-        title={discoverTitle}
+        title={h1Title}
         intro="A mosókapszula az egyik legkényelmesebb, legletisztultabb adagolási forma a modern háztartásokban. A legjobb eredményhez viszont fontos néhány alapelvet követni: hova kerüljön a kapszula, mikor tedd be, mennyit érdemes használni, és mire figyelj a biztonságos használat során."
         cta={
           <div className="rounded-[28px] border border-cyan-100/80 bg-gradient-to-br from-white via-cyan-50/80 to-teal-50/80 p-7 shadow-[0_22px_65px_rgba(15,23,42,0.1)] md:p-10">

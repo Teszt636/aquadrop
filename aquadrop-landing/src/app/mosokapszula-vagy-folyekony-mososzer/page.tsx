@@ -7,6 +7,7 @@ import { ButtonLink } from '@/components/ui';
 
 const articleTitle = 'Mosókapszula vagy folyékony mosószer – melyik a jobb választás?';
 const discoverTitle = 'Mosókapszula vagy folyékony mosószer? A választás meglepően sokat elárul arról, mennyire kényelmes és kiszámítható a mosási rutinod.';
+const h1Title = 'Mosókapszula vagy folyékony mosószer: melyik jobb választás?';
 const articleDescription =
   'Mosókapszula vagy folyékony mosószer? Összehasonlítjuk az előnyöket, hátrányokat és segítünk eldönteni, melyik megoldás illik leginkább a mindennapi mosáshoz.';
 const articleUrl = 'https://www.aquadrop.hu/mosokapszula-vagy-folyekony-mososzer';
@@ -67,6 +68,8 @@ export const metadata: Metadata = {
 };
 
 export default function MosokapszulaVagyFolyekonyMososerPage() {
+  void discoverTitle;
+
   const blogPostingStructuredData = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
@@ -137,7 +140,7 @@ export default function MosokapszulaVagyFolyekonyMososerPage() {
         slug="mosokapszula-vagy-folyekony-mososzer"
         category="Mosási útmutató"
         readingTime="kb. 12 perc olvasás"
-        title={discoverTitle}
+        title={h1Title}
         intro="Mosókapszula vagy folyékony mosószer? Ez az egyik leggyakoribb kérdés azok között, akik tudatosabban szeretnék kialakítani a mindennapi mosási rutinjukat. A döntés elsőre egyszerűnek tűnhet, valójában azonban több szempontot is érdemes mérlegelni: kényelmet, adagolhatóságot, hibalehetőségeket és azt, mennyire kiszámítható a végeredmény. Ebben az útmutatóban objektíven, érthetően és gyakorlati nézőpontból segítünk eldönteni, melyik megoldás illik leginkább hozzád."
         cta={
           <div className="rounded-[28px] border border-cyan-100/80 bg-gradient-to-br from-white via-cyan-50/80 to-teal-50/80 p-7 shadow-[0_22px_65px_rgba(15,23,42,0.1)] md:p-10">
