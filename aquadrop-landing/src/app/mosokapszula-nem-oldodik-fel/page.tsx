@@ -169,15 +169,13 @@ export default function MosokapszulaNemOldodikFelPage() {
           <figcaption className="px-4 py-3 text-sm text-slate-600 md:px-5">{heroImageCaption}</figcaption>
         </figure>
 
-        <div className="rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5 md:p-6">
-          <p className="mt-3">A mosókapszula oldódási hibája olyan mosási probléma, amikor a kapszula fóliája vagy tartalma a ciklus végére részben a ruhán vagy a dobban marad.</p>
-          <p className="mt-3"><strong>Definíció:</strong> A mosókapszula oldódási hibája olyan mosási probléma, amikor a kapszula fóliája vagy tartalma a ciklus végére részben a ruhán vagy a dobban marad.</p>
-          <ul className="mt-4">
-            <li>Gyakori ok a túl rövid program és a túlzsúfolt dob.</li>
-            <li>A kapszula helytelen elhelyezése az egyik legtipikusabb hiba.</li>
-            <li>A száraz, megfelelően tárolt kapszula egyenletesebben működik.</li>
+                <div className="rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5 md:p-6">
+          <p className="mt-3">Ha a mosókapszula nem oldódik fel, annak leggyakoribb oka a túl rövid program, a túlzsúfolt dob, a rossz elhelyezés vagy a túl kevés vízmozgás. A kapszulát mindig a dob aljára tedd a ruhák alá, és válassz legalább 18 perces programot, hogy a fólia megfelelően fel tudjon oldódni.</p>
+          <ul className="mt-4 space-y-2">
+            <li>A kapszula ne a ruhák tetejére és ne az adagolófiókba kerüljön.</li>
+            <li>A túltöltött dob akadályozza a víz és a mosószer mozgását.</li>
+            <li>Nagyon rövid vagy hideg programnál gyakoribb lehet az oldódási hiba.</li>
           </ul>
-          <p className="mt-3 font-semibold text-slate-800">Lényeg: az oldódási hibák többsége megelőzhető jól választott programmal és helyes rutinokkal.</p>
         </div>
 
         <h2>Miért nem oldódik fel a mosókapszula, és mi a leggyorsabb megoldás?</h2>

@@ -203,15 +203,13 @@ export default function HogyanMossunk20FokonPage() {
           <figcaption className="px-4 py-3 text-sm text-slate-600 md:px-5">{heroImageCaption}</figcaption>
         </figure>
 
-        <div className="rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5 md:p-6">
-          <p className="mt-3">A 20 fokos mosás olyan alacsony hőfokú tisztítási módszer, amely megfelelő programidővel és adagolással mindennapi ruháknál is jó eredményt adhat.</p>
-          <p className="mt-3"><strong>Definíció:</strong> A 20 fokos mosás olyan alacsony hőfokú tisztítási módszer, amely megfelelő programidővel és adagolással mindennapi ruháknál is jó eredményt adhat.</p>
-          <ul className="mt-4">
-            <li>A programidő legyen elég hosszú a megfelelő oldódáshoz.</li>
-            <li>A dob töltöttsége maradjon egyenletes, ne legyen túlzsúfolt.</li>
-            <li>A kapszula elhelyezése és a stabil rutin döntő jelentőségű.</li>
+                <div className="rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5 md:p-6">
+          <p className="mt-3">A 20 fokos mosás akkor működik jól, ha enyhén vagy közepesen szennyezett ruhákat mosol, nem töltöd túl a mosógépet, és megfelelő hosszúságú programot választasz. A legjobb eredményhez olyan mosószerrel érdemes mosni, amely alacsony hőfokon is gyorsan oldódik, a mosókapszulát pedig mindig közvetlenül a dob aljára tedd.</p>
+          <ul className="mt-4 space-y-2">
+            <li>Mindennapi ruhákhoz, pólókhoz, fehérneműhöz sokszor elegendő.</li>
+            <li>Erősen szennyezett textíliáknál magasabb hőfok vagy előkezelés kellhet.</li>
+            <li>A programhossz és a kapszula helyes elhelyezése különösen fontos.</li>
           </ul>
-          <p className="mt-3 font-semibold text-slate-800">Egy mondatban: 20 fokon is lehet tiszta, friss eredményt elérni, ha a rutin minden eleme tudatos.</p>
         </div>
 
         <h2>Hogyan moss hatékonyan 20 fokon úgy, hogy a ruhák valóban tiszták maradjanak?</h2>
