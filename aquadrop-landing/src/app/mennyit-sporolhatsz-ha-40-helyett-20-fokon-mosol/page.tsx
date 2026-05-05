@@ -49,7 +49,7 @@ const faqItems = [
 
 
 export const metadata: Metadata = {
-  title: 'Mennyit spórolhatsz, ha 40 helyett 20 fokon mosol? | Aquadrop',
+  title: '20 fokos mosás: mennyit spórolhatsz valójában?',
   description: articleDescription,
   keywords: [
     'mennyit spórolhatsz 20 fokos mosással',
@@ -68,7 +68,7 @@ export const metadata: Metadata = {
     canonical: articleUrl,
   },
   openGraph: {
-    title: 'Mennyit spórolhatsz, ha 40 helyett 20 fokon mosol? | Aquadrop',
+    title: 'Mennyit spórolhatsz 20 fokos mosással? Meglepő számok!',
     description: articleDescription,
     url: articleUrl,
     siteName: 'Aquadrop Expert Pro',
@@ -87,7 +87,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Mennyit spórolhatsz, ha 40 helyett 20 fokon mosol? | Aquadrop',
+    title: '20 fokos mosás: mennyit spórolhatsz valójában?',
     description: articleDescription,
     images: [socialImageUrl]
   }

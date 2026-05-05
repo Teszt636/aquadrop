@@ -4,11 +4,11 @@ import Link from 'next/link';
 import { WashingCostCalculator } from '@/components/tools/WashingCostCalculator';
 
 export const metadata: Metadata = {
-  title: 'Mosási költség kalkulátor – 20 fokos mosás megtakarítás',
+  title: 'Mosási költség kalkulátor: mennyit spórolsz 20 fokon?',
   description: 'Számold ki, mennyit spórolhatsz alacsony hőfokú mosással. Ingyenes mosási költség kalkulátor az Aquadroptól.',
   alternates: { canonical: 'https://www.aquadrop.hu/mosasi-koltseg-kalkulator' },
   openGraph: {
-    title: 'Mosási költség kalkulátor – mennyit spórolhatsz 20 fokon?',
+    title: 'Számold ki: ennyit spórolsz 20 fokos mosással',
     description: 'Interaktív kalkulátor, amellyel kiszámolhatod, mennyi energiát és pénzt takaríthatsz meg alacsonyabb hőfokú mosással.',
     url: 'https://www.aquadrop.hu/mosasi-koltseg-kalkulator',
     siteName: 'Aquadrop Expert Pro',
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Mosási költség kalkulátor – 20 fokos mosás megtakarítás',
+    title: 'Mosási költség kalkulátor: mennyit spórolsz 20 fokon?',
     description: 'Számold ki, mennyit spórolhatsz alacsony hőfokú mosással.',
     images: ['https://www.aquadrop.hu/20-fokos-mosas-megtakaritas-aquadrop-og.jpg']
   }

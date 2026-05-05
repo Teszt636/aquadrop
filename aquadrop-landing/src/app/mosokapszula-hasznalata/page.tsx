@@ -25,7 +25,7 @@ const faqItems = [
 ];
 
 export const metadata: Metadata = {
-  title: 'Mosókapszula használata: hova kell tenni és mennyit használj? | Aquadrop',
+  title: 'Mosókapszula használata: hova tedd és mennyit?',
   description: articleDescription,
   keywords: [
     'mosókapszula használata',
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     canonical: articleUrl,
   },
   openGraph: {
-    title: 'Mosókapszula használata: hova kell tenni és mennyit használj? | Aquadrop',
+    title: 'Mosókapszula használata: ezt sokan rosszul csinálják',
     description: articleDescription,
     url: articleUrl,
     siteName: 'Aquadrop Expert Pro',
@@ -59,7 +59,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Mosókapszula használata: hova kell tenni és mennyit használj? | Aquadrop',
+    title: 'Mosókapszula használata: hova tedd és mennyit?',
     description: articleDescription,
     images: [heroImageUrl]
   }

@@ -54,7 +54,7 @@ const faqItems = [
 
 
 export const metadata: Metadata = {
-  title: 'Energiatakarékos mosás: tiszta ruhák alacsony hőfokon is | Aquadrop',
+  title: 'Energiatakarékos mosás: így spórolsz minden mosásnál',
   description: articleDescription,
   keywords: [
     'energiatakarékos mosás',
@@ -74,7 +74,7 @@ export const metadata: Metadata = {
     canonical: articleUrl,
   },
   openGraph: {
-    title: 'Energiatakarékos mosás: tiszta ruhák alacsony hőfokon is | Aquadrop',
+    title: 'Energiatakarékos mosás: így csökkented a rezsit',
     description: articleDescription,
     url: articleUrl,
     siteName: 'Aquadrop Expert Pro',
@@ -93,7 +93,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Energiatakarékos mosás: tiszta ruhák alacsony hőfokon is | Aquadrop',
+    title: 'Energiatakarékos mosás: így spórolsz minden mosásnál',
     description: articleDescription,
     images: [socialImageUrl]
   }

@@ -26,7 +26,7 @@ const faqItems = [
 ];
 
 export const metadata: Metadata = {
-  title: 'Mosókapszula vagy folyékony mosószer – melyik a jobb választás? | Aquadrop',
+  title: 'Mosókapszula vagy folyékony mosószer: melyik jobb?',
   description: articleDescription,
   keywords: [
     'mosókapszula vagy folyékony mosószer',
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     canonical: articleUrl,
   },
   openGraph: {
-    title: 'Mosókapszula vagy folyékony mosószer – melyik a jobb választás? | Aquadrop',
+    title: 'Mosókapszula vs folyékony mosószer – melyik a jobb?',
     description: articleDescription,
     url: articleUrl,
     siteName: 'Aquadrop Expert Pro',
@@ -60,7 +60,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Mosókapszula vagy folyékony mosószer – melyik a jobb választás? | Aquadrop',
+    title: 'Mosókapszula vagy folyékony mosószer: melyik jobb?',
     description: articleDescription,
     images: [socialImageUrl]
   }
