@@ -7,15 +7,33 @@ export const metadata: Metadata = {
   title: 'Prémium viszonteladói partnerprogram | Aquadrop',
   description:
     'Aquadrop B2B partner oldal viszonteladóknak: kevesebb reklamáció, elégedettebb vevők, könnyebb értékesítés. Jelentkezz partneri egyeztetésre.',
+  alternates: {
+    canonical: 'https://www.aquadrop.hu/partner',
+  },
   openGraph: {
+    type: 'website',
+    locale: 'hu_HU',
+    siteName: 'Aquadrop',
     title: 'Prémium viszonteladói partnerprogram | Aquadrop',
     description:
       'Kevesebb reklamáció. Elégedettebb vevők. Könnyebb értékesítés. Ismerd meg az Aquadrop partnerprogramot.',
     url: 'https://www.aquadrop.hu/partner',
-    siteName: 'Aquadrop',
-    locale: 'hu_HU',
-    type: 'website'
-  }
+    images: [
+      {
+        url: 'https://www.aquadrop.hu/aquadrop-mosokapszula-og-kep.webp',
+        width: 1200,
+        height: 630,
+        alt: 'Aquadrop Expert Pro mosókapszula',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Prémium viszonteladói partnerprogram | Aquadrop',
+    description:
+      'Aquadrop B2B partner oldal viszonteladóknak: kevesebb reklamáció, elégedettebb vevők, könnyebb értékesítés. Jelentkezz partneri egyeztetésre.',
+    images: ['https://www.aquadrop.hu/aquadrop-mosokapszula-og-kep.webp'],
+  },
 };
 
 export default function PartnerPage() {
