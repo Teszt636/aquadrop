@@ -92,31 +92,50 @@ export default async function WashingCostCalculatorPage({ searchParams }: { sear
               </ul>
             </section>
 
-            <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {[
-                { title: '20 fokos mosás cikk', href: '/mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol' },
-                { title: 'Energiatakarékos mosás útmutató', href: '/energiatakarekos-mosas' },
-                { title: 'Aquadrop főoldal', href: '/' }
-              ].map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="group rounded-2xl border border-cyan-100/80 bg-white/80 p-5 text-center text-slate-900 shadow-[0_14px_35px_rgba(14,116,144,0.08)] transition hover:-translate-y-1 hover:border-cyan-300 hover:shadow-md hover:text-cyan-700"
-                >
-                  <p className="text-sm font-semibold uppercase tracking-[0.12em] text-cyan-700">Kapcsolódó</p>
-                  <p className="mt-2 text-lg font-semibold">{item.title}</p>
-                </Link>
-              ))}
-            </section>
-
-            <section className="rounded-2xl border border-cyan-100 bg-white/85 p-5 md:p-6">
+            <section className="rounded-3xl border border-cyan-100 bg-white/80 p-6 shadow-sm md:p-8">
               <h2 className="text-xl font-semibold text-slate-900">Kapcsolódó útmutatók a mosási költségek csökkentéséhez</h2>
-              <ul className="mt-3 space-y-2 text-slate-700">
-                <li><Link className="font-medium text-brand-primary hover:underline" href="/energiatakarekos-mosas">Energiatakarékos mosás lépésről lépésre</Link></li>
-                <li><Link className="font-medium text-brand-primary hover:underline" href="/hogyan-mossunk-20-fokon">Hogyan moss hatékonyan 20 fokon?</Link></li>
-                <li><Link className="font-medium text-brand-primary hover:underline" href="/mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol">Mennyit spórolhatsz 20 fokos mosással?</Link></li>
-                <li><Link className="font-medium text-brand-primary hover:underline" href="/mosokapszula-hasznalata">Mosókapszula használata helyesen</Link></li>
-              </ul>
+              <p className="mt-3 text-slate-700">
+                Ha szeretnéd csökkenteni a mosás energiafogyasztását, ezek az útmutatók segítenek a hőfok, a programhossz és a
+                mosókapszula használatának optimalizálásában.
+              </p>
+              <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                {[
+                  {
+                    title: 'Energiatakarékos mosás lépésről lépésre',
+                    description: 'Alacsonyabb hőfok, tudatos programválasztás és kevesebb energiafelhasználás a mindennapi mosásban.',
+                    href: '/energiatakarekos-mosas',
+                    label: 'Pillar útmutató'
+                  },
+                  {
+                    title: 'Hogyan moss hatékonyan 20 fokon?',
+                    description: 'Gyakorlati tanácsok ahhoz, hogy a 20 fokos mosás tiszta eredményt adjon a hétköznapi ruháknál.',
+                    href: '/hogyan-mossunk-20-fokon',
+                    label: '20 fokos mosás'
+                  },
+                  {
+                    title: 'Mennyit spórolhatsz 20 fokos mosással?',
+                    description: 'Nézd meg, miért csökkentheti a mosási költséget, ha 40 helyett 20 fokon mosol.',
+                    href: '/mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol',
+                    label: 'Megtakarítás'
+                  },
+                  {
+                    title: 'Mosókapszula használata helyesen',
+                    description: 'Hova tedd a kapszulát, mennyit használj, és mire figyelj alacsony hőfokú mosásnál?',
+                    href: '/mosokapszula-hasznalata',
+                    label: 'Mosókapszula tippek'
+                  }
+                ].map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="group rounded-3xl border border-cyan-100 bg-white/75 p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+                  >
+                    <p className="text-xs font-semibold uppercase tracking-wide text-cyan-700">{item.label}</p>
+                    <h3 className="mt-3 text-lg font-semibold text-slate-900">{item.title}</h3>
+                    <p className="mt-2 text-sm text-slate-600">{item.description}</p>
+                  </Link>
+                ))}
+              </div>
             </section>
 
             <section className="rounded-3xl border border-cyan-100/70 bg-white/80 p-7 text-center shadow-[0_18px_55px_rgba(14,116,144,0.10)] backdrop-blur-sm md:p-8">
