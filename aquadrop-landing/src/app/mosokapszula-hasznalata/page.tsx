@@ -171,7 +171,7 @@ export default function MosokapszulaHasznalataPage() {
         cta={
           <div className="rounded-[28px] border border-cyan-100/80 bg-gradient-to-br from-white via-cyan-50/80 to-teal-50/80 p-7 shadow-[0_22px_65px_rgba(15,23,42,0.1)] md:p-10">
             <div className="max-w-3xl space-y-5">
-              <h2 className="text-2xl leading-tight md:text-3xl">Próbáld ki az Aquadrop Expert Pro mosókapszulát</h2>
+              <h2 className="text-2xl leading-tight md:text-3xl">Milyen mosókapszulát érdemes választani a mindennapi mosáshoz?</h2>
               <p>
                 Ha fontos számodra az egyszerű adagolás, a kényelmes használat és a modern mosási megoldás, ismerd
                 meg az Aquadrop Expert Pro ajánlatát. Most 2 doboz vásárlása esetén a 3. dobozt ajándékba adjuk.

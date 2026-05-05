@@ -180,7 +180,7 @@ export default function HogyanMossunk20FokonPage() {
         cta={
           <div className="rounded-[28px] border border-cyan-100/80 bg-gradient-to-br from-white via-cyan-50/80 to-teal-50/80 p-7 shadow-[0_22px_65px_rgba(15,23,42,0.1)] md:p-10">
             <div className="max-w-3xl space-y-5">
-              <h2 className="text-2xl leading-tight md:text-3xl">Ismerd meg az Aquadrop Expert Pro megoldását</h2>
+              <h2 className="text-2xl leading-tight md:text-3xl">Milyen mosókapszula működik jól 20 fokos mosáshoz?</h2>
               <p>
                 Ha olyan mosási megoldást keresel, amely alacsony hőfokon is kényelmes, kiszámítható és hatékony
                 használatot támogat, nézd meg az Aquadrop Expert Pro részleteit és aktuális ajánlatait.

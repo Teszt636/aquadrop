@@ -172,7 +172,7 @@ export default function MosokapszulaNemOldodikFelPage() {
         cta={
           <div className="rounded-[28px] border border-cyan-100/80 bg-gradient-to-br from-white via-cyan-50/80 to-teal-50/80 p-7 shadow-[0_22px_65px_rgba(15,23,42,0.1)] md:p-10">
             <div className="max-w-3xl space-y-5">
-              <h2 className="text-2xl leading-tight md:text-3xl">Próbáld ki az Aquadrop Expert Pro mosókapszulát</h2>
+              <h2 className="text-2xl leading-tight md:text-3xl">Milyen mosókapszula csökkenti az oldódási hibák esélyét?</h2>
               <p>
                 Ha számodra is fontos, hogy a mosás egyszerű, kényelmes és megbízható legyen, ismerd meg az Aquadrop
                 Expert Pro ajánlatát. Most 2 doboz vásárlása esetén a 3. dobozt ajándékba adjuk.
@@ -458,7 +458,7 @@ export default function MosokapszulaNemOldodikFelPage() {
           <Link href="/mosokapszula-vagy-folyekony-mososzer">mosókapszula vagy folyékony mosószer</Link>.
         </p>
 
-        <h2>Hogyan kapcsolódik ehhez az Aquadrop Expert Pro?</h2>
+        <h2>Milyen mosókapszula csökkenti az oldódási hibák esélyét?</h2>
         <p>
           Az Aquadrop célja, hogy a mosás ne bonyolult feladat, hanem könnyen követhető, megbízható rutin legyen.
           Ennek részeként az Aquadrop Expert Pro kommunikációjában kiemelt szempont a <strong>gyors oldódás</strong>,
