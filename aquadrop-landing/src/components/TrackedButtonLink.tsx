@@ -2,10 +2,10 @@
 
 import type { ComponentProps } from 'react';
 import { ButtonLink } from '@/components/ui/Button';
-import { trackEvent } from '@/lib/tracking';
+import { trackEvent, type TrackingEventName } from '@/lib/tracking';
 
 type TrackedButtonLinkProps = ComponentProps<typeof ButtonLink> & {
-  eventName: string;
+  eventName: TrackingEventName;
 };
 
 export function TrackedButtonLink({ eventName, onClick, ...props }: TrackedButtonLinkProps) {
