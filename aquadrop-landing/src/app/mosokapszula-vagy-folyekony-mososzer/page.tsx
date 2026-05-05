@@ -168,15 +168,13 @@ export default function MosokapszulaVagyFolyekonyMososerPage() {
           <figcaption className="px-4 py-3 text-sm text-slate-600 md:px-5">{heroImageCaption}</figcaption>
         </figure>
 
-        <div className="rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5 md:p-6">
-          <p className="mt-3">A mosókapszula és folyékony mosószer közötti különbség főként az adagolás pontosságában, használati kényelemben és a célzott foltkezelési rugalmasságban jelenik meg.</p>
-          <p className="mt-3"><strong>Definíció:</strong> A mosókapszula és folyékony mosószer közötti különbség főként az adagolás pontosságában, használati kényelemben és a célzott foltkezelési rugalmasságban jelenik meg.</p>
-          <ul className="mt-4">
-            <li>A kapszula kényelmes és gyors, fix adagolással működik.</li>
-            <li>A folyékony mosószer rugalmasabb erősen szennyezett ruháknál.</li>
-            <li>A döntésnél a háztartási rutin és a mosási szokás a kulcs.</li>
+                <div className="rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5 md:p-6">
+          <p className="mt-3">A mosókapszula vagy folyékony mosószer közötti választás attól függ, mire van szükséged a mindennapi mosásban. A mosókapszula kényelmes, előre adagolt és tiszta használatot ad, míg a folyékony mosószer rugalmasabban adagolható. Ha gyors, egyszerű és következetes megoldást keresel, a kapszula sok háztartásban praktikusabb választás.</p>
+          <ul className="mt-4 space-y-2">
+            <li>Mosókapszula: kényelmes, előre adagolt, kevesebb méricskélés.</li>
+            <li>Folyékony mosószer: rugalmas adagolás, nagyobb kontroll.</li>
+            <li>A döntésnél számít a ruha típusa, a szennyezettség és a mosási szokás.</li>
           </ul>
-          <p className="mt-3 font-semibold text-slate-800">Röviden: nincs egyetlen univerzális győztes, a legjobb választás az, ami a saját mosási ritmusodhoz illeszkedik.</p>
         </div>
 
         <h2>Mosókapszula vagy folyékony mosószer: melyik működik jobban a mindennapi rutinodban?</h2>

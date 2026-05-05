@@ -205,15 +205,13 @@ export default function MennyitSporolhatsz20FokonPage() {
           <figcaption className="px-4 py-3 text-sm text-slate-600 md:px-5">{heroImageCaption}</figcaption>
         </figure>
 
-        <div className="rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5 md:p-6">
-          <p className="mt-3">A 40-ről 20 fokra váltott mosás költségelőnye azonos mosási gyakoriság mellett az alacsonyabb vízmelegítési energiaigényből adódik.</p>
-          <p className="mt-3"><strong>Definíció:</strong> A 40-ről 20 fokra váltott mosás költségelőnye azonos mosási gyakoriság mellett az alacsonyabb vízmelegítési energiaigényből adódik.</p>
-          <ul className="mt-4">
-            <li>Minél több mosásod van hetente, annál látványosabb az éves különbség.</li>
-            <li>A valós megtakarítás géptípustól és programtól is függ.</li>
-            <li>A költségelőny akkor marad tartós, ha nem kell újramosni a ruhákat.</li>
+                <div className="rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5 md:p-6">
+          <p className="mt-3">A 20 fokos mosás megtakarítás főként abból adódik, hogy a mosógépnek kevesebb energiát kell vízmelegítésre fordítania. Ha gyakran mosol 40°C helyett 20°C-on, éves szinten érezhetően csökkenhet a mosási energiafogyasztásod, különösen akkor, ha a mindennapi ruhákat alacsony hőfokon, jól oldódó mosószerrel mosod.</p>
+          <ul className="mt-4 space-y-2">
+            <li>A legnagyobb energiaigény általában a víz felmelegítéséből jön.</li>
+            <li>A megtakarítás a mosások számától és a gép energiafogyasztásától függ.</li>
+            <li>A kalkulátorral gyorsan megbecsülheted a saját különbségedet.</li>
           </ul>
-          <p className="mt-3 font-semibold text-slate-800">Rövid konklúzió: a hőfokcsökkentés kis döntésnek tűnik, de rendszeresen mosva komoly éves megtakarítást adhat.</p>
         </div>
 
         <h2>Mennyit lehet reálisan spórolni, ha 40 helyett 20 fokon mosol?</h2>

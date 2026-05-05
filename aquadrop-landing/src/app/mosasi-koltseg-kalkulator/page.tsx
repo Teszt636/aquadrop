@@ -63,6 +63,17 @@ export default async function WashingCostCalculatorPage({ searchParams }: { sear
         )}
 
         <WashingCostCalculator placement="calculator_page" showShare={!isEmbed} showEmbed={!isEmbed} showIntroBadge={true} isEmbed={isEmbed} />
+        {!isEmbed && (
+          <section className="rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5 text-slate-700 md:p-6">
+            <p>A mosási költség kalkulátor segít megbecsülni, mennyibe kerül egy mosás, és mennyit takaríthatsz meg alacsonyabb hőfok használatával. Add meg a mosások számát és az energiaadatokat, majd hasonlítsd össze, hogyan változhat a költség 40°C és 20°C között.</p>
+            <ul className="mt-4 space-y-2">
+              <li>Gyors becslést ad a mosási energiafelhasználásról.</li>
+              <li>Segít összehasonlítani a 20°C és 40°C közötti különbséget.</li>
+              <li>Hasznos, ha tudatosabban szeretnéd csökkenteni a háztartási költségeket.</li>
+            </ul>
+          </section>
+        )}
+
 
         {!isEmbed && (
           <>

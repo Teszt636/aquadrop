@@ -168,15 +168,13 @@ export default function MosokapszulaHasznalataPage() {
           <figcaption className="px-4 py-3 text-sm text-slate-600 md:px-5">{heroImageCaption}</figcaption>
         </figure>
 
-        <div className="rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5 md:p-6">
-          <p className="mt-3">A mosókapszula helyes használata a kapszula megfelelő dobba helyezését, pontos adagolását és a ruhamennyiséghez igazított programválasztást jelenti.</p>
-          <p className="mt-3"><strong>Definíció:</strong> A mosókapszula helyes használata a kapszula megfelelő dobba helyezését, pontos adagolását és a ruhamennyiséghez igazított programválasztást jelenti.</p>
-          <ul className="mt-4">
-            <li>A kapszulát mindig közvetlenül a dobba tedd, a ruhák alá.</li>
-            <li>Ne terheld túl a dobot, mert romlik az oldódás.</li>
-            <li>Programválasztásnál a ciklusidő legalább annyira fontos, mint a hőfok.</li>
+                <div className="rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5 md:p-6">
+          <p className="mt-3">A mosókapszula használata akkor helyes, ha a kapszulát mindig közvetlenül a mosógép dobjának aljára teszed, még a ruhák betöltése előtt. Egy átlagos mosáshoz általában egy kapszula elegendő, de nagyobb töltetnél, erősebb szennyeződésnél vagy kemény víznél szükség lehet eltérő adagolásra.</p>
+          <ul className="mt-4 space-y-2">
+            <li>Ne tedd a kapszulát az adagolófiókba.</li>
+            <li>Először a kapszula kerüljön a dobba, utána a ruhák.</li>
+            <li>Kerüld a túltöltést, mert ronthatja az oldódást és a mosási eredményt.</li>
           </ul>
-          <p className="mt-3 font-semibold text-slate-800">Összefoglalva: a helyes kapszulahasználat kis lépései nagy különbséget adnak a tisztaságban és a kényelemben.</p>
         </div>
 
         <h2>Hogyan használd a mosókapszulát, hogy alacsony hőfokon is jól működjön?</h2>

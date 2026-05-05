@@ -223,15 +223,13 @@ export default function EnergiatakarekosMosasPage() {
           <figcaption className="px-4 py-3 text-sm text-slate-600 md:px-5">{heroImageCaption}</figcaption>
         </figure>
 
-        <div className="rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5 md:p-6">
-          <p className="mt-3">Az energiatakarékos mosás olyan mosási rutin, amely alacsonyabb hőfokon és tudatos beállításokkal csökkenti az energiafelhasználást a tisztaság feladása nélkül.</p>
-          <p className="mt-3"><strong>Definíció:</strong> Az energiatakarékos mosás olyan mosási rutin, amely alacsonyabb hőfokon és tudatos beállításokkal csökkenti az energiafelhasználást a tisztaság feladása nélkül.</p>
-          <ul className="mt-4">
-            <li>20–30 fokon is lehet megbízható eredményt elérni megfelelő programidővel.</li>
-            <li>A dob túlpakolása és a túl rövid ciklus rontja az oldódást.</li>
-            <li>Egy stabil rutin egyszerre csökkentheti a költséget és növelheti a kiszámíthatóságot.</li>
+                <div className="rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5 md:p-6">
+          <p className="mt-3">Az energiatakarékos mosás lényege, hogy alacsonyabb hőfokon, jól megválasztott programmal és megfelelően adagolt mosószerrel moss. A legtöbb hétköznapi ruha 20–30°C-on is tiszta lehet, ha nem tömöd túl a dobot, legalább 18 perces programot választasz, és olyan mosószert használsz, amely alacsony hőfokon is jól oldódik.</p>
+          <ul className="mt-4 space-y-2">
+            <li>20–30°C sok hétköznapi mosáshoz elegendő lehet.</li>
+            <li>A túl rövid program és a túltöltött dob rontja az eredményt.</li>
+            <li>A jó mosószer alacsony hőfokon is segít a foltok és szagok ellen.</li>
           </ul>
-          <p className="mt-3 font-semibold text-slate-800">Röviden: az energiatakarékos mosás akkor működik igazán jól, ha a hőfok, az idő és az adagolás együtt van egyensúlyban.</p>
         </div>
 
         <h2>Hogyan lesz az energiatakarékos mosás egyszerre hatékony és megbízható?</h2>
