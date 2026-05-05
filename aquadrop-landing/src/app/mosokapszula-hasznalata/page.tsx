@@ -20,9 +20,36 @@ const heroImageAlt = 'Mosókapszula helyes használata mosógépben Aquadrop Exp
 const heroImageCaption = 'Mosókapszula helyes használata Aquadrop Expert Pro kapszulával';
 
 const faqItems = [
-  { question: 'Hova kell tenni a mosókapszulát?', answer: 'A kapszulát közvetlenül a dobba, lehetőleg alulra tedd, még a ruhák behelyezése előtt. Az adagolófiók általában nem kapszulához készült.' },
-  { question: 'Hány mosókapszula kell egy mosáshoz?', answer: 'A legtöbb átlagos mosásnál 1 kapszula elegendő. Nagyobb töltetnél vagy erősebb szennyezettségnél csak indokolt esetben mérlegelj eltérést.' },
-  { question: 'Mikor tegyem be a kapszulát?', answer: 'Először tedd be a kapszulát a dobba, és csak utána pakold rá a ruhákat. Így a program elején hamarabb és egyenletesebben éri víz.' }
+  {
+    question: 'Hova kell tenni a mosókapszulát?',
+    answer:
+      'A mosókapszulát közvetlenül a mosógép dobjába kell tenni, lehetőleg legalulra, még a ruhák behelyezése előtt. Az adagolófiók általában nem kapszulához készült.',
+  },
+  {
+    question: 'Hány mosókapszula kell egy mosáshoz?',
+    answer:
+      'Egy átlagos mosáshoz általában 1 kapszula elegendő. Nagyobb töltetnél, erősebb szennyeződésnél vagy kemény víznél csak indokolt esetben lehet szükség eltérő adagolásra.',
+  },
+  {
+    question: 'Mikor kell betenni a mosókapszulát?',
+    answer:
+      'Először a kapszulát tedd a dob aljára, és csak utána pakold rá a ruhákat. Így a program elején hamarabb éri víz, és egyenletesebben tud oldódni.',
+  },
+  {
+    question: 'Be lehet tenni a mosókapszulát az adagolófiókba?',
+    answer:
+      'Nem ajánlott, mert a mosókapszula nem az adagolófiókhoz készült. Ha nem jut elég vízhez, a fólia nem biztos, hogy megfelelően feloldódik.',
+  },
+  {
+    question: 'Használható a mosókapszula 20–30°C-on?',
+    answer:
+      'Igen, ha a kapszula alacsony hőfokon is jól oldódik, és megfelelő programot választasz. A túl rövid program, a túltöltött dob vagy a rossz elhelyezés ronthatja az eredményt.',
+  },
+  {
+    question: 'Miért maradhat mosókapszula-maradvány a ruhán?',
+    answer:
+      'Leggyakrabban túl rövid program, túlzsúfolt dob vagy rossz kapszulaelhelyezés okozza. A kapszulát mindig a dob aljára tedd, és hagyj elég helyet a víz és a ruhák mozgásának.',
+  },
 ];
 
 export const metadata: Metadata = {

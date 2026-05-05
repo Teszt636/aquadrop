@@ -22,30 +22,35 @@ const publishedDate = '2026-04-23';
 
 const faqItems = [
   {
-    question: 'Tényleg olcsóbb 20 fokon mosni?',
+    question: 'Tényleg olcsóbb 20 fokon mosni, mint 40 fokon?',
     answer:
-      'Sok esetben igen, mert a mosógép energiaigényének jelentős része a víz melegítéséből adódik. A pontos különbség program- és gépfüggő, ezért becslésként érdemes kezelni.'
+      'Igen, sok esetben olcsóbb lehet, mert a mosógépnek kevesebb energiát kell vízmelegítésre fordítania. A pontos megtakarítás a gép fogyasztásától, a mosások számától és a választott programtól függ.',
   },
   {
-    question: 'Miért használ több energiát a magasabb hőfok?',
+    question: 'Miért fogyaszt több energiát a 40 fokos mosás?',
     answer:
-      'Mert magasabb hőmérsékleten több energiát kell befektetni a víz felmelegítésébe. Ez különösen 40 °C fölött válik látványossá a költségekben.'
+      'A magasabb hőfokhoz több energiára van szükség a víz felmelegítéséhez. Ezért ugyanaz a mosás 40°C-on jellemzően drágább lehet, mint 20°C-on.',
   },
   {
-    question: 'Tiszták maradnak a ruhák 20 fokon?',
+    question: 'Tiszták maradnak a ruhák 20 fokos mosásnál?',
     answer:
-      'Sok mindennapi ruhánál igen, ha a mosási folyamat megfelelő: elegendő programidő, helyes kapszulaelhelyezés, nem túlzsúfolt dob és a textilhez illő beállítás.'
+      'A mindennapi, enyhén szennyezett ruhák sok esetben 20 fokon is tiszták lehetnek. A jó eredményhez fontos a megfelelő programhossz, a nem túlzsúfolt dob és az alacsony hőfokon is jól működő mosószer.',
   },
   {
-    question: 'Számít a program hossza?',
+    question: 'Mitől függ a 20 fokos mosás megtakarítása?',
     answer:
-      'Igen. Alacsonyabb hőfokon különösen fontos, hogy legyen idő az oldódásra és az összetevők egyenletes eloszlására. Ezért kulcsszabály a legalább 20 °C-os, legalább 18 perces program.'
+      'A megtakarítás függ a mosógép energiafogyasztásától, a heti mosások számától, az áramdíjtól és attól, milyen gyakran váltasz 40 fokról 20 fokra. Ezért érdemes saját adatokkal kalkulálni.',
   },
   {
-    question: 'Mennyire pontos a kalkulátor?',
+    question: 'Mennyire pontos a mosási költség kalkulátor?',
     answer:
-      'A kalkulátor védhető, átlátható becslési modellt használ, nem laborpontosságú mérőműszert. Összehasonlításhoz és szemléltetéshez készült, a valós értékeket befolyásolja a gép, a töltet, a program és az áramár.'
-  }
+      'A kalkulátor becslést ad, nem hivatalos mérési eredményt. Arra jó, hogy megmutassa a különbség nagyságrendjét 20°C és 40°C között a megadott mosási szokások alapján.',
+  },
+  {
+    question: 'Mikor nem érdemes 20 fokon mosni?',
+    answer:
+      'Erősen szennyezett ruháknál, törölközőknél, ágyneműknél vagy higiéniai okból szükséges mosásoknál időnként indokolt lehet a magasabb hőfok. A ruhacímke utasításait mindig érdemes figyelembe venni.',
+  },
 ];
 
 

@@ -3,6 +3,34 @@ import Link from 'next/link';
 
 import { WashingCostCalculator } from '@/components/tools/WashingCostCalculator';
 
+const faqItems = [
+  {
+    question: 'Mire jó a mosási költség kalkulátor?',
+    answer:
+      'A mosási költség kalkulátor segít megbecsülni, mennyibe kerül egy mosás, és hogyan változhat a költség, ha alacsonyabb hőfokon mosol.',
+  },
+  {
+    question: 'Mitől függ egy mosás ára?',
+    answer:
+      'Egy mosás ára főleg a mosógép energiafogyasztásától, a választott hőfoktól, a program hosszától, az áramdíjtól és a heti mosások számától függ.',
+  },
+  {
+    question: 'Olcsóbb 20 fokon mosni, mint 40 fokon?',
+    answer:
+      'Sok esetben igen, mert a mosógépnek kevesebb energiát kell vízmelegítésre fordítania. A pontos különbség a gép fogyasztásától és a mosási szokásoktól függ.',
+  },
+  {
+    question: 'Pontos eredményt ad a kalkulátor?',
+    answer:
+      'A kalkulátor becslést ad, nem hivatalos mérési eredményt. Arra jó, hogy megmutassa a 20°C és 40°C közötti költségkülönbség nagyságrendjét.',
+  },
+  {
+    question: 'Hogyan csökkenthető a mosási költség?',
+    answer:
+      'A költség csökkenthető alacsonyabb hőfokkal, megfelelő programmal, nem túltöltött dobbal és olyan mosószerrel, amely alacsony hőfokon is jól működik.',
+  },
+];
+
 export const metadata: Metadata = {
   title: 'Mosási költség kalkulátor: mennyit spórolsz 20 fokon?',
   description: 'Számold ki, mennyit spórolhatsz alacsony hőfokú mosással. Ingyenes mosási költség kalkulátor az Aquadroptól.',
@@ -34,10 +62,25 @@ export default async function WashingCostCalculatorPage({ searchParams }: { sear
   const params = await searchParams;
   const isEmbed = params.embed === 'true';
   const webAppSchema = { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Mosási költség kalkulátor', applicationCategory: 'UtilityApplication', operatingSystem: 'Web', description: 'Ingyenes kalkulátor, amellyel kiszámolható a 20 fokos mosás lehetséges energiamegtakarítása.', url: 'https://www.aquadrop.hu/mosasi-koltseg-kalkulator', publisher: { '@type': 'Organization', name: 'Aquadrop' } };
+  const faqStructuredData = {
+    '@type': 'FAQPage',
+    mainEntity: faqItems.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.answer,
+      },
+    })),
+  };
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@graph': [webAppSchema, faqStructuredData],
+  };
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-cyan-50 via-sky-50 to-white px-4 py-10 md:px-6 md:py-12">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-8 md:gap-10">
         {!isEmbed && (
           <header className="rounded-3xl border border-cyan-100/70 bg-white/85 p-7 text-center shadow-[0_18px_55px_rgba(14,116,144,0.12)] backdrop-blur-sm md:p-10">
@@ -134,6 +177,18 @@ export default async function WashingCostCalculatorPage({ searchParams }: { sear
                     <h3 className="mt-3 text-lg font-semibold text-slate-900">{item.title}</h3>
                     <p className="mt-2 text-sm text-slate-600">{item.description}</p>
                   </Link>
+                ))}
+              </div>
+            </section>
+
+            <section className="rounded-3xl border border-cyan-100 bg-white/80 p-6 shadow-sm md:p-8">
+              <h2 className="text-center text-2xl font-semibold text-slate-900">Gyakori kérdések a mosási költség kalkulátorról</h2>
+              <div className="mt-5 space-y-4">
+                {faqItems.map((item) => (
+                  <section key={item.question} className="rounded-2xl border border-cyan-100 bg-white/80 p-5">
+                    <h3 className="text-lg font-semibold text-slate-900">{item.question}</h3>
+                    <p className="mt-3 text-slate-700">{item.answer}</p>
+                  </section>
                 ))}
               </div>
             </section>
