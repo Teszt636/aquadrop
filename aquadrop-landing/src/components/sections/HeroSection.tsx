@@ -1,5 +1,3 @@
-'use client';
-
 import Image from 'next/image';
 
 export function HeroSection() {
@@ -36,11 +34,13 @@ export function HeroSection() {
               <div className="relative aspect-[5/4] overflow-hidden rounded-[1.5rem]">
                 <Image
                   src="/aquadrop-mosokapszula-hero.webp"
-                  alt="Aquadrop mosókapszula 20 fokon is hatékony mosás"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 767px) 100vw, 50vw"
+                  alt="Aquadrop Expert Pro prémium mosókapszula"
+                  width={900}
+                  height={700}
+                  className="h-full w-full object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   priority
+                  fetchPriority="high"
                 />
               </div>
             </div>

@@ -120,7 +120,7 @@ export function BeforeAfterSection() {
                 src="/tiszta-ruha-mosas-utan.webp"
                 alt="Tiszta ruha mosás után Aquadrop használatával"
                 fill
-                priority
+                loading="lazy"
                 sizes="(max-width: 768px) 100vw, 768px"
                 className="object-cover"
               />
@@ -138,7 +138,7 @@ export function BeforeAfterSection() {
                 src="/foltos-ruha-mosas-elott.webp"
                 alt="Foltos ruha mosás előtt"
                 fill
-                priority
+                loading="lazy"
                 sizes="(max-width: 768px) 100vw, 768px"
                 className="object-cover"
               />

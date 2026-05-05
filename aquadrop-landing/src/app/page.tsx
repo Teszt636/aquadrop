@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import dynamic from 'next/dynamic';
 import { SITE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
@@ -36,7 +37,6 @@ export const metadata: Metadata = {
 
 import {
   AnnouncementSection,
-  BeforeAfterSection,
   BenefitsSection,
   DubaiSection,
   EnergySavingsSection,
@@ -57,6 +57,14 @@ import {
 import { ScrollDepthTracker } from '@/components/analytics';
 import { HomeKnowledgeHub } from '@/components/home-knowledge-hub';
 import { HomeResellerCta } from '@/components/home-reseller-cta';
+
+const BeforeAfterSection = dynamic(
+  () => import('@/components/sections/BeforeAfterSection').then((mod) => mod.BeforeAfterSection),
+  {
+    ssr: false,
+    loading: () => <div className="ds-section"><div className="ds-container"><div className="min-h-[420px]" /></div></div>
+  }
+);
 
 export default function Home() {
 
