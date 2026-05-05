@@ -36,7 +36,6 @@ export const metadata: Metadata = {
 
 import {
   AnnouncementSection,
-  BeforeAfterSection,
   BenefitsSection,
   DubaiSection,
   EnergySavingsSection,
@@ -57,6 +56,7 @@ import {
 import { ScrollDepthTracker } from '@/components/analytics';
 import { HomeKnowledgeHub } from '@/components/home-knowledge-hub';
 import { HomeResellerCta } from '@/components/home-reseller-cta';
+import { BeforeAfterSectionDynamic } from '@/components/sections/BeforeAfterSectionDynamic';
 
 export default function Home() {
 
@@ -186,7 +186,7 @@ export default function Home() {
           <MicrocapsuleMagicSection />
           <TrustSection />
           <SocialProofSection />
-          <BeforeAfterSection />
+          <BeforeAfterSectionDynamic />
           <ThreePathsSection />
           <AnnouncementSection />
           <SeoSection />
