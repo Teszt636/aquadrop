@@ -194,7 +194,7 @@ export default function EnergiatakarekosMosasPage() {
         cta={
           <div className="rounded-[28px] border border-cyan-100/80 bg-gradient-to-br from-white via-cyan-50/80 to-teal-50/80 p-7 shadow-[0_22px_65px_rgba(15,23,42,0.1)] md:p-10">
             <div className="max-w-3xl space-y-5">
-              <h2 className="text-2xl leading-tight md:text-3xl">Ismerd meg az Aquadrop Expert Pro megoldását</h2>
+              <h2 className="text-2xl leading-tight md:text-3xl">Milyen mosókapszula segíthet alacsony hőfokon is?</h2>
               <p>
                 Ha olyan mosási megoldást keresel, amely alacsony hőfokon is kényelmes, kiszámítható és hatékony
                 használatot támogat, nézd meg az Aquadrop Expert Pro részleteit és aktuális ajánlatait.
@@ -471,7 +471,7 @@ export default function EnergiatakarekosMosasPage() {
           intelligensen hasznosítja.
         </p>
 
-        <h2>Mit tud hozzáadni egy 4 kamrás prémium mosókapszula?</h2>
+        <h2>Milyen mosószer működik jól energiatakarékos mosáshoz?</h2>
         <p>
           Egy 4 kamrás prémium kapszula legnagyobb előnye, hogy egy lépésben több mosási igényt tud kezelni. Az
           Aquadrop Expert Pro fejlesztésének lényege is ez: ne külön termékekből kelljen összerakni a rutint, hanem
