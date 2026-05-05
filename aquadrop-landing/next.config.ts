@@ -15,6 +15,22 @@ const nextConfig: NextConfig = {
         ],
         destination: 'https://www.aquadrop.hu/:path*',
         permanent: true
+      },
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'www.aquadrop.hu'
+          },
+          {
+            type: 'header',
+            key: 'x-forwarded-proto',
+            value: 'http'
+          }
+        ],
+        destination: 'https://www.aquadrop.hu/:path*',
+        permanent: true
       }
     ];
   },
