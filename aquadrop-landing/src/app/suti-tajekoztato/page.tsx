@@ -7,6 +7,33 @@ export const metadata: Metadata = {
   title: 'Süti tájékoztató | Aquadrop',
   description:
     'Az Aquadrop weboldal süti tájékoztatója a használt sütikről, azok céljáról, időtartamáról és a hozzájárulás kezeléséről.',
+  alternates: {
+    canonical: 'https://www.aquadrop.hu/suti-tajekoztato',
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'hu_HU',
+    siteName: 'Aquadrop',
+    title: 'Süti tájékoztató | Aquadrop',
+    description:
+      'Az Aquadrop weboldal süti tájékoztatója a használt sütikről, azok céljáról, időtartamáról és a hozzájárulás kezeléséről.',
+    url: 'https://www.aquadrop.hu/suti-tajekoztato',
+    images: [
+      {
+        url: 'https://www.aquadrop.hu/aquadrop-mosokapszula-og-kep.webp',
+        width: 1200,
+        height: 630,
+        alt: 'Aquadrop Expert Pro mosókapszula',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Süti tájékoztató | Aquadrop',
+    description:
+      'Az Aquadrop weboldal süti tájékoztatója a használt sütikről, azok céljáról, időtartamáról és a hozzájárulás kezeléséről.',
+    images: ['https://www.aquadrop.hu/aquadrop-mosokapszula-og-kep.webp'],
+  },
 };
 
 export default function CookiePolicyPage() {
