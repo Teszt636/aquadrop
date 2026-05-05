@@ -25,7 +25,7 @@ export function EnergySavingsSection() {
                 <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center md:justify-start">
                   <Link
                     href="/mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol"
-                    className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-cyan-600 px-6 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-cyan-700 sm:w-auto"
+                    className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-cyan-700 px-6 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-cyan-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-900 sm:w-auto"
                   >
                     Megnézem a kalkulátort
                   </Link>
