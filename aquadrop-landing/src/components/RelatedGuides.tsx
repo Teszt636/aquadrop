@@ -15,7 +15,7 @@ type RelatedGuidesProps = {
 
 export function RelatedGuides({ title, intro, items }: RelatedGuidesProps) {
   return (
-    <section className="rounded-3xl border border-cyan-200 bg-gradient-to-br from-cyan-50/80 via-white to-white p-4 shadow-[0_18px_55px_rgba(6,182,212,0.14)] md:p-5">
+    <section className="rounded-3xl border border-cyan-150 bg-gradient-to-br from-cyan-50/80 via-white to-white p-4 shadow-[0_18px_55px_rgba(6,182,212,0.14)] md:p-5">
       <div className="mb-4 max-w-3xl">
         <p className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-cyan-800">
           Kapcsolódó útmutatók
@@ -41,7 +41,7 @@ export function RelatedGuides({ title, intro, items }: RelatedGuidesProps) {
           >
             <div className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-cyan-200/35 blur-2xl transition group-hover:bg-cyan-300/45" />
 
-            <div className="absolute right-3.5 top-2 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-cyan-200 text-cyan-900 shadow-sm transition group-hover:bg-cyan-700 group-hover:text-white">
+            <div className="absolute right-3.5 top-3.5 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-cyan-200 text-cyan-900 shadow-sm transition group-hover:bg-cyan-700 group-hover:text-white">
               →
             </div>
 
@@ -50,7 +50,7 @@ export function RelatedGuides({ title, intro, items }: RelatedGuidesProps) {
                 {item.label}
               </p>
 
-              <h3 className="mt-1 text-base font-extrabold leading-snug text-slate-950 md:text-lg">
+              <h3 className="mt-1.5 text-base font-extrabold leading-snug text-slate-950 md:text-lg">
                 {item.title}
               </h3>
 
