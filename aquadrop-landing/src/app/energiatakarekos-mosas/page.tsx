@@ -243,8 +243,7 @@ export default function EnergiatakarekosMosasPage() {
 
         <h2>Spórolási kalkulátor: mennyit jelenthet a hőfokváltás?</h2>
         <p>
-          Ha konkrét számokat szeretnél, használd a <Link href="/mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol">mosási
-          költség kalkulátort</Link>. Például heti 4–5 mosásnál a 40 °C-ról 20–30 °C-ra váltás éves szinten már jól
+          Ha konkrét számokat szeretnél, használd a <Link href="/mosasi-koltseg-kalkulator">mosási költség kalkulátort</Link>. Például heti 4–5 mosásnál a 40 °C-ról 20–30 °C-ra váltás éves szinten már jól
           látható különbséget adhat a becsült energiaköltségben.
         </p>
         <div className="rounded-2xl border border-cyan-100 bg-cyan-50/60 p-5 md:p-7">
@@ -322,7 +321,7 @@ export default function EnergiatakarekosMosasPage() {
           négy elem arányban van, a mosási eredmény sokkal stabilabb lesz még alacsonyabb hőfokon is.
         </p>
         <p>
-          Az energiatakarékos mosás másik fontos eleme a következetesség. Nem kell minden körülményre külön „trükk”,
+          Az energiatakarékos mosás másik fontos eleme a következetesség, és a szer kiválasztásához érdemes összevetni a <Link href="/mosokapszula-vagy-folyekony-mososzer">mosókapszula vagy folyékony mosószer</Link> szempontjait. Nem kell minden körülményre külön „trükk”,
           elég egy világos alapelv-rendszer: ruhacímke tiszteletben tartása, jól megválasztott töltet, a textíliákhoz
           illesztett program és megbízható formula. Ez a kombináció adja azt a nyugodt működést, amit a prémium
           háztartási megoldásoktól elvárunk.
@@ -359,7 +358,7 @@ export default function EnergiatakarekosMosasPage() {
         <h2>Milyen problémák jelentkezhetnek alacsony hőfokú mosásnál?</h2>
         <p>
           Az alacsony hőfokú mosás sok előnyt kínál, de néhány tipikus hibaforrásra érdemes felkészülni. A leggyakoribb
-          panasz, hogy a kapszula nem oldódik fel teljesen, és maradvány marad a ruhán vagy a dobban. Ez kellemetlen,
+          panasz, hogy a kapszula nem oldódik fel teljesen, és maradvány marad a ruhán vagy a dobban — ennek részleteit a <Link href="/mosokapszula-nem-oldodik-fel">miért nem oldódik fel a mosókapszula</Link> cikkben bontjuk ki. Ez kellemetlen,
           mert ronthatja a tiszta, kész ruhák élményét.
         </p>
         <p>
@@ -385,7 +384,7 @@ export default function EnergiatakarekosMosasPage() {
 
         <h2>Hogyan lehet hatékonyan mosni 20–30 fokon?</h2>
         <p>
-          A kérdésre a legrövidebb válasz az, hogy következetes rendszerben gondolkodj. Az alábbi lépések gyorsan
+          A kérdésre a legrövidebb válasz az, hogy következetes rendszerben gondolkodj; ehhez hasznos lehet a <Link href="/hogyan-mossunk-20-fokon">hogyan moss hatékonyan 20 fokon</Link> útmutató is. Az alábbi lépések gyorsan
           átláthatóvá teszik, hogyan mossunk energiatakarékosan úgy, hogy a végeredmény tiszta és megbízható maradjon.
         </p>
         <ol className="list-decimal space-y-3 pl-6 text-slate-700 marker:font-semibold marker:text-cyan-700">
@@ -451,7 +450,7 @@ export default function EnergiatakarekosMosasPage() {
           mennyire jól tud működni ilyen környezetben.
         </p>
         <p>
-          A megfelelő mosási megoldás egyik előnye, hogy nem kényszerít folyamatos kompromisszumokra. Nem kell minden
+          A megfelelő mosási megoldás egyik előnye, hogy nem kényszerít folyamatos kompromisszumokra: nézd át a <Link href="/mosokapszula-hasznalata">mosókapszula helyes használata</Link> lépéseit is. Nem kell minden
           alkalommal találgatni, hogy oldódik-e megfelelően, marad-e nyom a ruhán, vagy elég lesz-e a tisztaságérzet.
           A cél egy olyan stabil alap, amelyre a mindennapi mosási döntések biztonsággal építhetők.
         </p>

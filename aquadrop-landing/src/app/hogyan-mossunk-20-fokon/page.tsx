@@ -244,7 +244,7 @@ export default function HogyanMossunk20FokonPage() {
         <p>
           A leggyakoribb ok az energiatudatos gondolkodás: sok háztartásnál természetes igény lett, hogy a napi rutinok
           kevesebb erőforrást használjanak. A <Link href="/energiatakarekos-mosas">energiatakarékos mosás</Link> ezért
-          nem kampányszerű trend, hanem egy hosszú távú szemléletváltás része.
+          nem kampányszerű trend, hanem egy hosszú távú szemléletváltás része — és érdemes azt is megnézni, <Link href="/mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol">mennyit spórolhatsz, ha 40 helyett 20 fokon mosol</Link>.
         </p>
         <p>
           Emellett a textilkímélés is fontos szempont. Az alacsonyabb hőfok sok ruhadarabnál kíméletesebb terhelést
@@ -338,7 +338,7 @@ export default function HogyanMossunk20FokonPage() {
           </li>
           <li>
             <strong>Rossz kapszulaelhelyezés:</strong> ha nem a dobba, vagy nem a ruhák alá kerül, lassabb lehet a
-            feloldódás.
+            feloldódás; részletek itt: <Link href="/mosokapszula-nem-oldodik-fel">miért nem oldódik fel a mosókapszula</Link>.
           </li>
           <li>
             <strong>Nem megfelelő adagolás:</strong> a túl kevés és a túl sok mosószer is rontja a végeredményt.
@@ -373,7 +373,7 @@ export default function HogyanMossunk20FokonPage() {
         <h2>20 fokos mosás és energiatudatos háztartás</h2>
         <p>
           A 20 fokos mosás mögött valójában egy átgondolt háztartási stratégia állhat. Nem pusztán a spórolásról szól,
-          hanem arról is, hogy a mosás textilkímélőbb, tervezhetőbb és napi szinten kényelmesebb legyen.
+          hanem arról is, hogy a mosás textilkímélőbb, tervezhetőbb és napi szinten kényelmesebb legyen; ehhez jó kiindulópont a <Link href="/mosasi-koltseg-kalkulator">mosási költség kalkulátor</Link>.
         </p>
         <p>
           Ha szeretnél mélyebben is belemenni ebbe a témába, érdemes átolvasni a teljes pilléroldalt az

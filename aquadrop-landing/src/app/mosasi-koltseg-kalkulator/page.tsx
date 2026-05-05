@@ -98,6 +98,16 @@ export default async function WashingCostCalculatorPage({ searchParams }: { sear
               ))}
             </section>
 
+            <section className="rounded-2xl border border-cyan-100 bg-white/85 p-5 md:p-6">
+              <h2 className="text-xl font-semibold text-slate-900">Kapcsolódó útmutatók</h2>
+              <ul className="mt-3 space-y-2 text-slate-700">
+                <li><Link className="font-medium text-brand-primary hover:underline" href="/energiatakarekos-mosas">Energiatakarékos mosás lépésről lépésre</Link></li>
+                <li><Link className="font-medium text-brand-primary hover:underline" href="/hogyan-mossunk-20-fokon">Hogyan moss hatékonyan 20 fokon?</Link></li>
+                <li><Link className="font-medium text-brand-primary hover:underline" href="/mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol">Mennyit spórolhatsz 20 fokos mosással?</Link></li>
+                <li><Link className="font-medium text-brand-primary hover:underline" href="/mosokapszula-hasznalata">Mosókapszula használata helyesen</Link></li>
+              </ul>
+            </section>
+
             <section className="rounded-3xl border border-cyan-100/70 bg-white/80 p-7 text-center shadow-[0_18px_55px_rgba(14,116,144,0.10)] backdrop-blur-sm md:p-8">
               <h2 className="text-2xl font-semibold text-slate-900">Alacsony hőfokon is hatékony mosási megoldást keresel?</h2>
               <p className="mt-3 text-slate-700">

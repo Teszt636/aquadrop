@@ -260,7 +260,7 @@ export default function MennyitSporolhatsz20FokonPage() {
           stratégia.
         </p>
 
-        <h2>Elég lehet a 20 fokos mosás a mindennapokban?</h2>
+        <h2>Elég lehet a 20 fokos mosás a mindennapokban? A részletes lépésekért nézd meg, <Link href="/hogyan-mossunk-20-fokon">hogyan moss hatékonyan 20 fokon</Link>.</h2>
         <p>
           Sok háztartásban igen, de nem automatikusan minden helyzetben. A hétköznapi, enyhén vagy közepesen
           szennyezett ruháknál a 20 fok jó választás lehet, ha a teljes mosási folyamat megfelelően van felépítve.
@@ -305,7 +305,7 @@ export default function MennyitSporolhatsz20FokonPage() {
         </p>
 
 
-        <h2>Mire figyelj, ha 20 fokon szeretnél jól mosni?</h2>
+        <h2>Mire figyelj, ha 20 fokon szeretnél jól mosni? Kezdd a <Link href="/mosokapszula-hasznalata">mosókapszula helyes használata</Link> alapjaival.</h2>
         <ul>
           <li>
             <strong>Válassz megfelelő programhosszt:</strong> alacsony hőfokon különösen fontos az idő, ezért a
@@ -317,7 +317,7 @@ export default function MennyitSporolhatsz20FokonPage() {
           </li>
           <li>
             <strong>Kerüld a túlzsúfolt dobot:</strong> ha a textíliák nem tudnak mozogni, romolhat a tisztítóhatás,
-            és az oldódás sem lesz ideális.
+            és az oldódás sem lesz ideális; ennek okait itt részletezzük: <Link href="/mosokapszula-nem-oldodik-fel">miért nem oldódik fel a mosókapszula</Link>.
           </li>
           <li>
             <strong>Illeszd a megoldást a szennyezettséghez:</strong> hétköznapi ruháknál gyakran elég az alacsony
