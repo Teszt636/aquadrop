@@ -7,8 +7,8 @@ import './globals.css';
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Mosókapszula – Aquadrop Expert Pro | 2+1 ajándék kapszula',
-    template: '%s | Aquadrop Expert Pro',
+    default: 'Aquadrop Expert Pro mosókapszula',
+    template: '%s',
   },
   description:
     'Prémium mosókapszula Dubai gyártói háttérrel. Vásárolj 2 dobozt, a 3.-at ajándékba adjuk. Erős tisztítás, tartós illat, modern formula.',
