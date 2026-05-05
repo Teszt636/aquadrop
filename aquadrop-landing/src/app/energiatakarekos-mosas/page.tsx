@@ -8,7 +8,7 @@ import { ButtonLink } from '@/components/ui';
 const articleTitle = 'Energiatakarékos mosás: tiszta ruhák alacsony hőfokon is';
 const discoverTitle = 'Az energiatakarékos mosás meglepően sokat javíthat a havi kiadásokon — úgy, hogy közben a ruháid is tiszták maradnak.';
 const articleDescription =
-  'Ismerd meg az energiatakarékos mosás alapjait: hogyan moss hatékonyan 20–30 fokon, mire figyelj az oldódásnál, és hogyan érhetsz el tiszta, foltmentes eredményt alacsony hőfokon is.';
+  'Energiatakarékos mosás 20–30°C-on: kevesebb villanyszámla, tiszta ruhák. Tippek, amikkel valóban működik alacsony hőfokon is.';
 const articleUrl = 'https://www.aquadrop.hu/energiatakarekos-mosas';
 const publishedDate = '2026-04-23';
 const modifiedDate = '2026-04-23';
