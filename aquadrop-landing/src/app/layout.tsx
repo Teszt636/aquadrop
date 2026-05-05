@@ -68,6 +68,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
         {children}
         <CookieConsentBanner />
+        <Script
+          src="https://analytics.ahrefs.com/analytics.js"
+          data-key="oo1g6YvtUDzMb2+xzjQdrg"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
