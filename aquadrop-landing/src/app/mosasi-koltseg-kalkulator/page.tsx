@@ -92,9 +92,9 @@ export default async function WashingCostCalculatorPage({ searchParams }: { sear
               </ul>
             </section>
 
-            <section className="rounded-3xl border border-cyan-100 bg-white/80 p-6 shadow-sm md:p-8">
+            <section className="rounded-3xl border border-cyan-100 bg-white/80 p-6 text-center shadow-sm md:p-8">
               <h2 className="text-xl font-semibold text-slate-900">Kapcsolódó útmutatók a mosási költségek csökkentéséhez</h2>
-              <p className="mt-3 text-slate-700">
+              <p className="mx-auto mt-3 max-w-3xl text-slate-700">
                 Ha szeretnéd csökkenteni a mosás energiafogyasztását, ezek az útmutatók segítenek a hőfok, a programhossz és a
                 mosókapszula használatának optimalizálásában.
               </p>
@@ -128,7 +128,7 @@ export default async function WashingCostCalculatorPage({ searchParams }: { sear
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="group rounded-3xl border border-cyan-100 bg-white/75 p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+                    className="group rounded-3xl border border-cyan-100 bg-white/75 p-5 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-md"
                   >
                     <p className="text-xs font-semibold uppercase tracking-wide text-cyan-700">{item.label}</p>
                     <h3 className="mt-3 text-lg font-semibold text-slate-900">{item.title}</h3>
