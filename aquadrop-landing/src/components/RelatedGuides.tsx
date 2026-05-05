@@ -15,7 +15,7 @@ type RelatedGuidesProps = {
 
 export function RelatedGuides({ title, intro, items }: RelatedGuidesProps) {
   return (
-    <section className="rounded-3xl border border-cyan-150 bg-gradient-to-br from-cyan-50/80 via-white to-white p-4 shadow-[0_18px_55px_rgba(6,182,212,0.14)] md:p-5">
+    <section className="not-prose rounded-3xl border border-cyan-200 bg-gradient-to-br from-cyan-50/80 via-white to-white p-4 shadow-[0_18px_55px_rgba(6,182,212,0.14)] md:p-5">
       <div className="mb-4 max-w-3xl">
         <p className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-cyan-800">
           Kapcsolódó útmutatók
@@ -50,7 +50,7 @@ export function RelatedGuides({ title, intro, items }: RelatedGuidesProps) {
                 {item.label}
               </p>
 
-              <h3 className="mt-1.5 text-base font-extrabold leading-snug text-slate-950 md:text-lg">
+              <h3 className="mt-2 text-base font-extrabold leading-snug text-slate-950 md:text-lg">
                 {item.title}
               </h3>
 
