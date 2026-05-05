@@ -34,7 +34,7 @@ export function HeroSection() {
               <div className="relative aspect-[5/4] overflow-hidden rounded-[1.5rem]">
                 <Image
                   src="/aquadrop-mosokapszula-hero.webp"
-                  alt="Aquadrop Expert Pro prémium mosókapszula"
+                  alt="Aquadrop Expert Pro prémium mosókapszula fehér ruhákhoz és alacsony hőfokú mosáshoz"
                   width={900}
                   height={700}
                   className="h-full w-full object-cover"

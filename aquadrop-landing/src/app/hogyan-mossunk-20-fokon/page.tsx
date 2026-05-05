@@ -17,8 +17,8 @@ const modifiedDate = '2026-04-23';
 const heroImageUrl = 'https://www.aquadrop.hu/20-fokos-mosas.webp';
 const heroImageWidth = 1734;
 const heroImageHeight = 907;
-const heroImageAlt = '20 fokos mosás hatékony tisztítással Aquadrop Expert Pro mosókapszulával';
-const heroImageCaption = '20 fokos mosás hatékony tisztítással Aquadrop Expert Pro mosókapszulával';
+const heroImageAlt = '20 fokos mosás Aquadrop Expert Pro mosókapszulával modern mosógép mellett';
+const heroImageCaption = '20 fokos mosás Aquadrop Expert Pro mosókapszulával modern mosógép mellett';
 
 const faqItems = [
   {

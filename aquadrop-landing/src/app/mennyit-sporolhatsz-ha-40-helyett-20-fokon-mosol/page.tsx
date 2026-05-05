@@ -14,7 +14,7 @@ const heroImageUrl = 'https://www.aquadrop.hu/20-fokos-mosas-megtakaritas-aquadr
 const socialImageUrl = 'https://www.aquadrop.hu/og/20-fokos-mosas-megtakaritas-aquadrop-og.webp';
 const heroImageWidth = 1536;
 const heroImageHeight = 1024;
-const heroImageAlt = '20 fokos mosás megtakarítás összehasonlítás Aquadrop Expert Pro mosókapszulával';
+const heroImageAlt = '20 fokos mosás megtakarításának szemléltetése Aquadrop Expert Pro mosókapszulával';
 const heroImageCaption = 'Ennyit spórolhatsz, ha 40 helyett 20 fokon mosol';
 const articleDescription =
   'Számold ki, mennyit változhat a mosás energiaköltsége, ha alacsonyabb hőfokon mosol. Interaktív kalkulátorral mutatjuk meg a különbséget.';
