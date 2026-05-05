@@ -222,7 +222,7 @@ export default function MosokapszulaVagyFolyekonyMososerPage() {
           a részletesebb finomhangolás könnyebben megvalósítható, ha valaki szívesen foglalkozik vele.
         </p>
 
-        <h2>Mi a különbség a mosókapszula és a folyékony mosószer között?</h2>
+        <h2>Mosókapszula vagy folyékony mosószer: mi a fő különbség?</h2>
         <p>
           A <strong>mosókapszula</strong> előre adagolt, koncentrált mosószerforma. Egy kapszula egy mosásra tervezett
           mennyiséget tartalmaz, ezért a használata jellemzően egyszerű: a kapszulát a dobba helyezed, majd elindítod
@@ -246,7 +246,7 @@ export default function MosokapszulaVagyFolyekonyMososerPage() {
           forma természetesebb választás lehet.
         </p>
 
-        <h2>A mosókapszula előnyei</h2>
+        <h2>Mikor jobb választás a mosókapszula?</h2>
         <p>
           A kapszulás forma népszerűsége elsősorban a kényelmi előnyökből épül fel. Ezeket érdemes külön-külön nézni,
           mert együtt adják azt a mindennapi élményt, amiért sok háztartás ezt a megoldást választja.
@@ -290,7 +290,7 @@ export default function MosokapszulaVagyFolyekonyMososerPage() {
           sokszor többet ér, mint bármilyen elméleti előny: stabilabb működést ad a teljes háztartás szintjén.
         </p>
 
-        <h2>A folyékony mosószer előnyei</h2>
+        <h2>Mikor praktikusabb a folyékony mosószer?</h2>
         <p>
           A <strong>folyékony mosószer előnyei</strong> leginkább ott látszanak, ahol a felhasználó több kontrollt
           szeretne a mosás paraméterei felett. Ez sok háztartásban valós igény, különösen változó tölteteknél.
@@ -330,7 +330,7 @@ export default function MosokapszulaVagyFolyekonyMososerPage() {
           figyelmet fordítani.
         </p>
 
-        <h2>Milyen hátrányokkal érdemes számolni?</h2>
+        <h2>Melyik adagolása egyszerűbb a mindennapi mosásban?</h2>
         <p>
           Az objektív <strong>mosószer összehasonlítás</strong> része az is, hogy ne csak az előnyökről beszéljünk.
           Mindkét forma hordoz kompromisszumokat, ezért érdemes tisztán látni a korlátokat.
@@ -372,7 +372,7 @@ export default function MosokapszulaVagyFolyekonyMososerPage() {
           egyszerűbb rendszer hosszú távon stabilabb eredményt adhat csak azért, mert könnyebb következetesen használni.
         </p>
 
-        <h2>Melyik a jobb választás a mindennapokban?</h2>
+        <h2>Melyik működik jobban alacsony hőfokon?</h2>
         <p>
           A „<strong>melyik jobb mosókapszula vagy folyékony</strong>” kérdésre nincs egyetlen, mindenkire igaz válasz.
           A döntés kulcsa, hogy te mit értékelsz jobban a mindennapi használatban.
@@ -462,7 +462,7 @@ export default function MosokapszulaVagyFolyekonyMososerPage() {
           ami hosszú távon nem segíti a kényelmes rutint.
         </p>
 
-        <h2>Hogyan illeszkedik ebbe az Aquadrop Expert Pro?</h2>
+        <h2>Melyik éri meg jobban a mindennapi mosásban?</h2>
         <p>
           Az Aquadrop Expert Pro egy olyan mosókapszula, amely a modern mosási igényekhez igazodva készült, és egy
           többkomponensű, 4 szegmensből álló prémium fejlesztés eredménye. A kapszulában különálló rétegekben található
@@ -481,7 +481,7 @@ export default function MosokapszulaVagyFolyekonyMososerPage() {
           folyékony mosószerekkel szemben, különösen akkor, ha a cél a kényelmes, gyors és egyenletes eredmény.
         </p>
 
-        <h2>Összefoglalás</h2>
+        <h2>Gyakori kérdések a mosókapszula és folyékony mosószer választásáról</h2>
         <p>
           A <strong>mosókapszula vagy folyékony mosószer</strong> kérdésben nincs egyetlen, univerzális „egyedüli jó”
           válasz. A két forma más előnyöket ad: a kapszula jellemzően kényelmesebb és gyorsabb, a folyékony pedig

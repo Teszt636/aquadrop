@@ -180,7 +180,7 @@ export default function MosokapszulaHasznalataPage() {
           </ul>
         </div>
 
-        <h2>Hogyan használd a mosókapszulát, hogy alacsony hőfokon is jól működjön?</h2>
+        <h2>Mosókapszula használata lépésről lépésre: így működik jól alacsony hőfokon is</h2>
         <p>
           Tedd a kapszulát közvetlenül a dob aljára, majd erre kerüljenek a ruhák. 20–30 fokon különösen fontos a
           megfelelő programhossz és a dob helyes töltése, hogy a kapszula maradéktalanul feloldódjon.
@@ -251,7 +251,7 @@ export default function MosokapszulaHasznalataPage() {
           túlzottan összenyomja. A cél az, hogy a mosás elején minél hamarabb érje a víz.
         </p>
 
-        <h2>Mikor kell betenni a mosókapszulát?</h2>
+        <h2>Hova és mikor kell tenni a mosókapszulát?</h2>
         <p>
           A sorrend sokat számít. A jó gyakorlat az, hogy először a kapszula kerüljön a dobba, és csak utána jöjjenek a
           ruhák. Ez a sorrend segít abban, hogy a kapszula ne maradjon a textíliák tetején vagy egy kevésbé kedvező
@@ -273,7 +273,7 @@ export default function MosokapszulaHasznalataPage() {
           kiszámíthatóbb indulást ad, és jobban illeszkedik a gyártói ajánlásokhoz is.
         </p>
 
-        <h2>Hány mosókapszula kell egy mosáshoz?</h2>
+        <h2>Mennyi mosókapszula kell egy mosáshoz?</h2>
         <p>
           A legtöbb háztartási mosásnál 1 kapszula elegendő. Ez általában megfelelő egy átlagos ruhamennyiséghez és
           tipikus szennyezettséghez. A kapszulás rendszer egyik előnye épp az, hogy könnyen tervezhető az adagolás.
@@ -331,7 +331,7 @@ export default function MosokapszulaHasznalataPage() {
           gyorsan átfutható, mégis jelentősen javítja a következetességet.
         </p>
 
-        <h2>Milyen hőfokon működik jól a mosókapszula? Ha alacsony hőfokon mosol, nézd meg ezt is: <Link href="/hogyan-mossunk-20-fokon">hogyan moss hatékonyan 20 fokon</Link>.</h2>
+        <h2>Használható a mosókapszula 20–30°C-on? Ha alacsony hőfokon mosol, nézd meg ezt is: <Link href="/hogyan-mossunk-20-fokon">hogyan moss hatékonyan 20 fokon</Link>.</h2>
         <p>
           Erre nincs minden helyzetre azonos, kőbe vésett szám. A kapszulás mosószerek általában többféle hétköznapi
           hőfoktartományban használhatók, de az optimális választás a ruha anyagától, színétől és szennyezettségétől is
@@ -444,7 +444,7 @@ export default function MosokapszulaHasznalataPage() {
           mosási élmény.
         </p>
 
-        <h2>Rövid gyakorlati kérdések, amelyek gyakran felmerülnek</h2>
+        <h2>Gyakori kérdések a mosókapszula használatáról</h2>
         <h3>Mi történik, ha véletlenül az adagolófiókba került a kapszula?</h3>
         <p>
           Ilyen hiba előfordulhat. Érdemes a következő mosásnál visszaállni a dobba helyezésre, mert a kapszula működése

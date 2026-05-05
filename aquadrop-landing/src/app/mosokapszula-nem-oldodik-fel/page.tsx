@@ -191,7 +191,7 @@ export default function MosokapszulaNemOldodikFelPage() {
           pillar oldalt is, ahol a hőfok–programidő–adagolás kapcsolatát is bemutatjuk.
         </p>
 
-        <h2>Mi a probléma, miért történik, és mit tegyél?</h2>
+        <h2>Miért nem oldódik fel a mosókapszula, és mit tegyél ilyenkor?</h2>
         <p>
           <strong>Mi a probléma:</strong> a kapszula részben bent marad, nyomot hagyhat a ruhán, vagy a tisztaságérzet
           gyengül.
@@ -252,7 +252,7 @@ export default function MosokapszulaNemOldodikFelPage() {
           lépés hozza a legnagyobb különbséget a saját gépedben és a saját textiljeiddel.
         </p>
 
-        <h2>A leggyakoribb okok, amiért a kapszula nem oldódik fel rendesen</h2>
+        <h2>Melyek a leggyakoribb mosókapszula-oldódási hibák?</h2>
 
         <h3>A kapszula nem a dob aljába került</h3>
         <p>
@@ -266,13 +266,13 @@ export default function MosokapszulaNemOldodikFelPage() {
           annak esélyét, hogy a kapszula részben megmaradjon, vagy később oldódjon fel.
         </p>
 
-        <h3>Túl sok ruha került a gépbe</h3>
+        <h3>A túltöltött dob is okozhat oldódási hibát</h3>
         <p>
           A túlzsúfolt dob csökkenti a víz és a textíliák szabad mozgását. Ilyenkor a kapszula nehezebben tud
           egyenletesen dolgozni, és nagyobb eséllyel jelenik meg maradvány.
         </p>
 
-        <h3>Túl rövid vagy nem megfelelő program indult</h3>
+        <h3>A túl rövid program miatt zselés maradhat a kapszula</h3>
         <p>
           Egy nagyon rövid vagy speciális ciklus nem minden esetben biztosít ideális környezetet a kapszulának.
           Ez nem azt jelenti, hogy az ilyen programok rosszak, hanem azt, hogy egyes tölteteknél körültekintőbben
@@ -343,7 +343,7 @@ export default function MosokapszulaNemOldodikFelPage() {
           is gyorsabbá válik.
         </p>
 
-        <h2>Mit tegyél, ha a mosókapszula nyomot hagyott a ruhán?</h2>
+        <h2>Mit tegyél, ha a mosókapszula ráragadt a ruhára?</h2>
         <p>
           Először is: maradj nyugodt, a helyzet sokszor egyszerűen kezelhető. Ha azt látod, hogy <strong>mosókapszula
           a ruhán marad</strong>, lehetőleg ne tedd az érintett ruhadarabot azonnal szárítógépbe.
@@ -373,7 +373,7 @@ export default function MosokapszulaNemOldodikFelPage() {
           a helyzet a következő mosásnál.
         </p>
 
-        <h2>Hogyan előzhető meg, hogy a mosókapszula ne oldódjon fel?</h2>
+        <h2>Hogyan előzheted meg, hogy a mosókapszula ne oldódjon fel?</h2>
         <p>
           A megelőzés kulcsa néhány egyszerű, de következetesen betartott rutinlépés. Ha ezeket beépíted a mindennapi
           mosásba, jelentősen csökkenthető a kellemetlen meglepetések esélye.
@@ -449,7 +449,7 @@ export default function MosokapszulaNemOldodikFelPage() {
           ami tényleg passzol a háztartásod ritmusához.
         </p>
 
-        <h2>Összefoglalás</h2>
+        <h2>Gyakori kérdések a mosókapszula oldódásáról</h2>
         <p>
           A „<strong>miért nem oldódik fel a mosókapszula</strong>” kérdésre ritkán létezik egyetlen válasz.
           A legtöbbször apró, javítható tényezők állnak a háttérben: elhelyezés, töltet, program és tárolás.
