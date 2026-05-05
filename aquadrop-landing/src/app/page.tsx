@@ -4,14 +4,14 @@ import { SITE_URL } from '@/lib/constants';
 export const metadata: Metadata = {
   title: 'Mosókapszula – Aquadrop Expert Pro | 2+1 ajándék kapszula',
   description:
-    'Fedezze fel az Aquadrop prémium világát! Dubai gyártói szakértelem és svájci Givaudan mikrokapszulás technológia találkozása a hosszan tartó, exkluzív illatélményért.',
+    'Prémium mosókapszula Dubai minőségben. Erős tisztítás már 20°C-on, hosszan tartó illat. Próbáld ki az Aquadrop Expert Pro-t!',
   alternates: {
     canonical: `${SITE_URL}/`,
   },
   openGraph: {
     title: 'Mosókapszula – Aquadrop Expert Pro | 2+1 ajándék kapszula',
     description:
-      'Fedezze fel az Aquadrop prémium világát! Dubai gyártói szakértelem és svájci Givaudan mikrokapszulás technológia találkozása a hosszan tartó, exkluzív illatélményért.',
+      'Prémium mosókapszula Dubai minőségben. Erős tisztítás már 20°C-on, hosszan tartó illat. Próbáld ki az Aquadrop Expert Pro-t!',
     url: `${SITE_URL}/`,
     siteName: 'Aquadrop Expert Pro',
     images: [
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Mosókapszula – Aquadrop Expert Pro | 2+1 ajándék kapszula',
     description:
-      'Fedezze fel az Aquadrop prémium világát! Dubai gyártói szakértelem és svájci Givaudan mikrokapszulás technológia találkozása a hosszan tartó, exkluzív illatélményért.',
+      'Prémium mosókapszula Dubai minőségben. Erős tisztítás már 20°C-on, hosszan tartó illat. Próbáld ki az Aquadrop Expert Pro-t!',
     images: ['/aquadrop-mosokapszula-og-kep.webp']
   }
 };
