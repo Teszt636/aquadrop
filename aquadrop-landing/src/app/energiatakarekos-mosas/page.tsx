@@ -101,6 +101,8 @@ export const metadata: Metadata = {
 };
 
 export default function EnergiatakarekosMosasPage() {
+  void discoverTitle;
+
   const blogPostingStructuredData = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',

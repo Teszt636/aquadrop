@@ -93,6 +93,8 @@ export const metadata: Metadata = {
 };
 
 export default function HogyanMossunk20FokonPage() {
+  void discoverTitle;
+
   const articleStructuredData = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',

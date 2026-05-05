@@ -68,6 +68,8 @@ export const metadata: Metadata = {
 };
 
 export default function MosokapszulaVagyFolyekonyMososerPage() {
+  void discoverTitle;
+
   const blogPostingStructuredData = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',

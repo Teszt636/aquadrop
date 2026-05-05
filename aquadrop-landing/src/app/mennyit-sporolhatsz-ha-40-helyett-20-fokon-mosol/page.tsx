@@ -95,6 +95,8 @@ export const metadata: Metadata = {
 };
 
 export default function MennyitSporolhatsz20FokonPage() {
+  void discoverTitle;
+
   const articleStructuredData = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
