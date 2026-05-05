@@ -13,6 +13,7 @@ const articleUrl = 'https://www.aquadrop.hu/mosokapszula-vagy-folyekony-mososzer
 const publishedDate = '2026-04-22';
 const modifiedDate = '2026-04-22';
 const heroImageUrl = 'https://www.aquadrop.hu/mosokapszula-vagy-folyekony-mososzer.webp';
+const socialImageUrl = 'https://www.aquadrop.hu/og/mosokapszula-vagy-folyekony-mososzer-aquadrop-og.webp';
 const heroImageWidth = 1536;
 const heroImageHeight = 1024;
 const heroImageAlt = 'Mosókapszula és folyékony mosószer összehasonlítása';
@@ -50,7 +51,7 @@ export const metadata: Metadata = {
     modifiedTime: `${modifiedDate}T08:00:00.000Z`,
     images: [
       {
-        url: heroImageUrl,
+        url: socialImageUrl,
         width: 1200,
         height: 630,
         alt: heroImageAlt
@@ -61,7 +62,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Mosókapszula vagy folyékony mosószer – melyik a jobb választás? | Aquadrop',
     description: articleDescription,
-    images: [heroImageUrl]
+    images: [socialImageUrl]
   }
 };
 

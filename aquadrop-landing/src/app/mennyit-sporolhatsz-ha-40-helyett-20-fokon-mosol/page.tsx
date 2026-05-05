@@ -9,6 +9,7 @@ import { ButtonLink } from '@/components/ui';
 const articleTitle = 'Mennyit spórolhatsz, ha 40 helyett 20 fokon mosol?';
 const discoverTitle = 'Sokan nem hiszik el, mennyit spórolhatsz, ha 40 helyett 20 fokon mosol';
 const heroImageUrl = 'https://www.aquadrop.hu/20-fokos-mosas-megtakaritas-aquadrop.webp';
+const socialImageUrl = 'https://www.aquadrop.hu/og/20-fokos-mosas-megtakaritas-aquadrop-og.webp';
 const heroImageWidth = 1536;
 const heroImageHeight = 1024;
 const heroImageAlt = '20 fokos mosás megtakarítás összehasonlítás Aquadrop Expert Pro mosókapszulával';
@@ -77,7 +78,7 @@ export const metadata: Metadata = {
     modifiedTime: `${publishedDate}T08:00:00.000Z`,
     images: [
       {
-        url: heroImageUrl,
+        url: socialImageUrl,
         width: 1200,
         height: 630,
         alt: heroImageAlt
@@ -88,7 +89,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Mennyit spórolhatsz, ha 40 helyett 20 fokon mosol? | Aquadrop',
     description: articleDescription,
-    images: [heroImageUrl]
+    images: [socialImageUrl]
   }
 };
 
