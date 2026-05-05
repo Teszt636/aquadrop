@@ -496,7 +496,7 @@ export default function MosokapszulaVagyFolyekonyMososerPage() {
           <Link href="/mosokapszula-hasznalata"> mosókapszula használata </Link>
           cikkben gyakorlati lépéseket találsz, a
           <Link href="/mosokapszula-nem-oldodik-fel"> mosókapszula nem oldódik fel </Link>
-          útmutatóban pedig a tipikus hibákra kapsz megoldásokat. Az aktuális ajánlatot és a fő információkat a
+          útmutatóban pedig a tipikus hibákra kapsz megoldásokat. Alacsony hőfokhoz nézd meg azt is, <Link href="/hogyan-mossunk-20-fokon">hogyan moss hatékonyan 20 fokon</Link>, és azt, <Link href="/mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol">mennyit spórolhatsz, ha 40 helyett 20 fokon mosol</Link>. Az aktuális ajánlatot és a fő információkat a
           <Link href="/"> főoldalon </Link>
           éred el.
         </p>

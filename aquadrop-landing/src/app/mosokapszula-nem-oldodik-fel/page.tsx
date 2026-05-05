@@ -321,7 +321,7 @@ export default function MosokapszulaNemOldodikFelPage() {
           cikkünket: <Link href="/mosokapszula-hasznalata">mosókapszula használata</Link>.
         </p>
 
-        <h2>Számít a mosási program is?</h2>
+        <h2>Számít a mosási program is? Igen, és ehhez gyakorlati segítség a <Link href="/hogyan-mossunk-20-fokon">hogyan moss hatékonyan 20 fokon</Link> útmutató.</h2>
         <p>
           Igen, számíthat. Nem minden program ad azonos körülményeket a kapszula oldódásához. Egyes rövidebb vagy
           speciális ciklusoknál a vízfelvétel és a mechanikai mozgás más lehet, ami bizonyos tölteteknél befolyásolhatja
