@@ -2,7 +2,6 @@ import type { ReactNode } from 'react';
 import Link from 'next/link';
 
 import { ArticlePartnerCta } from '@/components/article-partner-cta';
-import { RelatedArticles } from '@/components/related-articles';
 import { FooterSection } from '@/components/sections';
 import type { ArticleSlug } from '@/lib/article-config';
 
@@ -17,6 +16,8 @@ type ArticleLayoutProps = {
 };
 
 export function ArticleLayout({ slug, category, title, intro, readingTime, children, cta }: ArticleLayoutProps) {
+  void slug;
+
   return (
     <div className="relative min-h-screen w-full overflow-x-clip bg-gradient-to-b from-cyan-50 via-sky-50 to-teal-50">
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
@@ -57,14 +58,6 @@ export function ArticleLayout({ slug, category, title, intro, readingTime, child
                 {children}
               </div>
             </article>
-          </div>
-        </section>
-
-        <section className="pt-8 md:pt-10">
-          <div className="ds-container">
-            <div className="mx-auto max-w-4xl">
-              <RelatedArticles slug={slug} />
-            </div>
           </div>
         </section>
 
