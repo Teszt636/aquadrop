@@ -4,6 +4,7 @@ import Link from 'next/link';
 
 import { ButtonLink } from '@/components/ui';
 import { ArticleLayout } from '@/components/article/ArticleLayout';
+import { RelatedGuides } from '@/components/RelatedGuides';
 
 const articleTitle = 'Mosókapszula használata: hova kell tenni és mennyit használj?';
 const discoverTitle = 'A mosókapszula használata egyszerűnek tűnik, mégis ezen múlhat, hogy lesz-e foltos vagy friss a mosás végeredménye.';
@@ -479,6 +480,18 @@ export default function MosokapszulaHasznalataPage() {
           használod, általában gyorsan látszik a különbség: kevesebb bizonytalanság, nyugodtabb rutin, kiszámíthatóbb
           mosási élmény.
         </p>
+
+
+        <RelatedGuides
+          title='Kapcsolódó útmutatók a mosókapszula használatához'
+          intro='A kapszula helyes használata mellett a hőfok, a programhossz és az oldódási hibák megelőzése is sokat számít.'
+          items={[
+            { label: 'Oldódási hiba', title: 'Miért nem oldódik fel a mosókapszula?', description: 'A leggyakoribb okok és megoldások, ha a kapszula zselés marad vagy rátapad a ruhára.', href: '/mosokapszula-nem-oldodik-fel' },
+            { label: '20 fokos mosás', title: 'Hogyan moss hatékonyan 20 fokon?', description: 'Mitől működik jól az alacsony hőfokú mosás, és hogyan segíti ezt a kapszula helyes elhelyezése?', href: '/hogyan-mossunk-20-fokon' },
+            { label: 'Összehasonlítás', title: 'Mosókapszula vagy folyékony mosószer?', description: 'Segít eldönteni, mikor praktikusabb a kapszula, és mikor lehet jobb a folyékony mosószer.', href: '/mosokapszula-vagy-folyekony-mososzer' },
+            { label: 'Pillar útmutató', title: 'Energiatakarékos mosás lépésről lépésre', description: 'A teljes mosási rutin áttekintése alacsony hőfokkal, programválasztással és tudatos adagolással.', href: '/energiatakarekos-mosas' },
+          ]}
+        />
 
         <h2>Gyakori kérdések a mosókapszula használatáról</h2>
         <h3>Mi történik, ha véletlenül az adagolófiókba került a kapszula?</h3>

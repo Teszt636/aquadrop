@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { ArticleLayout } from '@/components/article/ArticleLayout';
+import { RelatedGuides } from '@/components/RelatedGuides';
 import { ButtonLink } from '@/components/ui';
 
 const articleTitle = 'Mosókapszula vagy folyékony mosószer – melyik a jobb választás?';
@@ -508,6 +509,18 @@ export default function MosokapszulaVagyFolyekonyMososerPage() {
           folyékony mosószerekkel szemben, különösen akkor, ha a cél a kényelmes, gyors és egyenletes eredmény.
         </p>
 
+
+        <RelatedGuides
+          title='Kapcsolódó útmutatók a mosószerválasztáshoz'
+          intro='A jó döntéshez érdemes megnézni a kapszula használatát, az alacsony hőfokú mosást és az esetleges oldódási hibákat is.'
+          items={[
+            { label: 'Használat', title: 'Mosókapszula használata helyesen', description: 'Gyakorlati útmutató a kapszula elhelyezéséhez, adagolásához és a gyakori hibák elkerüléséhez.', href: '/mosokapszula-hasznalata' },
+            { label: 'Oldódási hiba', title: 'Miért nem oldódik fel a mosókapszula?', description: 'Ha kapszulát választasz, érdemes tudni, mitől alakulhat ki maradvány vagy zselésedés.', href: '/mosokapszula-nem-oldodik-fel' },
+            { label: '20 fokos mosás', title: 'Hogyan moss hatékonyan 20 fokon?', description: 'Alacsony hőfokon különösen fontos a megfelelő programhossz és a jól oldódó mosószer.', href: '/hogyan-mossunk-20-fokon' },
+            { label: 'Megtakarítás', title: 'Mennyit spórolhatsz 20 fokos mosással?', description: 'Nézd meg, hogyan kapcsolódhat a mosószerválasztás az energiafogyasztás csökkentéséhez.', href: '/mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol' },
+          ]}
+        />
+
         <h2>Gyakori kérdések a mosókapszula és folyékony mosószer választásáról</h2>
         <p>
           A <strong>mosókapszula vagy folyékony mosószer</strong> kérdésben nincs egyetlen, univerzális „egyedüli jó”
@@ -520,7 +533,7 @@ export default function MosokapszulaVagyFolyekonyMososerPage() {
           A legjobb választás végső soron az, amelyik a te mindennapi valóságodban hosszú távon is fenntartható.
         </p>
         <p>
-          Ha szeretnél még tudatosabban dönteni, érdemes megnézned kapcsolódó útmutatóinkat is. A
+          Ha szeretnél még tudatosabban dönteni, hasonlítsd össze a saját mosási rutinoddal, melyik megközelítés működik számodra jobban. A
           <Link href="/mosokapszula-hasznalata"> mosókapszula használata </Link>
           cikkben gyakorlati lépéseket találsz, a
           <Link href="/mosokapszula-nem-oldodik-fel"> mosókapszula nem oldódik fel </Link>

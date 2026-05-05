@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { ArticleLayout } from '@/components/article/ArticleLayout';
+import { RelatedGuides } from '@/components/RelatedGuides';
 import { EnergySavingsCalculator } from '@/components/energy-savings-calculator';
 import { ButtonLink } from '@/components/ui';
 
@@ -358,6 +359,18 @@ export default function MennyitSporolhatsz20FokonPage() {
           mosás nem szükségmegoldás, hanem tudatos, jól működő választás lehet. A kulcs itt is ugyanaz: legalább
           20 °C-os, legalább 18 perces program, helyes kapszulaelhelyezés és a dob ésszerű terhelése.
         </p>
+
+
+        <RelatedGuides
+          title='Kapcsolódó útmutatók a 20 fokos mosás megtakarításához'
+          intro='A megtakarítás akkor működik jól a gyakorlatban, ha a hőfok, a programhossz és a mosószerhasználat is rendben van.'
+          items={[
+            { label: 'Gyakorlati útmutató', title: 'Hogyan moss hatékonyan 20 fokon?', description: 'Lépésről lépésre mutatjuk, mire figyelj, ha alacsony hőfokon szeretnél tiszta ruhákat.', href: '/hogyan-mossunk-20-fokon' },
+            { label: 'Kalkulátor', title: 'Mosási költség kalkulátor', description: 'Add meg saját mosási szokásaidat, és becsüld meg a 20 és 40 fok közötti különbséget.', href: '/mosasi-koltseg-kalkulator' },
+            { label: 'Mosókapszula', title: 'Mosókapszula használata helyesen', description: 'A jó eredményhez fontos, hova kerül a kapszula, mennyi hely marad a dobban, és milyen programot választasz.', href: '/mosokapszula-hasznalata' },
+            { label: 'Pillar útmutató', title: 'Energiatakarékos mosás lépésről lépésre', description: 'Átfogó útmutató a háztartási mosási költségek és energiahasználat csökkentéséhez.', href: '/energiatakarekos-mosas' },
+          ]}
+        />
 
         <h2>Gyakori kérdések a 20 fokos mosás megtakarításáról</h2>
         <div className="space-y-4">

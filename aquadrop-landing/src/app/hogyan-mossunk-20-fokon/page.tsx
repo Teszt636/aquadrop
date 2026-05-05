@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { ArticleLayout } from '@/components/article/ArticleLayout';
+import { RelatedGuides } from '@/components/RelatedGuides';
 import { ButtonLink } from '@/components/ui';
 
 const articleTitle = 'Hogyan mossunk hatékonyan 20 fokon?';
@@ -386,6 +387,18 @@ export default function HogyanMossunk20FokonPage() {
           <Link href="/energiatakarekos-mosas"> energiatakarékos mosásról</Link>, ahol részletesebben is bemutatjuk a
           beállítások és mosási rutinok összefüggéseit.
         </p>
+
+
+        <RelatedGuides
+          title='Kapcsolódó útmutatók a 20 fokos mosáshoz'
+          intro='Ha 20 fokon szeretnél mosni, érdemes a megtakarítást, a kapszula használatát és az oldódási hibákat együtt nézni.'
+          items={[
+            { label: 'Pillar útmutató', title: 'Energiatakarékos mosás lépésről lépésre', description: 'Átfogó útmutató az alacsony hőfokú, tudatos és költséghatékony mosási rutinhoz.', href: '/energiatakarekos-mosas' },
+            { label: 'Megtakarítás', title: 'Mennyit spórolhatsz 20 fokos mosással?', description: 'Ismerd meg, miért kerülhet kevesebbe a 20 fokos mosás, és mitől függ a különbség.', href: '/mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol' },
+            { label: 'Mosókapszula', title: 'Mosókapszula használata helyesen', description: 'A kapszula elhelyezése, adagolása és a gyakori hibák rövid, gyakorlati útmutatóban.', href: '/mosokapszula-hasznalata' },
+            { label: 'Oldódási hiba', title: 'Miért nem oldódik fel a mosókapszula?', description: 'Nézd meg, mitől maradhat zselés a kapszula, és hogyan előzheted meg a problémát.', href: '/mosokapszula-nem-oldodik-fel' },
+          ]}
+        />
 
         <h2>Gyakori kérdések a 20 fokos mosásról</h2>
         <div className="space-y-6 rounded-2xl border border-cyan-100 bg-white/70 p-5 md:p-7">

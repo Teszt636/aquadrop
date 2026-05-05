@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { ArticleLayout } from '@/components/article/ArticleLayout';
+import { RelatedGuides } from '@/components/RelatedGuides';
 import { ButtonLink } from '@/components/ui';
 
 const articleTitle = 'Energiatakarékos mosás: tiszta ruhák alacsony hőfokon is';
@@ -536,6 +537,18 @@ export default function EnergiatakarekosMosasPage() {
           tartósan csökkenti a bizonytalanságot, miközben javítja az otthoni komfortot. Ez a minőségérzet az, ami
           a prémium megoldásokat valóban megkülönbözteti a rövid távú, esetleges eredményektől.
         </p>
+
+
+        <RelatedGuides
+          title='Kapcsolódó útmutatók az energiatakarékos mosáshoz'
+          intro='Ha szeretnéd gyakorlatban is felépíteni az alacsony hőfokú mosási rutint, ezek az útmutatók segítenek a hőfok, a kapszula és a költségek pontosabb megértésében.'
+          items={[
+            { label: '20 fokos mosás', title: 'Hogyan moss hatékonyan 20 fokon?', description: 'Gyakorlati lépések ahhoz, hogy a 20 fokos mosás tiszta eredményt adjon a mindennapokban.', href: '/hogyan-mossunk-20-fokon' },
+            { label: 'Megtakarítás', title: 'Mennyit spórolhatsz 20 fokos mosással?', description: 'Nézd meg, hogyan változhat a mosási költség, ha 40 helyett 20 fokon mosol.', href: '/mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol' },
+            { label: 'Kalkulátor', title: 'Mosási költség kalkulátor', description: 'Számold ki saját adataiddal, mennyit jelenthet az alacsonyabb hőfok a villanyszámlában.', href: '/mosasi-koltseg-kalkulator' },
+            { label: 'Mosókapszula', title: 'Mosókapszula használata helyesen', description: 'Tudd meg, hova kell tenni a kapszulát, mennyit használj, és mit kerülj el alacsony hőfokon.', href: '/mosokapszula-hasznalata' },
+          ]}
+        />
 
         <h2>Gyakori kérdések az energiatakarékos mosásról</h2>
         <div className="space-y-5">
