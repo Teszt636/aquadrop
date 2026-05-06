@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { ButtonLink } from '@/components/ui/Button';
 
@@ -6,14 +8,19 @@ export function SeoSection() {
     <section className="ds-section pt-10">
       <div className="ds-container">
         <div className="ds-floating-panel px-6 py-8 md:px-10 md:py-12">
-          <SectionHeading>Mosókapszula – amit érdemes tudni választás előtt</SectionHeading>
+          <SectionHeading>Mosókapszula választás: mit érdemes tudni vásárlás előtt?</SectionHeading>
 
           <div className="mt-8 space-y-8 text-base leading-7 text-slate-700">
             <article>
               <h3 className="text-xl font-semibold text-slate-900">Mi az a mosókapszula, és miért egyre népszerűbb?</h3>
               <p className="mt-3">
                 A mosókapszula egy előre adagolt, koncentrált mosószer, amely megkönnyíti a mindennapi mosást. Nem
-                kell külön mérni vagy adagolni, egyetlen kapszula elegendő egy mosáshoz.
+                kell külön mérni vagy adagolni, egyetlen kapszula elegendő egy mosáshoz. A részletes
+                <Link className="text-sky-800 underline underline-offset-4" href="/mosokapszula-hasznalata">
+                  {' '}
+                  mosókapszula használata
+                </Link>
+                {' '}útmutató segít elkerülni a gyakori hibákat.
               </p>
               <p className="mt-3">
                 Az elmúlt években egyre többen váltanak kapszulás megoldásra, mert gyorsabb, kényelmesebb és sok
@@ -33,7 +40,13 @@ export function SeoSection() {
               </p>
               <p className="mt-3">
                 A koncentrált formula gyorsan oldódik, és már alacsonyabb hőfokon is hatékonyan működik. Ez
-                energiatakarékosabb mosást is lehetővé tesz, miközben a ruhák tiszták és frissek maradnak. A
+                energiatakarékosabb mosást is lehetővé tesz, miközben a ruhák tiszták és frissek maradnak. Ha ezt
+                a témát mélyebben is megnéznéd, az
+                <Link className="text-sky-800 underline underline-offset-4" href="/energiatakarekos-mosas">
+                  {' '}
+                  energiatakarékos mosás
+                </Link>
+                {' '}útmutató ad további gyakorlati szempontokat. A
                 kapszulás megoldás különösen praktikus a rohanó hétköznapokban, amikor fontos a gyors és egyszerű
                 használat.
               </p>
@@ -50,7 +63,12 @@ export function SeoSection() {
               </ul>
               <p className="mt-3">
                 Egy korszerű formula esetében az is fontos, hogy a kapszula ne hagyjon maradványt a ruhákon, és
-                egyenletesen oldódjon fel a mosás során. Az Aquadrop Expert Pro ilyen szempontból egy modern,
+                egyenletesen oldódjon fel a mosás során. Ehhez az is számít, hogy a
+                <Link className="text-sky-800 underline underline-offset-4" href="/mosokapszula-dobba-vagy-adagoloba">
+                  {' '}
+                  mosókapszula dobba vagy adagolóba
+                </Link>
+                {' '}kerül-e. Az Aquadrop Expert Pro ilyen szempontból egy modern,
                 koncentrált megoldás, amely a mindennapi használat során is stabil teljesítményt nyújt.
               </p>
             </article>

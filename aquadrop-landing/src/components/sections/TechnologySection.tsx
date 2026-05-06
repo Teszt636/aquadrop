@@ -39,7 +39,11 @@ export function TechnologySection() {
         <div className="ds-container">
           <div className="ds-floating-panel px-5 py-7 sm:px-7 md:px-10 md:py-10">
             <div className="ds-section-heading-wrap">
-              <SectionHeading>Mosókapszula különleges tulajdonságokkal</SectionHeading>
+              <SectionHeading>Mosókapszula technológia alacsony hőfokú mosáshoz</SectionHeading>
+              <p className="mt-4 text-base md:text-lg">
+                A jó mosási eredmény nem csak az illaton múlik. Számít az oldódás, a folttisztító hatás,
+                a szagsemlegesítés és az, hogy a kapszula a megfelelő program mellett egyenletesen tudjon dolgozni.
+              </p>
             </div>
 
             <div className="mt-10 grid items-center gap-6 lg:grid-cols-[minmax(320px,420px)_1fr] lg:gap-10">
@@ -82,11 +86,11 @@ export function TechnologySection() {
         <div className="ds-container text-center">
           <div className="ds-floating-panel px-5 py-7 sm:px-7 md:px-10 md:py-10">
             <h2 className="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
-              Környezetbarát választás a mindennapokra
+              Tudatosabb mosási rutin kevesebb pazarlással
             </h2>
             <p className="mx-auto mt-4 max-w-3xl text-base leading-relaxed text-slate-600 md:text-lg">
-              Az Aquadrop Expert Pro nemcsak hatékony, hanem környezettudatos megoldás is, amely a modern
-              háztartások igényeihez igazodik.
+              Az előre adagolt kapszula segíthet csökkenteni a túladagolást, miközben a modern háztartások
+              kényelmes, kiszámítható mosási rutinjához igazodik.
             </p>
 
             <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">

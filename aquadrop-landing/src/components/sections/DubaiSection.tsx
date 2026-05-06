@@ -7,11 +7,11 @@ const dubaiBenefits = [
   },
   {
     title: 'Prémium minőségérzet',
-    description: 'Olyan formula, amely a tisztaságot és frissességet helyezi előtérbe.'
+    description: 'A tisztaságot, a frissességet és a kényelmes használatot helyezi előtérbe.'
   },
   {
     title: 'Koncentrált hatás',
-    description: 'Kis kapszula, nagy teljesítmény.'
+    description: 'Előre adagolt kapszula koncentrált formulával a mindennapi ruhákhoz.'
   },
   {
     title: 'Modern megoldás',
@@ -25,18 +25,18 @@ export function DubaiSection() {
       <div className="ds-container">
         <div className="ds-floating-panel px-5 py-7 sm:px-7 md:px-10 md:py-10">
           <div className="ds-section-heading-wrap">
-            <SectionHeading>Nem egy átlagos mosókapszula</SectionHeading>
-            <p className="mt-4 text-xl font-semibold text-slate-900">Dubai háttérrel, prémium minőségre hangolva</p>
+            <SectionHeading>Prémium mosókapszula modern gyártói háttérrel</SectionHeading>
+            <p className="mt-4 text-xl font-semibold text-slate-900">
+              Dubai gyártói háttérrel, mindennapi mosáshoz fejlesztve
+            </p>
             <SectionDescription className="mx-auto max-w-4xl text-left text-base leading-7 text-slate-700 md:text-lg">
-              Az Aquadrop Expert Pro nem egy szokványos tömegtermék. A márka egy Dubai központú gyártó fejlesztése,
-              amely a modern mosási igényekhez igazított, koncentrált formulát kínál.
+              Az Aquadrop Expert Pro olyan prémium mosókapszula, amely a kényelmes adagolást, a koncentrált
+              tisztítóhatást és a modern mosási rutint helyezi előtérbe. A cél az, hogy a hétköznapi ruhák mosása
+              egyszerűbb, kiszámíthatóbb és frissebb élmény legyen.
             </SectionDescription>
             <SectionDescription className="mx-auto max-w-4xl text-left text-base leading-7 text-slate-700 md:text-lg">
-              A csomagoláson is szereplő „from Dubai” jelölés nem csupán eredetet jelent, hanem egy olyan minőségi
-              szemléletet is, amely a hatékonyságot, a megbízhatóságot és a korszerű megoldásokat helyezi előtérbe.
-            </SectionDescription>
-            <SectionDescription className="mx-auto max-w-4xl text-left text-base leading-7 text-slate-700 md:text-lg">
-              Az Aquadrop célja, hogy egyszerűbbé és hatékonyabbá tegye a mindennapi mosást – kompromisszumok nélkül.
+              A „from Dubai” jelölés a márka nemzetközi gyártói hátterére utal. A kommunikációban ezt minőségi
+              pozícióként használjuk, túlzó állítások nélkül.
             </SectionDescription>
           </div>
 
