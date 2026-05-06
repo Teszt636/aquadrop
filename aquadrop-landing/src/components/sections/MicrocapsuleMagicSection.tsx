@@ -6,12 +6,12 @@ const steps = [
   {
     title: 'A textilhez tapad',
     description:
-      'Az illatanyagokat mikroszkopikus kapszulák védik, amelyek a textilszálak felületén maradnak.'
+      'Az illatanyagokat mikroszkopikus kapszulák védhetik, amelyek a textilszálak felületén maradhatnak.'
   },
   {
     title: 'Mozgásra aktiválódik',
     description:
-      'A ruha viselése, mozgása és finom súrlódása fokozatosan megnyitja a kapszulákat.'
+      'A ruha viselése, mozgása és finom súrlódása hozzájárulhat az illatrészecskék fokozatos felszabadulásához.'
   },
   {
     title: 'Újra érezhető az illat',
@@ -23,7 +23,7 @@ const steps = [
 const premiumBenefits = [
   {
     title: 'Érintésre ébredő illat',
-    description: 'Egy ölelés, mozgás vagy a ruha felvétele is új illathullámot szabadíthat fel.'
+    description: 'A mozgás, az érintés vagy a ruha felvétele érezhetőbbé teheti a friss illatot.'
   },
   {
     title: 'Hosszan tartó frissesség',
@@ -45,16 +45,16 @@ export function MicrocapsuleMagicSection() {
           <div className="mx-auto max-w-3xl space-y-3 text-center">
             <SectionHeading>
               <span className="mt-4 block break-words text-center text-4xl leading-tight md:text-5xl">
-                Mikrokapszula varázslat
+                Hosszan tartó friss illat mikrokapszulás technológiával
               </span>
               <span className="mt-4 block break-words text-center text-3xl leading-tight md:text-4xl">
                 Ahol a tudomány és a luxus találkozik
               </span>
             </SectionHeading>
             <p className="text-base leading-relaxed text-brand-secondary md:text-lg">
-              Az Aquadropnál hisszük, hogy a tisztaság nemcsak látható, hanem érezhető is. A modern
-              mikrokapszulás illattechnológia segít abban, hogy a friss illat ne csak a mosás után
-              legyen jelen, hanem a ruhák viselése közben is újra és újra életre keljen.
+              A mikrokapszulás illattechnológia célja, hogy a friss illat ne csak a mosás után legyen
+              érezhető. A ruhaszálak között megtapadó illatrészecskék mozgásra és érintésre fokozatosan
+              szabadulhatnak fel.
             </p>
           </div>
 
@@ -87,10 +87,9 @@ export function MicrocapsuleMagicSection() {
           <article className="rounded-2xl border border-sky-100 bg-sky-50/40 p-5 text-center shadow-sm md:p-6">
             <h3 className="text-xl font-bold text-slate-900">Miért különleges ez a technológia?</h3>
             <p className="mx-auto mt-3 max-w-4xl text-sm leading-6 text-slate-700 md:text-base">
-              A hagyományos illatosítással szemben a mikrokapszulás megoldás nem egyszerre engedi el
-              az illatot. Az illatmolekulákat apró kapszulák védik, amelyek a textilszálakhoz
-              tapadnak, majd mozgás vagy súrlódás hatására fokozatosan nyílnak meg. Így a frissesség
-              érzete hosszabb ideig megmaradhat.
+              A mikrokapszulás megoldás célja, hogy az illat ne egyszerre illanjon el. Az illatmolekulákat
+              apró kapszulák védhetik, amelyek a textilszálakhoz tapadhatnak, majd mozgás vagy súrlódás
+              hatására fokozatosan nyílhatnak meg. Így a frissesség érzete hosszabb ideig megmaradhat.
             </p>
           </article>
 

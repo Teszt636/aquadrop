@@ -3,8 +3,8 @@ import { SectionHeading } from '@/components/ui';
 const benefits = [
   { title: 'Magas koncentráció', icon: '💧' },
   { title: 'Gyors oldódás', icon: '⚡' },
-  { title: 'Folteltávolítás', icon: '✨' },
-  { title: 'Frissesség és színvédelem', icon: '🛡️' }
+  { title: 'Folttisztító hatás', icon: '✨' },
+  { title: 'Friss illat és színvédelem', icon: '🛡️' }
 ];
 
 export function BenefitsSection() {
@@ -12,7 +12,11 @@ export function BenefitsSection() {
     <section className="ds-section bg-transparent">
       <div className="ds-container">
         <div className="ds-section-heading-wrap">
-          <SectionHeading>Amit minden mosásnál tapasztalni fogsz</SectionHeading>
+          <SectionHeading>Mit ad egy prémium mosókapszula a mindennapi mosáshoz?</SectionHeading>
+          <p className="mt-4 text-base md:text-lg">
+            Az Aquadrop Expert Pro célja, hogy egyszerűbbé tegye a mosást: előre adagolt kapszula,
+            koncentrált formula, friss illat és kényelmes használat egyetlen dobozban.
+          </p>
         </div>
 
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">

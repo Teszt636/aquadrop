@@ -2,9 +2,9 @@ import { SectionHeading } from '@/components/ui';
 
 const problemPoints = [
   { text: 'Nem tisztít elég hatékonyan', icon: '🧼' },
-  { text: 'Nem oldódik megfelelően', icon: '🫧' },
+  { text: 'Nem oldódik fel rendesen', icon: '🫧' },
   { text: 'Gyorsan elfogy, mégis drága', icon: '💸' },
-  { text: 'Az illat erős, de a hatás gyenge', icon: '😕' }
+  { text: 'Erős illat, gyenge mosási eredmény', icon: '😕' }
 ];
 
 export function ProblemSection() {
@@ -12,9 +12,10 @@ export function ProblemSection() {
     <section className="ds-section bg-transparent">
       <div className="ds-container">
         <div className="ds-section-heading-wrap">
-          <SectionHeading>Miért okoz csalódást sok mosókapszula?</SectionHeading>
+          <SectionHeading>Miért nem működik jól minden mosókapszula alacsony hőfokon?</SectionHeading>
           <p className="mt-4 text-base md:text-lg">
-            Sokan azért váltanak, mert a látványos csomagolás mögött nincs valódi teljesítmény.
+            A mindennapi mosásnál a leggyakoribb gond a gyenge tisztítóhatás, a rossz oldódás, a túl erős
+            illat vagy a bizonytalan adagolás. Ezek különösen alacsony hőfokú mosásnál válnak látványossá.
           </p>
         </div>
 
