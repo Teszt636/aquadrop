@@ -302,22 +302,22 @@ export default function MosokapszulaAdagolasPage() {
               href: '/mosokapszula-hasznalata',
             },
             {
+              label: 'Elhelyezés',
+              title: 'Mosókapszula dobba vagy adagolóba?',
+              description: 'Tudd meg, miért a dob alja a legbiztosabb hely a kapszulának.',
+              href: '/mosokapszula-dobba-vagy-adagoloba',
+            },
+            {
               label: 'Oldódási hiba',
               title: 'Miért nem oldódik fel a mosókapszula?',
               description: 'A leggyakoribb okok és megoldások, ha maradvány marad a ruhán vagy a dobban.',
               href: '/mosokapszula-nem-oldodik-fel',
             },
             {
-              label: '20 fokos mosás',
-              title: 'Hogyan moss hatékonyan 20 fokon?',
-              description: 'Programhossz, töltet és kapszulaelhelyezés alacsony hőfokú mosáshoz.',
-              href: '/hogyan-mossunk-20-fokon',
-            },
-            {
-              label: 'Energiatakarékosság',
-              title: 'Energiatakarékos mosás lépésről lépésre',
-              description: 'Átfogó útmutató tudatos, kímélő és költséghatékony mosási rutinhoz.',
-              href: '/energiatakarekos-mosas',
+              label: '20 fokos kapszula',
+              title: 'Mosókapszula 20 fokon',
+              description: 'Mikor működik jól alacsony hőfokon, és hogyan előzheted meg az oldódási hibákat?',
+              href: '/mosokapszula-20-fokon',
             },
           ]}
         />

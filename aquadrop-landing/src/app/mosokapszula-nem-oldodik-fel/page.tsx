@@ -358,6 +358,7 @@ export default function MosokapszulaNemOldodikFelPage() {
         <h2>Számít a mosási program hossza?</h2>
         <p>
           Gyakorlati segítségként nézd meg a <Link href="/hogyan-mossunk-20-fokon">hogyan moss hatékonyan 20 fokon</Link> útmutatót is.
+          Kifejezetten kapszulás oldalról a <Link href="/mosokapszula-20-fokon">mosókapszula 20 fokon</Link> cikk foglalja össze a legfontosabb oldódási szempontokat.
         </p>
         <p>
           Igen, számíthat. Nem minden program ad azonos körülményeket a kapszula oldódásához. Egyes rövidebb vagy
@@ -490,10 +491,10 @@ export default function MosokapszulaNemOldodikFelPage() {
           title='Kapcsolódó útmutatók mosókapszula oldódási hibákhoz'
           intro='Ha a kapszula nem oldódik fel, a használati sorrend, a programhossz és az alacsony hőfokú mosási rutin együtt számít.'
           items={[
-            { label: 'Használat', title: 'Mosókapszula használata helyesen', description: 'Nézd meg, hova kell tenni a kapszulát, mennyit használj, és milyen hibákat kerülj el.', href: '/mosokapszula-hasznalata' },
             { label: 'Elhelyezés', title: 'Mosókapszula dobba vagy adagolóba?', description: 'Rövid, gyakorlati útmutató arról, hova kerüljön a kapszula, hogy jobban oldódjon.', href: '/mosokapszula-dobba-vagy-adagoloba' },
-            { label: '20 fokos mosás', title: 'Hogyan moss hatékonyan 20 fokon?', description: 'Alacsony hőfoknál különösen fontos a megfelelő programhossz és a dob helyes töltése.', href: '/hogyan-mossunk-20-fokon' },
-            { label: 'Pillar útmutató', title: 'Energiatakarékos mosás lépésről lépésre', description: 'Tudd meg, hogyan kapcsolódik az alacsony hőfok, a programhossz és a mosószerhasználat.', href: '/energiatakarekos-mosas' },
+            { label: 'Adagolás', title: 'Mosókapszula adagolás: hány kapszula kell?', description: 'Mikor elég egy kapszula, mikor lehet szükség többre, és hogyan kerüld el a túladagolást?', href: '/mosokapszula-adagolas' },
+            { label: '20 fokos kapszula', title: 'Mosókapszula 20 fokon', description: 'Mikor működik jól alacsony hőfokon, és hogyan előzheted meg az oldódási hibákat?', href: '/mosokapszula-20-fokon' },
+            { label: 'Használat', title: 'Mosókapszula használata helyesen', description: 'Nézd meg, hova kell tenni a kapszulát, mennyit használj, és milyen hibákat kerülj el.', href: '/mosokapszula-hasznalata' },
           ]}
         />
 

@@ -305,10 +305,10 @@ export default function MosokapszulaDobbaVagyAdagolobaPage() {
               href: '/mosokapszula-nem-oldodik-fel',
             },
             {
-              label: '20 fokos mosás',
-              title: 'Hogyan moss hatékonyan 20 fokon?',
-              description: 'Programhossz, töltet és kapszulaelhelyezés alacsony hőfokú mosáshoz.',
-              href: '/hogyan-mossunk-20-fokon',
+              label: '20 fokos kapszula',
+              title: 'Mosókapszula 20 fokon',
+              description: 'Mikor működik jól alacsony hőfokon, és hogyan előzheted meg az oldódási hibákat?',
+              href: '/mosokapszula-20-fokon',
             },
           ]}
         />
