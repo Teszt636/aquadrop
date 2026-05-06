@@ -101,7 +101,7 @@ export default function Home() {
       {
         '@type': 'Organization',
         '@id': 'https://www.aquadrop.hu/#organization',
-        name: 'Aquadrop Expert Pro',
+        name: 'Aquadrop',
         url: `${SITE_URL}/`,
         logo: 'https://www.aquadrop.hu/logo.png'
       },
@@ -109,7 +109,7 @@ export default function Home() {
         '@type': 'WebSite',
         '@id': 'https://www.aquadrop.hu/#website',
         url: `${SITE_URL}/`,
-        name: 'Aquadrop Expert Pro',
+        name: 'Aquadrop',
         publisher: {
           '@id': 'https://www.aquadrop.hu/#organization'
         }
@@ -123,7 +123,7 @@ export default function Home() {
           '@id': 'https://www.aquadrop.hu/#website'
         },
         about: {
-          '@id': 'https://www.aquadrop.hu/#organization'
+          '@id': 'https://www.aquadrop.hu/#product'
         },
         mainEntity: {
           '@id': 'https://www.aquadrop.hu/#product'
@@ -139,7 +139,7 @@ export default function Home() {
         },
         description:
           'Prémium, előre adagolt mosókapszula mindennapi ruhákhoz, kényelmes használathoz és alacsony hőfokú mosási rutinhoz.',
-        image: 'https://www.aquadrop.hu/aquadrop-mosokapszula-hero.webp',
+        image: 'https://www.aquadrop.hu/aquadrop-expert-pro-mosokapszula.webp',
         category: 'Laundry detergent capsules',
         url: 'https://www.aquadrop.hu/',
         offers: {
@@ -147,8 +147,7 @@ export default function Home() {
           availability: 'https://schema.org/InStoreOnly',
           url: 'https://www.aquadrop.hu/',
           seller: {
-            '@type': 'Organization',
-            name: 'Aquadrop'
+            '@id': 'https://www.aquadrop.hu/#organization'
           }
         }
       },
