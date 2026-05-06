@@ -7,18 +7,19 @@ export function HeroSection() {
         <div className="grid w-full items-center gap-8 rounded-3xl border border-white/40 bg-white/75 p-5 shadow-[0_20px_60px_rgba(15,23,42,0.10)] backdrop-blur-sm sm:p-6 md:grid-cols-2 md:gap-12 md:p-12">
           <div className="min-w-0">
 
-            <h1 className="mt-4 text-sm font-semibold uppercase tracking-[0.08em] text-slate-600">
-              Aquadrop Expert Pro mosókapszula
-            </h1>
-            <h2 className="mt-3 break-words text-4xl leading-tight md:text-5xl">
-              Professzionális tisztaság otthonra
-            </h2>
-            <p className="mt-4 break-words text-3xl leading-tight md:text-4xl">
+            <p className="mt-4 text-sm font-semibold uppercase tracking-[0.08em] text-slate-600">
               Aquadrop Expert Pro mosókapszula
             </p>
+            <h1 className="mt-3 break-words text-4xl leading-tight md:text-5xl">
+              Prémium mosókapszula alacsony hőfokú mosáshoz
+            </h1>
+            <p className="mt-4 break-words text-2xl leading-tight text-cyan-900 md:text-3xl">
+              Professzionális tisztaság otthonra
+            </p>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-700">
-              Az Aquadrop Expert Pro magas koncentrációjú formula, amely hatékony tisztítást,
-              friss illatot és megbízható mindennapi teljesítményt ad.
+              Az Aquadrop Expert Pro magas koncentrációjú mosókapszula a mindennapi ruhák
+              tisztításához, friss illathoz és kényelmes adagoláshoz készült. Megbízható választás
+              akkor is, ha alacsonyabb hőfokon szeretnél tudatosabban mosni.
             </p>
 
             {/* Desktopon itt jelenjen meg */}

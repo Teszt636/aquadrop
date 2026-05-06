@@ -3,16 +3,16 @@ import dynamic from 'next/dynamic';
 import { SITE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: 'Mosókapszula – Aquadrop Expert Pro | 2+1 ajándék kapszula',
+  title: 'Prémium mosókapszula alacsony hőfokra | Aquadrop Expert Pro',
   description:
-    'Prémium mosókapszula Dubai minőségben. Erős tisztítás már 20°C-on, hosszan tartó illat. Próbáld ki az Aquadrop Expert Pro-t!',
+    'Ismerd meg az Aquadrop Expert Pro prémium mosókapszulát: kényelmes adagolás, friss illat, alacsony hőfokú mosáshoz is praktikus megoldás. Keresd viszonteladó partnereinknél.',
   alternates: {
     canonical: `${SITE_URL}/`,
   },
   openGraph: {
-    title: 'Mosókapszula – Aquadrop Expert Pro | 2+1 ajándék kapszula',
+    title: 'Prémium mosókapszula alacsony hőfokú mosáshoz | Aquadrop',
     description:
-      'Prémium mosókapszula Dubai minőségben. Erős tisztítás már 20°C-on, hosszan tartó illat. Próbáld ki az Aquadrop Expert Pro-t!',
+      'Az Aquadrop Expert Pro kényelmes, előre adagolt mosókapszula friss illattal, modern formulával és 2+1 ajándék promócióval.',
     url: `${SITE_URL}/`,
     siteName: 'Aquadrop Expert Pro',
     images: [
@@ -28,9 +28,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Mosókapszula – Aquadrop Expert Pro | 2+1 ajándék kapszula',
+    title: 'Prémium mosókapszula alacsony hőfokra | Aquadrop',
     description:
-      'Prémium mosókapszula Dubai minőségben. Erős tisztítás már 20°C-on, hosszan tartó illat. Próbáld ki az Aquadrop Expert Pro-t!',
+      'Fedezd fel az Aquadrop Expert Pro mosókapszulát: kényelmes adagolás, friss illat és tudatosabb mosási rutin.',
     images: ['/aquadrop-mosokapszula-og-kep.webp']
   }
 };
@@ -64,33 +64,34 @@ export default function Home() {
 
   const faqItems = [
     {
-      question: 'Hogyan kell használni az Aquadrop Expert Pro mosókapszulát?',
+      question: 'Hova kell tenni az Aquadrop Expert Pro mosókapszulát?',
       answer:
-        'A kapszulát közvetlenül a mosógép dobjába érdemes helyezni, még a ruhák behelyezése előtt. A kapszulás megoldás egyszerűbbé és tisztábbá teszi az adagolást.'
+        'A mosókapszulát közvetlenül a mosógép dobjának aljára érdemes tenni, még a ruhák behelyezése előtt. Így hamarabb éri víz, és egyenletesebben tud oldódni.'
     },
     {
-      question: 'Miben különbözik az Aquadrop Expert Pro a hagyományos mosószerektől?',
+      question: 'Használható az Aquadrop Expert Pro alacsony hőfokon is?',
       answer:
-        'Az Aquadrop Expert Pro egy koncentrált, előreadagolt mosókapszula, amely kényelmesebb használatot, gyors adagolást és egyszerűbb mindennapi mosást kínál.'
+        'Igen, az Aquadrop Expert Pro mindennapi ruhákhoz alacsonyabb hőfokon is praktikus választás lehet, ha megfelelő programot választasz, és nem töltöd túl a dobot.'
     },
     {
-      question: 'Hogyan igényelhető az ajándék mosókapszula?',
+      question: 'Miben különbözik a mosókapszula a folyékony mosószertől?',
       answer:
-        'Az ajándék igényléséhez 2 doboz Aquadrop Expert Pro terméket kell vásárolni valamely partnernél, majd a vásárlást igazoló blokk képét fel kell tölteni az oldalon található űrlapon.'
+        'A mosókapszula előre adagolt és kényelmesen használható, míg a folyékony mosószer rugalmasabban mérhető. A kapszula jó választás lehet, ha gyors, tiszta és kiszámítható adagolást szeretnél.'
     },
     {
-      question: 'Mi történik, ha a két doboz két külön blokkon szerepel?',
+      question: 'Hogyan igényelhető a 2+1 ajándék kapszula?',
       answer:
-        'Ebben az esetben a két blokkot egy jól olvasható, közös képen érdemes feltölteni, hogy az adatok egyértelműen ellenőrizhetők legyenek.'
-    },
-    {
-      question: 'Mennyire biztonságos a csomagolás gyermekek mellett?',
-      answer:
-        'A gyermekek védelmében különös figyelmet fordítottunk a gyerekzáras csomagolásra. A doboz erős kialakításának köszönhetően akkor sem törik szét könnyen, ha a gyermek lerántja vagy eldobja, stabil nyitási technikája pedig segít megakadályozni a kapszulákhoz való hozzáférést.'
+        'A promócióhoz 2 doboz Aquadrop Expert Pro terméket kell vásárolni valamely partnernél, majd a vásárlást igazoló blokk képét fel kell tölteni az oldalon található űrlapon.'
     },
     {
       question: 'Hol lehet megvásárolni az Aquadrop Expert Pro mosókapszulát?',
-      answer: 'Az Aquadrop Expert Pro jelenleg viszonteladó partnereken keresztül érhető el.'
+      answer:
+        'Az Aquadrop Expert Pro jelenleg viszonteladó partnereken keresztül érhető el. Az oldalon közvetlen online vásárlás nem működik.'
+    },
+    {
+      question: 'Biztonságos a csomagolás gyermekek mellett?',
+      answer:
+        'A termék gyerekzáras, stabil dobozban érkezik, de a mosókapszulákat mindig gyermekektől elzárva kell tárolni. A kapszulákhoz való hozzáférést minden háztartásban meg kell előzni.'
     }
   ];
 
@@ -123,6 +124,32 @@ export default function Home() {
         },
         about: {
           '@id': 'https://www.aquadrop.hu/#organization'
+        },
+        mainEntity: {
+          '@id': 'https://www.aquadrop.hu/#product'
+        }
+      },
+      {
+        '@type': 'Product',
+        '@id': 'https://www.aquadrop.hu/#product',
+        name: 'Aquadrop Expert Pro mosókapszula',
+        brand: {
+          '@type': 'Brand',
+          name: 'Aquadrop'
+        },
+        description:
+          'Prémium, előre adagolt mosókapszula mindennapi ruhákhoz, kényelmes használathoz és alacsony hőfokú mosási rutinhoz.',
+        image: 'https://www.aquadrop.hu/aquadrop-mosokapszula-hero.webp',
+        category: 'Laundry detergent capsules',
+        url: 'https://www.aquadrop.hu/',
+        offers: {
+          '@type': 'Offer',
+          availability: 'https://schema.org/InStoreOnly',
+          url: 'https://www.aquadrop.hu/',
+          seller: {
+            '@type': 'Organization',
+            name: 'Aquadrop'
+          }
         }
       },
       {

@@ -86,8 +86,8 @@ export function HomeKnowledgeHub() {
               Mosókapszula tudástár
             </h2>
             <p className="text-base leading-relaxed text-slate-700 md:text-lg">
-              Még bizonytalan vagy, vagy szeretnéd jobban átlátni, hogyan működik az energiatakarékos és
-              kiszámítható mosás? Nézd meg az alábbi útmutatókat.
+              Mosókapszula használat, adagolás, oldódási hibák és energiatakarékos mosás egy helyen.
+              Válaszd ki azt az útmutatót, amelyik a saját mosási kérdésedre ad választ.
             </p>
           </div>
 
