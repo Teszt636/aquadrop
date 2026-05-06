@@ -333,6 +333,7 @@ export default function HogyanMossunk20FokonPage() {
         </p>
         <p>
           Ha részletes lépésekre is szükséged van, nézd meg ezt a kapcsolódó útmutatót: <Link href="/mosokapszula-hasznalata">mosókapszula használata</Link>.
+          Az elhelyezés pontos sorrendjéhez pedig ez segít: <Link href="/mosokapszula-dobba-vagy-adagoloba">mosókapszula dobba vagy adagolóba</Link>.
         </p>
 
         <h2>Milyen hibák ronthatják el a 20 fokos mosást?</h2>
