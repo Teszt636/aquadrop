@@ -141,15 +141,7 @@ export default function Home() {
           'Prémium, előre adagolt mosókapszula mindennapi ruhákhoz, kényelmes használathoz és alacsony hőfokú mosási rutinhoz.',
         image: 'https://www.aquadrop.hu/aquadrop-expert-pro-mosokapszula.webp',
         category: 'Laundry detergent capsules',
-        url: 'https://www.aquadrop.hu/',
-        offers: {
-          '@type': 'Offer',
-          availability: 'https://schema.org/InStoreOnly',
-          url: 'https://www.aquadrop.hu/',
-          seller: {
-            '@id': 'https://www.aquadrop.hu/#organization'
-          }
-        }
+        url: 'https://www.aquadrop.hu/'
       },
       {
         '@type': 'FAQPage',
