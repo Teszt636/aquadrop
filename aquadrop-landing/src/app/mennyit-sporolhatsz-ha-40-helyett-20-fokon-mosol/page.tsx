@@ -318,6 +318,8 @@ export default function MennyitSporolhatsz20FokonPage() {
         <h2>Mikor nem a 20 fokos mosás a jó választás?</h2>
         <p>
           Ha kapszulát használsz, érdemes először a <Link href="/mosokapszula-hasznalata">mosókapszula helyes használata</Link> alapjaival kezdeni.
+          Ha nem 20 fokra váltanál, hanem a 30 és 40 fok közötti döntést pontosítanád, a{' '}
+          <Link href="/mosas-30-fokon-vagy-40-fokon">30 fokos vagy 40 fokos mosás</Link> útmutató lesz hasznosabb.
         </p>
         <ul>
           <li>

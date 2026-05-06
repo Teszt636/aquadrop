@@ -375,7 +375,8 @@ export default function HogyanMossunk20FokonPage() {
         <p>
           Ez a felépítés nem arról szól, hogy minden helyzetre „csodamegoldást” ígérjen, hanem arról, hogy kényelmesebb,
           összetettebb és kiszámíthatóbb támogatást adjon a napi rutinhoz, különösen akkor, ha rendszeresen alacsonyabb
-          hőfokon mosol.
+          hőfokon mosol. Ha kifejezetten kapszulával mosnál ilyen alacsony hőfokon, nézd meg a{' '}
+          <Link href="/mosokapszula-20-fokon">mosókapszula 20 fokon</Link> útmutatót is.
         </p>
 
         <h2>Mikor nem ajánlott a 20 fokos mosás?</h2>
