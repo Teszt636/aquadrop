@@ -123,25 +123,8 @@ export default function Home() {
           '@id': 'https://www.aquadrop.hu/#website'
         },
         about: {
-          '@id': 'https://www.aquadrop.hu/#product'
-        },
-        mainEntity: {
-          '@id': 'https://www.aquadrop.hu/#product'
+          '@id': 'https://www.aquadrop.hu/#organization'
         }
-      },
-      {
-        '@type': 'Product',
-        '@id': 'https://www.aquadrop.hu/#product',
-        name: 'Aquadrop Expert Pro mosókapszula',
-        brand: {
-          '@type': 'Brand',
-          name: 'Aquadrop'
-        },
-        description:
-          'Prémium, előre adagolt mosókapszula mindennapi ruhákhoz, kényelmes használathoz és alacsony hőfokú mosási rutinhoz.',
-        image: 'https://www.aquadrop.hu/aquadrop-expert-pro-mosokapszula.webp',
-        category: 'Laundry detergent capsules',
-        url: 'https://www.aquadrop.hu/'
       },
       {
         '@type': 'FAQPage',
