@@ -352,6 +352,11 @@ export default function EnergiatakarekosMosasPage() {
           mosásokhoz, mert ezek jobban illeszkednek a mindennapi gardrób valós igényeihez.
         </p>
         <p>
+          Ha a napi rutinban inkább 30 és 40 fok között dilemmázol, a{' '}
+          <Link href="/mosas-30-fokon-vagy-40-fokon">30 fokos vagy 40 fokos mosás</Link> összehasonlítás segít eldönteni,
+          mikor melyik hőfok ésszerűbb.
+        </p>
+        <p>
           A praktikus oldal sem elhanyagolható: ha a mosás kiszámíthatóan működik alacsony hőfokon, kevesebb az
           utólagos válogatás, újramosás és bizonytalanság. Ez időt takarít meg, egyszerűsíti a háztartási rutint,
           és mentálisan is könnyebb, mert nem minden mosás egy külön döntési helyzet.

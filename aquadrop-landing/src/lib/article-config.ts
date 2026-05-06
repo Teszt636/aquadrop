@@ -1,11 +1,14 @@
 export type ArticleSlug =
   | 'energiatakarekos-mosas'
+  | 'mosas-30-fokon-vagy-40-fokon'
+  | 'mosokapszula-20-fokon'
   | 'mosokapszula-adagolas'
   | 'mosokapszula-dobba-vagy-adagoloba'
   | 'mosokapszula-hasznalata'
   | 'mosokapszula-nem-oldodik-fel'
   | 'mosokapszula-vagy-folyekony-mososzer'
   | 'hogyan-mossunk-20-fokon'
+  | 'mosasi-koltseg-kalkulator'
   | 'mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol';
 
 export type ArticleConfigItem = {
@@ -23,7 +26,23 @@ export const articleConfig: Record<ArticleSlug, ArticleConfigItem> = {
     description:
       'Alapok, beállítások és gyakorlati rutinok az energiatudatos, alacsony hőfokú mosáshoz kompromisszumok nélkül.',
     category: 'Mosási útmutató',
-    relatedSlugs: ['hogyan-mossunk-20-fokon', 'mosokapszula-hasznalata', 'mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol']
+    relatedSlugs: ['hogyan-mossunk-20-fokon', 'mosas-30-fokon-vagy-40-fokon', 'mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol']
+  },
+  'mosas-30-fokon-vagy-40-fokon': {
+    slug: 'mosas-30-fokon-vagy-40-fokon',
+    title: '30 fokos vagy 40 fokos mosás: mikor melyiket válaszd?',
+    description:
+      'Gyakorlati útmutató a 30 és 40 fokos mosás közötti választáshoz, költségekkel és ruhakíméléssel együtt.',
+    category: 'Összehasonlító útmutató',
+    relatedSlugs: ['energiatakarekos-mosas', 'mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol', 'mosasi-koltseg-kalkulator']
+  },
+  'mosokapszula-20-fokon': {
+    slug: 'mosokapszula-20-fokon',
+    title: 'Mosókapszula 20 fokon: feloldódik és tisztít rendesen?',
+    description:
+      'Mikor működik jól a mosókapszula 20 fokon, hova tedd, és hogyan előzd meg az oldódási hibákat.',
+    category: 'Mosási útmutató',
+    relatedSlugs: ['hogyan-mossunk-20-fokon', 'mosokapszula-dobba-vagy-adagoloba', 'mosokapszula-nem-oldodik-fel']
   },
   'mosokapszula-adagolas': {
     slug: 'mosokapszula-adagolas',
@@ -47,7 +66,7 @@ export const articleConfig: Record<ArticleSlug, ArticleConfigItem> = {
     description:
       'Lépésről lépésre útmutató a mosókapszula helyes elhelyezéséhez, adagolásához és a stabil napi mosási rutinhoz.',
     category: 'Mosási útmutató',
-    relatedSlugs: ['mosokapszula-nem-oldodik-fel', 'hogyan-mossunk-20-fokon', 'mosokapszula-vagy-folyekony-mososzer']
+    relatedSlugs: ['mosokapszula-20-fokon', 'mosokapszula-nem-oldodik-fel', 'hogyan-mossunk-20-fokon']
   },
   'mosokapszula-nem-oldodik-fel': {
     slug: 'mosokapszula-nem-oldodik-fel',
@@ -71,7 +90,15 @@ export const articleConfig: Record<ArticleSlug, ArticleConfigItem> = {
     description:
       'Gyakorlati tanácsok a 20 fokos mosáshoz: programidő, adagolás, kapszulaelhelyezés és mindennapi hibák megelőzése.',
     category: 'Mosási útmutató',
-    relatedSlugs: ['energiatakarekos-mosas', 'mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol', 'mosokapszula-nem-oldodik-fel']
+    relatedSlugs: ['mosokapszula-20-fokon', 'energiatakarekos-mosas', 'mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol']
+  },
+  'mosasi-koltseg-kalkulator': {
+    slug: 'mosasi-koltseg-kalkulator',
+    title: 'Mosási költség kalkulátor',
+    description:
+      'Interaktív kalkulátor a mosási hőfok, heti mosásszám és energiaár alapján becsült költségkülönbséghez.',
+    category: 'Energiatakarékosság',
+    relatedSlugs: ['mosas-30-fokon-vagy-40-fokon', 'energiatakarekos-mosas', 'mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol']
   },
   'mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol': {
     slug: 'mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol',
@@ -79,7 +106,7 @@ export const articleConfig: Record<ArticleSlug, ArticleConfigItem> = {
     description:
       'Konkrét becslések és gyakorlati irányok arról, mekkora különbséget jelenthet a hőfokváltás a mosási költségekben.',
     category: 'Energiatakarékosság',
-    relatedSlugs: ['energiatakarekos-mosas', 'hogyan-mossunk-20-fokon', 'mosokapszula-vagy-folyekony-mososzer']
+    relatedSlugs: ['energiatakarekos-mosas', 'mosas-30-fokon-vagy-40-fokon', 'hogyan-mossunk-20-fokon']
   }
 };
 

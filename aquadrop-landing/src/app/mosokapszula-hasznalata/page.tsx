@@ -370,6 +370,8 @@ export default function MosokapszulaHasznalataPage() {
         <h2>Használható a mosókapszula 20–30°C-on?</h2>
         <p>
           Ha alacsony hőfokon mosol, nézd meg ezt is: <Link href="/hogyan-mossunk-20-fokon">hogyan moss hatékonyan 20 fokon</Link>.
+          Kifejezetten kapszulás oldalról a <Link href="/mosokapszula-20-fokon">mosókapszula 20 fokon</Link> útmutató foglalja össze,
+          mire figyelj az oldódásnál.
         </p>
         <p>
           Erre nincs minden helyzetre azonos, kőbe vésett szám. A kapszulás mosószerek általában többféle hétköznapi

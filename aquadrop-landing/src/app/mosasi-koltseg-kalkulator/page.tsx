@@ -142,6 +142,7 @@ export default async function WashingCostCalculatorPage({ searchParams }: { sear
               items={[
                 { label: 'Pillar útmutató', title: 'Energiatakarékos mosás lépésről lépésre', description: 'Alacsonyabb hőfok, tudatos programválasztás és kevesebb energiafelhasználás a mindennapi mosásban.', href: '/energiatakarekos-mosas' },
                 { label: '20 fokos mosás', title: 'Hogyan moss hatékonyan 20 fokon?', description: 'Gyakorlati tanácsok ahhoz, hogy a 20 fokos mosás tiszta eredményt adjon a hétköznapi ruháknál.', href: '/hogyan-mossunk-20-fokon' },
+                { label: 'Hőfokválasztás', title: '30 fokos vagy 40 fokos mosás?', description: 'Döntési útmutató, mikor elég az alacsonyabb hőfok, és mikor indokolt a 40°C.', href: '/mosas-30-fokon-vagy-40-fokon' },
                 { label: 'Megtakarítás', title: 'Mennyit spórolhatsz 20 fokos mosással?', description: 'Nézd meg, miért csökkentheti a mosási költséget, ha 40 helyett 20 fokon mosol.', href: '/mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol' },
                 { label: 'Mosókapszula tippek', title: 'Mosókapszula használata helyesen', description: 'Hova tedd a kapszulát, mennyit használj, és mire figyelj alacsony hőfokú mosásnál?', href: '/mosokapszula-hasznalata' }
               ]}

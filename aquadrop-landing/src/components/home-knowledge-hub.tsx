@@ -9,6 +9,13 @@ const knowledgeArticles = [
     category: 'Alapok'
   },
   {
+    title: 'Mosókapszula 20 fokon',
+    description:
+      'Mikor működik jól alacsony hőfokon, hova tedd a kapszulát, és hogyan előzd meg az oldódási hibákat.',
+    href: '/mosokapszula-20-fokon',
+    category: 'Alapok'
+  },
+  {
     title: 'Mosókapszula adagolás: hány kapszula kell?',
     description:
       'Tudd meg, mikor elég egy kapszula, mikor lehet szükség többre, és hogyan kerüld el a túladagolást.',
@@ -41,6 +48,13 @@ const knowledgeArticles = [
     description:
       'Átfogó útmutató az alacsony hőfokú, textilkímélő és tudatos mosási szokásokhoz.',
     href: '/energiatakarekos-mosas',
+    category: 'Energiatakarékosság'
+  },
+  {
+    title: '30 vagy 40 fokos mosás',
+    description:
+      'Gyakorlati döntési útmutató, mikor elég a 30°C, mikor indokolt a 40°C, és hol tudsz spórolni.',
+    href: '/mosas-30-fokon-vagy-40-fokon',
     category: 'Energiatakarékosság'
   },
   {
