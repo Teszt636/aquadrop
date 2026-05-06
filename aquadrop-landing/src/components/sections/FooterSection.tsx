@@ -10,6 +10,8 @@ const knowledgeGroups = [
     title: 'ALAPOK',
     links: [
       { href: '/mosokapszula-hasznalata', label: 'Mosókapszula használata' },
+      { href: '/mosokapszula-adagolas', label: 'Mosókapszula adagolás' },
+      { href: '/mosokapszula-dobba-vagy-adagoloba', label: 'Mosókapszula dobba vagy adagolóba' },
       { href: '/mosokapszula-nem-oldodik-fel', label: 'Miért nem oldódik fel a mosókapszula?' }
     ]
   },
@@ -20,6 +22,8 @@ const knowledgeGroups = [
   {
     title: 'ENERGIATAKARÉKOSSÁG',
     links: [
+      { href: '/mosokapszula-20-fokon', label: 'Mosókapszula 20 fokon' },
+      { href: '/mosas-30-fokon-vagy-40-fokon', label: '30 vagy 40 fokos mosás' },
       { href: '/hogyan-mossunk-20-fokon', label: 'Hogyan mossunk 20 fokon' },
       { href: '/energiatakarekos-mosas', label: 'Energiatakarékos mosás' },
       {
