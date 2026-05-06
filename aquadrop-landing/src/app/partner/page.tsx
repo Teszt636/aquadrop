@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 import { FooterSection } from '@/components/sections';
-import { PartnerLanding } from '@/components/partner';
+import { PartnerBrochureViewer, PartnerLanding } from '@/components/partner';
 
 export const metadata: Metadata = {
   title: 'Prémium viszonteladói partnerprogram | Aquadrop',
@@ -72,6 +72,7 @@ export default function PartnerPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(partnerStructuredData) }}
       />
       <PartnerLanding />
+      <PartnerBrochureViewer />
       <FooterSection />
     </>
   );
