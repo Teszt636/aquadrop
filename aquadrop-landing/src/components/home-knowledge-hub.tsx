@@ -65,10 +65,10 @@ const knowledgeArticles = [
     category: 'Energiatakarékosság'
   },
   {
-    title: 'Mennyit spórolhatsz 20 fokos mosással',
+    title: 'Mosási költség kalkulátor',
     description:
-      'Interaktív kalkulátorral mutatjuk meg, mit jelenthet a hőfokváltás a mosási költségekben.',
-    href: '/mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol',
+      'Számold ki, mennyit jelenthet a 20 fokos mosás a háztartási mosási költségekben.',
+    href: '/mosasi-koltseg-kalkulator',
     category: 'Energiatakarékosság'
   }
 ] as const;
