@@ -549,9 +549,9 @@ export default function EnergiatakarekosMosasPage() {
           intro='Ha szeretnéd gyakorlatban is felépíteni az alacsony hőfokú mosási rutint, ezek az útmutatók segítenek a hőfok, a kapszula és a költségek pontosabb megértésében.'
           items={[
             { label: '20 fokos mosás', title: 'Hogyan moss hatékonyan 20 fokon?', description: 'Gyakorlati lépések ahhoz, hogy a 20 fokos mosás tiszta eredményt adjon a mindennapokban.', href: '/hogyan-mossunk-20-fokon' },
+            { label: 'Hőfokválasztás', title: '30 fokos vagy 40 fokos mosás?', description: 'Döntési útmutató, mikor elég az alacsonyabb hőfok, és mikor indokolt a 40°C.', href: '/mosas-30-fokon-vagy-40-fokon' },
             { label: 'Megtakarítás', title: 'Mennyit spórolhatsz 20 fokos mosással?', description: 'Nézd meg, hogyan változhat a mosási költség, ha 40 helyett 20 fokon mosol.', href: '/mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol' },
             { label: 'Kalkulátor', title: 'Mosási költség kalkulátor', description: 'Számold ki saját adataiddal, mennyit jelenthet az alacsonyabb hőfok a villanyszámlában.', href: '/mosasi-koltseg-kalkulator' },
-            { label: 'Mosókapszula', title: 'Mosókapszula használata helyesen', description: 'Tudd meg, hova kell tenni a kapszulát, mennyit használj, és mit kerülj el alacsony hőfokon.', href: '/mosokapszula-hasznalata' },
           ]}
         />
 

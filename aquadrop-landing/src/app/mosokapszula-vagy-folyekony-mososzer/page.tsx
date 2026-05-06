@@ -515,9 +515,9 @@ export default function MosokapszulaVagyFolyekonyMososerPage() {
           intro='A jó döntéshez érdemes megnézni a kapszula használatát, az alacsony hőfokú mosást és az esetleges oldódási hibákat is.'
           items={[
             { label: 'Használat', title: 'Mosókapszula használata helyesen', description: 'Gyakorlati útmutató a kapszula elhelyezéséhez, adagolásához és a gyakori hibák elkerüléséhez.', href: '/mosokapszula-hasznalata' },
-            { label: 'Oldódási hiba', title: 'Miért nem oldódik fel a mosókapszula?', description: 'Ha kapszulát választasz, érdemes tudni, mitől alakulhat ki maradvány vagy zselésedés.', href: '/mosokapszula-nem-oldodik-fel' },
+            { label: 'Adagolás', title: 'Mosókapszula adagolás: hány kapszula kell?', description: 'Mikor elég egy kapszula, mikor lehet szükség többre, és hogyan kerüld el a túladagolást?', href: '/mosokapszula-adagolas' },
+            { label: '20 fokos kapszula', title: 'Mosókapszula 20 fokon', description: 'Mikor működik jól alacsony hőfokon, és hogyan előzheted meg az oldódási hibákat?', href: '/mosokapszula-20-fokon' },
             { label: '20 fokos mosás', title: 'Hogyan moss hatékonyan 20 fokon?', description: 'Alacsony hőfokon különösen fontos a megfelelő programhossz és a jól oldódó mosószer.', href: '/hogyan-mossunk-20-fokon' },
-            { label: 'Megtakarítás', title: 'Mennyit spórolhatsz 20 fokos mosással?', description: 'Nézd meg, hogyan kapcsolódhat a mosószerválasztás az energiafogyasztás csökkentéséhez.', href: '/mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol' },
           ]}
         />
 

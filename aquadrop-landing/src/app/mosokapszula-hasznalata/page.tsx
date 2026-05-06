@@ -493,10 +493,10 @@ export default function MosokapszulaHasznalataPage() {
           title='Kapcsolódó útmutatók a mosókapszula használatához'
           intro='A kapszula helyes használata mellett a hőfok, a programhossz és az oldódási hibák megelőzése is sokat számít.'
           items={[
-            { label: 'Oldódási hiba', title: 'Miért nem oldódik fel a mosókapszula?', description: 'A leggyakoribb okok és megoldások, ha a kapszula zselés marad vagy rátapad a ruhára.', href: '/mosokapszula-nem-oldodik-fel' },
-            { label: '20 fokos mosás', title: 'Hogyan moss hatékonyan 20 fokon?', description: 'Mitől működik jól az alacsony hőfokú mosás, és hogyan segíti ezt a kapszula helyes elhelyezése?', href: '/hogyan-mossunk-20-fokon' },
-            { label: 'Összehasonlítás', title: 'Mosókapszula vagy folyékony mosószer?', description: 'Segít eldönteni, mikor praktikusabb a kapszula, és mikor lehet jobb a folyékony mosószer.', href: '/mosokapszula-vagy-folyekony-mososzer' },
+            { label: 'Elhelyezés', title: 'Mosókapszula dobba vagy adagolóba?', description: 'Rövid, gyakorlati útmutató arról, hova kerüljön a kapszula, hogy jobban oldódjon.', href: '/mosokapszula-dobba-vagy-adagoloba' },
             { label: 'Adagolás', title: 'Mosókapszula adagolás: hány kapszula kell?', description: 'Mikor elég egy kapszula, mikor lehet szükség többre, és hogyan kerüld el a túladagolást?', href: '/mosokapszula-adagolas' },
+            { label: '20 fokos kapszula', title: 'Mosókapszula 20 fokon', description: 'Mikor működik jól alacsony hőfokon, és hogyan előzheted meg az oldódási hibákat?', href: '/mosokapszula-20-fokon' },
+            { label: 'Oldódási hiba', title: 'Miért nem oldódik fel a mosókapszula?', description: 'A leggyakoribb okok és megoldások, ha a kapszula zselés marad vagy rátapad a ruhára.', href: '/mosokapszula-nem-oldodik-fel' },
           ]}
         />
 
