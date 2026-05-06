@@ -1,5 +1,7 @@
 export type ArticleSlug =
   | 'energiatakarekos-mosas'
+  | 'mosokapszula-adagolas'
+  | 'mosokapszula-dobba-vagy-adagoloba'
   | 'mosokapszula-hasznalata'
   | 'mosokapszula-nem-oldodik-fel'
   | 'mosokapszula-vagy-folyekony-mososzer'
@@ -22,6 +24,22 @@ export const articleConfig: Record<ArticleSlug, ArticleConfigItem> = {
       'Alapok, beállítások és gyakorlati rutinok az energiatudatos, alacsony hőfokú mosáshoz kompromisszumok nélkül.',
     category: 'Mosási útmutató',
     relatedSlugs: ['hogyan-mossunk-20-fokon', 'mosokapszula-hasznalata', 'mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol']
+  },
+  'mosokapszula-adagolas': {
+    slug: 'mosokapszula-adagolas',
+    title: 'Mosókapszula adagolás: hány kapszula kell?',
+    description:
+      'Tudd meg, mikor elég egy kapszula, mikor lehet szükség többre, és hogyan kerüld el a túladagolást.',
+    category: 'Mosási útmutató',
+    relatedSlugs: ['mosokapszula-hasznalata', 'mosokapszula-nem-oldodik-fel', 'hogyan-mossunk-20-fokon']
+  },
+  'mosokapszula-dobba-vagy-adagoloba': {
+    slug: 'mosokapszula-dobba-vagy-adagoloba',
+    title: 'Mosókapszula dobba vagy adagolóba?',
+    description:
+      'Megmutatjuk, hova kell tenni a mosókapszulát, és miért nem érdemes az adagolófiókba rakni.',
+    category: 'Mosási útmutató',
+    relatedSlugs: ['mosokapszula-hasznalata', 'mosokapszula-adagolas', 'mosokapszula-nem-oldodik-fel']
   },
   'mosokapszula-hasznalata': {
     slug: 'mosokapszula-hasznalata',

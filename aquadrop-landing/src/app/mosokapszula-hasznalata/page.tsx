@@ -274,6 +274,11 @@ export default function MosokapszulaHasznalataPage() {
           a kapszula burka és működése más logika szerint optimalizált.
         </p>
         <p>
+          Ha külön szeretnéd áttekinteni a mennyiséget és a pontos helyet, segít a{' '}
+          <Link href="/mosokapszula-adagolas">mosókapszula adagolás</Link> és a{' '}
+          <Link href="/mosokapszula-dobba-vagy-adagoloba">mosókapszula dobba vagy adagolóba</Link> útmutató is.
+        </p>
+        <p>
           Akkor jársz a legbiztosabban, ha a kapszulát még üres dobba teszed, és csak utána pakolod be a ruhákat. Ez
           segít elkerülni, hogy a kapszula felül maradjon, illetve csökkenti az esélyét annak, hogy a töltet egy ponton
           túlzottan összenyomja. A cél az, hogy a mosás elején minél hamarabb érje a víz.
@@ -489,7 +494,7 @@ export default function MosokapszulaHasznalataPage() {
             { label: 'Oldódási hiba', title: 'Miért nem oldódik fel a mosókapszula?', description: 'A leggyakoribb okok és megoldások, ha a kapszula zselés marad vagy rátapad a ruhára.', href: '/mosokapszula-nem-oldodik-fel' },
             { label: '20 fokos mosás', title: 'Hogyan moss hatékonyan 20 fokon?', description: 'Mitől működik jól az alacsony hőfokú mosás, és hogyan segíti ezt a kapszula helyes elhelyezése?', href: '/hogyan-mossunk-20-fokon' },
             { label: 'Összehasonlítás', title: 'Mosókapszula vagy folyékony mosószer?', description: 'Segít eldönteni, mikor praktikusabb a kapszula, és mikor lehet jobb a folyékony mosószer.', href: '/mosokapszula-vagy-folyekony-mososzer' },
-            { label: 'Pillar útmutató', title: 'Energiatakarékos mosás lépésről lépésre', description: 'A teljes mosási rutin áttekintése alacsony hőfokkal, programválasztással és tudatos adagolással.', href: '/energiatakarekos-mosas' },
+            { label: 'Adagolás', title: 'Mosókapszula adagolás: hány kapszula kell?', description: 'Mikor elég egy kapszula, mikor lehet szükség többre, és hogyan kerüld el a túladagolást?', href: '/mosokapszula-adagolas' },
           ]}
         />
 

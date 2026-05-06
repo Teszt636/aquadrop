@@ -10,6 +10,8 @@ const routes: Array<{
 }> = [
   { path: '/', lastModified: '2026-04-22', changeFrequency: 'weekly', priority: 1 },
   { path: '/energiatakarekos-mosas', lastModified: '2026-04-23', changeFrequency: 'weekly', priority: 0.7 },
+  { path: '/mosokapszula-adagolas', lastModified: '2026-05-06', changeFrequency: 'weekly', priority: 0.7 },
+  { path: '/mosokapszula-dobba-vagy-adagoloba', lastModified: '2026-05-06', changeFrequency: 'weekly', priority: 0.7 },
   { path: '/mosokapszula-hasznalata', lastModified: '2026-04-22', changeFrequency: 'weekly', priority: 0.7 },
   { path: '/mosokapszula-nem-oldodik-fel', lastModified: '2026-04-22', changeFrequency: 'weekly', priority: 0.7 },
   { path: '/mosokapszula-vagy-folyekony-mososzer', lastModified: '2026-04-22', changeFrequency: 'weekly', priority: 0.7 },

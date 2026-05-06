@@ -9,6 +9,20 @@ const knowledgeArticles = [
     category: 'Alapok'
   },
   {
+    title: 'Mosókapszula adagolás: hány kapszula kell?',
+    description:
+      'Tudd meg, mikor elég egy kapszula, mikor lehet szükség többre, és hogyan kerüld el a túladagolást.',
+    href: '/mosokapszula-adagolas',
+    category: 'Alapok'
+  },
+  {
+    title: 'Mosókapszula dobba vagy adagolóba?',
+    description:
+      'Megmutatjuk, hova kell tenni a mosókapszulát, és miért nem érdemes az adagolófiókba rakni.',
+    href: '/mosokapszula-dobba-vagy-adagoloba',
+    category: 'Alapok'
+  },
+  {
     title: 'Miért nem oldódik fel a mosókapszula?',
     description:
       'Gyakori hibák és gyakorlati megoldások, ha maradvány marad a ruhán vagy a mosógépben.',

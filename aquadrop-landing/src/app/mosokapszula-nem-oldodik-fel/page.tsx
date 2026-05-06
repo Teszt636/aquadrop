@@ -341,6 +341,11 @@ export default function MosokapszulaNemOldodikFelPage() {
           egyszerű sorrendi lépéssel megelőzhető.
         </p>
         <p>
+          Ha kifejezetten az elhelyezés érdekel, nézd meg a{' '}
+          <Link href="/mosokapszula-dobba-vagy-adagoloba">mosókapszula dobba vagy adagolóba</Link> útmutatót; ha pedig
+          a mennyiség a kérdés, a <Link href="/mosokapszula-adagolas">mosókapszula adagolás</Link> cikk segít tovább.
+        </p>
+        <p>
           A hétköznapi gyakorlatban ez úgy néz ki a legegyszerűbben, hogy kinyitod a dobot, beteszed a kapszulát alulra,
           és csak utána pakolod be a ruhákat úgy, hogy maradjon mozgástér. Ez a pár másodperces sorrend hosszú távon
           stabilabb eredményt adhat, mint bármilyen utólagos korrekció.
@@ -486,8 +491,8 @@ export default function MosokapszulaNemOldodikFelPage() {
           intro='Ha a kapszula nem oldódik fel, a használati sorrend, a programhossz és az alacsony hőfokú mosási rutin együtt számít.'
           items={[
             { label: 'Használat', title: 'Mosókapszula használata helyesen', description: 'Nézd meg, hova kell tenni a kapszulát, mennyit használj, és milyen hibákat kerülj el.', href: '/mosokapszula-hasznalata' },
+            { label: 'Elhelyezés', title: 'Mosókapszula dobba vagy adagolóba?', description: 'Rövid, gyakorlati útmutató arról, hova kerüljön a kapszula, hogy jobban oldódjon.', href: '/mosokapszula-dobba-vagy-adagoloba' },
             { label: '20 fokos mosás', title: 'Hogyan moss hatékonyan 20 fokon?', description: 'Alacsony hőfoknál különösen fontos a megfelelő programhossz és a dob helyes töltése.', href: '/hogyan-mossunk-20-fokon' },
-            { label: 'Összehasonlítás', title: 'Mosókapszula vagy folyékony mosószer?', description: 'Ismerd meg, mikor jobb a kapszula kényelme, és mikor ad több kontrollt a folyékony mosószer.', href: '/mosokapszula-vagy-folyekony-mososzer' },
             { label: 'Pillar útmutató', title: 'Energiatakarékos mosás lépésről lépésre', description: 'Tudd meg, hogyan kapcsolódik az alacsony hőfok, a programhossz és a mosószerhasználat.', href: '/energiatakarekos-mosas' },
           ]}
         />
