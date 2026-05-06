@@ -1,118 +1,188 @@
 import Link from 'next/link';
 
-import { SectionHeading } from '@/components/ui/SectionHeading';
-import { ButtonLink } from '@/components/ui/Button';
+const linkClassName = 'font-semibold text-cyan-800 underline underline-offset-4 hover:text-cyan-950';
 
 export function SeoSection() {
   return (
-    <section className="ds-section pt-10">
+    <section className="ds-section pt-10 not-prose">
       <div className="ds-container">
-        <div className="ds-floating-panel px-6 py-8 md:px-10 md:py-12">
-          <SectionHeading>Mosókapszula választás: mit érdemes tudni vásárlás előtt?</SectionHeading>
+        <div className="mx-auto max-w-6xl rounded-[2rem] border border-cyan-100 bg-gradient-to-br from-white via-cyan-50/40 to-white p-5 shadow-[0_24px_70px_rgba(15,118,110,0.10)] md:p-8">
+          <div className="max-w-4xl">
+            <span className="inline-flex rounded-full border border-cyan-100 bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-800">
+              Mosókapszula útmutató
+            </span>
+            <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">
+              Mosókapszula választás: mit érdemes tudni vásárlás előtt?
+            </h2>
+            <p className="mt-4 text-base leading-7 text-slate-700 md:text-lg md:leading-8">
+              A mosókapszula akkor jó választás, ha egyszerű, előre adagolt és kiszámítható mosási megoldást keresel.
+              A jó eredményhez azonban nem csak a kapszula minősége számít: fontos a hőfok, a programhossz, a
+              ruhamennyiség, az elhelyezés és az is, hogy milyen típusú ruhákat mosol.
+            </p>
+            <p className="mt-3 text-base leading-7 text-slate-700 md:text-lg md:leading-8">
+              Az Aquadrop Expert Pro célja, hogy a mindennapi mosás kényelmesebb, frissebb és tudatosabb legyen,
+              miközben a főoldalon valódi, könnyen átlátható útmutatót kapsz a legfontosabb döntési pontokról.
+            </p>
+          </div>
 
-          <div className="mt-8 space-y-8 text-base leading-7 text-slate-700">
-            <article>
-              <h3 className="text-xl font-semibold text-slate-900">Mi az a mosókapszula, és miért egyre népszerűbb?</h3>
-              <p className="mt-3">
-                A mosókapszula egy előre adagolt, koncentrált mosószer, amely megkönnyíti a mindennapi mosást. Nem
-                kell külön mérni vagy adagolni, egyetlen kapszula elegendő egy mosáshoz. A részletes
-                <Link className="font-medium text-cyan-800 underline underline-offset-4" href="/mosokapszula-hasznalata">
-                  {' '}
-                  mosókapszula használata
-                </Link>
-                {' '}útmutató segít elkerülni a gyakori hibákat.
+          <div className="mt-6 rounded-2xl border border-cyan-100 bg-white/90 p-5 shadow-sm">
+            <h3 className="text-lg font-semibold text-slate-900 md:text-xl">Röviden: mitől lesz gördülékenyebb a kapszulás mosás?</h3>
+            <p className="mt-2 text-base leading-7 text-slate-700">
+              A legtöbb mosási kérdés három pont körül dől el: hova kerül a kapszula, mennyire van megtöltve a dob,
+              és mennyire illik a választott program az adott ruhákhoz. Ha ezeket tudatosabban kezeled, a
+              mosókapszula kényelmesebb és kiszámíthatóbb része lehet a heti rutinnak.
+            </p>
+          </div>
+
+          <div className="mt-6 grid gap-4 lg:grid-cols-2">
+            <article className="rounded-2xl border border-cyan-100 bg-white/90 p-5 shadow-sm">
+              <h3 className="text-xl font-semibold text-slate-900">Miért választanak sokan mosókapszulát?</h3>
+              <p className="mt-3 text-base leading-7 text-slate-700">
+                A mosókapszula egyik legnagyobb előnye az egyszerű adagolás. Nem kell külön mérni a folyékony
+                mosószert, és kisebb az esélye annak, hogy túl sok vagy túl kevés mosószer kerül a gépbe.
               </p>
-              <p className="mt-3">
-                Az elmúlt években egyre többen váltanak kapszulás megoldásra, mert gyorsabb, kényelmesebb és sok
-                esetben hatékonyabb is, mint a hagyományos por vagy folyékony mosószerek. A modern mosókapszulák
-                célja, hogy a tisztítóerőt, az egyszerű használatot és a megbízható eredményt egyetlen lépésben
-                biztosítsák.
+              <p className="mt-3 text-base leading-7 text-slate-700">
+                Egy kapszula előre kimért mennyiséget tartalmaz, ezért a hétköznapi mosás gyorsabbá és kényelmesebbé
+                válhat, különösen akkor, ha rendszeresen mosol vegyes családi ruhákat vagy törölközőket.
               </p>
+              <Link className={`${linkClassName} mt-4 inline-flex`} href="/mosokapszula-hasznalata">
+                Mosókapszula használata
+              </Link>
             </article>
 
-            <article>
-              <h3 className="text-xl font-semibold text-slate-900">
-                Miért jobb választás a mosókapszula a hagyományos mosószernél?
-              </h3>
-              <p className="mt-3">
-                A kapszulák egyik legnagyobb előnye a pontos adagolás. Nem fordul elő túladagolás vagy aluladagolás,
-                ami nemcsak a ruhák tisztaságára, hanem a mosógép állapotára is pozitív hatással van.
+            <article className="rounded-2xl border border-cyan-100 bg-white/90 p-5 shadow-sm">
+              <h3 className="text-xl font-semibold text-slate-900">Hova kell tenni a mosókapszulát?</h3>
+              <p className="mt-3 text-base leading-7 text-slate-700">
+                A mosókapszulát nem az adagolófiókba érdemes tenni, hanem közvetlenül a mosógép dobjába. A legjobb
+                sorrend általában az, hogy először a kapszula kerül be, és csak utána a ruhák.
               </p>
-              <p className="mt-3">
-                A koncentrált formula gyorsan oldódik, és már alacsonyabb hőfokon is hatékonyan működik. Ez
-                energiatakarékosabb mosást is lehetővé tesz, miközben a ruhák tiszták és frissek maradnak. Ha ezt
-                a témát mélyebben is megnéznéd, az
-                <Link className="font-medium text-cyan-800 underline underline-offset-4" href="/energiatakarekos-mosas">
-                  {' '}
-                  energiatakarékos mosás
-                </Link>
-                {' '}útmutató ad további gyakorlati szempontokat. A
-                kapszulás megoldás különösen praktikus a rohanó hétköznapokban, amikor fontos a gyors és egyszerű
-                használat.
+              <p className="mt-3 text-base leading-7 text-slate-700">
+                Így hamarabb éri víz, és kisebb az esélye annak, hogy a kapszula a ruhák tetején maradjon vagy
+                egyenetlenül oldódjon fel a program elején.
               </p>
+              <Link className={`${linkClassName} mt-4 inline-flex`} href="/mosokapszula-dobba-vagy-adagoloba">
+                Mosókapszula dobba vagy adagolóba
+              </Link>
             </article>
 
-            <article>
-              <h3 className="text-xl font-semibold text-slate-900">Mitől számít prémium minőségűnek egy mosókapszula?</h3>
-              <p className="mt-3">Egy prémium mosókapszula nem csak tisztít, hanem komplex megoldást kínál:</p>
-              <ul className="mt-3 list-inside list-disc space-y-1">
-                <li>hatékony folteltávolítás</li>
-                <li>friss illat</li>
-                <li>színvédelem</li>
-                <li>gyors oldódás</li>
-              </ul>
-              <p className="mt-3">
-                Egy korszerű formula esetében az is fontos, hogy a kapszula ne hagyjon maradványt a ruhákon, és
-                egyenletesen oldódjon fel a mosás során. Ehhez az is számít, hogy a
-                <Link className="font-medium text-cyan-800 underline underline-offset-4" href="/mosokapszula-dobba-vagy-adagoloba">
-                  {' '}
-                  mosókapszula dobba vagy adagolóba
-                </Link>
-                {' '}kerül-e. Az Aquadrop Expert Pro ilyen szempontból egy modern,
-                koncentrált megoldás, amely a mindennapi használat során is stabil teljesítményt nyújt.
+            <article className="rounded-2xl border border-cyan-100 bg-white/90 p-5 shadow-sm">
+              <h3 className="text-xl font-semibold text-slate-900">Hány mosókapszula kell egy mosáshoz?</h3>
+              <p className="mt-3 text-base leading-7 text-slate-700">
+                Átlagos ruhamennyiséghez általában egy kapszula elegendő. A pontos adagolás azonban függ a dob
+                méretétől, a ruhák szennyezettségétől, a vízkeménységtől és attól is, milyen programot indítasz.
               </p>
+              <p className="mt-3 text-base leading-7 text-slate-700">
+                Erősen szennyezett ruháknál vagy nagyobb töltetnél több mosóerőre lehet szükség, de a tudatos
+                mennyiségválasztás segít elkerülni a pazarlást.
+              </p>
+              <Link className={`${linkClassName} mt-4 inline-flex`} href="/mosokapszula-adagolas">
+                Mosókapszula adagolás
+              </Link>
             </article>
 
-            <article>
-              <h3 className="text-xl font-semibold text-slate-900">Mikor érdemes mosókapszulát használni?</h3>
-              <p className="mt-3">A kapszulás mosás ideális választás:</p>
-              <ul className="mt-3 list-inside list-disc space-y-1">
-                <li>ha gyors és egyszerű megoldást keresel</li>
-                <li>ha fontos a kényelmes adagolás</li>
-                <li>ha szeretnéd elkerülni a mosószer pazarlását</li>
-                <li>ha egységes, megbízható eredményt szeretnél</li>
-              </ul>
-              <p className="mt-3">
-                {'A mos\u00f3kapszul\u00e1k k\u00fcl\u00f6n\u00f6sen j\u00f3l haszn\u00e1lhat\u00f3k mindennapi ruh\u00e1k mos\u00e1s\u00e1hoz, amikor fontos a kisz\u00e1m\u00edthat\u00f3 eredm\u00e9ny \u00e9s a praktikus haszn\u00e1lat. Ha kifejezetten alacsony h\u0151fok\u00fa programban mosol, a'}
-                <Link className="font-medium text-cyan-800 underline underline-offset-4" href="/mosokapszula-20-fokon">
-                  {' '}
-                  {'mos\u00f3kapszula 20 fokon'}
-                </Link>
-                {' \u00fatmutat\u00f3 seg\u00edt eld\u00f6nteni, mikor m\u0171k\u00f6dik j\u00f3l ez a megold\u00e1s.'}
+            <article className="rounded-2xl border border-cyan-100 bg-white/90 p-5 shadow-sm">
+              <h3 className="text-xl font-semibold text-slate-900">Használható a mosókapszula alacsony hőfokon?</h3>
+              <p className="mt-3 text-base leading-7 text-slate-700">
+                A modern mosási rutinban egyre többen mosnak 20-30°C körüli hőfokon, mert ezzel energiát lehet
+                megtakarítani, és sok ruhadarab kíméletesebben kezelhető.
               </p>
+              <p className="mt-3 text-base leading-7 text-slate-700">
+                A kapszula alacsony hőfokon is jó választás lehet, ha a program elég hosszú, a dob nincs túltöltve,
+                és a kapszula a megfelelő helyre kerül.
+              </p>
+              <Link className={`${linkClassName} mt-4 inline-flex`} href="/mosokapszula-20-fokon">
+                Mosókapszula 20 fokon
+              </Link>
             </article>
 
-            <article>
-              <h3 className="text-xl font-semibold text-slate-900">Hogyan illeszkedik ebbe az Aquadrop Expert Pro?</h3>
-              <p className="mt-3">
-                Az Aquadrop Expert Pro egy olyan mosókapszula, amely a modern elvárásokhoz igazodik. A koncentrált
-                formula, a gyors oldódás és a felhasználóbarát kialakítás együtt biztosítják, hogy a mosás egyszerűbb
-                és hatékonyabb legyen.
+            <article className="rounded-2xl border border-cyan-100 bg-white/90 p-5 shadow-sm">
+              <h3 className="text-xl font-semibold text-slate-900">Miért nem oldódik fel néha a mosókapszula?</h3>
+              <p className="mt-3 text-base leading-7 text-slate-700">
+                Ha a mosókapszula nem oldódik fel teljesen, annak több oka is lehet. Gyakori hiba a túl rövid
+                program, a túlzsúfolt mosógép vagy a rossz elhelyezés.
               </p>
-              <p className="mt-3">
-                A termék kialakításánál a praktikum mellett a biztonság is fontos szerepet kapott. A gyerekzáras
-                csomagolás és a stabil dobozszerkezet segít csökkenteni a véletlen hozzáférés kockázatát, így a
-                kapszulák biztonságosabban tárolhatók a háztartásban.
+              <p className="mt-3 text-base leading-7 text-slate-700">
+                A kapszula akkor működik a legjobban, ha kap elég vízmozgást a program elején, ezért sokszor már egy
+                kisebb rutinmódosítás is látványosan segít.
               </p>
-              <p className="mt-3">
-                Ha egy megbízható, könnyen használható és korszerű megoldást keresel, érdemes kipróbálni.
+              <Link className={`${linkClassName} mt-4 inline-flex`} href="/mosokapszula-nem-oldodik-fel">
+                Miért nem oldódik fel a mosókapszula
+              </Link>
+            </article>
+
+            <article className="rounded-2xl border border-cyan-100 bg-white/90 p-5 shadow-sm">
+              <h3 className="text-xl font-semibold text-slate-900">Mosókapszula vagy folyékony mosószer?</h3>
+              <p className="mt-3 text-base leading-7 text-slate-700">
+                A mosókapszula kényelmes, előre adagolt és gyorsan használható. A folyékony mosószer rugalmasabb
+                adagolást adhat, például nagyon kis töltetnél vagy speciális előkezelésnél.
               </p>
-              <div className="mt-4 flex justify-center">
-                <ButtonLink href="#gift-form">
-                  Próbáld ki most – 2 doboz vásárlása esetén adunk plusz egyet ajándékba
-                </ButtonLink>
+              <p className="mt-3 text-base leading-7 text-slate-700">
+                A választás akkor lesz igazán jó, ha a saját mosási szokásaidhoz igazítod: mennyit mosol, milyen
+                változó a ruhamennyiség, és mennyire fontos a gyors, tiszta rutin.
+              </p>
+              <Link className={`${linkClassName} mt-4 inline-flex`} href="/mosokapszula-vagy-folyekony-mososzer">
+                Mosókapszula vagy folyékony mosószer
+              </Link>
+            </article>
+
+            <article className="rounded-2xl border border-cyan-100 bg-white/90 p-5 shadow-sm">
+              <h3 className="text-xl font-semibold text-slate-900">Hogyan kapcsolódik a hőfok a mosási költséghez?</h3>
+              <p className="mt-3 text-base leading-7 text-slate-700">
+                Az alacsonyabb hőfok csökkentheti az energiafelhasználást, de nem minden helyzetben a legalacsonyabb
+                program a legjobb döntés. Enyhén szennyezett ruháknál a 20-30°C is elég lehet, más textíliáknál
+                viszont indokolt lehet magasabb hőfok.
+              </p>
+              <p className="mt-3 text-base leading-7 text-slate-700">
+                Érdemes a hőfokot nem megszokásból választani, hanem ahhoz igazítani, hogy milyen ruhákat mosol és
+                milyen tisztasági eredményt vársz.
+              </p>
+              <div className="mt-4">
+                <Link className={linkClassName} href="/mosas-30-fokon-vagy-40-fokon">
+                  30 fokos vagy 40 fokos mosás
+                </Link>
               </div>
             </article>
+
+            <article className="rounded-2xl border border-cyan-100 bg-white/90 p-5 shadow-sm">
+              <h3 className="text-xl font-semibold text-slate-900">Kinek jó választás az Aquadrop Expert Pro?</h3>
+              <p className="mt-3 text-base leading-7 text-slate-700">
+                Az Aquadrop Expert Pro azoknak készült, akik kényelmes, előre adagolt és prémium érzetű mosási
+                megoldást keresnek a mindennapokra. Jó választás lehet családi háztartásokban, rendszeresen mosó
+                felhasználóknak, valamint azoknak, akik egyszerűbbé tennék a mosószer adagolását.
+              </p>
+              <p className="mt-3 text-base leading-7 text-slate-700">
+                A termék jelenleg viszonteladóknál érhető el, így a főoldal elsődlegesen tájékozódásra, tudatos
+                választásra és a promóciós lehetőségek áttekintésére szolgál.
+              </p>
+              <Link className={`${linkClassName} mt-4 inline-flex`} href="/energiatakarekos-mosas">
+                Energiatakarékos mosás
+              </Link>
+            </article>
+          </div>
+
+          <div className="mt-6 rounded-2xl border border-cyan-200 bg-gradient-to-r from-cyan-50 via-white to-blue-50 p-5 md:flex md:items-center md:justify-between md:gap-6">
+            <div className="max-w-2xl">
+              <h3 className="text-xl font-semibold text-slate-900">Nem tudod, melyik mosási rutin illik hozzád?</h3>
+              <p className="mt-2 text-base leading-7 text-slate-700">
+                Nézd meg a mosási költség kalkulátort, vagy válaszd ki a tudástárból azt az útmutatót, amelyik a
+                saját kérdésedre ad választ.
+              </p>
+            </div>
+
+            <div className="mt-4 flex flex-col gap-3 md:mt-0 md:w-auto md:flex-row">
+              <Link
+                className="inline-flex w-full items-center justify-center rounded-xl bg-cyan-700 px-5 py-3 text-sm font-bold text-white shadow-md transition hover:bg-cyan-800 md:w-auto"
+                href="/mosasi-koltseg-kalkulator"
+              >
+                Mosási költség kalkulátor
+              </Link>
+              <Link
+                className="inline-flex w-full items-center justify-center rounded-xl border border-cyan-200 bg-white px-5 py-3 text-sm font-bold text-cyan-900 transition hover:bg-cyan-50 md:w-auto"
+                href="#knowledge-hub-title"
+              >
+                Mosókapszula tudástár
+              </Link>
+            </div>
           </div>
         </div>
       </div>
