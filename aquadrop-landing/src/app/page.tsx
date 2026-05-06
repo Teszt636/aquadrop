@@ -5,7 +5,7 @@ import { SITE_URL } from '@/lib/constants';
 export const metadata: Metadata = {
   title: 'Prémium mosókapszula alacsony hőfokra | Aquadrop Expert Pro',
   description:
-    'Ismerd meg az Aquadrop Expert Pro prémium mosókapszulát: kényelmes adagolás, friss illat, alacsony hőfokú mosáshoz is praktikus megoldás. Keresd viszonteladó partnereinknél.',
+    'Prémium Aquadrop mosókapszula friss illattal, kényelmes adagolással és alacsony hőfokú mosáshoz is praktikus használattal.',
   alternates: {
     canonical: `${SITE_URL}/`,
   },
