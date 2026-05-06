@@ -23,13 +23,8 @@ const knowledgeGroups = [
     title: 'ENERGIATAKARÉKOSSÁG',
     links: [
       { href: '/mosokapszula-20-fokon', label: 'Mosókapszula 20 fokon' },
-      { href: '/mosas-30-fokon-vagy-40-fokon', label: '30 vagy 40 fokos mosás' },
-      { href: '/hogyan-mossunk-20-fokon', label: 'Hogyan mossunk 20 fokon' },
       { href: '/energiatakarekos-mosas', label: 'Energiatakarékos mosás' },
-      {
-        href: '/mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol',
-        label: 'Mennyit spórolhatsz 20 fokos mosással'
-      }
+      { href: '/mosasi-koltseg-kalkulator', label: 'Mos\u00e1si k\u00f6lts\u00e9g kalkul\u00e1tor' }
     ]
   }
 ];

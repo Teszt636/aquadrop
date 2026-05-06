@@ -210,15 +210,16 @@ export function GiftSection() {
                 Ajándék mosókapszula igénylés
               </h2>
               <p className="mx-auto mt-4 max-w-xl text-center text-base leading-6 text-slate-700 lg:mx-0 lg:text-left">
-                Az alábbi űrlap kitöltésével és a vásárlási blokk feltöltésével egyszerűen
-                igényelheted az ajándék mosókapszulát.
+                {
+                  'V\u00e1s\u00e1rolj 2 doboz Aquadrop Expert Pro mos\u00f3kapszul\u00e1t valamely viszontelad\u00f3 partner\u00fcnkn\u00e9l, t\u00f6ltsd fel a blokkot, \u00e9s ig\u00e9nyeld az aj\u00e1nd\u00e9k kapszul\u00e1t. Az oldalon k\u00f6zvetlen online v\u00e1s\u00e1rl\u00e1s nem \u00e9rhet\u0151 el.'
+                }
               </p>
 
               <ul className="mt-5 space-y-2.5 text-sm font-medium text-slate-700 md:text-base">
                 <li className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3">
                   <span className="mt-0.5 text-blue-600">✓</span>
                   <span className="leading-snug">
-                    Vásárolj 2 doboz Aquadrop Expert Pro mosókapszulát
+                    {'V\u00e1s\u00e1rolj 2 doboz Aquadrop Expert Pro mos\u00f3kapszul\u00e1t viszontelad\u00f3 partner\u00fcnkn\u00e9l'}
                   </span>
                 </li>
                 <li className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3">
@@ -247,7 +248,9 @@ export function GiftSection() {
             <h3 className="text-xl font-semibold text-slate-900 md:text-2xl">Ajándék mosókapszula igénylőlap</h3>
 
             <p className="mt-2 text-sm leading-snug text-slate-600">
-              Töltsd ki az alábbi mezőket, majd töltsd fel a vásárlási blokk képét.
+              {
+                'T\u00f6ltsd ki az al\u00e1bbi mez\u0151ket, majd t\u00f6ltsd fel a 2 doboz megv\u00e1s\u00e1rl\u00e1s\u00e1t igazol\u00f3 blokk k\u00e9p\u00e9t az aj\u00e1nd\u00e9k ig\u00e9nyl\u00e9s\u00e9hez.'
+              }
             </p>
 
             <div className="mt-6 grid grid-cols-1 gap-x-5 gap-y-4 md:grid-cols-2 md:gap-x-6 md:gap-y-5">
@@ -422,7 +425,7 @@ export function GiftSection() {
                   disabled={isSubmitting}
                   className="h-12 w-full rounded-xl bg-blue-600 px-6 text-white shadow-md hover:bg-blue-700 md:w-auto md:px-8 md:min-w-[17rem]"
                 >
-                  {isSubmitting ? 'Beküldés folyamatban...' : 'Ajándék igénylés beküldése'}
+                  {isSubmitting ? 'Bek\u00fcld\u00e9s folyamatban...' : 'Felt\u00f6lt\u00f6m a blokkot \u00e9s ig\u00e9nylem az aj\u00e1nd\u00e9kot'}
                 </Button>
               </div>
             </div>
@@ -446,8 +449,9 @@ export function GiftConversionSection() {
               Vásárolj 2 dobozt – mi adjuk a harmadikat
             </SectionHeading>
             <SectionDescription className="mx-auto mt-4 max-w-2xl text-lg text-gray-600">
-              Vásárolj 2 doboz Aquadrop Expert Pro mosókapszulát valamelyik partner üzletben,
-              töltsd fel a blokkot, és elküldjük a 3. dobozt ajándékba.
+              {
+                'V\u00e1s\u00e1rolj 2 doboz Aquadrop Expert Pro mos\u00f3kapszul\u00e1t valamely viszontelad\u00f3 partner\u00fcnkn\u00e9l, t\u00f6ltsd fel a blokkot, \u00e9s ig\u00e9nyeld az aj\u00e1nd\u00e9k kapszul\u00e1t. Az oldalon k\u00f6zvetlen online v\u00e1s\u00e1rl\u00e1s nem \u00e9rhet\u0151 el.'
+              }
             </SectionDescription>
 
             <div className="mt-5 inline-flex rounded-full border border-amber-300 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-800">
@@ -475,7 +479,7 @@ export function GiftConversionSection() {
               href="#gift-form"
               className="inline-flex rounded-xl bg-blue-600 px-6 py-3 text-white shadow-lg transition hover:scale-105 hover:bg-blue-700"
             >
-              Ajándék terméket igénylek
+              {'Felt\u00f6lt\u00f6m a blokkot \u00e9s ig\u00e9nylem az aj\u00e1nd\u00e9kot'}
             </a>
           </div>
         </div>

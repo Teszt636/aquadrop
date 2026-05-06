@@ -10,8 +10,9 @@ export function HomeResellerCta() {
               Viszonteladóknak
             </h2>
             <p className="max-w-3xl text-sm leading-6 text-slate-700 md:text-base">
-              Ha prémium, könnyen kommunikálható és alacsony hőfokú mosásnál is erős terméket keresel kínálatodba,
-              ismerd meg az Aquadrop partnerprogramját.
+              {
+                'Ha \u00fczletedben vagy h\u00e1l\u00f3zatodban pr\u00e9mium mos\u00f3kapszul\u00e1t k\u00edn\u00e1ln\u00e1l, jelentkezz viszontelad\u00f3 partnernek.'
+              }
             </p>
             <p className="text-xs font-medium text-slate-600/90 md:text-sm">
               Marketingtámogatással és szakmai onboardinggal.
@@ -22,7 +23,7 @@ export function HomeResellerCta() {
             href="/partner"
             className="inline-flex w-full items-center justify-center rounded-xl border border-cyan-200/80 bg-white/90 px-5 py-3 text-sm font-semibold text-brand-primary transition-colors hover:border-cyan-300 hover:bg-white md:w-auto md:min-w-[230px]"
           >
-            Megnézem a partnerprogramot
+            {'\u00c9rdekel a viszontelad\u00f3i program'}
           </Link>
         </div>
       </div>

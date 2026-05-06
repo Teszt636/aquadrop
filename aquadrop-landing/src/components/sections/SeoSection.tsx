@@ -16,7 +16,7 @@ export function SeoSection() {
               <p className="mt-3">
                 A mosókapszula egy előre adagolt, koncentrált mosószer, amely megkönnyíti a mindennapi mosást. Nem
                 kell külön mérni vagy adagolni, egyetlen kapszula elegendő egy mosáshoz. A részletes
-                <Link className="text-sky-800 underline underline-offset-4" href="/mosokapszula-hasznalata">
+                <Link className="font-medium text-cyan-800 underline underline-offset-4" href="/mosokapszula-hasznalata">
                   {' '}
                   mosókapszula használata
                 </Link>
@@ -42,7 +42,7 @@ export function SeoSection() {
                 A koncentrált formula gyorsan oldódik, és már alacsonyabb hőfokon is hatékonyan működik. Ez
                 energiatakarékosabb mosást is lehetővé tesz, miközben a ruhák tiszták és frissek maradnak. Ha ezt
                 a témát mélyebben is megnéznéd, az
-                <Link className="text-sky-800 underline underline-offset-4" href="/energiatakarekos-mosas">
+                <Link className="font-medium text-cyan-800 underline underline-offset-4" href="/energiatakarekos-mosas">
                   {' '}
                   energiatakarékos mosás
                 </Link>
@@ -64,7 +64,7 @@ export function SeoSection() {
               <p className="mt-3">
                 Egy korszerű formula esetében az is fontos, hogy a kapszula ne hagyjon maradványt a ruhákon, és
                 egyenletesen oldódjon fel a mosás során. Ehhez az is számít, hogy a
-                <Link className="text-sky-800 underline underline-offset-4" href="/mosokapszula-dobba-vagy-adagoloba">
+                <Link className="font-medium text-cyan-800 underline underline-offset-4" href="/mosokapszula-dobba-vagy-adagoloba">
                   {' '}
                   mosókapszula dobba vagy adagolóba
                 </Link>
@@ -83,8 +83,12 @@ export function SeoSection() {
                 <li>ha egységes, megbízható eredményt szeretnél</li>
               </ul>
               <p className="mt-3">
-                A mosókapszulák különösen jól használhatók mindennapi ruhák mosásához, amikor fontos a kiszámítható
-                eredmény és a praktikus használat.
+                {'A mos\u00f3kapszul\u00e1k k\u00fcl\u00f6n\u00f6sen j\u00f3l haszn\u00e1lhat\u00f3k mindennapi ruh\u00e1k mos\u00e1s\u00e1hoz, amikor fontos a kisz\u00e1m\u00edthat\u00f3 eredm\u00e9ny \u00e9s a praktikus haszn\u00e1lat. Ha kifejezetten alacsony h\u0151fok\u00fa programban mosol, a'}
+                <Link className="font-medium text-cyan-800 underline underline-offset-4" href="/mosokapszula-20-fokon">
+                  {' '}
+                  {'mos\u00f3kapszula 20 fokon'}
+                </Link>
+                {' \u00fatmutat\u00f3 seg\u00edt eld\u00f6nteni, mikor m\u0171k\u00f6dik j\u00f3l ez a megold\u00e1s.'}
               </p>
             </article>
 
