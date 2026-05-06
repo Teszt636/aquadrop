@@ -193,7 +193,6 @@ export default function Mosokapszula20FokonPage() {
         </figure>
 
         <div className="rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5 md:p-6">
-          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-800">Gyors válasz</p>
           <p className="mt-3">
             A mosókapszula 20 fokon is működhet jól, ha a kapszula alacsony hőfokra alkalmas, a dob nincs túltöltve,
             és a program nem túl rövid. A kapszulát mindig a dob aljára tedd, még a ruhák betöltése előtt, mert így

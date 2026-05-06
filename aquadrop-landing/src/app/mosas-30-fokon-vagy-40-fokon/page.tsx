@@ -193,7 +193,6 @@ export default function Mosas30FokonVagy40FokonPage() {
         </figure>
 
         <div className="rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5 md:p-6">
-          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-800">Gyors válasz</p>
           <p className="mt-3">
             A 30 fokos mosás sok hétköznapi, enyhén vagy közepesen szennyezett ruhához elegendő lehet, míg a 40 fokos
             mosás erősebb szennyeződésnél, törölközőknél, ágyneműnél vagy higiéniai okból lehet indokolt. Ha a ruha
