@@ -3,6 +3,7 @@ const RESEND_API_URL = 'https://api.resend.com/emails';
 export type SendEmailInput = {
   from: string;
   to: string | string[];
+  cc?: string | string[];
   subject: string;
   html: string;
   replyTo?: string | string[];
@@ -27,10 +28,12 @@ function requireServerEnv(name: string): string {
 export async function sendEmailWithResend(input: SendEmailInput): Promise<ResendSendResponse> {
   const apiKey = requireServerEnv('RESEND_API_KEY');
   const recipientList = Array.isArray(input.to) ? input.to : [input.to];
+  const ccList = input.cc ? (Array.isArray(input.cc) ? input.cc : [input.cc]) : undefined;
 
   console.info('[email][resend] Sending email request', {
     from: input.from,
     to: recipientList,
+    cc: ccList,
     subject: input.subject
   });
 
@@ -43,6 +46,7 @@ export async function sendEmailWithResend(input: SendEmailInput): Promise<Resend
     body: JSON.stringify({
       from: input.from,
       to: recipientList,
+      cc: ccList,
       subject: input.subject,
       html: input.html,
       reply_to: input.replyTo

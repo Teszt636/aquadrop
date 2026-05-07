@@ -449,12 +449,13 @@ alter table public.reseller_applications
 
 create table if not exists public.crm_email_notifications (
   id uuid primary key default gen_random_uuid(),
-  notification_type text not null check (notification_type in ('partner_daily_tasks', 'partner_1h_reminder')),
+  notification_type text not null check (notification_type in ('partner_daily_tasks', 'partner_1h_reminder', 'gift_daily_summary')),
   crm_type text not null default 'partner',
   recipient_user_id uuid references public.admin_users(id) on delete set null,
   recipient_email text not null,
   reseller_application_id uuid references public.reseller_applications(id) on delete set null,
   notification_date date,
+  notification_slot text,
   next_action_at_snapshot timestamptz,
   sent_at timestamptz not null default now(),
   created_at timestamptz not null default now()
@@ -473,3 +474,7 @@ create unique index if not exists crm_email_notifications_daily_dedupe_idx
 create unique index if not exists crm_email_notifications_reminder_dedupe_idx
   on public.crm_email_notifications (notification_type, crm_type, reseller_application_id, next_action_at_snapshot)
   where notification_type = 'partner_1h_reminder';
+
+create unique index if not exists crm_email_notifications_gift_summary_dedupe_idx
+  on public.crm_email_notifications (notification_type, crm_type, recipient_user_id, notification_date, notification_slot)
+  where notification_type = 'gift_daily_summary';

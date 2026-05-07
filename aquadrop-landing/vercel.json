@@ -2,11 +2,15 @@
   "crons": [
     {
       "path": "/api/cron/partner-daily-tasks",
-      "schedule": "0 6 * * *"
+      "schedule": "0 6,7 * * 1-5"
     },
     {
       "path": "/api/cron/partner-task-reminders",
-      "schedule": "*/15 * * * *"
+      "schedule": "*/15 * * * 1-5"
+    },
+    {
+      "path": "/api/cron/gift-daily-summary",
+      "schedule": "0 6,7,11,12 * * 1-5"
     }
   ]
 }
