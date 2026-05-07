@@ -62,11 +62,11 @@ function withGiftToken(subject: string, statusToken: string | null): string {
 }
 
 function buildSubject(type: NotificationType, subject: string, statusToken: string | null): string {
-  return type === 'elutasitas' ? withGiftToken(subject, statusToken) : subject;
+  return type === 'elutasitas' || type === 'hianypotlas' ? withGiftToken(subject, statusToken) : subject;
 }
 
 function buildReplyTo(type: NotificationType): string | string[] {
-  if (type !== 'elutasitas') return REPLY_TO_EMAIL;
+  if (type !== 'elutasitas' && type !== 'hianypotlas') return REPLY_TO_EMAIL;
   const inboundReplyTo = normalizeText(process.env.GIFT_INBOUND_REPLY_TO);
   return inboundReplyTo ? [REPLY_TO_EMAIL, inboundReplyTo] : REPLY_TO_EMAIL;
 }
