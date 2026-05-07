@@ -23,11 +23,7 @@ const brochurePages = [
   }
 ] as const;
 
-const desktopStates = [
-  { label: '1 / 4', title: 'Borító' },
-  { label: '2–3 / 4', title: 'Kinyitott prospektus' },
-  { label: '4 / 4', title: 'Hátlap' }
-] as const;
+const desktopStates = [{ label: '1 / 4' }, { label: '2–3 / 4' }, { label: '4 / 4' }] as const;
 
 function PageImage({
   page,
@@ -183,10 +179,9 @@ export function PartnerBrochureFlipbook() {
                 </button>
 
                 <div className="min-w-0 text-center">
-                  <p aria-live="polite" className="text-sm font-semibold uppercase tracking-[0.18em] text-cyan-200">
-                    {desktopStates[desktopState].title}
+                  <p aria-live="polite" className="text-2xl font-bold text-white">
+                    {desktopStates[desktopState].label}
                   </p>
-                  <p className="mt-1 text-2xl font-bold text-white">{desktopStates[desktopState].label}</p>
                   <div className="mt-3 flex justify-center gap-2" aria-hidden="true">
                     {desktopStates.map((state, index) => (
                       <span
