@@ -1,6 +1,11 @@
 import { NextResponse } from 'next/server';
 
-import { isCronRequestAuthorized, isVercelCronRequest, runPartnerTaskReminderCron } from '@/lib/cron/partner-crm';
+import {
+  isCronRequestAuthorized,
+  isCronSecretAuthorized,
+  isVercelCronRequest,
+  runPartnerTaskReminderCron
+} from '@/lib/cron/partner-crm';
 
 export async function GET(request: Request) {
   if (!isCronRequestAuthorized(request)) {
@@ -11,6 +16,7 @@ export async function GET(request: Request) {
         error: 'Unauthorized',
         dryRun: true,
         debug: false,
+        force: false,
         requestedSend: false,
         effectiveDryRun: true,
         nowUtc,
@@ -18,6 +24,7 @@ export async function GET(request: Request) {
         checkedUsers: 0,
         checkedLeads: 0,
         eligibleLeads: 0,
+        skippedByTimeWindow: false,
         wouldSendTo: [],
         sentEmails: 0,
         skippedReasons: { unauthorized: 1 },
@@ -33,13 +40,14 @@ export async function GET(request: Request) {
   const dryRunParam = params.get('dryRun') === '1';
   const debug = params.get('debug') === '1';
   const send = params.get('send') === '1' || params.get('send') === 'true';
+  const force = params.get('force') === '1' && isCronSecretAuthorized(request);
   const requestedSend = send || isVercelCronRequest(request);
   const dryRun = dryRunParam || debug || !requestedSend;
 
   try {
-    const result = await runPartnerTaskReminderCron({ dryRun, debug });
+    const result = await runPartnerTaskReminderCron({ dryRun, debug, force });
 
-    return NextResponse.json({ ...result, debug, requestedSend, effectiveDryRun: dryRun });
+    return NextResponse.json({ ...result, debug, force, requestedSend, effectiveDryRun: dryRun });
   } catch (error) {
     console.error('[cron][partner-task-reminders] Route failed', {
       route: '/api/cron/partner-task-reminders',
@@ -54,6 +62,7 @@ export async function GET(request: Request) {
         details: error instanceof Error ? error.message : error,
         dryRun,
         debug,
+        force,
         requestedSend,
         effectiveDryRun: dryRun,
         nowUtc,
@@ -61,6 +70,7 @@ export async function GET(request: Request) {
         checkedUsers: 0,
         checkedLeads: 0,
         eligibleLeads: 0,
+        skippedByTimeWindow: false,
         wouldSendTo: [],
         sentEmails: 0,
         resendResponses: [],

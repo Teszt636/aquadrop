@@ -237,12 +237,21 @@ export function isCronRequestAuthorized(request: Request): boolean {
   return vercelCronHeader === '1';
 }
 
+export function isCronSecretAuthorized(request: Request): boolean {
+  const secret = process.env.CRON_SECRET;
+  const authHeader = request.headers.get('authorization');
+  const bearerToken = authHeader?.startsWith('Bearer ') ? authHeader.slice(7).trim() : null;
+  const querySecret = new URL(request.url).searchParams.get('secret');
+
+  return Boolean(secret && (bearerToken === secret || querySecret === secret));
+}
+
 export function isVercelCronRequest(request: Request): boolean {
   const userAgent = request.headers.get('user-agent')?.toLowerCase() ?? '';
   return request.headers.get('x-vercel-cron') === '1' || userAgent.startsWith('vercel-cron/');
 }
 
-export async function runPartnerDailyTasksCron(params: { dryRun: boolean; debug?: boolean }) {
+export async function runPartnerDailyTasksCron(params: { dryRun: boolean; debug?: boolean; force?: boolean }) {
   const nowSnapshot = getBudapestNow();
   const localDate = nowSnapshot.date;
   const hour = nowSnapshot.hour;
@@ -264,6 +273,7 @@ export async function runPartnerDailyTasksCron(params: { dryRun: boolean; debug?
     skippedEmails: 0,
     resendErrors: [] as string[],
     dryRun: params.dryRun,
+    force: Boolean(params.force),
     skippedByTimeWindow: false,
     skippedReasons: {} as Record<string, number>,
     wouldSendTo: [] as Array<{ userEmail: string; overdue: number; today: number; hot: number }>,
@@ -276,16 +286,24 @@ export async function runPartnerDailyTasksCron(params: { dryRun: boolean; debug?
 
   if (!isWeekday) {
     summary.skippedByTimeWindow = true;
+    if (params.force) {
+      summary.skippedReasons.force_ignored_weekend = 1;
+    } else {
     summary.skippedEmails = admins.length;
     summary.skippedReasons.weekend = admins.length;
     return { ...summary, nowUtc: nowSnapshot.nowUtc, nowBudapest: nowSnapshot.nowBudapest };
+    }
   }
 
   if (hour !== 8) {
     summary.skippedByTimeWindow = true;
+    if (params.force) {
+      summary.skippedReasons.force_ignored_outside_daily_window = 1;
+    } else {
     summary.skippedEmails = admins.length;
     summary.skippedReasons.outside_daily_window = admins.length;
     return { ...summary, nowUtc: nowSnapshot.nowUtc, nowBudapest: nowSnapshot.nowBudapest };
+    }
   }
 
   for (const admin of admins) {
@@ -395,7 +413,7 @@ export async function runPartnerDailyTasksCron(params: { dryRun: boolean; debug?
   return { ...summary, nowUtc: nowSnapshot.nowUtc, nowBudapest: nowSnapshot.nowBudapest };
 }
 
-export async function runPartnerTaskReminderCron(params: { dryRun: boolean; debug?: boolean }) {
+export async function runPartnerTaskReminderCron(params: { dryRun: boolean; debug?: boolean; force?: boolean }) {
   const senderEmail = resolveAquadropSenderEmail({ allowFallback: true });
   const nowSnapshot = getBudapestNow();
   const budapestWeekday = new Intl.DateTimeFormat('en-US', { timeZone: 'Europe/Budapest', weekday: 'short' }).format(
@@ -422,6 +440,8 @@ export async function runPartnerTaskReminderCron(params: { dryRun: boolean; debu
     skippedEmails: 0,
     resendErrors: [] as string[],
     dryRun: params.dryRun,
+    force: Boolean(params.force),
+    skippedByTimeWindow: false,
     skippedReasons: {} as Record<string, number>,
     wouldSendTo: [] as Array<{ userEmail: string; resellerId: string; nextActionAt: string | null }>,
     resendResponses: [] as Array<{ userEmail: string; resellerId: string; resendId: string | null }>,
@@ -429,8 +449,13 @@ export async function runPartnerTaskReminderCron(params: { dryRun: boolean; debu
   };
 
   if (['Sat', 'Sun'].includes(budapestWeekday)) {
+    summary.skippedByTimeWindow = true;
+    if (params.force) {
+      summary.skippedReasons.force_ignored_weekend = 1;
+    } else {
     summary.skippedReasons.weekend = 1;
     return summary;
+    }
   }
 
   const leads = await fetchLeadsDueWithinOneHour(windowStartIso, windowEndIso);

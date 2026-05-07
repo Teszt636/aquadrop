@@ -51,6 +51,8 @@ type GiftDailySummaryResult = {
   resendResponses: Array<{ userEmail: string; resendId: string | null }>;
   resendErrors: string[];
   dryRun: boolean;
+  force: boolean;
+  skippedByTimeWindow: boolean;
 };
 
 const GIFT_ADMIN_URL = 'https://www.aquadrop.hu/admin?tab=gift_claims';
@@ -207,7 +209,7 @@ function hasAnyGiftTasks(counts: GiftStatusCounts): boolean {
   return Object.values(counts).some((count) => count > 0);
 }
 
-export async function runGiftDailySummaryCron(params: { dryRun: boolean; debug?: boolean }): Promise<GiftDailySummaryResult> {
+export async function runGiftDailySummaryCron(params: { dryRun: boolean; debug?: boolean; force?: boolean }): Promise<GiftDailySummaryResult> {
   const now = getBudapestNow();
   const slot = String(now.hour).padStart(2, '0');
   const summary: GiftDailySummaryResult = {
@@ -224,20 +226,32 @@ export async function runGiftDailySummaryCron(params: { dryRun: boolean; debug?:
     resendAttempted: false,
     resendResponses: [],
     resendErrors: [],
-    dryRun: params.dryRun
+    dryRun: params.dryRun,
+    force: Boolean(params.force),
+    skippedByTimeWindow: false
   };
 
   const budapestWeekday = new Intl.DateTimeFormat('en-US', { timeZone: 'Europe/Budapest', weekday: 'short' }).format(
     new Date(now.nowUtc)
   );
   if (['Sat', 'Sun'].includes(budapestWeekday)) {
+    summary.skippedByTimeWindow = true;
+    if (params.force) {
+      incrementSkip(summary, 'force_ignored_weekend');
+    } else {
     incrementSkip(summary, 'weekend');
     return summary;
+    }
   }
 
   if (!(now.hour === 8 || now.hour === 13)) {
+    summary.skippedByTimeWindow = true;
+    if (params.force) {
+      incrementSkip(summary, 'force_ignored_outside_daily_window');
+    } else {
     incrementSkip(summary, 'outside_daily_window');
     return summary;
+    }
   }
 
   const admins = await fetchActiveAdminUsers();
