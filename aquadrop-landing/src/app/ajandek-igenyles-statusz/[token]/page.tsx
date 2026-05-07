@@ -115,12 +115,12 @@ export default async function GiftClaimStatusPage({ params }: { params: Promise<
 
         <div className="mt-8 grid gap-4 rounded-2xl border border-slate-200 bg-slate-50/80 p-5 sm:grid-cols-2">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Igénylő neve</p>
-            <p className="mt-1 text-base font-semibold text-slate-900">{status.name}</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Igénylő</p>
+            <p className="mt-1 text-base font-semibold text-slate-900">{status.maskedName}</p>
           </div>
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Szállítási cím</p>
-            <p className="mt-1 text-base font-semibold text-slate-900">{status.shipping_address}</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Szállítási hely</p>
+            <p className="mt-1 text-base font-semibold text-slate-900">{status.maskedShippingAddress}</p>
           </div>
         </div>
 

@@ -4,12 +4,11 @@ const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const STATUS_PAGE_BASE_URL = 'https://www.aquadrop.hu';
 
 export type PublicGiftStatusPayload = {
-  name: string;
-  shipping_address: string;
+  maskedName: string;
+  maskedShippingAddress: string;
   pipeline_status: string;
   receipt_check_status: string;
   shipping_status: string;
-  next_action_description: string | null;
   tracking_number: string | null;
   courier_name: string | null;
   tracking_url: string | null;
@@ -23,7 +22,6 @@ type GiftStatusRow = {
   pipeline_status: string | null;
   receipt_check_status: string | null;
   shipping_status: string | null;
-  next_action_description: string | null;
   tracking_number: string | null;
   courier_name: string | null;
   tracking_url: string | null;
@@ -47,6 +45,96 @@ function normalizeToken(value: string): string {
   return value.trim();
 }
 
+export function maskGiftClaimName(fullName: string | null): string {
+  const parts = fullName?.trim().split(/\s+/).filter(Boolean) ?? [];
+
+  if (parts.length < 2) {
+    return 'Igénylő';
+  }
+
+  return `${parts[0]} ${parts[1].charAt(0)}.`;
+}
+
+function stripAddressDetails(value: string): string {
+  const detailMarkers = new Set([
+    'fszt',
+    'fsz',
+    'emelet',
+    'em',
+    'ajtó',
+    'ajto',
+    'door',
+    'floor'
+  ]);
+  const words = value.trim().split(/\s+/).filter(Boolean);
+  const safeWords: string[] = [];
+
+  for (const word of words) {
+    const normalizedWord = word.toLowerCase().replace(/[.,;:]/g, '');
+
+    if (/\d/.test(normalizedWord) || detailMarkers.has(normalizedWord)) {
+      break;
+    }
+
+    safeWords.push(word);
+  }
+
+  return safeWords.join(' ').replace(/[,\s]+$/g, '').trim();
+}
+
+function maskAddressWithoutCommas(address: string): string {
+  const words = address.split(/\s+/).filter(Boolean);
+  const streetTypeIndex = words.findIndex((word) => {
+    const normalizedWord = word.toLowerCase().replace(/[.,;:]/g, '');
+    return [
+      'utca',
+      'u',
+      'út',
+      'ut',
+      'tér',
+      'ter',
+      'körút',
+      'korut',
+      'köz',
+      'koz',
+      'sor',
+      'park',
+      'sétány',
+      'setany',
+      'dűlő',
+      'dulo'
+    ].includes(normalizedWord);
+  });
+
+  if (streetTypeIndex >= 2 && /^\d{4}$/.test(words[0])) {
+    return words.slice(0, streetTypeIndex + 1).join(' ');
+  }
+
+  return 'Szállítási cím rögzítve';
+}
+
+export function maskGiftClaimAddress(address: string | null): string {
+  const normalizedAddress = address?.trim().replace(/\s+/g, ' ') ?? '';
+
+  if (!normalizedAddress) {
+    return 'Szállítási cím rögzítve';
+  }
+
+  const parts = normalizedAddress
+    .split(',')
+    .map((part) => part.trim())
+    .filter(Boolean);
+
+  if (parts.length >= 2) {
+    const location = parts[0];
+    const street = stripAddressDetails(parts[1]);
+
+    return street ? `${location}, ${street}` : location;
+  }
+
+  return maskAddressWithoutCommas(normalizedAddress);
+}
+
 export function buildGiftClaimStatusUrl(statusToken: string): string {
   const token = normalizeToken(statusToken);
   return `${STATUS_PAGE_BASE_URL}/ajandek-igenyles-statusz/${encodeURIComponent(token)}`;
@@ -64,7 +152,7 @@ export async function fetchGiftClaimPublicStatusByToken(token: string): Promise<
 
   const query = new URLSearchParams({
     select:
-      'full_name,shipping_address,pipeline_status,receipt_check_status,shipping_status,next_action_description,tracking_number,courier_name,tracking_url,created_at,updated_at',
+      'full_name,shipping_address,pipeline_status,receipt_check_status,shipping_status,tracking_number,courier_name,tracking_url,created_at,updated_at',
     status_token: `eq.${normalizedToken}`,
     limit: '1'
   });
@@ -88,12 +176,11 @@ export async function fetchGiftClaimPublicStatusByToken(token: string): Promise<
   }
 
   return {
-    name: row.full_name?.trim() || 'Nincs megadva',
-    shipping_address: row.shipping_address?.trim() || 'Nincs megadva',
+    maskedName: maskGiftClaimName(row.full_name),
+    maskedShippingAddress: maskGiftClaimAddress(row.shipping_address),
     pipeline_status: row.pipeline_status?.trim() || 'Új igénylés',
     receipt_check_status: row.receipt_check_status?.trim() || 'Ellenőrzésre vár',
     shipping_status: row.shipping_status?.trim() || 'Nincs előkészítve',
-    next_action_description: row.next_action_description?.trim() || null,
     tracking_number: row.tracking_number?.trim() || null,
     courier_name: row.courier_name?.trim() || null,
     tracking_url: row.tracking_url?.trim() || null,
