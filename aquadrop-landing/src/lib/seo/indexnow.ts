@@ -17,7 +17,13 @@ const CORE_SEO_PATHS = [
   '/mosas-30-fokon-vagy-40-fokon'
 ] as const;
 
-const STATIC_INDEXABLE_PATHS = ['/', '/partner', '/publikus-seo-oldal'] as const;
+const STATIC_INDEXABLE_PATHS = [
+  '/',
+  '/partner',
+  '/adatvedelmi-tajekoztato',
+  '/suti-tajekoztato',
+  '/publikus-seo-oldal'
+] as const;
 
 const ARTICLE_PATHS = Object.keys(articleConfig).map((slug) => `/${slug}`);
 
@@ -62,6 +68,13 @@ export class MissingIndexNowKeyError extends Error {
   }
 }
 
+export class SitemapFetchError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'SitemapFetchError';
+  }
+}
+
 function getIndexNowOrigin(): URL {
   const configuredHost = process.env.INDEXNOW_HOST?.trim() || DEFAULT_INDEXNOW_ORIGIN;
   const url = new URL(configuredHost);
@@ -81,6 +94,54 @@ function getIndexNowKey(): string {
   }
 
   return key;
+}
+
+function decodeXmlEntity(value: string): string {
+  const namedEntities: Record<string, string> = {
+    amp: '&',
+    apos: "'",
+    gt: '>',
+    lt: '<',
+    quot: '"'
+  };
+
+  return value.replace(/&(#x?[0-9a-f]+|amp|apos|gt|lt|quot);/gi, (entity, code: string) => {
+    if (code[0] === '#') {
+      const isHex = code[1]?.toLowerCase() === 'x';
+      const parsedCode = Number.parseInt(code.slice(isHex ? 2 : 1), isHex ? 16 : 10);
+      return Number.isFinite(parsedCode) ? String.fromCodePoint(parsedCode) : entity;
+    }
+
+    return namedEntities[code.toLowerCase()] ?? entity;
+  });
+}
+
+export async function fetchAquadropSitemapUrls(): Promise<string[]> {
+  const sitemapUrl = new URL('/sitemap.xml', getIndexNowOrigin()).toString();
+  const response = await fetch(sitemapUrl, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/xml, text/xml;q=0.9, */*;q=0.8'
+    },
+    cache: 'no-store'
+  });
+
+  if (!response.ok) {
+    throw new SitemapFetchError(`Sitemap fetch failed (${response.status}) for ${sitemapUrl}.`);
+  }
+
+  const xml = await response.text();
+  const locMatches = xml.matchAll(/<loc>\s*([\s\S]*?)\s*<\/loc>/gi);
+  const urls = new Set<string>();
+
+  for (const match of locMatches) {
+    const loc = match[1]?.trim();
+    if (loc) {
+      urls.add(decodeXmlEntity(loc));
+    }
+  }
+
+  return [...urls];
 }
 
 function normalizePathname(pathname: string): string {
