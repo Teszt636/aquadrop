@@ -2,10 +2,14 @@ import { NextResponse } from 'next/server';
 
 import { requireAdminSession } from '@/lib/admin/auth';
 import {
+  fetchAquadropSitemapUrls,
   MissingIndexNowKeyError,
   SEO_CORE_INDEXNOW_URLS,
+  SitemapFetchError,
   submitUrlsToIndexNow
 } from '@/lib/seo/indexnow';
+
+type IndexNowPreset = 'seo-core' | 'sitemap';
 
 type IndexNowSubmitBody = {
   urls?: unknown;
@@ -17,15 +21,29 @@ function isStringArray(value: unknown): value is string[] {
   return Array.isArray(value) && value.every((item) => typeof item === 'string');
 }
 
-function getUrlsFromBody(body: IndexNowSubmitBody): string[] | NextResponse {
+type ResolvedIndexNowRequest =
+  | {
+      urls: string[];
+      preset: IndexNowPreset | null;
+    }
+  | NextResponse;
+
+async function getUrlsFromBody(body: IndexNowSubmitBody): Promise<ResolvedIndexNowRequest> {
   const urls: string[] = [];
+  let preset: IndexNowPreset | null = null;
 
   if (body.preset !== undefined) {
-    if (body.preset !== 'seo-core') {
+    if (body.preset !== 'seo-core' && body.preset !== 'sitemap') {
       return NextResponse.json({ success: false, error: 'Unknown preset.' }, { status: 400 });
     }
 
-    urls.push(...SEO_CORE_INDEXNOW_URLS);
+    preset = body.preset;
+
+    if (body.preset === 'seo-core') {
+      urls.push(...SEO_CORE_INDEXNOW_URLS);
+    } else {
+      urls.push(...(await fetchAquadropSitemapUrls()));
+    }
   }
 
   if (body.urls !== undefined) {
@@ -37,10 +55,10 @@ function getUrlsFromBody(body: IndexNowSubmitBody): string[] | NextResponse {
   }
 
   if (urls.length === 0) {
-    return NextResponse.json({ success: false, error: 'Provide urls or preset: seo-core.' }, { status: 400 });
+    return NextResponse.json({ success: false, error: 'Provide urls or preset: seo-core/sitemap.' }, { status: 400 });
   }
 
-  return urls;
+  return { urls, preset };
 }
 
 export async function POST(request: Request) {
@@ -52,17 +70,20 @@ export async function POST(request: Request) {
 
   try {
     const body = (await request.json()) as IndexNowSubmitBody;
-    const urls = getUrlsFromBody(body);
+    const resolvedRequest = await getUrlsFromBody(body);
 
-    if (urls instanceof NextResponse) {
-      return urls;
+    if (resolvedRequest instanceof NextResponse) {
+      return resolvedRequest;
     }
 
-    const result = await submitUrlsToIndexNow(urls, { dryRun: body.dryRun === true });
+    const result = await submitUrlsToIndexNow(resolvedRequest.urls, { dryRun: body.dryRun === true });
 
     return NextResponse.json({
       success: true,
-      ...result
+      preset: resolvedRequest.preset,
+      ...result,
+      submittedCount: result.submitted.length,
+      skippedCount: result.skipped.length
     });
   } catch (error) {
     if (error instanceof SyntaxError) {
@@ -74,6 +95,10 @@ export async function POST(request: Request) {
         { success: false, error: 'INDEXNOW_KEY nincs beallitva, IndexNow kuldes nem indult.' },
         { status: 500 }
       );
+    }
+
+    if (error instanceof SitemapFetchError) {
+      return NextResponse.json({ success: false, error: error.message }, { status: 502 });
     }
 
     console.error('[indexnow] admin route failed', { error });
