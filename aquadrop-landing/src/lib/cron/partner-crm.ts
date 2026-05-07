@@ -35,13 +35,14 @@ type ResellerLead = {
 };
 
 type NotificationLogRow = {
-  notification_type: 'partner_daily_tasks' | 'partner_1h_reminder';
-  crm_type: 'partner';
+  notification_type: 'partner_daily_tasks' | 'partner_1h_reminder' | 'gift_daily_summary';
+  crm_type: 'partner' | 'gift';
   recipient_user_id: string;
   recipient_email: string;
   reseller_application_id?: string | null;
   notification_date?: string | null;
   next_action_at_snapshot?: string | null;
+  notification_slot?: string | null;
 };
 
 const CLOSED_STATUSES = new Set(['Partner lett', 'Elutasítva']);
@@ -236,6 +237,11 @@ export function isCronRequestAuthorized(request: Request): boolean {
   return vercelCronHeader === '1';
 }
 
+export function isVercelCronRequest(request: Request): boolean {
+  const userAgent = request.headers.get('user-agent')?.toLowerCase() ?? '';
+  return request.headers.get('x-vercel-cron') === '1' || userAgent.startsWith('vercel-cron/');
+}
+
 export async function runPartnerDailyTasksCron(params: { dryRun: boolean; debug?: boolean }) {
   const nowSnapshot = getBudapestNow();
   const localDate = nowSnapshot.date;
@@ -249,6 +255,7 @@ export async function runPartnerDailyTasksCron(params: { dryRun: boolean; debug?
     todayRangeUtc,
     checkedUsers: admins.length,
     checkedLeads: 0,
+    eligibleLeads: 0,
     usersWithTasks: 0,
     overdueCount: 0,
     todayCount: 0,
@@ -295,10 +302,20 @@ export async function runPartnerDailyTasksCron(params: { dryRun: boolean; debug?
         const dueDate = getBudapestDateKey(lead.next_action_at);
         return dueDate === localDate;
       });
-      const hot = leads.filter((lead) => Boolean(lead.is_hot_lead) && !isClosedPipelineStatus(lead.pipeline_status));
+      const tomorrowDate = new Date(`${localDate}T00:00:00.000Z`);
+      tomorrowDate.setUTCDate(tomorrowDate.getUTCDate() + 1);
+      const tomorrowLocalDate = tomorrowDate.toISOString().slice(0, 10);
+      const hot = leads.filter((lead) => {
+        if (!lead.is_hot_lead || !lead.next_action_at || isClosedPipelineStatus(lead.pipeline_status)) {
+          return false;
+        }
+        const dueDate = getBudapestDateKey(lead.next_action_at);
+        return dueDate === localDate || dueDate === tomorrowLocalDate;
+      });
       summary.overdueCount += overdue.length;
       summary.todayCount += today.length;
       summary.hotCount += hot.length;
+      summary.eligibleLeads += overdue.length + today.length + hot.length;
 
       if (overdue.length === 0 && today.length === 0 && hot.length === 0) {
         summary.skippedEmails += 1;
@@ -340,7 +357,8 @@ export async function runPartnerDailyTasksCron(params: { dryRun: boolean; debug?
       summary.resendAttempted = true;
       const resendResponse = await sendEmailWithResend({
         from: senderEmail,
-        to: [admin.email, CC_ADMIN_EMAIL],
+        to: admin.email,
+        cc: CC_ADMIN_EMAIL,
         subject: email.subject,
         html: email.html,
         replyTo: [REPLY_TO_EMAIL]
@@ -379,6 +397,10 @@ export async function runPartnerDailyTasksCron(params: { dryRun: boolean; debug?
 
 export async function runPartnerTaskReminderCron(params: { dryRun: boolean; debug?: boolean }) {
   const senderEmail = resolveAquadropSenderEmail({ allowFallback: true });
+  const nowSnapshot = getBudapestNow();
+  const budapestWeekday = new Intl.DateTimeFormat('en-US', { timeZone: 'Europe/Budapest', weekday: 'short' }).format(
+    new Date(nowSnapshot.nowUtc)
+  );
   const now = new Date();
   const windowStartIso = new Date(now.getTime() + 55 * 60 * 1000).toISOString();
   const windowEndIso = new Date(now.getTime() + 65 * 60 * 1000).toISOString();
@@ -389,8 +411,8 @@ export async function runPartnerTaskReminderCron(params: { dryRun: boolean; debu
 
   const summary = {
     success: true,
-    nowUtc: windowStartIso,
-    nowBudapest: formatBudapestDateTime(windowStartIso),
+    nowUtc: now.toISOString(),
+    nowBudapest: formatBudapestDateTime(now.toISOString()),
     windowStartUtc: windowStartIso,
     windowEndUtc: windowEndIso,
     checkedUsers: activeUsers.length,
@@ -405,6 +427,11 @@ export async function runPartnerTaskReminderCron(params: { dryRun: boolean; debu
     resendResponses: [] as Array<{ userEmail: string; resellerId: string; resendId: string | null }>,
     resendAttempted: false
   };
+
+  if (['Sat', 'Sun'].includes(budapestWeekday)) {
+    summary.skippedReasons.weekend = 1;
+    return summary;
+  }
 
   const leads = await fetchLeadsDueWithinOneHour(windowStartIso, windowEndIso);
   summary.checkedLeads = leads.length;
