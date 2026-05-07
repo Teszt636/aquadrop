@@ -4,9 +4,10 @@ import { ButtonLink } from '@/components/ui/Button';
 type ThankYouPageProps = {
   title: string;
   message: string;
+  showGoogleReviewCta?: boolean;
 };
 
-export function ThankYouPage({ title, message }: ThankYouPageProps) {
+export function ThankYouPage({ title, message, showGoogleReviewCta = true }: ThankYouPageProps) {
   return (
     <main className="relative flex min-h-screen items-center overflow-hidden bg-slate-50 py-16">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(30,64,175,0.1),_transparent_55%)]" />
@@ -21,14 +22,16 @@ export function ThankYouPage({ title, message }: ThankYouPageProps) {
           <h1 className="mt-6 text-3xl leading-tight md:text-5xl">{title}</h1>
           <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-slate-700">{message}</p>
 
-          <GoogleReviewCta
-            variant="section"
-            placement="thank_you"
-            className="mx-auto mt-8 max-w-2xl text-left"
-            title="Köszönjük az igénylésed – és a bizalmad!"
-            description="Mivel az ajándékigényléshez már meglévő Aquadrop Expert Pro vásárlás szükséges, örömmel vesszük, ha pár szóban megírod a tapasztalatodat a Google értékelésben."
-            buttonText="Értékelem Google-ben"
-          />
+          {showGoogleReviewCta ? (
+            <GoogleReviewCta
+              variant="section"
+              placement="thank_you"
+              className="mx-auto mt-8 max-w-2xl text-left"
+              title="Köszönjük az igénylésed – és a bizalmad!"
+              description="Mivel az ajándékigényléshez már meglévő Aquadrop Expert Pro vásárlás szükséges, örömmel vesszük, ha pár szóban megírod a tapasztalatodat a Google értékelésben."
+              buttonText="Értékelem Google-ben"
+            />
+          ) : null}
 
           <div className="mt-8">
             <ButtonLink className="px-8 py-3 text-sm md:text-base" href="/">

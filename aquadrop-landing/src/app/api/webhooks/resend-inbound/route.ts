@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 import { buildUtcIsoFromBudapestParts, getBudapestDateTimeParts } from '@/lib/datetime/budapest';
 
 const TOKEN_PATTERN = /\[#gift:([a-zA-Z0-9-]+)\]/i;
+type GiftReplyKind = 'hianypotlas' | 'elutasitas';
 
 function safeTrim(value: unknown): string { return typeof value === 'string' ? value.trim() : ''; }
 
@@ -73,6 +74,32 @@ function cleanInboundReplyText(input: string): string {
 function shortenText(input: string, maxLength = 300): string {
   if (input.length <= maxLength) return input;
   return `${input.slice(0, maxLength).trimEnd()}...`;
+}
+
+function normalizeForMatching(input: string): string {
+  return input
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+}
+
+function detectGiftReplyKind(subject: string): GiftReplyKind {
+  const normalizedSubject = normalizeForMatching(subject);
+  if (normalizedSubject.includes('hianypotlas')) return 'hianypotlas';
+  if (normalizedSubject.includes('elutas')) return 'elutasitas';
+  return 'elutasitas';
+}
+
+function buildReplyIntro(kind: GiftReplyKind): string {
+  return kind === 'hianypotlas'
+    ? 'Ügyfél válaszolt a hiánypótlás emailre.'
+    : 'Ügyfél válaszolt az elutasító emailre.';
+}
+
+function buildActivitySummary(kind: GiftReplyKind): string {
+  return kind === 'hianypotlas'
+    ? 'Ügyfél válaszolt a hiánypótlás emailre, az ügy újranyitva ellenőrzésre.'
+    : 'Ügyfél válaszolt az elutasító emailre, az ügy újranyitva ellenőrzésre.';
 }
 
 type BodySource = 'payload.text' | 'payload.html' | 'receiving.text' | 'receiving.html' | 'none';
@@ -175,6 +202,7 @@ export async function POST(request: Request) {
   const payloadHasBody = Boolean(bodyPreview);
   const subjectTokenMatch = subject.match(TOKEN_PATTERN);
   let statusToken = subjectTokenMatch?.[1] ?? null;
+  const replyKind = detectGiftReplyKind(subject);
 
   const supabaseUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, '')}/rest/v1`;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY ?? '';
@@ -255,7 +283,8 @@ export async function POST(request: Request) {
   const shortBody = bodyPreview ? shortenText(bodyPreview, 300) : '';
   debugState.bodyPreviewLength = shortBody.length;
   const replyContent = shortBody || 'Ügyfél válasza érkezett, de a friss válasz szövege nem volt egyértelműen kinyerhető.';
-  const nextActionDescription = `Ügyfél válaszolt az emailre.\n\nVálasz tartalma:\n${replyContent}\n\nCsatolmány érkezett: ${hasAttachments ? 'igen' : 'nem'}`;
+  const replyIntro = buildReplyIntro(replyKind);
+  const nextActionDescription = `${replyIntro}\n\nVálasz tartalma:\n${replyContent}\n\nCsatolmány érkezett: ${hasAttachments ? 'igen' : 'nem'}`;
 
   const adminRes = await fetch(`${supabaseUrl}/admin_users?select=id&name=eq.Bartók Csaba&is_active=eq.true&limit=1`, { headers, cache: 'no-store' });
   const adminRows = (await adminRes.json()) as Array<{ id: string }>;
@@ -284,7 +313,7 @@ export async function POST(request: Request) {
     });
   }
 
-  const activityRes = await fetch(`${supabaseUrl}/gift_activity_logs`, { method: 'POST', headers: { ...headers, Prefer: 'return=minimal' }, body: JSON.stringify([{ gift_claim_id: claim.id, field_name: 'inbound_reply', change_summary: 'Ügyfél válaszolt emailben, az ügy újranyitva ellenőrzésre.', old_value: `${safeTrim(claim.pipeline_status)} | ${safeTrim(claim.receipt_check_status)}`, new_value: `Blokk ellenőrzés alatt | Ellenőrzésre vár | ${replyContent} | Csatolmány: ${hasAttachments ? 'igen' : 'nem'}`, changed_by_name: 'Email válasz', changed_by_email: sender, changed_by_user_id: null }]) });
+  const activityRes = await fetch(`${supabaseUrl}/gift_activity_logs`, { method: 'POST', headers: { ...headers, Prefer: 'return=minimal' }, body: JSON.stringify([{ gift_claim_id: claim.id, field_name: 'inbound_reply', change_summary: buildActivitySummary(replyKind), old_value: `${safeTrim(claim.pipeline_status)} | ${safeTrim(claim.receipt_check_status)}`, new_value: `Blokk ellenőrzés alatt | Ellenőrzésre vár | Feladó: ${sender} | Válasz preview: ${replyContent} | Csatolmány: ${hasAttachments ? 'igen' : 'nem'}`, changed_by_name: 'Email válasz', changed_by_email: sender, changed_by_user_id: null }]) });
 
   const inboundReason = updateRes.ok ? (activityRes.ok ? 'matched_updated' : 'activity_log_failed') : `update_failed: ${debugState.updateError ?? 'unknown_error'}`;
   await logInboundEmail(inboundReason, true, claim.id);

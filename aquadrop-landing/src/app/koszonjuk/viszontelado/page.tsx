@@ -10,6 +10,7 @@ export default function ResellerThankYouPage() {
     <ThankYouPage
       title="Köszönjük a jelentkezést!"
       message="Viszonteladói jelentkezésed megérkezett. Hamarosan felvesszük veled a kapcsolatot."
+      showGoogleReviewCta={false}
     />
   );
 }
