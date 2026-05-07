@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { CONSENT_KEY, type ConsentChoice } from '@/lib/consent';
 
@@ -60,12 +61,12 @@ export default function CookieConsentBanner() {
             Ez a weboldal sütiket használ a működéshez és statisztikai célokra. A statisztikai sütik csak az Ön hozzájárulása után töltődnek be.
           </p>
           <div className="flex flex-col gap-2 text-sm font-medium text-brand-primary sm:flex-row sm:items-center sm:gap-4">
-            <a className="inline-flex underline-offset-2 transition hover:underline" href="/adatvedelmi-tajekoztato">
+            <Link className="inline-flex underline-offset-2 transition hover:underline" href="/adatvedelmi-tajekoztato">
               Adatvédelmi tájékoztató
-            </a>
-            <a className="inline-flex underline-offset-2 transition hover:underline" href="/suti-tajekoztato">
+            </Link>
+            <Link className="inline-flex underline-offset-2 transition hover:underline" href="/suti-tajekoztato">
               Süti tájékoztató
-            </a>
+            </Link>
           </div>
         </div>
         <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
