@@ -66,6 +66,22 @@ type ManagedUser = {
   role: 'admin' | 'crm_user';
   is_active: boolean;
 };
+type IndexNowSkippedUrl = {
+  url: string;
+  reason?: string | null;
+};
+type IndexNowResult = {
+  success: boolean;
+  dryRun?: boolean;
+  submitted?: string[];
+  skipped?: IndexNowSkippedUrl[];
+  indexNowStatus?: number | null;
+  submittedCount?: number;
+  skippedCount?: number;
+  error?: string;
+  message?: string;
+};
+type IndexNowSubmitMode = 'dryRun' | 'submit';
 
 function stringifyValue(value: unknown): string {
   if (value === null || value === undefined) {
@@ -230,6 +246,8 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
   const [newUserName, setNewUserName] = useState('');
   const [newUserEmail, setNewUserEmail] = useState('');
   const [newUserPassword, setNewUserPassword] = useState('');
+  const [indexNowResult, setIndexNowResult] = useState<IndexNowResult | null>(null);
+  const [indexNowLoadingMode, setIndexNowLoadingMode] = useState<IndexNowSubmitMode | null>(null);
   const [activityByRowId, setActivityByRowId] = useState<Record<string, ActivityState>>({});
   const [nextActionEditors, setNextActionEditors] = useState<
     Record<string, { isOpen: boolean; date: string; hour: string; minute: string }>
@@ -886,6 +904,50 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
     await loadRows();
   }
 
+  async function submitIndexNow(mode: IndexNowSubmitMode) {
+    const dryRun = mode === 'dryRun';
+
+    if (!dryRun) {
+      const approved = window.confirm('Biztosan beküldöd az összes publikus sitemap URL-t IndexNow-ra?');
+      if (!approved) {
+        return;
+      }
+    }
+
+    setIndexNowLoadingMode(mode);
+    setIndexNowResult(null);
+
+    try {
+      const response = await fetch('/api/admin/indexnow-submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          preset: 'sitemap',
+          dryRun
+        })
+      });
+      const body = (await response.json()) as IndexNowResult;
+
+      if (!response.ok || body.success === false) {
+        const message =
+          body.error?.includes('INDEXNOW_KEY')
+            ? 'Hiányzik az INDEXNOW_KEY környezeti változó.'
+            : body.error ?? body.message ?? 'Ismeretlen IndexNow hiba.';
+        setIndexNowResult({ ...body, success: false, error: message });
+        return;
+      }
+
+      setIndexNowResult(body);
+    } catch (submitError) {
+      setIndexNowResult({
+        success: false,
+        error: submitError instanceof Error ? submitError.message : 'Ismeretlen IndexNow hiba.'
+      });
+    } finally {
+      setIndexNowLoadingMode(null);
+    }
+  }
+
   useEffect(() => {
     return () => {
       Object.values(rowSaveStateTimersRef.current).forEach((timerId) => window.clearTimeout(timerId));
@@ -1002,6 +1064,121 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
                 </div>
               ))}
             </div>
+
+            {isAdmin ? (
+              <div className="space-y-4 rounded-lg border border-cyan-900/70 bg-slate-950/60 p-4">
+                <div className="space-y-1">
+                  <h2 className="text-lg font-semibold text-white">IndexNow beküldés</h2>
+                  <p className="max-w-3xl text-sm leading-6 text-slate-300">
+                    Az IndexNow segítségével jelezheted a Bing és más támogatott keresők felé, hogy az Aquadrop
+                    publikus SEO oldalai frissültek.
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    onClick={() => void submitIndexNow('dryRun')}
+                    disabled={indexNowLoadingMode !== null}
+                    className="rounded-md border border-slate-700 px-3 py-2 text-sm font-semibold text-slate-100 transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {indexNowLoadingMode === 'dryRun' ? 'Feldolgozás...' : 'URL-ek ellenőrzése küldés nélkül'}
+                  </button>
+                  <button
+                    onClick={() => void submitIndexNow('submit')}
+                    disabled={indexNowLoadingMode !== null}
+                    className="rounded-md bg-cyan-500 px-3 py-2 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {indexNowLoadingMode === 'submit' ? 'Feldolgozás...' : 'Beküldés IndexNow-ra'}
+                  </button>
+                </div>
+
+                {indexNowResult ? (
+                  <div
+                    className={`space-y-3 rounded-lg border p-3 text-sm ${
+                      indexNowResult.success
+                        ? 'border-emerald-800 bg-emerald-950/30 text-emerald-100'
+                        : 'border-rose-800 bg-rose-950/30 text-rose-100'
+                    }`}
+                  >
+                    {indexNowResult.success ? (
+                      indexNowResult.dryRun ? (
+                        <div className="grid gap-2 md:grid-cols-3">
+                          <div>
+                            <div className="text-xs text-slate-300">Ellenőrzött URL-ek száma</div>
+                            <div className="text-lg font-semibold">
+                              {(indexNowResult.submittedCount ?? indexNowResult.submitted?.length ?? 0) +
+                                (indexNowResult.skippedCount ?? indexNowResult.skipped?.length ?? 0)}
+                            </div>
+                          </div>
+                          <div>
+                            <div className="text-xs text-slate-300">Beküldésre alkalmas URL-ek száma</div>
+                            <div className="text-lg font-semibold">
+                              {indexNowResult.submittedCount ?? indexNowResult.submitted?.length ?? 0}
+                            </div>
+                          </div>
+                          <div>
+                            <div className="text-xs text-slate-300">Kihagyott URL-ek száma</div>
+                            <div className="text-lg font-semibold">
+                              {indexNowResult.skippedCount ?? indexNowResult.skipped?.length ?? 0}
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="space-y-1">
+                          <p className="font-semibold">IndexNow beküldés sikeres</p>
+                          <p>indexNowStatus: {indexNowResult.indexNowStatus ?? 'nincs'}</p>
+                          <p>submittedCount: {indexNowResult.submittedCount ?? indexNowResult.submitted?.length ?? 0}</p>
+                          <p>skippedCount: {indexNowResult.skippedCount ?? indexNowResult.skipped?.length ?? 0}</p>
+                        </div>
+                      )
+                    ) : (
+                      <div className="space-y-1">
+                        <p className="font-semibold">IndexNow hiba</p>
+                        <p>{indexNowResult.error ?? indexNowResult.message ?? 'Ismeretlen hiba.'}</p>
+                      </div>
+                    )}
+
+                    <details className="rounded-md border border-slate-800 bg-slate-950/70 p-3 text-slate-100">
+                      <summary className="cursor-pointer font-semibold">Beküldött URL-ek megjelenítése</summary>
+                      <div className="mt-3 grid gap-4 lg:grid-cols-2">
+                        <div>
+                          <h3 className="mb-2 text-sm font-semibold">Submitted URL-ek</h3>
+                          {indexNowResult.submitted?.length ? (
+                            <ul className="max-h-64 space-y-1 overflow-auto text-xs text-slate-300">
+                              {indexNowResult.submitted.map((url) => (
+                                <li key={url} className="break-all rounded border border-slate-800 bg-slate-900 px-2 py-1">
+                                  {url}
+                                </li>
+                              ))}
+                            </ul>
+                          ) : (
+                            <p className="text-xs text-slate-400">Nincs submitted URL.</p>
+                          )}
+                        </div>
+                        <div>
+                          <h3 className="mb-2 text-sm font-semibold">Skipped URL-ek</h3>
+                          {indexNowResult.skipped?.length ? (
+                            <ul className="max-h-64 space-y-1 overflow-auto text-xs text-slate-300">
+                              {indexNowResult.skipped.map((item, index) => (
+                                <li
+                                  key={`${item.url}-${item.reason ?? 'unknown'}-${index}`}
+                                  className="break-all rounded border border-slate-800 bg-slate-900 px-2 py-1"
+                                >
+                                  {item.url}
+                                  {item.reason ? <span className="text-slate-400"> · {item.reason}</span> : null}
+                                </li>
+                              ))}
+                            </ul>
+                          ) : (
+                            <p className="text-xs text-slate-400">Nincs skipped URL.</p>
+                          )}
+                        </div>
+                      </div>
+                    </details>
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
           </div>
         ) : isResellerTable ? (
           <div className="mb-4 grid gap-2 md:grid-cols-4">
