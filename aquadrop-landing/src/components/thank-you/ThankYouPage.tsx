@@ -4,10 +4,30 @@ import { ButtonLink } from '@/components/ui/Button';
 type ThankYouPageProps = {
   title: string;
   message: string;
+  secondaryMessage?: string;
   showGoogleReviewCta?: boolean;
+  actions?: Array<{
+    href: string;
+    label: string;
+    variant?: 'primary' | 'secondary';
+  }>;
 };
 
-export function ThankYouPage({ title, message, showGoogleReviewCta = true }: ThankYouPageProps) {
+const defaultActions = [
+  {
+    href: '/',
+    label: 'Vissza a főoldalra',
+    variant: 'primary' as const
+  }
+];
+
+export function ThankYouPage({
+  title,
+  message,
+  secondaryMessage,
+  showGoogleReviewCta = true,
+  actions = defaultActions
+}: ThankYouPageProps) {
   return (
     <main className="relative flex min-h-screen items-center overflow-hidden bg-slate-50 py-16">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(30,64,175,0.1),_transparent_55%)]" />
@@ -21,6 +41,9 @@ export function ThankYouPage({ title, message, showGoogleReviewCta = true }: Tha
           </p>
           <h1 className="mt-6 text-3xl leading-tight md:text-5xl">{title}</h1>
           <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-slate-700">{message}</p>
+          {secondaryMessage ? (
+            <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-600">{secondaryMessage}</p>
+          ) : null}
 
           {showGoogleReviewCta ? (
             <GoogleReviewCta
@@ -33,10 +56,17 @@ export function ThankYouPage({ title, message, showGoogleReviewCta = true }: Tha
             />
           ) : null}
 
-          <div className="mt-8">
-            <ButtonLink className="px-8 py-3 text-sm md:text-base" href="/">
-              Vissza a főoldalra
-            </ButtonLink>
+          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap">
+            {actions.map((action) => (
+              <ButtonLink
+                className="w-full px-6 py-3 text-sm sm:w-auto md:text-base"
+                href={action.href}
+                key={action.href}
+                variant={action.variant ?? 'primary'}
+              >
+                {action.label}
+              </ButtonLink>
+            ))}
           </div>
         </div>
       </section>
