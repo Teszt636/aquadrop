@@ -200,6 +200,7 @@ export const adminTableConfigs: Record<AdminTableViewName, AdminTableConfig> = {
     columns: [
       { key: 'name', label: 'Név' },
       { key: 'email', label: 'Email' },
+      { key: 'source', label: 'Forrás' },
       { key: 'created_at', label: 'Létrehozva', type: 'date' },
       { key: 'id', label: 'ID', hiddenInTable: true, hiddenInDetails: true }
     ]

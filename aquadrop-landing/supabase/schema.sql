@@ -8,9 +8,13 @@ create table if not exists public.announcement_signups (
   name text not null,
   email text not null,
   phone text,
+  source text,
   consent boolean not null default false,
   created_at timestamptz default now()
 );
+
+alter table public.announcement_signups
+add column if not exists source text;
 
 create index if not exists announcement_signups_email_idx
   on public.announcement_signups (email);
