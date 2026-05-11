@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { ArticleSignupCta } from '@/components/articles/ArticleSignupCta';
 import { ArticleLayout } from '@/components/article/ArticleLayout';
 import { RelatedGuides } from '@/components/RelatedGuides';
 import { ButtonLink } from '@/components/ui';
@@ -496,6 +497,12 @@ export default function MosokapszulaNemOldodikFelPage() {
             { label: '20 fokos kapszula', title: 'Mosókapszula 20 fokon', description: 'Mikor működik jól alacsony hőfokon, és hogyan előzheted meg az oldódási hibákat?', href: '/mosokapszula-20-fokon' },
             { label: 'Használat', title: 'Mosókapszula használata helyesen', description: 'Nézd meg, hova kell tenni a kapszulát, mennyit használj, és milyen hibákat kerülj el.', href: '/mosokapszula-hasznalata' },
           ]}
+        />
+
+        <ArticleSignupCta
+          source="article:mosokapszula-nem-oldodik-fel"
+          title="Kérsz még praktikus mosókapszula tippeket?"
+          description="Iratkozz fel, és küldünk hasznos útmutatókat a mosókapszula használatához, adagolásához és az oldódási hibák megelőzéséhez."
         />
 
         <h2>Gyakori kérdések a mosókapszula oldódásáról</h2>

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { ArticleSignupCta } from '@/components/articles/ArticleSignupCta';
 import { ArticleLayout } from '@/components/article/ArticleLayout';
 import { RelatedGuides } from '@/components/RelatedGuides';
 import { EnergySavingsCalculator } from '@/components/energy-savings-calculator';
@@ -372,6 +373,12 @@ export default function MennyitSporolhatsz20FokonPage() {
             { label: 'Gyakorlati útmutató', title: 'Hogyan moss hatékonyan 20 fokon?', description: 'Lépésről lépésre mutatjuk, mire figyelj, ha alacsony hőfokon szeretnél tiszta ruhákat.', href: '/hogyan-mossunk-20-fokon' },
             { label: 'Pillar útmutató', title: 'Energiatakarékos mosás lépésről lépésre', description: 'Átfogó útmutató a háztartási mosási költségek és energiahasználat csökkentéséhez.', href: '/energiatakarekos-mosas' },
           ]}
+        />
+
+        <ArticleSignupCta
+          source="article:mennyit-sporolhatsz-20-fokon"
+          title="Kérsz még energiatakarékos mosási tippeket?"
+          description="Iratkozz fel, és értesítünk az Aquadrop újdonságokról, promóciókról és hasznos alacsony hőfokú mosási útmutatókról."
         />
 
         <h2>Gyakori kérdések a 20 fokos mosás megtakarításáról</h2>

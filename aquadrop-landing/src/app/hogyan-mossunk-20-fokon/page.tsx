@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { ArticleSignupCta } from '@/components/articles/ArticleSignupCta';
 import { ArticleLayout } from '@/components/article/ArticleLayout';
 import { RelatedGuides } from '@/components/RelatedGuides';
 import { ButtonLink } from '@/components/ui';
@@ -400,6 +401,12 @@ export default function HogyanMossunk20FokonPage() {
             { label: 'Megtakarítás', title: 'Mennyit spórolhatsz 20 fokos mosással?', description: 'Ismerd meg, miért kerülhet kevesebbe a 20 fokos mosás, és mitől függ a különbség.', href: '/mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol' },
             { label: 'Pillar útmutató', title: 'Energiatakarékos mosás lépésről lépésre', description: 'Átfogó útmutató az alacsony hőfokú, tudatos és költséghatékony mosási rutinhoz.', href: '/energiatakarekos-mosas' },
           ]}
+        />
+
+        <ArticleSignupCta
+          source="article:hogyan-mossunk-20-fokon"
+          title="Kérsz még energiatakarékos mosási tippeket?"
+          description="Iratkozz fel, és értesítünk az Aquadrop újdonságokról, promóciókról és hasznos alacsony hőfokú mosási útmutatókról."
         />
 
         <h2>Gyakori kérdések a 20 fokos mosásról</h2>

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { ArticleSignupCta } from '@/components/articles/ArticleSignupCta';
 import { ArticleLayout } from '@/components/article/ArticleLayout';
 import { RelatedGuides } from '@/components/RelatedGuides';
 import { ButtonLink } from '@/components/ui';
@@ -553,6 +554,12 @@ export default function EnergiatakarekosMosasPage() {
             { label: 'Megtakarítás', title: 'Mennyit spórolhatsz 20 fokos mosással?', description: 'Nézd meg, hogyan változhat a mosási költség, ha 40 helyett 20 fokon mosol.', href: '/mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol' },
             { label: 'Kalkulátor', title: 'Mosási költség kalkulátor', description: 'Számold ki saját adataiddal, mennyit jelenthet az alacsonyabb hőfok a villanyszámlában.', href: '/mosasi-koltseg-kalkulator' },
           ]}
+        />
+
+        <ArticleSignupCta
+          source="article:energiatakarekos-mosas"
+          title="Kérsz még energiatakarékos mosási tippeket?"
+          description="Iratkozz fel, és értesítünk az Aquadrop újdonságokról, promóciókról és hasznos alacsony hőfokú mosási útmutatókról."
         />
 
         <h2>Gyakori kérdések az energiatakarékos mosásról</h2>

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { ArticleSignupCta } from '@/components/articles/ArticleSignupCta';
 import { ArticleLayout } from '@/components/article/ArticleLayout';
 import { RelatedGuides } from '@/components/RelatedGuides';
 import { ButtonLink } from '@/components/ui';
@@ -315,6 +316,12 @@ export default function Mosas30FokonVagy40FokonPage() {
               href: '/mosokapszula-20-fokon',
             },
           ]}
+        />
+
+        <ArticleSignupCta
+          source="article:mosas-30-fokon-vagy-40-fokon"
+          title="Kérsz még energiatakarékos mosási tippeket?"
+          description="Iratkozz fel, és értesítünk az Aquadrop újdonságokról, promóciókról és hasznos alacsony hőfokú mosási útmutatókról."
         />
 
         <h2>Gyakori kérdések a 30 és 40 fokos mosásról</h2>
