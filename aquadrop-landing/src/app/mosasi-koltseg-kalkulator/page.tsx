@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
+import { ArticleSignupCta } from '@/components/articles/ArticleSignupCta';
 import { RelatedGuides } from '@/components/RelatedGuides';
 import { WashingCostCalculator } from '@/components/tools/WashingCostCalculator';
 
@@ -146,6 +147,12 @@ export default async function WashingCostCalculatorPage({ searchParams }: { sear
                 { label: 'Pillar útmutató', title: 'Energiatakarékos mosás lépésről lépésre', description: 'Alacsonyabb hőfok, tudatos programválasztás és kevesebb energiafelhasználás a mindennapi mosásban.', href: '/energiatakarekos-mosas' },
                 { label: '20 fokos mosás', title: 'Hogyan moss hatékonyan 20 fokon?', description: 'Gyakorlati tanácsok ahhoz, hogy a 20 fokos mosás tiszta eredményt adjon a hétköznapi ruháknál.', href: '/hogyan-mossunk-20-fokon' },
               ]}
+            />
+
+            <ArticleSignupCta
+              source="article:mosasi-koltseg-kalkulator"
+              title="Kérsz még spórolási tippeket a mosáshoz?"
+              description="Iratkozz fel, és értesítünk az új Aquadrop útmutatókról, promóciókról és energiatakarékos mosási tippekről."
             />
 
             <section className="rounded-3xl border border-cyan-100 bg-white/80 p-6 shadow-sm md:p-8">

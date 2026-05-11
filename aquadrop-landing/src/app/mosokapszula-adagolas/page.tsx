@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { ArticleSignupCta } from '@/components/articles/ArticleSignupCta';
 import { ArticleLayout } from '@/components/article/ArticleLayout';
 import { RelatedGuides } from '@/components/RelatedGuides';
 import { ButtonLink } from '@/components/ui';
@@ -320,6 +321,12 @@ export default function MosokapszulaAdagolasPage() {
               href: '/mosokapszula-20-fokon',
             },
           ]}
+        />
+
+        <ArticleSignupCta
+          source="article:mosokapszula-adagolas"
+          title="Kérsz még praktikus mosókapszula tippeket?"
+          description="Iratkozz fel, és küldünk hasznos útmutatókat a mosókapszula használatához, adagolásához és az oldódási hibák megelőzéséhez."
         />
 
         <h2>Gyakori kérdések a mosókapszula adagolásáról</h2>

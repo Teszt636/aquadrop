@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { ArticleSignupCta } from '@/components/articles/ArticleSignupCta';
 import { ArticleLayout } from '@/components/article/ArticleLayout';
 import { RelatedGuides } from '@/components/RelatedGuides';
 import { ButtonLink } from '@/components/ui';
@@ -519,6 +520,12 @@ export default function MosokapszulaVagyFolyekonyMososerPage() {
             { label: '20 fokos kapszula', title: 'Mosókapszula 20 fokon', description: 'Mikor működik jól alacsony hőfokon, és hogyan előzheted meg az oldódási hibákat?', href: '/mosokapszula-20-fokon' },
             { label: '20 fokos mosás', title: 'Hogyan moss hatékonyan 20 fokon?', description: 'Alacsony hőfokon különösen fontos a megfelelő programhossz és a jól oldódó mosószer.', href: '/hogyan-mossunk-20-fokon' },
           ]}
+        />
+
+        <ArticleSignupCta
+          source="article:mosokapszula-vagy-folyekony-mososzer"
+          title="Kérsz még praktikus mosókapszula tippeket?"
+          description="Iratkozz fel, és küldünk hasznos útmutatókat a mosókapszula használatához, adagolásához és az oldódási hibák megelőzéséhez."
         />
 
         <h2>Gyakori kérdések a mosókapszula és folyékony mosószer választásáról</h2>
