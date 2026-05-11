@@ -97,6 +97,17 @@ alter table public.gift_claims
 add column if not exists admin_note text;
 ```
 
+If your `announcement_signups` table was created earlier and does not yet include article signup source tracking,
+run this in the Supabase SQL Editor:
+
+```sql
+alter table public.announcement_signups
+add column if not exists source text;
+```
+
+The optional `source` field shows which page or component generated the signup, for example:
+`article:mosokapszula-20-fokon`.
+
 ### Storage bucket (required for receipt upload)
 
 Create a bucket named:

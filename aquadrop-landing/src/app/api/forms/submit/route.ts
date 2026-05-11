@@ -11,6 +11,7 @@ type AnnouncementSubmitRequest = {
     email: string;
     phone: string | null;
     consent: boolean;
+    source?: string | null;
   };
 };
 
@@ -171,6 +172,15 @@ async function insertRow(table: string, payload: Record<string, unknown>): Promi
   }
 }
 
+function isMissingSourceColumnError(error: unknown): boolean {
+  if (!(error instanceof Error) || !('supabaseErrorText' in error)) {
+    return false;
+  }
+
+  const errorText = String(error.supabaseErrorText ?? '').toLowerCase();
+  return errorText.includes('source') && (errorText.includes('column') || errorText.includes('pgrst204'));
+}
+
 async function getAdminUserIdByName(name: string): Promise<string | null> {
   const query = new URLSearchParams({
     select: 'id',
@@ -212,6 +222,8 @@ export async function POST(request: Request) {
       const normalizedEmail = body.payload.email.trim().toLowerCase();
       const normalizedName = body.payload.name.trim();
       const normalizedPhone = body.payload.phone?.trim() || null;
+      const normalizedSource =
+        typeof body.payload.source === 'string' ? body.payload.source.trim().slice(0, 120) : null;
 
       const duplicateQuery = new URLSearchParams({
         select: 'id',
@@ -223,12 +235,33 @@ export async function POST(request: Request) {
       const insertSkipped = duplicateDetected;
 
       if (!duplicateDetected) {
-        await insertRow('announcement_signups', {
+        const announcementSignupPayload = {
           name: normalizedName,
           email: normalizedEmail,
           phone: normalizedPhone,
-          consent: body.payload.consent
-        });
+          consent: body.payload.consent,
+          ...(normalizedSource ? { source: normalizedSource } : {})
+        };
+
+        try {
+          await insertRow('announcement_signups', announcementSignupPayload);
+        } catch (error) {
+          if (!normalizedSource || !isMissingSourceColumnError(error)) {
+            throw error;
+          }
+
+          console.warn('[forms][submit] announcement signup source column missing, retrying without source', {
+            formType: body.formType,
+            source: normalizedSource
+          });
+
+          await insertRow('announcement_signups', {
+            name: normalizedName,
+            email: normalizedEmail,
+            phone: normalizedPhone,
+            consent: body.payload.consent
+          });
+        }
       }
 
       const notificationType: EmailNotificationRequest['type'] = duplicateDetected
@@ -239,7 +272,8 @@ export async function POST(request: Request) {
         formType: body.formType,
         duplicateDetected,
         notificationType,
-        insertSkipped
+        insertSkipped,
+        source: normalizedSource
       });
 
       await sendFormNotifications({

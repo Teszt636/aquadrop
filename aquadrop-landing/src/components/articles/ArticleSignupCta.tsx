@@ -47,6 +47,7 @@ export function ArticleSignupCta({
     setStatus(null);
 
     try {
+      const trimmedSource = source?.trim();
       const response = await fetch('/api/forms/submit', {
         method: 'POST',
         headers: {
@@ -58,7 +59,8 @@ export function ArticleSignupCta({
             name: trimmedName,
             email: trimmedEmail,
             phone: null,
-            consent: true
+            consent: true,
+            ...(trimmedSource ? { source: trimmedSource } : {})
           }
         })
       });
@@ -95,66 +97,86 @@ export function ArticleSignupCta({
           <p className="mt-3 text-sm leading-6 text-slate-700 md:text-base">{description}</p>
         </div>
 
-        <form className="space-y-3" onSubmit={handleSubmit} noValidate>
-          <div>
-            <label className="sr-only" htmlFor={`article-signup-name-${source ?? 'default'}`}>
-              Név
-            </label>
-            <input
-              className="w-full rounded-xl border border-cyan-100 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
-              id={`article-signup-name-${source ?? 'default'}`}
-              name="name"
-              placeholder="Név"
-              required
-              type="text"
-              value={formState.name}
-              onChange={(event) => setFormState((previous) => ({ ...previous, name: event.target.value }))}
-              disabled={isSubmitting}
-            />
+        {status === 'success' ? (
+          <div className="rounded-2xl border border-emerald-200 bg-emerald-50/80 p-5 text-emerald-950 shadow-sm">
+            <div className="flex items-start gap-3">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-base font-extrabold text-white">
+                ✓
+              </div>
+              <div>
+                <p className="text-base font-extrabold">Sikeres feliratkozás</p>
+                <p className="mt-2 text-sm leading-6 text-emerald-900">
+                  Köszönjük, feliratkoztál az Aquadrop mosási tippjeire. Értesítünk az újdonságokról,
+                  promóciókról és hasznos útmutatókról.
+                </p>
+                <p className="mt-3 text-sm font-semibold text-emerald-800">
+                  Addig is böngéssz tovább a kapcsolódó útmutatók között.
+                </p>
+              </div>
+            </div>
           </div>
+        ) : (
+          <form className="space-y-3" onSubmit={handleSubmit} noValidate>
+            <div>
+              <label className="sr-only" htmlFor={`article-signup-name-${source ?? 'default'}`}>
+                Név
+              </label>
+              <input
+                className="w-full rounded-xl border border-cyan-100 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
+                id={`article-signup-name-${source ?? 'default'}`}
+                name="name"
+                placeholder="Név"
+                required
+                type="text"
+                value={formState.name}
+                onChange={(event) => setFormState((previous) => ({ ...previous, name: event.target.value }))}
+                disabled={isSubmitting}
+              />
+            </div>
 
-          <div>
-            <label className="sr-only" htmlFor={`article-signup-email-${source ?? 'default'}`}>
-              Email
-            </label>
-            <input
-              className="w-full rounded-xl border border-cyan-100 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
-              id={`article-signup-email-${source ?? 'default'}`}
-              name="email"
-              placeholder="Email"
-              required
-              type="email"
-              value={formState.email}
-              onChange={(event) => setFormState((previous) => ({ ...previous, email: event.target.value }))}
+            <div>
+              <label className="sr-only" htmlFor={`article-signup-email-${source ?? 'default'}`}>
+                Email
+              </label>
+              <input
+                className="w-full rounded-xl border border-cyan-100 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
+                id={`article-signup-email-${source ?? 'default'}`}
+                name="email"
+                placeholder="Email"
+                required
+                type="email"
+                value={formState.email}
+                onChange={(event) => setFormState((previous) => ({ ...previous, email: event.target.value }))}
+                disabled={isSubmitting}
+              />
+            </div>
+
+            <button
+              className="inline-flex w-full items-center justify-center rounded-xl bg-cyan-700 px-5 py-3 text-sm font-bold text-white shadow-md transition hover:bg-cyan-800 disabled:cursor-not-allowed disabled:opacity-60"
+              type="submit"
               disabled={isSubmitting}
-            />
-          </div>
+            >
+              {isSubmitting ? 'Küldés...' : 'Feliratkozom'}
+            </button>
 
-          <button
-            className="inline-flex w-full items-center justify-center rounded-xl bg-cyan-700 px-5 py-3 text-sm font-bold text-white shadow-md transition hover:bg-cyan-800 disabled:cursor-not-allowed disabled:opacity-60"
-            type="submit"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? 'Küldés...' : 'Feliratkozom'}
-          </button>
+            {status === 'error' ? (
+              <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold leading-5 text-red-700">
+                Nem sikerült a feliratkozás. Kérjük, próbáld újra később.
+              </p>
+            ) : null}
 
-          {status === 'success' ? (
-            <p className="text-sm font-semibold text-cyan-800">Köszönjük, sikeresen feliratkoztál.</p>
-          ) : null}
-          {status === 'error' ? (
-            <p className="text-sm font-semibold text-red-600">
-              Nem sikerült a feliratkozás. Kérjük, próbáld újra később.
+            <p className="text-xs leading-5 text-slate-600">
+              A feliratkozással elfogadod az{' '}
+              <Link
+                className="font-semibold text-cyan-800 underline-offset-4 hover:underline"
+                href="/adatvedelmi-tajekoztato"
+              >
+                adatvédelmi tájékoztatót
+              </Link>
+              . Bármikor leiratkozhatsz.
             </p>
-          ) : null}
-
-          <p className="text-xs leading-5 text-slate-600">
-            A feliratkozással elfogadod az{' '}
-            <Link className="font-semibold text-cyan-800 underline-offset-4 hover:underline" href="/adatvedelmi-tajekoztato">
-              adatvédelmi tájékoztatót
-            </Link>
-            . Bármikor leiratkozhatsz.
-          </p>
-        </form>
+          </form>
+        )}
       </div>
     </section>
   );
