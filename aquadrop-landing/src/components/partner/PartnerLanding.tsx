@@ -364,7 +364,7 @@ export function PartnerLanding() {
           <div className="mt-8 rounded-2xl border border-cyan-200/40 bg-cyan-200/15 p-5 shadow-[0_20px_38px_-34px_rgba(34,211,238,0.78)] backdrop-blur-xl md:flex md:items-center md:justify-between md:gap-8 md:p-7">
             <div>
               <h3 className="text-xl font-semibold text-white">Érdekel a viszonteladói együttműködés?</h3>
-              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-200 md:text-base">
+              <p className="mt-2 max-w-2xl text-base leading-7 text-slate-200">
                 Kérj partneri egyeztetést, és nézzük meg, hogyan illeszthető az Aquadrop Expert Pro a kínálatodba.
               </p>
             </div>
