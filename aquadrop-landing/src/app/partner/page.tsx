@@ -4,9 +4,9 @@ import { FooterSection } from '@/components/sections';
 import { PartnerBrochureFlipbook, PartnerLanding } from '@/components/partner';
 
 export const metadata: Metadata = {
-  title: 'Prémium viszonteladói partnerprogram | Aquadrop',
+  title: 'Mosókapszula viszonteladóknak | Aquadrop partnerprogram',
   description:
-    'Aquadrop B2B partner oldal viszonteladóknak: kevesebb reklamáció, elégedettebb vevők, könnyebb értékesítés. Jelentkezz partneri egyeztetésre.',
+    'Prémium mosókapszula viszonteladóknak: erős termékpozíció, könnyen kommunikálható előnyök, értékesítési támogatás és partneri együttműködés az Aquadropnál.',
   alternates: {
     canonical: 'https://www.aquadrop.hu/partner',
   },
@@ -14,9 +14,9 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'hu_HU',
     siteName: 'Aquadrop',
-    title: 'Prémium viszonteladói partnerprogram | Aquadrop',
+    title: 'Mosókapszula viszonteladóknak | Aquadrop',
     description:
-      'Kevesebb reklamáció. Elégedettebb vevők. Könnyebb értékesítés. Ismerd meg az Aquadrop partnerprogramot.',
+      'Prémium 4 az 1-ben mosókapszula viszonteladóknak, üzleti fókuszú partnerprogrammal, értékesítési támogatással és könnyen kommunikálható termékelőnyökkel.',
     url: 'https://www.aquadrop.hu/partner',
     images: [
       {
@@ -29,9 +29,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Prémium viszonteladói partnerprogram | Aquadrop',
+    title: 'Mosókapszula viszonteladóknak | Aquadrop',
     description:
-      'Aquadrop B2B partner oldal viszonteladóknak: kevesebb reklamáció, elégedettebb vevők, könnyebb értékesítés. Jelentkezz partneri egyeztetésre.',
+      'Prémium 4 az 1-ben mosókapszula viszonteladóknak, üzleti fókuszú partnerprogrammal, értékesítési támogatással és könnyen kommunikálható termékelőnyökkel.',
     images: ['https://www.aquadrop.hu/aquadrop-mosokapszula-og-kep.webp'],
   },
 };
@@ -51,9 +51,9 @@ export default function PartnerPage() {
         '@type': 'WebPage',
         '@id': 'https://www.aquadrop.hu/partner/#webpage',
         url: 'https://www.aquadrop.hu/partner',
-        name: 'Prémium viszonteladói partnerprogram | Aquadrop',
+        name: 'Mosókapszula viszonteladóknak | Aquadrop partnerprogram',
         description:
-          'B2B landing oldal viszonteladóknak, konkrét reklamáció-csökkentési és értékesítéstámogatási fókuszú ajánlattal.',
+          'Aquadrop B2B partner oldal mosókapszula viszonteladóknak, prémium termékpozicionálással, értékesítési támogatással és gyakorlati viszonteladói információkkal.',
         inLanguage: 'hu-HU',
         isPartOf: {
           '@id': 'https://www.aquadrop.hu/#website'
