@@ -323,8 +323,9 @@ export function PartnerLanding() {
                 </p>
                 <p>
                   Ezért az Aquadrop kommunikációja gyakorlati előnyökre épül. A 20-30°C-os mosás támogatása, a megfelelő
-                  programidő hangsúlyozása, a 4 az 1-ben hatás és a prémium illatélmény mind olyan üzenet, amelyet egy
-                  viszonteladó könnyen be tud építeni a saját értékesítési folyamataiba.
+                  használat és a legalább 18 perces programidő hangsúlyozása segít elmagyarázni, hogyan csökkenthető a
+                  kapszulamaradék kockázata. A 4 az 1-ben hatás és a prémium illatélmény szintén olyan üzenet, amelyet
+                  egy viszonteladó könnyen be tud építeni a saját értékesítési folyamataiba.
                 </p>
               </div>
             </article>
@@ -359,6 +360,81 @@ export function PartnerLanding() {
                 </p>
               </div>
             </article>
+          </div>
+
+          <div className="mt-12">
+            <div className="max-w-5xl">
+              <h3 className="text-2xl font-semibold text-white md:text-3xl">
+                Gyakorlati útmutató mosókapszula viszonteladóknak
+              </h3>
+              <p className="mt-4 max-w-4xl text-base leading-7 text-slate-200 md:text-lg md:leading-8">
+                A sikeres viszonteladói értékesítés nemcsak a jó terméken múlik. Fontos a megfelelő kategóriázás, az
+                érthető vásárlói kommunikáció, a kiszerelés, a raktározás és az is, hogy a partner gyorsan el tudja
+                magyarázni, miért érdemes prémium mosókapszulát választani.
+              </p>
+            </div>
+
+            <div className="mt-8 grid gap-4 md:grid-cols-3">
+              <article className="rounded-2xl border border-white/15 bg-white/[0.08] p-6 shadow-xl shadow-black/25 backdrop-blur-xl [&_p]:text-slate-200 [&_p]:leading-7">
+                <h4 className="text-lg font-semibold text-slate-50">Termékkategóriák és vásárlói igények</h4>
+                <div className="mt-5 space-y-5 text-base">
+                  <p>
+                    A vásárlók eltérő szempontok alapján keresnek mosószert. Van, akinek az egyszerű adagolás fontos,
+                    más a kellemes illatot, az alacsony hőfokú mosást, a színes ruhák védelmét vagy az érzékenyebb
+                    textíliák kíméletes kezelését keresi. Egy viszonteladónak ezért érdemes nemcsak terméket, hanem
+                    érthető választási szempontokat is adnia.
+                  </p>
+                  <p>
+                    Az Aquadrop Expert Pro kommunikációja ebben segít: a 4 az 1-ben hatás, a praktikus használat, a
+                    prémium illatélmény és az alacsony hőfokú mosás támogatása könnyen beépíthető bolti ajánlásba,
+                    webshopos termékleírásba vagy értékesítési kampányba.
+                  </p>
+                </div>
+              </article>
+
+              <article className="rounded-2xl border border-white/15 bg-white/[0.08] p-6 shadow-xl shadow-black/25 backdrop-blur-xl [&_p]:text-slate-200 [&_p]:leading-7">
+                <h4 className="text-lg font-semibold text-slate-50">Kiszerelés, raktározás és szállítás</h4>
+                <div className="mt-5 space-y-5 text-base">
+                  <p>
+                    A mosókapszula viszonteladóknak logisztikai szempontból is kedvező kategória lehet, mert kompakt,
+                    jól tervezhető és könnyen készletezhető. A tárolásnál ugyanakkor fontos a száraz, hűvös környezet,
+                    a nedvességtől való védelem és a gyermekektől elzárt elhelyezés.
+                  </p>
+                  <p>
+                    A partneri működésben az is számít, hogy a termék kiszerelése, csomagolása és szállíthatósága
+                    illeszkedjen a bolti vagy online értékesítéshez. Egy jól kommunikálható prémium termék kevesebb
+                    magyarázatot igényel, miközben nagyobb bizalmat építhet a vásárlóban.
+                  </p>
+                </div>
+              </article>
+
+              <article className="rounded-2xl border border-white/15 bg-white/[0.08] p-6 shadow-xl shadow-black/25 backdrop-blur-xl [&_p]:text-slate-200 [&_p]:leading-7">
+                <h4 className="text-lg font-semibold text-slate-50">Webshopos és bolti értékesítési logika</h4>
+                <div className="mt-5 space-y-5 text-base">
+                  <p>
+                    Webshopban érdemes külön figyelni a kategóriákra, a termékelőnyök rövid megfogalmazására és a
+                    gyakori vásárlói kérdések megválaszolására. A vevő gyorsan szeretné látni, mire való a termék,
+                    hogyan kell használni, milyen hőfokon ajánlott, és milyen előnyt kap a hagyományos mosószerekhez
+                    képest.
+                  </p>
+                  <p>
+                    Bolti értékesítésnél a polci megjelenés, a rövid ajánlószöveg és az eladói edukáció kap nagyobb
+                    szerepet. Az Aquadrop partnerprogram célja, hogy a viszonteladó ne egyedül találja ki ezeket az
+                    üzeneteket, hanem használható termékelőnyökkel és kommunikációs alapokkal dolgozhasson.
+                  </p>
+                </div>
+              </article>
+            </div>
+
+            <aside className="mt-6 rounded-2xl border border-cyan-200/30 bg-cyan-200/10 p-5 shadow-[0_18px_34px_-32px_rgba(34,211,238,0.72)] backdrop-blur-xl md:p-6">
+              <h4 className="text-lg font-semibold text-white">Gyors válasz viszonteladóknak</h4>
+              <p className="mt-3 text-base leading-7 text-slate-100">
+                A mosókapszula viszonteladóknak akkor lehet jó választás, ha a termék könnyen magyarázható, jól
+                készletezhető, erős vásárlói előnyt ad, és támogatja a prémium értékesítési pozíciót. Az Aquadrop
+                Expert Pro ezt 4 az 1-ben hatással, alacsony hőfokú mosási kommunikációval és partneri értékesítési
+                támogatással segíti.
+              </p>
+            </aside>
           </div>
 
           <div className="mt-8 rounded-2xl border border-cyan-200/40 bg-cyan-200/15 p-5 shadow-[0_20px_38px_-34px_rgba(34,211,238,0.78)] backdrop-blur-xl md:flex md:items-center md:justify-between md:gap-8 md:p-7">

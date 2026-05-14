@@ -6,7 +6,7 @@ import { PartnerBrochureFlipbook, PartnerLanding } from '@/components/partner';
 export const metadata: Metadata = {
   title: 'Mosókapszula viszonteladóknak | Aquadrop partnerprogram',
   description:
-    'Prémium mosókapszula viszonteladóknak: erős termékpozíció, könnyen kommunikálható előnyök, értékesítési támogatás és partneri együttműködés az Aquadropnál.',
+    'Prémium mosókapszula viszonteladóknak: erős termékpozíció, könnyen kommunikálható előnyök, értékesítési támogatás, raktározási és webshopos értékesítési szempontok.',
   alternates: {
     canonical: 'https://www.aquadrop.hu/partner',
   },
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     siteName: 'Aquadrop',
     title: 'Mosókapszula viszonteladóknak | Aquadrop',
     description:
-      'Prémium 4 az 1-ben mosókapszula viszonteladóknak, üzleti fókuszú partnerprogrammal, értékesítési támogatással és könnyen kommunikálható termékelőnyökkel.',
+      'Aquadrop partnerprogram viszonteladóknak: prémium mosókapszula, értékesítési támogatás, könnyen kommunikálható termékelőnyök és gyakorlati B2B szempontok.',
     url: 'https://www.aquadrop.hu/partner',
     images: [
       {
