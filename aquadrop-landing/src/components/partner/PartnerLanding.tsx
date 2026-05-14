@@ -261,12 +261,12 @@ export function PartnerLanding() {
 
       <section className="border-y border-white/10 bg-slate-950 px-5 py-14 sm:px-6 md:px-10 md:py-20">
         <div className="mx-auto w-full max-w-6xl">
-          <div className="max-w-6xl">
+          <div className="max-w-5xl">
             <p className="text-sm font-medium uppercase tracking-wide text-cyan-200">Viszonteladói szempontok</p>
             <h2 className="mt-2 text-2xl font-semibold text-white md:text-4xl">
               Mosókapszula viszonteladóknak: mire figyel egy jó partner?
             </h2>
-            <div className="mt-5 max-w-5xl space-y-4 text-base leading-7 text-slate-100 sm:text-lg sm:leading-8">
+            <div className="mt-5 space-y-4 text-base leading-8 text-slate-200 sm:text-lg sm:leading-8 [&_p]:text-slate-200 [&_p]:leading-8">
               <p>
                 A mosókapszula ma már nemcsak kényelmi termék, hanem önálló értékesítési kategória. A vásárlók gyors,
                 pontosan adagolható és megbízható megoldást keresnek, a kereskedők számára pedig az számít, hogy a termék
@@ -281,9 +281,9 @@ export function PartnerLanding() {
           </div>
 
           <div className="mt-10 grid gap-4 md:grid-cols-2">
-            <article className="rounded-2xl border border-white/15 bg-white/[0.09] p-5 shadow-lg shadow-black/25 backdrop-blur-xl transition hover:border-cyan-300/40 hover:bg-white/[0.11] md:p-7">
-              <h3 className="text-base font-semibold text-slate-50 sm:text-lg">Miért lehet jó üzlet a mosókapszula viszonteladóknak?</h3>
-              <div className="mt-4 space-y-4 text-sm leading-6 text-slate-100">
+            <article className="rounded-2xl border border-white/15 bg-white/[0.08] p-6 shadow-xl shadow-black/25 backdrop-blur-xl transition hover:border-cyan-300/40 hover:bg-white/[0.1] md:p-7">
+              <h3 className="text-lg font-semibold text-slate-50">Miért lehet jó üzlet a mosókapszula viszonteladóknak?</h3>
+              <div className="mt-5 space-y-5 text-base leading-7 text-slate-200 [&_p]:text-slate-200 [&_p]:leading-7">
                 <p>
                   A kapszulás mosószerek egyik legnagyobb előnye, hogy a vásárló számára egyszerűen érthetők. Nincs
                   méricskélés, nincs túladagolás, a használat gyors és kényelmes. Ez a bolti és online értékesítésben is
@@ -297,9 +297,9 @@ export function PartnerLanding() {
               </div>
             </article>
 
-            <article className="rounded-2xl border border-white/15 bg-white/[0.09] p-5 shadow-lg shadow-black/25 backdrop-blur-xl transition hover:border-cyan-300/40 hover:bg-white/[0.11] md:p-7">
-              <h3 className="text-base font-semibold text-slate-50 sm:text-lg">Mitől lesz erős egy mosókapszula beszállítói ajánlat?</h3>
-              <div className="mt-4 space-y-4 text-sm leading-6 text-slate-100">
+            <article className="rounded-2xl border border-white/15 bg-white/[0.08] p-6 shadow-xl shadow-black/25 backdrop-blur-xl transition hover:border-cyan-300/40 hover:bg-white/[0.1] md:p-7">
+              <h3 className="text-lg font-semibold text-slate-50">Mitől lesz erős egy mosókapszula beszállítói ajánlat?</h3>
+              <div className="mt-5 space-y-5 text-base leading-7 text-slate-200 [&_p]:text-slate-200 [&_p]:leading-7">
                 <p>
                   Egy viszonteladó számára nem kizárólag a beszerzési ár számít. Legalább ilyen fontos a termékpozíció, a
                   márkaépítés, az elérhető marketinganyagok, a logisztikai kiszámíthatóság és az, hogy a termék milyen
@@ -313,9 +313,9 @@ export function PartnerLanding() {
               </div>
             </article>
 
-            <article className="rounded-2xl border border-white/15 bg-white/[0.09] p-5 shadow-lg shadow-black/25 backdrop-blur-xl transition hover:border-cyan-300/40 hover:bg-white/[0.11] md:p-7">
-              <h3 className="text-base font-semibold text-slate-50 sm:text-lg">Milyen termékelőnyöket keresnek a vásárlók?</h3>
-              <div className="mt-4 space-y-4 text-sm leading-6 text-slate-100">
+            <article className="rounded-2xl border border-white/15 bg-white/[0.08] p-6 shadow-xl shadow-black/25 backdrop-blur-xl transition hover:border-cyan-300/40 hover:bg-white/[0.1] md:p-7">
+              <h3 className="text-lg font-semibold text-slate-50">Milyen termékelőnyöket keresnek a vásárlók?</h3>
+              <div className="mt-5 space-y-5 text-base leading-7 text-slate-200 [&_p]:text-slate-200 [&_p]:leading-7">
                 <p>
                   A vásárlók többsége nem technológiai részleteket keres, hanem egyszerű választ szeretne: tiszta lesz-e a
                   ruha, kellemes lesz-e az illat, nem marad-e kapszulamaradék, használható-e alacsonyabb hőfokon, és megéri-e
@@ -329,9 +329,9 @@ export function PartnerLanding() {
               </div>
             </article>
 
-            <article className="rounded-2xl border border-white/15 bg-white/[0.09] p-5 shadow-lg shadow-black/25 backdrop-blur-xl transition hover:border-cyan-300/40 hover:bg-white/[0.11] md:p-7">
-              <h3 className="text-base font-semibold text-slate-50 sm:text-lg">Hogyan érdemes tárolni és kommunikálni a mosókapszulát?</h3>
-              <div className="mt-4 space-y-4 text-sm leading-6 text-slate-100">
+            <article className="rounded-2xl border border-white/15 bg-white/[0.08] p-6 shadow-xl shadow-black/25 backdrop-blur-xl transition hover:border-cyan-300/40 hover:bg-white/[0.1] md:p-7">
+              <h3 className="text-lg font-semibold text-slate-50">Hogyan érdemes tárolni és kommunikálni a mosókapszulát?</h3>
+              <div className="mt-5 space-y-5 text-base leading-7 text-slate-200 [&_p]:text-slate-200 [&_p]:leading-7">
                 <p>
                   A mosókapszulákat száraz, hűvös helyen, nedvességtől és közvetlen napfénytől védve érdemes tárolni. A
                   vásárlók felé különösen fontos hangsúlyozni, hogy a kapszulákat mindig gyermekektől elzárva kell tartani,
@@ -345,9 +345,9 @@ export function PartnerLanding() {
               </div>
             </article>
 
-            <article className="rounded-2xl border border-white/15 bg-white/[0.09] p-5 shadow-lg shadow-black/25 backdrop-blur-xl transition hover:border-cyan-300/40 hover:bg-white/[0.11] md:col-span-2 md:p-7">
-              <h3 className="text-base font-semibold text-slate-50 sm:text-lg">Kinek ajánlott az Aquadrop partnerprogram?</h3>
-              <div className="mt-4 grid gap-4 text-sm leading-6 text-slate-100 md:grid-cols-2">
+            <article className="rounded-2xl border border-white/15 bg-white/[0.08] p-6 shadow-xl shadow-black/25 backdrop-blur-xl transition hover:border-cyan-300/40 hover:bg-white/[0.1] md:col-span-2 md:p-7">
+              <h3 className="text-lg font-semibold text-slate-50">Kinek ajánlott az Aquadrop partnerprogram?</h3>
+              <div className="mt-5 grid gap-5 text-base leading-7 text-slate-200 md:grid-cols-2 [&_p]:text-slate-200 [&_p]:leading-7">
                 <p>
                   Az Aquadrop partnerprogram azoknak a boltoknak, webáruházaknak és értékesítési partnereknek lehet jó
                   választás, akik prémium mosókapszulát keresnek viszonteladásra, és fontos számukra a jól kommunikálható
