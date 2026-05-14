@@ -259,6 +259,125 @@ export function PartnerLanding() {
         </div>
       </section>
 
+      <section className="border-y border-white/10 bg-slate-950 px-5 py-14 sm:px-6 md:px-10 md:py-20">
+        <div className="mx-auto w-full max-w-6xl">
+          <div className="max-w-5xl">
+            <p className="text-sm font-medium uppercase tracking-wide text-cyan-200">Viszonteladói szempontok</p>
+            <h2 className="mt-2 text-2xl font-semibold text-white md:text-4xl">
+              Mosókapszula viszonteladóknak: mire figyel egy jó partner?
+            </h2>
+            <div className="mt-5 space-y-4 text-base leading-7 text-slate-200 sm:text-lg sm:leading-8">
+              <p>
+                A mosókapszula ma már nemcsak kényelmi termék, hanem önálló értékesítési kategória. A vásárlók gyors,
+                pontosan adagolható és megbízható megoldást keresnek, a kereskedők számára pedig az számít, hogy a termék
+                könnyen elmagyarázható, jól pozicionálható és kevés utólagos panaszt okozzon.
+              </p>
+              <p>
+                Az Aquadrop Expert Pro azoknak a partnereknek készült, akik nem pusztán egy újabb mosószert szeretnének a
+                kínálatukba tenni, hanem olyan prémium mosókapszulát keresnek, amely mögé világos értékesítési történet
+                építhető: 4 az 1-ben hatás, alacsony hőfokú mosás támogatása, praktikus használat és erős márkaélmény.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-10 grid gap-4 md:grid-cols-2">
+            <article className="rounded-2xl border border-white/10 bg-white/[0.06] p-5 shadow-lg shadow-black/20 backdrop-blur-xl transition hover:border-cyan-300/30 hover:bg-white/[0.08] md:p-7">
+              <h3 className="text-base font-semibold text-slate-50 sm:text-lg">Miért lehet jó üzlet a mosókapszula viszonteladóknak?</h3>
+              <div className="mt-4 space-y-4 text-sm leading-6 text-slate-200">
+                <p>
+                  A kapszulás mosószerek egyik legnagyobb előnye, hogy a vásárló számára egyszerűen érthetők. Nincs
+                  méricskélés, nincs túladagolás, a használat gyors és kényelmes. Ez a bolti és online értékesítésben is
+                  előny, mert a termékelőny néhány mondatban átadható.
+                </p>
+                <p>
+                  Viszonteladói oldalról a jó termék nemcsak eladható, hanem csökkenti az utólagos bizonytalanságot is. Ha
+                  a vevő érti, hogyan kell használni a kapszulát, milyen hőfokon működik jól, és milyen programidő mellett
+                  várható a legjobb eredmény, kisebb eséllyel alakul ki félreértés vagy reklamáció.
+                </p>
+              </div>
+            </article>
+
+            <article className="rounded-2xl border border-white/10 bg-white/[0.06] p-5 shadow-lg shadow-black/20 backdrop-blur-xl transition hover:border-cyan-300/30 hover:bg-white/[0.08] md:p-7">
+              <h3 className="text-base font-semibold text-slate-50 sm:text-lg">Mitől lesz erős egy mosókapszula beszállítói ajánlat?</h3>
+              <div className="mt-4 space-y-4 text-sm leading-6 text-slate-200">
+                <p>
+                  Egy viszonteladó számára nem kizárólag a beszerzési ár számít. Legalább ilyen fontos a termékpozíció, a
+                  márkaépítés, az elérhető marketinganyagok, a logisztikai kiszámíthatóság és az, hogy a termék milyen
+                  választ ad a vásárlók valódi problémáira.
+                </p>
+                <p>
+                  Az Aquadrop partneri ajánlata erre épül: prémium megjelenés, egyértelmű kommunikáció, edukációs tartalmak
+                  és olyan termékelőnyök, amelyeket a vásárló is könnyen megért. Ez különösen fontos azoknál a kereskedőknél,
+                  akik nem árversenyben, hanem értékalapú értékesítésben gondolkodnak.
+                </p>
+              </div>
+            </article>
+
+            <article className="rounded-2xl border border-white/10 bg-white/[0.06] p-5 shadow-lg shadow-black/20 backdrop-blur-xl transition hover:border-cyan-300/30 hover:bg-white/[0.08] md:p-7">
+              <h3 className="text-base font-semibold text-slate-50 sm:text-lg">Milyen termékelőnyöket keresnek a vásárlók?</h3>
+              <div className="mt-4 space-y-4 text-sm leading-6 text-slate-200">
+                <p>
+                  A vásárlók többsége nem technológiai részleteket keres, hanem egyszerű választ szeretne: tiszta lesz-e a
+                  ruha, kellemes lesz-e az illat, nem marad-e kapszulamaradék, használható-e alacsonyabb hőfokon, és megéri-e
+                  az árát.
+                </p>
+                <p>
+                  Ezért az Aquadrop kommunikációja gyakorlati előnyökre épül. A 20-30°C-os mosás támogatása, a megfelelő
+                  programidő hangsúlyozása, a 4 az 1-ben hatás és a prémium illatélmény mind olyan üzenet, amelyet egy
+                  viszonteladó könnyen be tud építeni a saját értékesítési folyamataiba.
+                </p>
+              </div>
+            </article>
+
+            <article className="rounded-2xl border border-white/10 bg-white/[0.06] p-5 shadow-lg shadow-black/20 backdrop-blur-xl transition hover:border-cyan-300/30 hover:bg-white/[0.08] md:p-7">
+              <h3 className="text-base font-semibold text-slate-50 sm:text-lg">Hogyan érdemes tárolni és kommunikálni a mosókapszulát?</h3>
+              <div className="mt-4 space-y-4 text-sm leading-6 text-slate-200">
+                <p>
+                  A mosókapszulákat száraz, hűvös helyen, nedvességtől és közvetlen napfénytől védve érdemes tárolni. A
+                  vásárlók felé különösen fontos hangsúlyozni, hogy a kapszulákat mindig gyermekektől elzárva kell tartani,
+                  lehetőség szerint zárható dobozban.
+                </p>
+                <p>
+                  Ez nemcsak biztonsági kérdés, hanem bizalomépítési pont is. Egy felelős viszonteladó nemcsak eladja a
+                  terméket, hanem segít a helyes használatban is. Az ilyen edukáció hosszabb távon erősíti a vásárlói
+                  elégedettséget és az újravásárlási arányt.
+                </p>
+              </div>
+            </article>
+
+            <article className="rounded-2xl border border-white/10 bg-white/[0.06] p-5 shadow-lg shadow-black/20 backdrop-blur-xl transition hover:border-cyan-300/30 hover:bg-white/[0.08] md:col-span-2 md:p-7">
+              <h3 className="text-base font-semibold text-slate-50 sm:text-lg">Kinek ajánlott az Aquadrop partnerprogram?</h3>
+              <div className="mt-4 grid gap-4 text-sm leading-6 text-slate-200 md:grid-cols-2">
+                <p>
+                  Az Aquadrop partnerprogram azoknak a boltoknak, webáruházaknak és értékesítési partnereknek lehet jó
+                  választás, akik prémium mosókapszulát keresnek viszonteladásra, és fontos számukra a jól kommunikálható
+                  termékelőny, az igényes márkamegjelenés és a hosszú távon építhető vásárlói bizalom.
+                </p>
+                <p>
+                  A cél nem az, hogy egy újabb átlagos mosószer kerüljön a polcra. A cél az, hogy a partner olyan terméket
+                  kapjon, amely mögött erős történet, gyakorlati előny és támogatható értékesítési logika áll.
+                </p>
+              </div>
+            </article>
+          </div>
+
+          <div className="mt-8 rounded-2xl border border-cyan-200/25 bg-cyan-200/10 p-5 shadow-[0_20px_38px_-34px_rgba(34,211,238,0.68)] backdrop-blur-xl md:flex md:items-center md:justify-between md:gap-8 md:p-7">
+            <div>
+              <h3 className="text-xl font-semibold text-white">Érdekel a viszonteladói együttműködés?</h3>
+              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-200 md:text-base">
+                Kérj partneri egyeztetést, és nézzük meg, hogyan illeszthető az Aquadrop Expert Pro a kínálatodba.
+              </p>
+            </div>
+            <a
+              href="#jelentkezes"
+              className="mt-5 inline-flex h-12 w-full items-center justify-center rounded-xl bg-gradient-to-r from-cyan-300 via-cyan-400 to-sky-400 px-6 text-sm font-semibold text-slate-950 shadow-[0_12px_22px_-16px_rgba(34,211,238,0.74)] transition hover:from-cyan-200 hover:to-sky-300 md:mt-0 md:w-auto"
+            >
+              Partneri egyeztetést kérek
+            </a>
+          </div>
+        </div>
+      </section>
+
       <section className="px-5 py-14 sm:px-6 md:px-10 md:py-20">
         <div className="mx-auto grid w-full max-w-6xl gap-8 lg:items-stretch lg:grid-cols-[1.15fr_0.85fr]">
           <article className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 via-white/5 to-slate-950/55 p-6 shadow-[0_24px_42px_-36px_rgba(14,116,144,0.58)] backdrop-blur-xl md:p-8 lg:flex lg:h-full lg:flex-col lg:justify-between">
