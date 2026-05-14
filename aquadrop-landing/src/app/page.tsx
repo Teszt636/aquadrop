@@ -3,16 +3,16 @@ import dynamic from 'next/dynamic';
 import { SITE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: 'Prémium mosókapszula alacsony hőfokra | Aquadrop Expert Pro',
+  title: 'Aquadrop Expert Pro mosókapszula | Prémium 4 az 1-ben mosás',
   description:
-    'Prémium Aquadrop mosókapszula friss illattal, kényelmes adagolással és alacsony hőfokú mosáshoz is praktikus használattal.',
+    'Prémium 4 az 1-ben mosókapszula alacsonyabb hőfokú mosáshoz, friss illatélménnyel, egyszerű adagolással és tudatos mosási útmutatóval.',
   alternates: {
     canonical: `${SITE_URL}/`,
   },
   openGraph: {
-    title: 'Prémium mosókapszula alacsony hőfokú mosáshoz | Aquadrop',
+    title: 'Aquadrop Expert Pro mosókapszula',
     description:
-      'Az Aquadrop Expert Pro kényelmes, előre adagolt mosókapszula friss illattal, modern formulával és 2+1 ajándék promócióval.',
+      'Ismerd meg az Aquadrop Expert Pro 4 az 1-ben mosókapszulát: prémium illat, praktikus használat, alacsonyabb hőfokú mosás és tiszta, friss ruhák.',
     url: `${SITE_URL}/`,
     siteName: 'Aquadrop Expert Pro',
     images: [
@@ -28,9 +28,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Prémium mosókapszula alacsony hőfokra | Aquadrop',
+    title: 'Aquadrop Expert Pro mosókapszula',
     description:
-      'Fedezd fel az Aquadrop Expert Pro mosókapszulát: kényelmes adagolás, friss illat és tudatosabb mosási rutin.',
+      'Fedezd fel az Aquadrop Expert Pro 4 az 1-ben mosókapszulát: prémium illat, kényelmes adagolás és tudatosabb mosási rutin.',
     images: ['/aquadrop-mosokapszula-og-kep.webp']
   }
 };
@@ -45,6 +45,7 @@ import {
   GiftConversionSection,
   HeroSection,
   HeroTrustStripSection,
+  LaundryCapsuleGuideSection,
   MicrocapsuleMagicSection,
   ProblemSection,
   SeoSection,
@@ -118,7 +119,11 @@ export default function Home() {
         '@type': 'WebPage',
         '@id': 'https://www.aquadrop.hu/#webpage',
         url: 'https://www.aquadrop.hu/',
-        name: 'Mosókapszula – Aquadrop Expert Pro | 2+1 ajándék kapszula',
+        name: 'Aquadrop Expert Pro mosókapszula | Prémium 4 az 1-ben mosás',
+        description:
+          'Aquadrop Expert Pro 4 az 1-ben mosókapszula alacsonyabb hőfokú mosáshoz, prémium mosási élménnyel és tudatos használati útmutatóval.',
+        keywords:
+          'Aquadrop Expert Pro, mosókapszula, 4 az 1-ben, alacsonyabb hőfokú mosás, prémium mosási élmény',
         isPartOf: {
           '@id': 'https://www.aquadrop.hu/#website'
         },
@@ -184,6 +189,7 @@ export default function Home() {
           <HomeKnowledgeHub />
           <GiftSectionDynamic />
           <ProblemSection />
+          <LaundryCapsuleGuideSection />
           <BenefitsSection />
           <TechnologySection />
           <MicrocapsuleMagicSection />
