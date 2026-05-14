@@ -24,3 +24,5 @@ export * from './EnergySavingsSection';
 export * from './PartnerMediaKitSection';
 
 export * from './HeroTrustStripSection';
+
+export * from './LaundryCapsuleGuideSection';
