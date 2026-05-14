@@ -76,6 +76,10 @@ npm run start
 
 The app uses the REST endpoints (`/rest/v1`) for table inserts and Storage (`/storage/v1`) for receipt file uploads.
 
+### Supabase Data API grants
+
+When creating a new table in the `public` schema, add explicit grants for the roles that need Data API access. If a Next.js API route uses the table through `/rest/v1` with `SUPABASE_SERVICE_ROLE_KEY`, grant the required table privileges to `service_role`. Only grant `anon` or `authenticated` access when client-side Supabase access is intentionally required. RLS is still a separate required security layer and must be designed for each table.
+
 ## 6) How to create the database tables
 
 1. Open your Supabase dashboard.
