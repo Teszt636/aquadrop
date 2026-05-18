@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
+import { JsonLd } from '@/components/JsonLd';
 import { SITE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
@@ -102,26 +103,29 @@ export default function Home() {
       {
         '@type': 'Organization',
         '@id': 'https://www.aquadrop.hu/#organization',
-        name: 'Aquadrop',
+        name: 'Aquadrop Expert Pro',
         url: `${SITE_URL}/`,
-        logo: 'https://www.aquadrop.hu/logo.png'
+        logo: `${SITE_URL}/logo.png`,
+        description:
+          'Az Aquadrop Expert Pro prémium 4 az 1-ben mosókapszula márka, amely az energiatakarékos, alacsony hőfokú és kényelmes mosást támogatja.'
       },
       {
         '@type': 'WebSite',
         '@id': 'https://www.aquadrop.hu/#website',
         url: `${SITE_URL}/`,
-        name: 'Aquadrop',
+        name: 'Aquadrop Expert Pro',
         publisher: {
           '@id': 'https://www.aquadrop.hu/#organization'
-        }
+        },
+        inLanguage: 'hu-HU'
       },
       {
         '@type': 'WebPage',
         '@id': 'https://www.aquadrop.hu/#webpage',
-        url: 'https://www.aquadrop.hu/',
-        name: 'Aquadrop Expert Pro mosókapszula | Prémium 4 az 1-ben mosás',
-        description:
-          'Aquadrop Expert Pro 4 az 1-ben mosókapszula alacsonyabb hőfokú mosáshoz, prémium mosási élménnyel és tudatos használati útmutatóval.',
+        url: `${SITE_URL}/`,
+        name: 'Aquadrop Expert Pro mosókapszula',
+        description: 'Prémium 4 az 1-ben mosókapszula energiatakarékos, alacsony hőfokú mosáshoz.',
+        image: `${SITE_URL}/aquadrop-mosokapszula-og-kep.webp`,
         keywords:
           'Aquadrop Expert Pro, mosókapszula, 4 az 1-ben, alacsonyabb hőfokú mosás, prémium mosási élmény',
         isPartOf: {
@@ -129,7 +133,22 @@ export default function Home() {
         },
         about: {
           '@id': 'https://www.aquadrop.hu/#organization'
-        }
+        },
+        inLanguage: 'hu-HU',
+        datePublished: '2026-04-15',
+        dateModified: '2026-05-18'
+      },
+      {
+        '@type': 'BreadcrumbList',
+        '@id': 'https://www.aquadrop.hu/#breadcrumb',
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Főoldal',
+            item: `${SITE_URL}/`
+          }
+        ]
       },
       {
         '@type': 'FAQPage',
@@ -148,10 +167,7 @@ export default function Home() {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(homeStructuredData) }}
-      />
+      <JsonLd data={homeStructuredData} />
       <div className="relative w-full overflow-x-clip bg-gradient-to-b from-cyan-50 via-sky-50 to-teal-50">
         <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(245,255,255,0.92)_0%,rgba(232,250,252,0.9)_50%,rgba(225,247,246,0.94)_100%)]" />

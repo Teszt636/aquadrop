@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ArticleSignupCta } from '@/components/articles/ArticleSignupCta';
 import { ButtonLink } from '@/components/ui';
 import { ArticleLayout } from '@/components/article/ArticleLayout';
+import { JsonLd } from '@/components/JsonLd';
 import { RelatedGuides } from '@/components/RelatedGuides';
 
 const articleTitle = 'Mosókapszula használata: hova kell tenni és mennyit használj?';
@@ -14,7 +15,7 @@ const articleDescription =
   'Ismerd meg a mosókapszula helyes használatát: hova kell tenni, mennyit érdemes használni, és mire figyelj a legjobb mosási eredmény érdekében.';
 const articleUrl = 'https://www.aquadrop.hu/mosokapszula-hasznalata';
 const publishedDate = '2026-04-22';
-const modifiedDate = '2026-04-22';
+const modifiedDate = '2026-05-18';
 const heroImageUrl = 'https://www.aquadrop.hu/mosokapszula-hasznalata.webp';
 const heroImageWidth = 1731;
 const heroImageHeight = 909;
@@ -103,6 +104,8 @@ export default function MosokapszulaHasznalataPage() {
     '@type': 'BlogPosting',
     headline: articleTitle,
     description: articleDescription,
+    url: articleUrl,
+    inLanguage: 'hu-HU',
     image: {
       '@type': 'ImageObject',
       url: heroImageUrl,
@@ -111,12 +114,12 @@ export default function MosokapszulaHasznalataPage() {
     },
     author: {
       '@type': 'Organization',
-      name: 'Aquadrop',
+      name: 'Aquadrop Expert Pro',
       url: 'https://www.aquadrop.hu/'
     },
     publisher: {
       '@type': 'Organization',
-      name: 'Aquadrop',
+      name: 'Aquadrop Expert Pro',
       logo: {
         '@type': 'ImageObject',
         url: 'https://www.aquadrop.hu/logo.png',
@@ -143,10 +146,7 @@ export default function MosokapszulaHasznalataPage() {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+      <JsonLd data={{
             '@context': 'https://schema.org',
             '@graph': [
               blogPostingStructuredData,
@@ -160,9 +160,7 @@ export default function MosokapszulaHasznalataPage() {
               },
               breadcrumbStructuredData
             ]
-          })
-        }}
-      />
+          }} />
 
       <ArticleLayout
         slug="mosokapszula-hasznalata"

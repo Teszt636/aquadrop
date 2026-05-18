@@ -4,6 +4,7 @@ import Link from 'next/link';
 
 import { ArticleSignupCta } from '@/components/articles/ArticleSignupCta';
 import { ArticleLayout } from '@/components/article/ArticleLayout';
+import { JsonLd } from '@/components/JsonLd';
 import { RelatedGuides } from '@/components/RelatedGuides';
 import { ButtonLink } from '@/components/ui';
 
@@ -14,7 +15,7 @@ const articleDescription =
   'Energiatakarékos mosás 20–30°C-on: kevesebb villanyszámla, tiszta ruhák. Tippek, amikkel valóban működik alacsony hőfokon is.';
 const articleUrl = 'https://www.aquadrop.hu/energiatakarekos-mosas';
 const publishedDate = '2026-04-23';
-const modifiedDate = '2026-04-23';
+const modifiedDate = '2026-05-18';
 const heroImageUrl = 'https://www.aquadrop.hu/energiatakarekos-mosas-aquadrop-expert-pro.webp';
 const socialImageUrl = 'https://www.aquadrop.hu/og/energiatakarekos-mosas-aquadrop-og.webp';
 const heroImageWidth = 1536;
@@ -110,6 +111,8 @@ export default function EnergiatakarekosMosasPage() {
     '@type': 'BlogPosting',
     headline: articleTitle,
     description: articleDescription,
+    url: articleUrl,
+    inLanguage: 'hu-HU',
     image: {
       '@type': 'ImageObject',
       url: heroImageUrl,
@@ -118,12 +121,12 @@ export default function EnergiatakarekosMosasPage() {
     },
     author: {
       '@type': 'Organization',
-      name: 'Aquadrop',
+      name: 'Aquadrop Expert Pro',
       url: 'https://www.aquadrop.hu/'
     },
     publisher: {
       '@type': 'Organization',
-      name: 'Aquadrop',
+      name: 'Aquadrop Expert Pro',
       logo: {
         '@type': 'ImageObject',
         url: 'https://www.aquadrop.hu/logo.png',
@@ -182,10 +185,7 @@ export default function EnergiatakarekosMosasPage() {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
+      <JsonLd data={structuredData} />
 
       <ArticleLayout
         slug="energiatakarekos-mosas"

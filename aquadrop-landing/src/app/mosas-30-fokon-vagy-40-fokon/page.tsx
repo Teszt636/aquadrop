@@ -4,6 +4,7 @@ import Link from 'next/link';
 
 import { ArticleSignupCta } from '@/components/articles/ArticleSignupCta';
 import { ArticleLayout } from '@/components/article/ArticleLayout';
+import { JsonLd } from '@/components/JsonLd';
 import { RelatedGuides } from '@/components/RelatedGuides';
 import { ButtonLink } from '@/components/ui';
 
@@ -13,7 +14,7 @@ const articleDescription =
   'Gyakorlati útmutató a 30 és 40 fokos mosás közötti választáshoz: mikor elég az alacsonyabb hőfok, mikor kell magasabb hőmérséklet, és hogyan kapcsolódik mindez a mosási költségekhez.';
 const articleUrl = 'https://www.aquadrop.hu/mosas-30-fokon-vagy-40-fokon';
 const publishedDate = '2026-05-06';
-const modifiedDate = '2026-05-06';
+const modifiedDate = '2026-05-18';
 const heroImageUrl = 'https://www.aquadrop.hu/energiatakarekos-mosas-aquadrop-expert-pro.webp';
 const heroImageWidth = 1600;
 const heroImageHeight = 900;
@@ -97,6 +98,8 @@ export default function Mosas30FokonVagy40FokonPage() {
     '@type': 'BlogPosting',
     headline: articleTitle,
     description: articleDescription,
+    url: articleUrl,
+    inLanguage: 'hu-HU',
     image: {
       '@type': 'ImageObject',
       url: heroImageUrl,
@@ -105,12 +108,12 @@ export default function Mosas30FokonVagy40FokonPage() {
     },
     author: {
       '@type': 'Organization',
-      name: 'Aquadrop',
+      name: 'Aquadrop Expert Pro',
       url: 'https://www.aquadrop.hu/',
     },
     publisher: {
       '@type': 'Organization',
-      name: 'Aquadrop',
+      name: 'Aquadrop Expert Pro',
       logo: {
         '@type': 'ImageObject',
         url: 'https://www.aquadrop.hu/logo.png',
@@ -137,10 +140,7 @@ export default function Mosas30FokonVagy40FokonPage() {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+      <JsonLd data={{
             '@context': 'https://schema.org',
             '@graph': [
               blogPostingStructuredData,
@@ -154,9 +154,7 @@ export default function Mosas30FokonVagy40FokonPage() {
               },
               breadcrumbStructuredData,
             ],
-          }),
-        }}
-      />
+          }} />
 
       <ArticleLayout
         slug="mosas-30-fokon-vagy-40-fokon"

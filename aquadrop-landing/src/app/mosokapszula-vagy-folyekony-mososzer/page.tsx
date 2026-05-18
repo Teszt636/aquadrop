@@ -4,6 +4,7 @@ import Link from 'next/link';
 
 import { ArticleSignupCta } from '@/components/articles/ArticleSignupCta';
 import { ArticleLayout } from '@/components/article/ArticleLayout';
+import { JsonLd } from '@/components/JsonLd';
 import { RelatedGuides } from '@/components/RelatedGuides';
 import { ButtonLink } from '@/components/ui';
 
@@ -14,7 +15,7 @@ const articleDescription =
   'Mosókapszula vagy folyékony mosószer? Összehasonlítjuk az előnyöket, hátrányokat és segítünk eldönteni, melyik megoldás illik leginkább a mindennapi mosáshoz.';
 const articleUrl = 'https://www.aquadrop.hu/mosokapszula-vagy-folyekony-mososzer';
 const publishedDate = '2026-04-22';
-const modifiedDate = '2026-04-22';
+const modifiedDate = '2026-05-18';
 const heroImageUrl = 'https://www.aquadrop.hu/mosokapszula-vagy-folyekony-mososzer.webp';
 const socialImageUrl = 'https://www.aquadrop.hu/og/mosokapszula-vagy-folyekony-mososzer-aquadrop-og.webp';
 const heroImageWidth = 1536;
@@ -104,6 +105,8 @@ export default function MosokapszulaVagyFolyekonyMososerPage() {
     '@type': 'BlogPosting',
     headline: articleTitle,
     description: articleDescription,
+    url: articleUrl,
+    inLanguage: 'hu-HU',
     image: {
       '@type': 'ImageObject',
       url: heroImageUrl,
@@ -112,12 +115,12 @@ export default function MosokapszulaVagyFolyekonyMososerPage() {
     },
     author: {
       '@type': 'Organization',
-      name: 'Aquadrop',
+      name: 'Aquadrop Expert Pro',
       url: 'https://www.aquadrop.hu/'
     },
     publisher: {
       '@type': 'Organization',
-      name: 'Aquadrop',
+      name: 'Aquadrop Expert Pro',
       logo: {
         '@type': 'ImageObject',
         url: 'https://www.aquadrop.hu/logo.png',
@@ -144,10 +147,7 @@ export default function MosokapszulaVagyFolyekonyMososerPage() {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+      <JsonLd data={{
             '@context': 'https://schema.org',
             '@graph': [
               blogPostingStructuredData,
@@ -161,9 +161,7 @@ export default function MosokapszulaVagyFolyekonyMososerPage() {
               },
               breadcrumbStructuredData
             ]
-          })
-        }}
-      />
+          }} />
 
       <ArticleLayout
         slug="mosokapszula-vagy-folyekony-mososzer"

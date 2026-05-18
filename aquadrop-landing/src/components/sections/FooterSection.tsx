@@ -112,6 +112,9 @@ export function FooterSection() {
             </address>
           </div>
         </div>
+        <p className="mt-10 border-t border-slate-700/70 pt-5 text-center text-xs font-medium text-slate-400">
+          Aquadrop Expert Pro információk ellenőrizve: 2026. május
+        </p>
       </div>
     </footer>
   );

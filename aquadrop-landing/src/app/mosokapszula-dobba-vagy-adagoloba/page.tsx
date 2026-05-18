@@ -4,6 +4,7 @@ import Link from 'next/link';
 
 import { ArticleSignupCta } from '@/components/articles/ArticleSignupCta';
 import { ArticleLayout } from '@/components/article/ArticleLayout';
+import { JsonLd } from '@/components/JsonLd';
 import { RelatedGuides } from '@/components/RelatedGuides';
 import { ButtonLink } from '@/components/ui';
 
@@ -13,7 +14,7 @@ const articleDescription =
   'Gyakorlati útmutató arról, hova kell tenni a mosókapszulát, miért nem az adagolófiókba való, és hogyan előzheted meg a maradványokat.';
 const articleUrl = 'https://www.aquadrop.hu/mosokapszula-dobba-vagy-adagoloba';
 const publishedDate = '2026-05-06';
-const modifiedDate = '2026-05-06';
+const modifiedDate = '2026-05-18';
 const heroImageUrl = 'https://www.aquadrop.hu/mosokapszula-nem-oldodik-fel-megoldas-aquadrop.webp';
 const heroImageWidth = 1536;
 const heroImageHeight = 1024;
@@ -92,6 +93,8 @@ export default function MosokapszulaDobbaVagyAdagolobaPage() {
     '@type': 'BlogPosting',
     headline: articleTitle,
     description: articleDescription,
+    url: articleUrl,
+    inLanguage: 'hu-HU',
     image: {
       '@type': 'ImageObject',
       url: heroImageUrl,
@@ -100,12 +103,12 @@ export default function MosokapszulaDobbaVagyAdagolobaPage() {
     },
     author: {
       '@type': 'Organization',
-      name: 'Aquadrop',
+      name: 'Aquadrop Expert Pro',
       url: 'https://www.aquadrop.hu/',
     },
     publisher: {
       '@type': 'Organization',
-      name: 'Aquadrop',
+      name: 'Aquadrop Expert Pro',
       logo: {
         '@type': 'ImageObject',
         url: 'https://www.aquadrop.hu/logo.png',
@@ -132,10 +135,7 @@ export default function MosokapszulaDobbaVagyAdagolobaPage() {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+      <JsonLd data={{
             '@context': 'https://schema.org',
             '@graph': [
               blogPostingStructuredData,
@@ -149,9 +149,7 @@ export default function MosokapszulaDobbaVagyAdagolobaPage() {
               },
               breadcrumbStructuredData,
             ],
-          }),
-        }}
-      />
+          }} />
 
       <ArticleLayout
         slug="mosokapszula-dobba-vagy-adagoloba"

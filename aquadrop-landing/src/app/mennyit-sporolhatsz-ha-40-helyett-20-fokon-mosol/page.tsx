@@ -4,6 +4,7 @@ import Link from 'next/link';
 
 import { ArticleSignupCta } from '@/components/articles/ArticleSignupCta';
 import { ArticleLayout } from '@/components/article/ArticleLayout';
+import { JsonLd } from '@/components/JsonLd';
 import { RelatedGuides } from '@/components/RelatedGuides';
 import { EnergySavingsCalculator } from '@/components/energy-savings-calculator';
 import { ButtonLink } from '@/components/ui';
@@ -21,6 +22,7 @@ const articleDescription =
   'Számold ki, mennyit változhat a mosás energiaköltsége, ha alacsonyabb hőfokon mosol. Interaktív kalkulátorral mutatjuk meg a különbséget.';
 const articleUrl = 'https://www.aquadrop.hu/mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol';
 const publishedDate = '2026-04-23';
+const modifiedDate = '2026-05-18';
 
 const faqItems = [
   {
@@ -83,7 +85,7 @@ export const metadata: Metadata = {
     locale: 'hu_HU',
     type: 'article',
     publishedTime: `${publishedDate}T08:00:00.000Z`,
-    modifiedTime: `${publishedDate}T08:00:00.000Z`,
+    modifiedTime: `${modifiedDate}T08:00:00.000Z`,
     images: [
       {
         url: socialImageUrl,
@@ -109,6 +111,8 @@ export default function MennyitSporolhatsz20FokonPage() {
     '@type': 'BlogPosting',
     headline: articleTitle,
     description: articleDescription,
+    url: articleUrl,
+    inLanguage: 'hu-HU',
     image: {
       '@type': 'ImageObject',
       url: heroImageUrl,
@@ -117,12 +121,12 @@ export default function MennyitSporolhatsz20FokonPage() {
     },
     author: {
       '@type': 'Organization',
-      name: 'Aquadrop',
+      name: 'Aquadrop Expert Pro',
       url: 'https://www.aquadrop.hu/'
     },
     publisher: {
       '@type': 'Organization',
-      name: 'Aquadrop',
+      name: 'Aquadrop Expert Pro',
       logo: {
         '@type': 'ImageObject',
         url: 'https://www.aquadrop.hu/logo.png',
@@ -135,7 +139,7 @@ export default function MennyitSporolhatsz20FokonPage() {
       '@id': articleUrl
     },
     datePublished: `${publishedDate}T08:00:00.000Z`,
-    dateModified: `${publishedDate}T08:00:00.000Z`
+    dateModified: `${modifiedDate}T08:00:00.000Z`
   };
 
   const faqStructuredData = {
@@ -161,19 +165,14 @@ export default function MennyitSporolhatsz20FokonPage() {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+      <JsonLd data={{
             '@context': 'https://schema.org',
             '@graph': [
               articleStructuredData,
               faqStructuredData,
               breadcrumbStructuredData
             ]
-          })
-        }}
-      />
+          }} />
 
       <ArticleLayout
         slug="mennyit-sporolhatsz-ha-40-helyett-20-fokon-mosol"
