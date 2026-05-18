@@ -4,6 +4,7 @@ import Link from 'next/link';
 
 import { ArticleSignupCta } from '@/components/articles/ArticleSignupCta';
 import { ArticleLayout } from '@/components/article/ArticleLayout';
+import { JsonLd } from '@/components/JsonLd';
 import { RelatedGuides } from '@/components/RelatedGuides';
 import { ButtonLink } from '@/components/ui';
 
@@ -13,7 +14,7 @@ const articleDescription =
   'Gyakorlati útmutató arról, mikor működik jól a mosókapszula 20 fokon, hogyan kell elhelyezni, és milyen programmal kerülhetők el az oldódási hibák.';
 const articleUrl = 'https://www.aquadrop.hu/mosokapszula-20-fokon';
 const publishedDate = '2026-05-06';
-const modifiedDate = '2026-05-06';
+const modifiedDate = '2026-05-18';
 const heroImageUrl = 'https://www.aquadrop.hu/20-fokos-mosas.webp';
 const heroImageWidth = 1600;
 const heroImageHeight = 900;
@@ -97,6 +98,8 @@ export default function Mosokapszula20FokonPage() {
     '@type': 'BlogPosting',
     headline: articleTitle,
     description: articleDescription,
+    url: articleUrl,
+    inLanguage: 'hu-HU',
     image: {
       '@type': 'ImageObject',
       url: heroImageUrl,
@@ -105,12 +108,12 @@ export default function Mosokapszula20FokonPage() {
     },
     author: {
       '@type': 'Organization',
-      name: 'Aquadrop',
+      name: 'Aquadrop Expert Pro',
       url: 'https://www.aquadrop.hu/',
     },
     publisher: {
       '@type': 'Organization',
-      name: 'Aquadrop',
+      name: 'Aquadrop Expert Pro',
       logo: {
         '@type': 'ImageObject',
         url: 'https://www.aquadrop.hu/logo.png',
@@ -137,10 +140,7 @@ export default function Mosokapszula20FokonPage() {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+      <JsonLd data={{
             '@context': 'https://schema.org',
             '@graph': [
               blogPostingStructuredData,
@@ -154,9 +154,7 @@ export default function Mosokapszula20FokonPage() {
               },
               breadcrumbStructuredData,
             ],
-          }),
-        }}
-      />
+          }} />
 
       <ArticleLayout
         slug="mosokapszula-20-fokon"

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 
+import { JsonLd } from '@/components/JsonLd';
 import { FooterSection } from '@/components/sections';
 import { PartnerBrochureFlipbook, PartnerLanding } from '@/components/partner';
 
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'hu_HU',
-    siteName: 'Aquadrop',
+    siteName: 'Aquadrop Expert Pro',
     title: 'Mosókapszula viszonteladóknak | Aquadrop',
     description:
       'Aquadrop partnerprogram viszonteladóknak: prémium mosókapszula, értékesítési támogatás, könnyen kommunikálható termékelőnyök és gyakorlati B2B szempontok.',
@@ -67,10 +68,7 @@ export default function PartnerPage() {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(partnerStructuredData) }}
-      />
+      <JsonLd data={partnerStructuredData} />
       <PartnerLanding />
       <PartnerBrochureFlipbook />
       <FooterSection />

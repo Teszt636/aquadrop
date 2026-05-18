@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import { ArticleSignupCta } from '@/components/articles/ArticleSignupCta';
+import { JsonLd } from '@/components/JsonLd';
 import { RelatedGuides } from '@/components/RelatedGuides';
 import { WashingCostCalculator } from '@/components/tools/WashingCostCalculator';
 
@@ -63,7 +64,7 @@ export const metadata: Metadata = {
 export default async function WashingCostCalculatorPage({ searchParams }: { searchParams: Promise<{ embed?: string }> }) {
   const params = await searchParams;
   const isEmbed = params.embed === 'true';
-  const webAppSchema = { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Mosási költség kalkulátor', applicationCategory: 'UtilityApplication', operatingSystem: 'Web', description: 'Ingyenes kalkulátor, amellyel kiszámolható a 20 fokos mosás lehetséges energiamegtakarítása.', url: 'https://www.aquadrop.hu/mosasi-koltseg-kalkulator', publisher: { '@type': 'Organization', name: 'Aquadrop' } };
+  const webAppSchema = { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Mosási költség kalkulátor', applicationCategory: 'UtilityApplication', operatingSystem: 'Web', description: 'Ingyenes kalkulátor, amellyel kiszámolható a 20 fokos mosás lehetséges energiamegtakarítása.', url: 'https://www.aquadrop.hu/mosasi-koltseg-kalkulator', publisher: { '@type': 'Organization', name: 'Aquadrop Expert Pro' } };
   const faqStructuredData = {
     '@type': 'FAQPage',
     mainEntity: faqItems.map((item) => ({
@@ -82,7 +83,7 @@ export default async function WashingCostCalculatorPage({ searchParams }: { sear
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-cyan-50 via-sky-50 to-white px-4 py-10 md:px-6 md:py-12">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+      <JsonLd data={structuredData} />
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-8 md:gap-10">
         {!isEmbed && (
           <header className="rounded-3xl border border-cyan-100/70 bg-white/85 p-7 text-center shadow-[0_18px_55px_rgba(14,116,144,0.12)] backdrop-blur-sm md:p-10">
