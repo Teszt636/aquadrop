@@ -169,7 +169,7 @@ export default function MosokapszulaHasznalataPage() {
         category="Mosási útmutató"
         readingTime="kb. 10 perc olvasás"
         title={h1Title}
-        intro="A mosókapszula az egyik legkényelmesebb, legletisztultabb adagolási forma a modern háztartásokban. A legjobb eredményhez viszont fontos néhány alapelvet követni: hova kerüljön a kapszula, mikor tedd be, mennyit érdemes használni, és mire figyelj a biztonságos használat során."
+        intro="A mosókapszula használatánál a legtöbb hiba nem az adagolás bonyolultságából jön, hanem egy apró sorrendi tévedésből: a kapszula rossz helyre kerül, a dob túl tele van, vagy a program túl rövid. Ha a kapszula a dob alján indul, a ruhák pedig csak utána kerülnek rá, sokkal kiszámíthatóbb lesz az oldódás és a mosási eredmény."
         cta={
           <div className="rounded-[28px] border border-cyan-100/80 bg-gradient-to-br from-white via-cyan-50/80 to-teal-50/80 p-7 shadow-[0_22px_65px_rgba(15,23,42,0.1)] md:p-10">
             <div className="max-w-3xl space-y-5">
@@ -201,7 +201,7 @@ export default function MosokapszulaHasznalataPage() {
         </figure>
 
                 <div className="rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5 md:p-6">
-          <p className="mt-3">A mosókapszula használata akkor helyes, ha a kapszulát mindig közvetlenül a mosógép dobjának aljára teszed, még a ruhák betöltése előtt. Egy átlagos mosáshoz általában egy kapszula elegendő, de nagyobb töltetnél, erősebb szennyeződésnél vagy kemény víznél szükség lehet eltérő adagolásra.</p>
+          <p className="mt-3">A mosókapszula használata akkor helyes, ha a kapszulát mindig közvetlenül a mosógép dobjának aljára teszed, még a ruhák betöltése előtt. Egy átlagos mosáshoz általában egy kapszula elegendő. Két kapszula csak nagyobb vagy erősebben szennyezett töltetnél indokolt, ha a program és a gép kapacitása is elbírja.</p>
           <ul className="mt-4 space-y-2">
             <li>Ne tedd a kapszulát az adagolófiókba.</li>
             <li>Először a kapszula kerüljön a dobba, utána a ruhák.</li>
@@ -212,7 +212,8 @@ export default function MosokapszulaHasznalataPage() {
         <h2>Mosókapszula használata lépésről lépésre: így működik jól alacsony hőfokon is</h2>
         <p>
           Tedd a kapszulát közvetlenül a dob aljára, majd erre kerüljenek a ruhák. 20–30 fokon különösen fontos a
-          megfelelő programhossz és a dob helyes töltése, hogy a kapszula maradéktalanul feloldódjon.
+          megfelelő programhossz és a dob helyes töltése, hogy a kapszula maradéktalanul feloldódjon. Az Aquadrop
+          Expert Pro esetében alacsony hőfokon is legalább 18 perces programot érdemes választani.
         </p>
         <p>
           Ha átlátható alaprutint szeretnél, indulj az <Link href="/energiatakarekos-mosas">energiatakarékos mosás</Link>{' '}
@@ -227,10 +228,17 @@ export default function MosokapszulaHasznalataPage() {
         </p>
         <p>
           Sokan tapasztalnak bizonytalan eredményt azért, mert rossz helyre kerül a kapszula, túl rövid programot
-          választanak, vagy túlzsúfolják a dobot. Ezek nem ritka hibák, és könnyen javíthatók. Ebben az útmutatóban
-          részletesen végigmegyünk azon, <strong>hogyan kell használni a mosókapszulát</strong> úgy, hogy az kényelmes,
-          kiszámítható és biztonságos maradjon.
+          választanak, vagy túlzsúfolják a dobot. Ezek nem ritka hibák, és könnyen javíthatók. A helyes sorrend nem
+          látványos trükk, hanem egyszerű rutin: kapszula le, ruhák rá, program indít.
         </p>
+        <div className="rounded-2xl border border-amber-100 bg-amber-50/70 p-5 md:p-6">
+          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-amber-800">A leggyakoribb hiba</p>
+          <p className="mt-3">
+            Sokan a kapszulát a ruhák tetejére dobják, majd elindítanak egy nagyon rövid programot. Ilyenkor a kapszula
+            később találkozik a vízzel, rosszabbul forog a dobban, és nagyobb az esélye annak, hogy nem oszlik el
+            tökéletesen. A helyes sorrend: kapszula a dob aljára, utána a ruhák, majd legalább 18 perces program.
+          </p>
+        </div>
         <p>
           Ha most ismerkedsz a kapszulás mosással, vagy már használod, de szeretnél biztosra menni, ez a cikk gyakorlati
           kapaszkodót ad. A cél nem a túlzó ígéretek halmozása, hanem egy olyan megbízható keretrendszer, amit a
@@ -380,6 +388,11 @@ export default function MosokapszulaHasznalataPage() {
           függ. A gyakorlatban a kiegyensúlyozott döntés adja a legjobb eredményt.
         </p>
         <p>
+          Enyhén vagy átlagosan szennyezett hétköznapi ruháknál a 20–30°C jó kiindulópont lehet, ha a dob nincs túltöltve
+          és a program nem extrém rövid. Sportos, izzadt vagy erősebben szennyezett daraboknál gyakran jobb a hosszabb
+          program, illetve a ruhacímkével összhangban a 30–40°C-os beállítás.
+        </p>
+        <p>
           Első szempont mindig a ruhacímke: ha egy textília alacsonyabb hőfokot igényel, ezt érdemes követni. Második
           szempont a mosókapszula termékhasználati útmutatója, mert az ad iránymutatást arra, milyen körülmények között
           várható megfelelő működés. A két információ együtt ad megbízható alapot.
@@ -476,7 +489,8 @@ export default function MosokapszulaHasznalataPage() {
         <p>
           A program kiválasztásakor a ruhacímke legyen az elsődleges támpont. A túl rövid, gyors ciklusok bizonyos
           helyzetekben kevésbé kedveznek a teljes oldódásnak, ezért átlagos vegyes mosásnál gyakran egy kiegyensúlyozott,
-          normál időtartamú program a praktikusabb döntés.
+          normál időtartamú program a praktikusabb döntés. Kapszulás mosásnál alacsony hőfokon az Aquadrop ajánlása
+          szerint a legalább 18 perces programidő jó alsó határ.
         </p>
         <h3>5. Mosás után rendezd vissza a tárolást</h3>
         <p>
