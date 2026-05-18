@@ -163,7 +163,7 @@ export default function Mosokapszula20FokonPage() {
         category="Mosási útmutató"
         readingTime="kb. 7 perc olvasás"
         title={h1Title}
-        intro={articleDescription}
+        intro="A 20 fokos mosás akkor működik jól, ha nem egyetlen beállításként kezeled, hanem teljes mosási helyzetként. Számít, mennyire szennyezett a ruha, mennyi hely marad a dobban, mennyi ideig fut a program, és hogy a kapszula alacsony hőfokon is időben fel tud-e oldódni."
         cta={
           <div className="rounded-[28px] border border-cyan-100/80 bg-gradient-to-br from-white via-cyan-50/80 to-teal-50/80 p-7 shadow-[0_22px_65px_rgba(15,23,42,0.1)] md:p-10">
             <div className="max-w-3xl space-y-5">
@@ -197,9 +197,9 @@ export default function Mosokapszula20FokonPage() {
           <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-800">Gyors válasz</p>
           <p className="mt-3">
             A mosókapszula 20 fokon is működhet jól, ha a kapszula alacsony hőfokra alkalmas, a dob nincs túltöltve,
-            és a program nem túl rövid. A kapszulát mindig a dob aljára tedd, még a ruhák betöltése előtt, mert így
-            hamarabb éri víz és könnyebben feloldódik. Erősen szennyezett ruháknál vagy higiéniai mosásnál magasabb
-            hőfok is indokolt lehet.
+            és a program nem túl rövid. Az Aquadrop Expert Pro esetében a 20–30°C-os mosásnál legalább 18 perces
+            programot érdemes választani. Erősen szennyezett ruháknál vagy higiéniai mosásnál magasabb hőfok is
+            indokolt lehet.
           </p>
           <ul className="mt-4 space-y-2">
             <li>A kapszula a dob aljára kerüljön, ne az adagolófiókba.</li>
@@ -212,8 +212,17 @@ export default function Mosokapszula20FokonPage() {
         <p>
           Igen, a mosókapszula 20 fokon is működhet, de alacsony hőfokon kevesebb a hibahatár. Ilyenkor nem elég csak
           a fokszámot nézni: számít a program hossza, a dob telítettsége, a kapszula helye és az is, mennyire szennyezett
-          a ruha. Ha ezek rendben vannak, a 20 fokos mosás sok hétköznapi töltetnél jó választás lehet.
+          a ruha. Ha ezek rendben vannak, a 20 fokos mosás sok enyhén vagy átlagosan szennyezett hétköznapi töltetnél
+          jó választás lehet.
         </p>
+        <div className="rounded-2xl border border-cyan-100 bg-white/85 p-5 shadow-sm">
+          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-800">Mikor működik jól az alacsony hőfok?</p>
+          <p className="mt-3">
+            20°C-on főleg frissítő, hétköznapi mosásban gondolkodj: pólók, ingek, könnyebb nadrágok, kevésbé szennyezett
+            darabok. Ha a ruha izzadt, sáros, zsíros vagy vastagabb textilből van, a 30–40°C és a hosszabb program sokszor
+            reálisabb döntés.
+          </p>
+        </div>
         <p>
           A teljes alacsony hőfokú rutinhoz érdemes átnézni, hogyan moss hatékonyan 20 fokon a{' '}
           <Link href="/hogyan-mossunk-20-fokon">hogyan moss hatékonyan 20 fokon</Link> útmutatóban. Ez segít összehangolni
@@ -224,7 +233,8 @@ export default function Mosokapszula20FokonPage() {
         <p>
           A kapszula oldódása alacsony hőfokon is lehetséges, ha elegendő víz és mozgás éri. A gond sokszor nem önmagában
           a 20 fok, hanem az, hogy a kapszula egy szárazabb ruhacsomó közé szorul, a program túl rövid, vagy a dob annyira
-          tele van, hogy nincs hely az egyenletes vízmozgásnak.
+          tele van, hogy nincs hely az egyenletes vízmozgásnak. Ezért fontos, hogy a kapszula a dob aljáról induljon,
+          ne a ruhák tetejéről.
         </p>
         <p>
           Ha már tapasztaltál maradványt a ruhán vagy a dobban, olvasd el a{' '}
@@ -248,7 +258,8 @@ export default function Mosokapszula20FokonPage() {
         <p>
           Olyan programot válassz, amely nem csak hideg vagy alacsony hőfokú, hanem elég időt is ad a mosásnak. A nagyon
           rövid gyorsprogram kényelmesnek tűnik, de nagyobb töltetnél vagy sűrűbb anyagoknál növelheti az oldódási hiba
-          esélyét. A programhossz itt a tisztítóhatás és az oldódás egyik kulcsa.
+          esélyét. A programhossz itt a tisztítóhatás és az oldódás egyik kulcsa; kapszulás mosásnál a legalább 18 perces
+          ciklus jó gyakorlati minimum.
         </p>
         <p>
           A kapszula mennyisége sem mindegy: átlagos töltethez általában egy kapszula elég, de a{' '}
@@ -285,8 +296,10 @@ export default function Mosokapszula20FokonPage() {
           nem pótolja a jó programválasztást, de egy stabil, modern formula sokat segíthet a kiszámítható napi rutinban.
         </p>
         <p>
-          A gyakorlatban a legjobb eredményt a jó termék, a helyes elhelyezés és a reális mosási cél együtt adja. 20 fokon
-          különösen ez az összhang számít.
+          Az Aquadrop Expert Pro alacsony hőfokú használatánál éppen ez az összhang a lényeg: a kapszula oldódását
+          támogató formula önmagában nem helyettesíti a megfelelő programot, de jó rutin mellett stabilabbá teheti a
+          20–30°C-os mosást. A gyakorlatban a legjobb eredményt a jó termék, a helyes elhelyezés és a reális mosási cél
+          együtt adja.
         </p>
 
         <RelatedGuides

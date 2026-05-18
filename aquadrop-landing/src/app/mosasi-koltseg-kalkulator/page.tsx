@@ -111,11 +111,16 @@ export default async function WashingCostCalculatorPage({ searchParams }: { sear
         <WashingCostCalculator placement="calculator_page" showShare={!isEmbed} showEmbed={!isEmbed} showIntroBadge={true} isEmbed={isEmbed} />
         {!isEmbed && (
           <section className="rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5 text-slate-700 md:p-6">
-            <p>A mosási költség kalkulátor segít megbecsülni, mennyibe kerül egy mosás, és mennyit takaríthatsz meg alacsonyabb hőfok használatával. Add meg a mosások számát és az energiaadatokat, majd hasonlítsd össze, hogyan változhat a költség 40°C és 20°C között.</p>
+            <p>A mosási költség kalkulátor abban segít, hogy a saját mosási szokásaidat lásd számokban, ne csak általános spórolási tanácsokat olvass. Add meg a mosások számát és az energiaadatokat, majd hasonlítsd össze, hogyan változhat a becsült költség 40°C és 20°C között.</p>
+            <p className="mt-3">
+              Az eredményt érdemes becslésként kezelni, nem hivatalos energetikai tanúsításként. A tényleges költséget
+              befolyásolja a mosógép típusa, a program hossza, a töltet mennyisége, a vízfelhasználás és az is, hogy a
+              mosást elsőre sikerül-e jól beállítani.
+            </p>
             <ul className="mt-4 space-y-2">
               <li>Gyors becslést ad a mosási energiafelhasználásról.</li>
               <li>Segít összehasonlítani a 20°C és 40°C közötti különbséget.</li>
-              <li>Hasznos, ha tudatosabban szeretnéd csökkenteni a háztartási költségeket.</li>
+              <li>Segít végiggondolni, mikor éri meg 20–30°C-ra váltani, és mikor jobb a hosszabb vagy melegebb program.</li>
             </ul>
           </section>
         )}
@@ -127,7 +132,32 @@ export default async function WashingCostCalculatorPage({ searchParams }: { sear
               <h2 className="text-center text-2xl font-semibold text-slate-900">Hogyan működik a mosási költség kalkulátor?</h2>
               <p className="mx-auto mt-3 max-w-3xl text-center text-slate-700">
                 A mosási hőfok és a program hossza látványosan befolyásolhatja az energiafelhasználást. A kalkulátor segít megérteni,
-                hogy ugyanazzal a heti mosásszámmal mekkora különbséget okozhat egy energiatudatosabb beállítás.
+                hogy ugyanazzal a heti mosásszámmal mekkora különbséget okozhat egy energiatudatosabb beállítás, például ha
+                néhány hétköznapi töltetet 30 vagy 20 fokon mosol.
+              </p>
+              <div className="mt-6 grid gap-4 text-left text-slate-700 md:grid-cols-2">
+                <div className="rounded-2xl border border-cyan-100 bg-cyan-50/60 p-5">
+                  <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-800">Gyakorlati tanács</p>
+                  <p className="mt-3">
+                    A megtakarítás nem csak az alacsonyabb hőfokon múlik. Ha a túl rövid program miatt a ruha nem lesz
+                    friss, vagy a kapszula maradékot hagy, az újramosás elviheti a különbséget. A jó beállítás elsőre ad
+                    használható eredményt.
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-cyan-100 bg-white/85 p-5">
+                  <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-800">Aquadrop nézőpont</p>
+                  <p className="mt-3">
+                    30°C sok hétköznapi mosásnál jó kompromisszum lehet, 20°C pedig enyhén szennyezett ruháknál takarékos
+                    opció. Kapszulás mosásnál figyelj arra, hogy a program legalább 18 perces legyen, és a kapszula a dob
+                    alján induljon.
+                  </p>
+                </div>
+              </div>
+              <p className="mx-auto mt-6 max-w-3xl text-slate-700">
+                Ha a kalkulátor alapján nagy különbség látszik, nem kell egyik napról a másikra minden mosást hidegebbre
+                állítani. Kezdd azokkal a töltetekkel, ahol kicsi a kockázat: enyhén szennyezett pólók, ingek, hétköznapi
+                ruhák. A döntéshez hasznos háttér az <Link href="/energiatakarekos-mosas">energiatakarékos mosás</Link>{' '}
+                útmutató és a <Link href="/mosokapszula-20-fokon">mosókapszula 20 fokon</Link> cikk is.
               </p>
               <ul className="mt-5 grid gap-3 text-sm font-medium text-cyan-900 md:grid-cols-3 md:text-base">
                 {['Gyors becslés saját mosási szokások alapján', 'Megosztható eredménylink', 'Beágyazható kalkulátor más weboldalakhoz'].map((item) => (

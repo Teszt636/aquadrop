@@ -192,7 +192,7 @@ export default function EnergiatakarekosMosasPage() {
         category="Mosási útmutató"
         readingTime="kb. 18 perc olvasás"
         title={h1Title}
-        intro="Az energiatakarékos mosás ma már nem kényszerű kompromisszum, hanem tudatos döntés. A cél egyszerre az alacsonyabb energiafelhasználás, a textíliák kímélése és a megbízható tisztaságérzet. Ehhez azonban nem elég pusztán lejjebb venni a hőfokot: számít a programhossz, az adagolás és az is, hogy a választott mosási megoldás mennyire illeszkedik az alacsony hőfokú használathoz."
+        intro="Az energiatakarékos mosás nem ott kezdődik, hogy mindig a legrövidebb programot választod. A legtöbb bosszúság abból jön, hogy alacsony hőfokon, túl rövid ciklussal és rosszul oldódó mosószerrel próbálunk spórolni. Ilyenkor a ruha kevésbé lesz friss, a kapszula maradékot hagyhat, a mosást pedig gyakran újra kell indítani."
         cta={
           <div className="rounded-[28px] border border-cyan-100/80 bg-gradient-to-br from-white via-cyan-50/80 to-teal-50/80 p-7 shadow-[0_22px_65px_rgba(15,23,42,0.1)] md:p-10">
             <div className="max-w-3xl space-y-5">
@@ -229,19 +229,23 @@ export default function EnergiatakarekosMosasPage() {
         </figure>
 
                 <div className="rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5 md:p-6">
-          <p className="mt-3">Az energiatakarékos mosás lényege, hogy alacsonyabb hőfokon, jól megválasztott programmal és megfelelően adagolt mosószerrel moss. A legtöbb hétköznapi ruha 20–30°C-on is tiszta lehet, ha nem tömöd túl a dobot, legalább 18 perces programot választasz, és olyan mosószert használsz, amely alacsony hőfokon is jól oldódik.</p>
+          <p className="mt-3">Az energiatakarékos mosás lényege, hogy a hőfokot, a programidőt, a dob töltöttségét és a mosószer oldódását együtt kezeled. Sok hétköznapi ruha 20–30°C-on is tiszta lehet, ha nem tömöd túl a dobot, legalább 18 perces programot választasz kapszulás mosásnál, és a kapszula már a program elején vízhez jut.</p>
           <ul className="mt-4 space-y-2">
             <li>20–30°C sok hétköznapi mosáshoz elegendő lehet.</li>
             <li>A túl rövid program és a túltöltött dob rontja az eredményt.</li>
-            <li>A jó mosószer alacsony hőfokon is segít a foltok és szagok ellen.</li>
+            <li>A spórolás akkor valódi, ha nem kell újraindítani a mosást.</li>
           </ul>
         </div>
 
         <h2>Mi az energiatakarékos mosás, és mikor működik jól?</h2>
         <p>
           Az eredmény kulcsa nem csak az alacsony hőfok, hanem a hőfok, a programidő, a töltet és az adagolás
-          egyensúlya. Ha ez a négy elem együtt jól működik, a ruhák tiszták maradnak, miközben a mosás energiaigénye
-          is csökkenhet.
+          egyensúlya. Egy 20–30 fokos program akkor ad jó eredményt, ha a víz át tudja járni a ruhákat, a kapszula
+          nincs elzárva egy sűrű textilcsomóban, és a ciklus elég hosszú ahhoz, hogy a fólia teljesen feloldódjon.
+        </p>
+        <p>
+          Ezért nem a legrövidebb gomb a legfontosabb, hanem az, hogy a mosás elsőre sikerüljön. Ha a ruha szaga,
+          tapintása vagy a kapszulamaradék miatt újra kell mosni, az energia- és vízmegtakarítás gyorsan eltűnik.
         </p>
 
         <h2>Mennyi pénzt takaríthatsz meg energiatakarékos mosással?</h2>
@@ -269,22 +273,28 @@ export default function EnergiatakarekosMosasPage() {
         </div>
 
         <p>
-          Az elmúlt években látványosan megváltozott, ahogy a háztartások a mosásra tekintenek. Korábban sokan úgy
-          gondolták, hogy az igazán tiszta eredményhez mindig magas hőfok szükséges. Ma már egyre többen keresik azt,
-          hogyan lehet alacsonyabb hőmérsékleten, tudatosabban és kiszámíthatóbban mosni. Ebben az irányban az
-          energiatakarékosság mellett a kényelem és a textilek védelme is egyre fontosabb szempont.
+          A legtöbb háztartásban nem a különleges foltok jelentik a napi mosás nagy részét, hanem a hordott pólók,
+          ingek, fehérneműk, sportosabb felsők és gyerekruhák váltakozása. Ezeknél gyakran nem forró vizes „nagy mosásra”
+          van szükség, hanem jól eltalált, kímélő és ismételhető rutinra.
         </p>
         <p>
           A gyakorlatban az alacsony hőfokú mosás sikere több tényezőn múlik egyszerre. Nem elég egyetlen beállítást
           módosítani, ha közben a töltet túl nagy, a program túl rövid, vagy a mosószer oldódása nem egyenletes.
-          Ezért érdemes rendszerként nézni a mosást: milyen ruhákat mosol együtt, milyen programot választasz, mennyire
-          tud a víz szabadon keringeni, és a választott megoldás mennyire támogatja a 20–30 fokos környezetet.
+          Kapszulánál ez különösen fontos: először a fóliának kell teljesen feloldódnia, csak utána tudnak a hatóanyagok
+          egyenletesen eloszlani a dobban.
         </p>
+        <div className="rounded-2xl border border-cyan-100 bg-white/85 p-5 shadow-sm">
+          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-800">Aquadrop tipp</p>
+          <p className="mt-3">
+            Alacsony hőfokon kapszulával ne a 10–15 perces frissítő program legyen az alap. Az Aquadrop Expert Pro
+            használatánál legalább 18 perces programot érdemes választani, és a kapszulát a dob aljára tenni még a
+            ruhák előtt. Ez egyszerű lépés, de sok oldódási hibát megelőz.
+          </p>
+        </div>
         <p>
-          Ez az útmutató abban segít, hogy az energiatudatos mosás ne bizonytalan kísérletezés legyen, hanem olyan
-          stabil rutin, amelyben a tisztaság, a textilkímélés és a kényelmes használat egyszerre teljesül. A cél nem
-          a túlzó ígéretek sorolása, hanem egy megbízható gondolkodási keret: mitől lesz valóban hatékony az alacsony
-          hőfokú mosás, és mire érdemes figyelni a mindennapi használatban.
+          Az energiatudatos mosás így nem bizonytalan kísérletezés, hanem néhány jól ismételhető döntés sora:
+          különválogatod a nagyon koszos ruhákat, nem pakolod keményre a dobot, és olyan programot választasz, amely
+          ad időt a vízmozgásnak és az oldódásnak.
         </p>
         <p>
           Fontos különbséget tenni aközött, hogy valami elméletben energiatakarékos, és aközött, hogy a gyakorlatban
@@ -297,16 +307,16 @@ export default function EnergiatakarekosMosasPage() {
           amellyel a hétköznapi ruhák rendszeresen tiszták, kellemes tapintásúak és jól hordhatók maradnak.
         </p>
         <p>
-          Ebből a nézőpontból az energiatakarékos mosás valójában életmódbeli döntés. Nem a kompromisszumról szól,
-          hanem arról, hogy a technológiát és a rutint úgy hangolod össze, hogy a háztartásod egyszerre legyen
-          hatékonyabb, kényelmesebb és tudatosabb.
+          Ebből a nézőpontból az energiatakarékos mosás nem „hideg víz mindenre” szabály. Inkább egy rugalmas rutin:
+          hétköznapi, enyhén vagy átlagosan szennyezett ruhákhoz 20–30°C, erősebb szennyeződésnél hosszabb program vagy
+          magasabb hőfok, és mindig annyi mozgástér a dobban, hogy a víz és a mosószer tényleg eljusson a textilek közé.
         </p>
 
         <h2>Az energiatakarékos mosás alapjai a gyakorlatban</h2>
         <p>
           Az energiatakarékos mosás lényege, hogy a ruhák tisztán tartását alacsonyabb energiaigény mellett valósítod
-          meg. A legtöbben ezt automatikusan a hőfok csökkentésével azonosítják, ami részben igaz, de önmagában nem
-          elég. Az igazán jó eredményhez a teljes mosási folyamatot érdemes optimalizálni.
+          meg. A legtöbben ezt automatikusan a hőfok csökkentésével azonosítják, pedig a mosógép nem csak fűt: vizet
+          mozgat, forgat, öblít, és időt ad a mosószernek dolgozni.
         </p>
         <p>
           Ide tartozik a megfelelő program kiválasztása, a töltet mennyisége, a helyes adagolás és a mosószer típusa.
@@ -389,6 +399,14 @@ export default function EnergiatakarekosMosasPage() {
           csak ezután értékeled a végeredményt. Így gyorsabban megtalálod, mi működik legjobban a saját gépedben és a
           saját textiljeiddel, és hosszú távon megbízhatóbb lesz minden alacsony hőfokú mosás.
         </p>
+        <div className="rounded-2xl border border-amber-100 bg-amber-50/70 p-5 md:p-6">
+          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-amber-800">Mosási hiba, amit érdemes elkerülni</p>
+          <p className="mt-3">
+            Ne a rövidebb programmal próbáld „visszahozni” az alacsony hőfokon megspórolt időt. Ha a ciklus túl rövid,
+            a kapszula később oldódhat, a hatóanyagok kevesebb ideig dolgoznak, és a mosás végén könnyen jön a
+            kompromisszum: újraöblítés, újramosás vagy kevésbé friss ruha.
+          </p>
+        </div>
 
         <h2>Hogyan lehet hatékonyan mosni 20–30 fokon?</h2>
         <p>
@@ -436,9 +454,9 @@ export default function EnergiatakarekosMosasPage() {
           mosási érzet, ami összességében csökkenti az energiatakarékos rutin megbízhatóságát.
         </p>
         <p>
-          Az Aquadrop Expert Pro használatánál 20–30 fokos mosás esetén, legalább 18 perces program mellett biztosítható
-          a kapszula maradéktalan oldódása és a foltmentes eredmény. Ez a gyakorlatban egy egyszerű, jól alkalmazható
-          irányelv: alacsony hőfokon se rövidítsd túl a ciklust, ha stabil, prémium minőségű végeredményt szeretnél.
+          Az Aquadrop Expert Pro használatánál 20–30 fokos mosás esetén, legalább 18 perces program mellett támogatott
+          a maradékmentes oldódás. Ez a gyakorlatban egy egyszerű, jól alkalmazható irányelv: alacsony hőfokon se
+          rövidítsd túl a ciklust, ha stabil, prémium minőségű végeredményt szeretnél.
         </p>
         <p>
           Ez azért lényeges, mert a programhossz adja meg azt az időablakot, amelyben a kapszula összetevői kifejthetik

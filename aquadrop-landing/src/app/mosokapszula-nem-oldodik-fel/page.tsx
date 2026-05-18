@@ -170,7 +170,7 @@ export default function MosokapszulaNemOldodikFelPage() {
         category="Mosási útmutató"
         readingTime="kb. 11 perc olvasás"
         title={h1Title}
-        intro="A mosókapszula kényelmes és gyors megoldás a mindennapokban, mégis sokan találkoznak azzal, hogy a kapszula részben megmarad, nyomot hagy, vagy nem oldódik fel teljesen. Jó hír, hogy ez a legtöbbször nem végleges probléma: néhány használati és tárolási szempont átgondolásával a mosási eredmény jellemzően kiszámíthatóbbá tehető."
+        intro="Ha mosás után zselés kapszulamaradékot látsz a ruhán vagy a dobban, nem kell rögtön a kapszulás mosást leírni. A háttérben legtöbbször használati körülmény áll: túl rövid program, túltöltött dob, rossz elhelyezés vagy kevés vízmozgás. Ezeket gyorsan lehet ellenőrizni, és a következő mosásnál sokszor már megelőzhető a gond."
         cta={
           <div className="rounded-[28px] border border-cyan-100/80 bg-gradient-to-br from-white via-cyan-50/80 to-teal-50/80 p-7 shadow-[0_22px_65px_rgba(15,23,42,0.1)] md:p-10">
             <div className="max-w-3xl space-y-5">
@@ -202,7 +202,7 @@ export default function MosokapszulaNemOldodikFelPage() {
         </figure>
 
                 <div className="rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5 md:p-6">
-          <p className="mt-3">Ha a mosókapszula nem oldódik fel, annak leggyakoribb oka a túl rövid program, a túlzsúfolt dob, a rossz elhelyezés vagy a túl kevés vízmozgás. A kapszulát mindig a dob aljára tedd a ruhák alá, és válassz legalább 18 perces programot, hogy a fólia megfelelően fel tudjon oldódni.</p>
+          <p className="mt-3">Ha a mosókapszula nem oldódik fel, annak leggyakoribb oka a túl rövid program, a túlzsúfolt dob, a rossz elhelyezés vagy a túl kevés vízmozgás. A kapszulát mindig a dob aljára tedd a ruhák alá, és alacsony hőfokon válassz legalább 18 perces programot, hogy a fólia megfelelően fel tudjon oldódni.</p>
           <ul className="mt-4 space-y-2">
             <li>A kapszula ne a ruhák tetejére és ne az adagolófiókba kerüljön.</li>
             <li>A túltöltött dob akadályozza a víz és a mosószer mozgását.</li>
@@ -213,7 +213,7 @@ export default function MosokapszulaNemOldodikFelPage() {
         <h2>Miért nem oldódik fel a mosókapszula?</h2>
         <p>
           A probléma jellemzően túl rövid program, túlzsúfolt dob vagy rossz kapszulaelhelyezés miatt jelentkezik.
-          A legtöbbször gyorsan javítható: kapszula a dob aljára, lazább töltet, hosszabb ciklus.
+          A legtöbbször gyorsan javítható: kapszula a dob aljára, ruhák csak utána, lazább töltet, hosszabb ciklus.
         </p>
         <p>
           A teljes rendszer megértéséhez nézd meg az <Link href="/energiatakarekos-mosas">energiatakarékos mosás</Link>{' '}
@@ -234,10 +234,10 @@ export default function MosokapszulaNemOldodikFelPage() {
           kapszula tárolását is.
         </p>
         <p>
-          A „<strong>mosókapszula nem oldódik fel</strong>” probléma jóval gyakoribb keresés, mint azt sokan elsőre
-          gondolnák. A felhasználó oldaláról ez érthető: amikor mosás után kapszulamaradványt látsz a ruhán vagy a
-          dobban, az első reakció általában a bizonytalanság. Fontos azonban, hogy ez önmagában nem jelenti azt, hogy
-          minden kapszula rossz, vagy hogy a kapszulás mosás ne lehetne megbízható.
+          A „<strong>mosókapszula nem oldódik fel</strong>” probléma jóval gyakoribb, mint azt sokan elsőre gondolnák.
+          A felhasználó oldaláról ez érthető: amikor mosás után kapszulamaradványt látsz a ruhán vagy a dobban, az
+          első reakció általában a bizonytalanság. Fontos azonban, hogy ez önmagában nem jelenti azt, hogy minden
+          kapszula rossz, vagy hogy a kapszulás mosás ne lehetne megbízható.
         </p>
         <p>
           A tapasztalatok alapján a háttérben gyakran egyszerűen korrigálható okok állnak: a kapszula elhelyezése,
@@ -245,12 +245,19 @@ export default function MosokapszulaNemOldodikFelPage() {
           jelentősen befolyásolhatják, hogy a kapszula mennyire tud időben és egyenletesen oldódni.
         </p>
         <p>
-          Ebben az útmutatóban lépésről lépésre végigvesszük, <strong>miért nem oldódik fel a mosókapszula</strong>,
-          mire érdemes figyelned használat közben, és mit tehetsz akkor, ha már kialakult a kellemetlen helyzet.
-          Közben természetesen hivatkozunk a kapszulás mosás általános alapelveire is, amelyekről bővebben ebben az
-          útmutatóban olvashatsz:{' '}
+          A legjobb első lépés nem az, hogy erősebb mosást indítasz automatikusan, hanem hogy megnézed a körülményeket:
+          hol volt a kapszula, mennyi ruha volt a dobban, milyen hosszú program futott, és száraz kézzel vetted-e ki a
+          kapszulát. A kapszulás mosás általános alapjait itt találod:{' '}
           <Link href="/mosokapszula-hasznalata">mosókapszula helyes használata</Link>.
         </p>
+        <div className="rounded-2xl border border-cyan-100 bg-white/85 p-5 shadow-sm">
+          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-800">Gyakorlati tanács</p>
+          <p className="mt-3">
+            Ha maradékot látsz, a következő mosásnál először csak egy dolgon változtass: tedd a kapszulát az üres dob
+            aljára, és arra pakold a ruhákat. Ha így javul az eredmény, nem a hőfok volt az egyetlen ok, hanem a kapszula
+            későn jutott vízhez.
+          </p>
+        </div>
         <p>
           A célunk nem az, hogy bonyolult technikai magyarázatokkal terheljünk, hanem az, hogy gyakorlati, otthon is
           azonnal alkalmazható kapaszkodókat adjunk. Egy jól működő mosási rutin általában nem a véletlenen múlik,
@@ -261,14 +268,14 @@ export default function MosokapszulaNemOldodikFelPage() {
         <h2>A leggyakoribb okok, amiért a kapszula nem oldódik fel</h2>
         <p>
           Röviden: több tényező együttes hatása miatt. A legtöbb esetben nem egyetlen „hiba” áll a háttérben, hanem
-          több kisebb körülmény adódik össze. Ilyen lehet például a túl alacsony vízmennyiség, a túlzsúfolt dob,
-          a kapszula nem ideális elhelyezése, egy túl rövid program, vagy olyan környezeti tényezők, amelyek lassítják
-          az oldódást.
+          több kisebb körülmény adódik össze. Ilyen lehet a túl alacsony vízmozgás, a túlzsúfolt dob, a kapszula nem
+          ideális elhelyezése, egy túl rövid program, vagy a párás tárolás miatt tapadóssá vált kapszulaburok.
         </p>
         <p>
           A kapszula akkor tud jól működni, ha a program elején megfelelő vízkapcsolatot kap, és a ruhák között van
           elegendő mozgástér. Ha ez nem teljesül, előfordulhat <strong>mosókapszula maradvány</strong>, illetve az,
-          hogy a kapszula filmrétege késleltetve vagy csak részben oldódik fel.
+          hogy a kapszula filmrétege késleltetve vagy csak részben oldódik fel. 20–30°C-on ez még érzékenyebb pont,
+          mert az alacsonyabb hőfok kevesebb tartalékot hagy a rossz programválasztásnak.
         </p>
         <p>
           A jó megközelítés az, hogy nem egyetlen okot keresel, hanem rutinszerűen ellenőrzöd a fő pontokat: hova
@@ -364,7 +371,8 @@ export default function MosokapszulaNemOldodikFelPage() {
         <p>
           Igen, számíthat. Nem minden program ad azonos körülményeket a kapszula oldódásához. Egyes rövidebb vagy
           speciális ciklusoknál a vízfelvétel és a mechanikai mozgás más lehet, ami bizonyos tölteteknél befolyásolhatja
-          az oldódás egyenletességét.
+          az oldódás egyenletességét. Az Aquadrop Expert Pro használatánál 20–30°C-on a legalább 18 perces programidő
+          azért fontos, mert időt ad a kapszulaburoknak és a hatóanyagok egyenletes eloszlásának.
         </p>
         <p>
           A legbiztosabb iránytű továbbra is a ruha címkéje és a termék használati útmutatója. Ezek együtt adnak
@@ -373,7 +381,8 @@ export default function MosokapszulaNemOldodikFelPage() {
         </p>
         <p>
           Nem érdemes általános „mindenkire érvényes” programreceptet keresni: a töltet típusa, mennyisége és a
-          ruhák összetétele minden háztartásban más. A cél a következetes, tudatos beállítás.
+          ruhák összetétele minden háztartásban más. A cél a következetes, tudatos beállítás, ahol a gyorsprogramot
+          nem használod automatikusan minden töltetre.
         </p>
         <p>
           Hasznos lehet egy rövid saját „alapbeállítás” kialakítása: melyik program vált be a mindennapi vegyes
@@ -469,8 +478,8 @@ export default function MosokapszulaNemOldodikFelPage() {
         <h2>Milyen mosókapszula csökkenti az oldódási hibák esélyét?</h2>
         <p>
           Az Aquadrop célja, hogy a mosás ne bonyolult feladat, hanem könnyen követhető, megbízható rutin legyen.
-          Ennek részeként az Aquadrop Expert Pro kommunikációjában kiemelt szempont a <strong>gyors oldódás</strong>,
-          mert ez a mindennapi használat kényelmét közvetlenül támogatja.
+          Ennek részeként az Aquadrop Expert Pro kommunikációjában kiemelt szempont az alacsony hőfokon is kiszámítható
+          oldódás, mert ez a mindennapi használat kényelmét közvetlenül támogatja.
         </p>
         <p>
           Fontos ugyanakkor látni, hogy a kapszula teljesítménye a használati körülményektől is függ. A megfelelő
@@ -478,8 +487,8 @@ export default function MosokapszulaNemOldodikFelPage() {
           a legkiegyensúlyozottabban működik.
         </p>
         <p>
-          Ha olyan megoldást keresel, amely prémium szemlélettel, letisztult rutinnal és gyakorlatias támogatással
-          közelít a mindennapi mosáshoz, az Aquadrop Expert Pro ebben ad kézzelfogható irányt.
+          Ha olyan megoldást keresel, amely prémium 4 az 1-ben szemlélettel, letisztult rutinnal és gyakorlatias
+          támogatással közelít a mindennapi mosáshoz, az Aquadrop Expert Pro ebben ad kézzelfogható irányt.
         </p>
         <p>
           Az Aquadrop oldalán a fókusz nem webshopos nyomás, hanem edukáció és jól követhető ajánlat. Ennek célja, hogy
