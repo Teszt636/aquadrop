@@ -211,7 +211,7 @@ export function GiftSection() {
               </h2>
               <p className="mx-auto mt-4 max-w-xl text-center text-base leading-6 text-slate-700 lg:mx-0 lg:text-left">
                 {
-                  'V\u00e1s\u00e1rolj 2 doboz Aquadrop Expert Pro mos\u00f3kapszul\u00e1t valamely viszontelad\u00f3 partner\u00fcnkn\u00e9l, t\u00f6ltsd fel a blokkot, \u00e9s ig\u00e9nyeld az aj\u00e1nd\u00e9k kapszul\u00e1t. Az oldalon k\u00f6zvetlen online v\u00e1s\u00e1rl\u00e1s nem \u00e9rhet\u0151 el.'
+                  'Keresd az Aquadrop Expert Pro mosókapszulát viszonteladó partnereinknél, vásárolj belőle 2 dobozzal, töltsd fel a blokkot és küldd el az ajándék mosókapszula igénylést. Az oldalon közvetlen vásárlás nem lehetséges.'
                 }
               </p>
 
