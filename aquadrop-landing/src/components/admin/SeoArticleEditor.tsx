@@ -37,13 +37,24 @@ type FormState = {
   internal_note: string;
 };
 
-const markdownPlaceholder = `# Cikk címe
+type EditorError = {
+  message: string;
+  debug?: string;
+};
 
-Bevezető...
+const markdownPlaceholder = `Bevezető bekezdés...
 
-## Alcím
+## Első alcím
 
-Bekezdés...`;
+Bekezdés...
+
+## Második alcím
+
+Bekezdés...
+
+## Összegzés
+
+Záró gondolat...`;
 
 function textValue(value: unknown): string {
   return typeof value === 'string' ? value : '';
@@ -100,6 +111,26 @@ function isPublished(state: FormState): boolean {
   return state.status === 'published';
 }
 
+function getUserFacingSaveError(error: unknown): EditorError {
+  const message = error instanceof Error ? error.message : 'Ismeretlen mentési hiba.';
+  const knownHungarianMessages = [
+    'Publikálás előtt',
+    'A cikk törzsszövege túl rövid',
+    'Érvénytelen',
+    'A kézi ajánlott cikk ID',
+    'A publikálási dátum hibás'
+  ];
+
+  if (knownHungarianMessages.some((item) => message.includes(item))) {
+    return { message };
+  }
+
+  return {
+    message: 'A cikk mentése nem sikerült. Ellenőrizd a mezőket, majd próbáld újra.',
+    debug: message
+  };
+}
+
 export function SeoArticleEditor({ article, onCancel, onSaved }: SeoArticleEditorProps) {
   const articleId = textValue(article.id);
   const [form, setForm] = useState<FormState>(() => ({
@@ -126,7 +157,8 @@ export function SeoArticleEditor({ article, onCancel, onSaved }: SeoArticleEdito
   const [showPreview, setShowPreview] = useState(true);
   const [showAdvancedRelated, setShowAdvancedRelated] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<EditorError | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const publicPath = useMemo(
     () => (form.audience === 'partner' ? `/partner/tudastar/${form.slug || '[slug]'}` : `/tudastar/${form.slug || '[slug]'}`),
@@ -134,6 +166,7 @@ export function SeoArticleEditor({ article, onCancel, onSaved }: SeoArticleEdito
   );
 
   function update<K extends keyof FormState>(key: K, value: FormState[K]) {
+    setSuccessMessage(null);
     setForm((previous) => ({ ...previous, [key]: value }));
   }
 
@@ -152,12 +185,13 @@ export function SeoArticleEditor({ article, onCancel, onSaved }: SeoArticleEdito
   async function save() {
     const validationError = validate();
     if (validationError) {
-      setError(validationError);
+      setError({ message: validationError });
       return;
     }
 
     setSaving(true);
     setError(null);
+    setSuccessMessage(null);
 
     const publishedAt = isPublished(form) && !form.published_at ? new Date().toISOString() : form.published_at;
     const updates = {
@@ -193,8 +227,9 @@ export function SeoArticleEditor({ article, onCancel, onSaved }: SeoArticleEdito
         throw new Error(body.error ?? 'Sikertelen mentés.');
       }
       await onSaved();
+      setSuccessMessage('A cikk mentése sikeres.');
     } catch (saveError) {
-      setError(saveError instanceof Error ? saveError.message : 'Sikertelen mentés.');
+      setError(getUserFacingSaveError(saveError));
     } finally {
       setSaving(false);
     }
@@ -227,10 +262,20 @@ export function SeoArticleEditor({ article, onCancel, onSaved }: SeoArticleEdito
         </header>
 
         <div className="space-y-5 p-4 md:p-6">
-          {error ? <p className="rounded-lg border border-rose-500/40 bg-rose-950/50 p-3 text-sm text-rose-100">{error}</p> : null}
+          {successMessage ? (
+            <p className="rounded-lg border border-emerald-500/40 bg-emerald-950/50 p-3 text-sm font-semibold text-emerald-100">
+              {successMessage}
+            </p>
+          ) : null}
+          {error ? (
+            <div className="rounded-lg border border-rose-500/40 bg-rose-950/50 p-3 text-sm text-rose-100">
+              <p className="font-semibold">{error.message}</p>
+              {error.debug ? <p className="mt-2 text-xs text-rose-200/75">Admin debug: {error.debug}</p> : null}
+            </div>
+          ) : null}
           {isPublished(form) && !form.is_indexable ? (
-            <p className="rounded-lg border border-amber-400/40 bg-amber-950/40 p-3 text-sm text-amber-100">
-              A cikk publikált, de nem indexelhető. Így nem kerül be a sitemapbe.
+            <p className="rounded-lg border border-amber-300 bg-amber-950/70 p-4 text-sm font-semibold text-amber-50 shadow-lg shadow-amber-950/30">
+              A cikk publikált státuszú, de nem indexelhető. Így nem jelenik meg a publikus tudástárban és nem kerül be a sitemapbe.
             </p>
           ) : null}
 
@@ -281,6 +326,9 @@ export function SeoArticleEditor({ article, onCancel, onSaved }: SeoArticleEdito
               <label className="space-y-1 text-sm">
                 <span>SEO cím</span>
                 <input value={form.seo_title} onChange={(event) => update('seo_title', event.target.value)} className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-white" />
+                <span className="block text-xs text-slate-400">
+                  Ajánlott hossz: 50-65 karakter. Jelenleg: {form.seo_title.length} karakter.
+                </span>
               </label>
               <label className="space-y-1 text-sm">
                 <span>Fő kulcsszó</span>
@@ -289,6 +337,9 @@ export function SeoArticleEditor({ article, onCancel, onSaved }: SeoArticleEdito
               <label className="space-y-1 text-sm md:col-span-2">
                 <span>Meta leírás</span>
                 <textarea value={form.meta_description} onChange={(event) => update('meta_description', event.target.value)} className="min-h-20 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-white" />
+                <span className="block text-xs text-slate-400">
+                  Ajánlott hossz: 140-160 karakter. Jelenleg: {form.meta_description.length} karakter.
+                </span>
               </label>
               <label className="space-y-1 text-sm md:col-span-2">
                 <span>Kivonat</span>
@@ -305,7 +356,12 @@ export function SeoArticleEditor({ article, onCancel, onSaved }: SeoArticleEdito
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
                 <h3 className="text-lg font-semibold text-white">Cikk törzsszöveg</h3>
-                <p className="mt-1 text-xs text-slate-400">Használható: ## Alcím, ### Kisebb alcím, - felsorolás, **kiemelés**, [link](https://...)</p>
+                <p className="mt-1 text-xs text-slate-400">
+                  A cikk címe automatikusan H1 lesz. A törzsszövegben használj ## alcímeket, ### kisebb alcímeket, felsorolást, **kiemelést** és [link](https://...) formátumot.
+                </p>
+                <p className="mt-1 text-xs text-slate-400">
+                  Publikálás előtt legalább 1000 karakter szükséges. Jelenleg: {form.body.trim().length} karakter.
+                </p>
               </div>
               <button type="button" onClick={() => setShowPreview((value) => !value)} className="rounded-md border border-slate-700 px-3 py-2 text-sm hover:bg-slate-800">
                 {showPreview ? 'Előnézet elrejtése' : 'Előnézet'}
@@ -363,7 +419,7 @@ export function SeoArticleEditor({ article, onCancel, onSaved }: SeoArticleEdito
             <div className="mt-4 grid gap-4 md:grid-cols-2">
               <label className="flex items-center gap-2 text-sm">
                 <input type="checkbox" checked={form.is_indexable} onChange={(event) => update('is_indexable', event.target.checked)} className="h-4 w-4" />
-                Indexelhető
+                Indexelhető és sitemapbe bekerülhet
               </label>
               <label className="space-y-1 text-sm">
                 <span>Publikálási dátum</span>
@@ -372,6 +428,9 @@ export function SeoArticleEditor({ article, onCancel, onSaved }: SeoArticleEdito
               <div className="rounded-md border border-slate-800 bg-slate-900 p-3 text-sm md:col-span-2">
                 <span className="text-slate-400">Publikus URL előnézet: </span>
                 <span className="font-semibold text-cyan-200">{publicPath}</span>
+                <p className="mt-2 text-xs text-slate-400">
+                  Publikus oldalon csak akkor jelenik meg, ha a státusz Publikált és az Indexelhető mező be van kapcsolva.
+                </p>
               </div>
               <label className="space-y-1 text-sm md:col-span-2">
                 <span>Belső megjegyzés</span>
