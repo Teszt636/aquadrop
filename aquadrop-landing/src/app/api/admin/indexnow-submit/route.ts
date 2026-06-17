@@ -21,15 +21,29 @@ function isStringArray(value: unknown): value is string[] {
   return Array.isArray(value) && value.every((item) => typeof item === 'string');
 }
 
+function hasSitemapGatedSeoArticleUrl(urls: string[]): boolean {
+  return urls.some((url) => {
+    try {
+      const parsedUrl = url.startsWith('/') ? new URL(url, 'https://www.aquadrop.hu') : new URL(url);
+      const pathname = parsedUrl.pathname.replace(/\/+$/, '') || '/';
+      return /^\/tudastar\/[^/]+$/.test(pathname) || /^\/partner\/tudastar\/[^/]+$/.test(pathname);
+    } catch {
+      return false;
+    }
+  });
+}
+
 type ResolvedIndexNowRequest =
   | {
       urls: string[];
       preset: IndexNowPreset | null;
+      knownIndexableUrls: string[];
     }
   | NextResponse;
 
 async function getUrlsFromBody(body: IndexNowSubmitBody): Promise<ResolvedIndexNowRequest> {
   const urls: string[] = [];
+  let knownIndexableUrls: string[] = [];
   let preset: IndexNowPreset | null = null;
 
   if (body.preset !== undefined) {
@@ -42,7 +56,8 @@ async function getUrlsFromBody(body: IndexNowSubmitBody): Promise<ResolvedIndexN
     if (body.preset === 'seo-core') {
       urls.push(...SEO_CORE_INDEXNOW_URLS);
     } else {
-      urls.push(...(await fetchAquadropSitemapUrls()));
+      knownIndexableUrls = await fetchAquadropSitemapUrls();
+      urls.push(...knownIndexableUrls);
     }
   }
 
@@ -58,7 +73,11 @@ async function getUrlsFromBody(body: IndexNowSubmitBody): Promise<ResolvedIndexN
     return NextResponse.json({ success: false, error: 'Provide urls or preset: seo-core/sitemap.' }, { status: 400 });
   }
 
-  return { urls, preset };
+  if (knownIndexableUrls.length === 0 && hasSitemapGatedSeoArticleUrl(urls)) {
+    knownIndexableUrls = await fetchAquadropSitemapUrls();
+  }
+
+  return { urls, preset, knownIndexableUrls };
 }
 
 export async function POST(request: Request) {
@@ -76,7 +95,10 @@ export async function POST(request: Request) {
       return resolvedRequest;
     }
 
-    const result = await submitUrlsToIndexNow(resolvedRequest.urls, { dryRun: body.dryRun === true });
+    const result = await submitUrlsToIndexNow(resolvedRequest.urls, {
+      dryRun: body.dryRun === true,
+      knownIndexableUrls: resolvedRequest.knownIndexableUrls
+    });
 
     return NextResponse.json({
       success: true,
