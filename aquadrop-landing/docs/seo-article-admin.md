@@ -70,6 +70,18 @@ Egy cikk akkor kerül sitemapbe, ha:
 
 Ha egy cikk publikált, de nem indexelhető, megjelenhet publikus URL-en csak akkor, ha a publikus lekérő engedi. A jelenlegi publikus lekérők és sitemap csak `is_indexable=true` cikket adnak vissza.
 
+## IndexNow
+
+Az adminos SEO cikkek akkor alkalmasak IndexNow beküldésre, ha:
+
+- `status = published`
+- `is_indexable = true`
+- a cikk URL-je szerepel a sitemapben
+
+A `/tudastar` és `/partner/tudastar` listaoldalak is beküldhetők IndexNow-ra. A cikk detail oldalaknál az IndexNow szűrés a sitemapben szereplő URL-ekkel van összhangban, ezért draft, archived és nem indexelhető cikkek nem küldhetők be.
+
+Az IndexNow beküldés canonical hostja egységesen `https://www.aquadrop.hu`.
+
 ## Publikálás előtti ellenőrzés
 
 Publikálás előtt kötelező:

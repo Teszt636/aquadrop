@@ -20,6 +20,8 @@ const CORE_SEO_PATHS = [
 const STATIC_INDEXABLE_PATHS = [
   '/',
   '/partner',
+  '/tudastar',
+  '/partner/tudastar',
   '/adatvedelmi-tajekoztato',
   '/suti-tajekoztato',
   '/publikus-seo-oldal'
@@ -28,6 +30,11 @@ const STATIC_INDEXABLE_PATHS = [
 const ARTICLE_PATHS = Object.keys(articleConfig).map((slug) => `/${slug}`);
 
 const INDEXABLE_PATHS = new Set<string>([...STATIC_INDEXABLE_PATHS, ...ARTICLE_PATHS]);
+
+const SITEMAP_GATED_INDEXABLE_PATH_PATTERNS = [
+  /^\/tudastar\/[^/]+$/,
+  /^\/partner\/tudastar\/[^/]+$/
+];
 
 const FORBIDDEN_SEGMENT_PATTERNS: Array<{ pattern: RegExp; reason: string }> = [
   { pattern: /^admin(?:\/|$)/, reason: 'admin_url' },
@@ -152,6 +159,23 @@ function normalizePathname(pathname: string): string {
   return pathname.replace(/\/+$/, '');
 }
 
+function getKnownIndexablePathSet(urls?: string[]): Set<string> {
+  const paths = new Set<string>();
+
+  for (const url of urls ?? []) {
+    try {
+      const parsedUrl = url.startsWith('/') ? new URL(url, DEFAULT_INDEXNOW_ORIGIN) : new URL(url);
+      if (parsedUrl.hostname === PRIMARY_HOST && parsedUrl.protocol === 'https:') {
+        paths.add(normalizePathname(parsedUrl.pathname));
+      }
+    } catch {
+      // Invalid URLs are handled by the main inspection path.
+    }
+  }
+
+  return paths;
+}
+
 function getForbiddenReason(pathname: string): string | null {
   const pathWithoutSlash = pathname.replace(/^\/+/, '').toLowerCase();
 
@@ -169,7 +193,10 @@ function getForbiddenReason(pathname: string): string | null {
   return null;
 }
 
-function inspectAquadropUrl(input: string): { normalizedUrl: string | null; reason: string | null } {
+function inspectAquadropUrl(
+  input: string,
+  knownIndexablePaths: Set<string> = new Set()
+): { normalizedUrl: string | null; reason: string | null } {
   const trimmedInput = input.trim();
 
   if (!trimmedInput) {
@@ -208,7 +235,9 @@ function inspectAquadropUrl(input: string): { normalizedUrl: string | null; reas
 
   const normalizedUrl = `${DEFAULT_INDEXNOW_ORIGIN}${pathname === '/' ? '/' : pathname}`;
 
-  if (!INDEXABLE_PATHS.has(pathname)) {
+  const isSitemapGatedPath = SITEMAP_GATED_INDEXABLE_PATH_PATTERNS.some((pattern) => pattern.test(pathname));
+
+  if (!INDEXABLE_PATHS.has(pathname) && !(isSitemapGatedPath && knownIndexablePaths.has(pathname))) {
     return { normalizedUrl, reason: 'not_in_indexable_allowlist' };
   }
 
@@ -223,13 +252,17 @@ export function isIndexableAquadropUrl(url: string): boolean {
   return inspectAquadropUrl(url).reason === null;
 }
 
-export function filterIndexNowUrls(urls: string[]): { submitted: string[]; skipped: IndexNowSkippedUrl[] } {
+export function filterIndexNowUrls(
+  urls: string[],
+  options: { knownIndexableUrls?: string[] } = {}
+): { submitted: string[]; skipped: IndexNowSkippedUrl[] } {
   const submitted: string[] = [];
   const skipped: IndexNowSkippedUrl[] = [];
   const submittedSet = new Set<string>();
+  const knownIndexablePaths = getKnownIndexablePathSet(options.knownIndexableUrls);
 
   for (const url of urls) {
-    const inspectedUrl = inspectAquadropUrl(url);
+    const inspectedUrl = inspectAquadropUrl(url, knownIndexablePaths);
 
     if (!inspectedUrl.normalizedUrl || inspectedUrl.reason) {
       skipped.push({ url, reason: inspectedUrl.reason ?? 'not_indexable' });
@@ -250,11 +283,11 @@ export function filterIndexNowUrls(urls: string[]): { submitted: string[]; skipp
 
 export async function submitUrlsToIndexNow(
   urls: string[],
-  options: { dryRun?: boolean } = {}
+  options: { dryRun?: boolean; knownIndexableUrls?: string[] } = {}
 ): Promise<SubmitUrlsToIndexNowResult> {
   const key = getIndexNowKey();
   const host = getIndexNowOrigin().hostname;
-  const { submitted, skipped } = filterIndexNowUrls(urls);
+  const { submitted, skipped } = filterIndexNowUrls(urls, { knownIndexableUrls: options.knownIndexableUrls });
   const dryRun = options.dryRun === true;
 
   if (dryRun || submitted.length === 0) {
