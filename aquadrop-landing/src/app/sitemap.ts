@@ -1,6 +1,9 @@
 import { MetadataRoute } from 'next';
 
+import { buildSeoArticlePath, getPublishedSeoArticles } from '@/lib/articles/seo-articles';
 import { PRIMARY_ORIGIN } from '@/lib/site';
+
+export const dynamic = 'force-dynamic';
 
 const routes: Array<{
   path: string;
@@ -22,14 +25,30 @@ const routes: Array<{
   { path: '/mosasi-koltseg-kalkulator', lastModified: '2026-04-23', changeFrequency: 'weekly', priority: 0.7 },
   { path: '/adatvedelmi-tajekoztato', lastModified: '2026-04-22', changeFrequency: 'monthly', priority: 0.5 },
   { path: '/suti-tajekoztato', lastModified: '2026-04-22', changeFrequency: 'monthly', priority: 0.5 },
-  { path: '/partner', lastModified: '2026-04-22', changeFrequency: 'weekly', priority: 0.7 }
+  { path: '/partner', lastModified: '2026-04-22', changeFrequency: 'weekly', priority: 0.7 },
+  { path: '/tudastar', lastModified: '2026-06-17', changeFrequency: 'weekly', priority: 0.7 },
+  { path: '/partner/tudastar', lastModified: '2026-06-17', changeFrequency: 'weekly', priority: 0.7 }
 ];
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  return routes.map((route) => ({
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const [consumerArticles, partnerArticles] = await Promise.all([
+    getPublishedSeoArticles('consumer'),
+    getPublishedSeoArticles('partner')
+  ]);
+
+  const staticRoutes = routes.map((route) => ({
     url: `${PRIMARY_ORIGIN}${route.path}`,
     lastModified: route.lastModified,
     changeFrequency: route.changeFrequency,
     priority: route.priority
   }));
+
+  const articleRoutes = [...consumerArticles, ...partnerArticles].map((article) => ({
+    url: `${PRIMARY_ORIGIN}${buildSeoArticlePath(article)}`,
+    lastModified: article.updated_at ?? article.published_at ?? article.created_at,
+    changeFrequency: 'weekly' as const,
+    priority: 0.6
+  }));
+
+  return [...staticRoutes, ...articleRoutes];
 }

@@ -6,6 +6,7 @@ export type AdminBaseTableName =
   | 'gift_claims'
   | 'reseller_applications'
   | 'media_kit_downloads'
+  | 'seo_articles'
   | 'admin_users';
 
 export type AdminTableViewName = AdminBaseTableName | 'unsubscribed';
@@ -18,7 +19,7 @@ export type AdminColumnConfig = {
   type?: AdminColumnType;
   editable?: boolean;
   inputType?: 'text' | 'select' | 'textarea' | 'date' | 'datetime-local' | 'number' | 'checkbox';
-  options?: string[];
+  options?: Array<string | { value: string; label: string }>;
   hiddenInTable?: boolean;
   hiddenInDetails?: boolean;
   formatter?: (value: unknown) => string;
@@ -148,6 +149,49 @@ export const RESELLER_PIPELINE_OPTIONS = [
   'Partner lett',
   'Elutasítva'
 ];
+
+export const SEO_ARTICLE_STATUS_OPTIONS = [
+  { value: 'draft', label: 'Vázlat' },
+  { value: 'published', label: 'Publikált' },
+  { value: 'archived', label: 'Archivált' }
+];
+
+export const SEO_ARTICLE_AUDIENCE_OPTIONS = [
+  { value: 'consumer', label: 'Lakossági tudástár' },
+  { value: 'partner', label: 'Viszonteladói tudástár' }
+];
+
+export const SEO_ARTICLE_GOAL_OPTIONS = [
+  { value: 'consumer_product_education', label: 'Mosókapszula edukáció' },
+  { value: 'consumer_problem_solution', label: 'Mosási probléma megoldása' },
+  { value: 'consumer_energy_saving', label: 'Energiatakarékos mosás' },
+  { value: 'consumer_usage_guide', label: 'Használati útmutató' },
+  { value: 'partner_reseller_lead', label: 'Viszonteladói érdeklődés' },
+  { value: 'partner_wholesale_interest', label: 'Nagykereskedelmi érdeklődés' },
+  { value: 'partner_retail_strategy', label: 'Kiskereskedelmi stratégia' },
+  { value: 'partner_category_education', label: 'Partner edukáció' }
+];
+
+function formatOptionLabel(options: Array<string | { value: string; label: string }>, value: unknown): string {
+  const normalized = typeof value === 'string' ? value : '';
+  const option = options.find((item) => (typeof item === 'string' ? item : item.value) === normalized);
+  if (!option) {
+    return normalized || '-';
+  }
+  return typeof option === 'string' ? option : option.label;
+}
+
+export function formatSeoArticleStatus(value: unknown): string {
+  return formatOptionLabel(SEO_ARTICLE_STATUS_OPTIONS, value);
+}
+
+export function formatSeoArticleAudience(value: unknown): string {
+  return formatOptionLabel(SEO_ARTICLE_AUDIENCE_OPTIONS, value);
+}
+
+export function formatSeoArticleGoal(value: unknown): string {
+  return formatOptionLabel(SEO_ARTICLE_GOAL_OPTIONS, value);
+}
 
 export function getGiftStatusValue(row: Record<string, unknown>): string {
   const raw = row.status;
@@ -346,6 +390,57 @@ export const adminTableConfigs: Record<AdminTableViewName, AdminTableConfig> = {
       { key: 'usage_type', label: 'Felület', formatter: formatUsageType },
       { key: 'downloaded_file', label: 'Letöltve', type: 'mapped', formatter: formatDownloadedFile },
       { key: 'created_at', label: 'Letöltés ideje', type: 'date' },
+      { key: 'id', label: 'ID', hiddenInTable: true, hiddenInDetails: true }
+    ]
+  },
+  seo_articles: {
+    label: 'SEO cikkek',
+    sourceTable: 'seo_articles',
+    emptyState: 'Még nincs feltöltött SEO cikk.',
+    columns: [
+      {
+        key: 'status',
+        label: 'Státusz',
+        editable: true,
+        inputType: 'select',
+        type: 'badge',
+        options: SEO_ARTICLE_STATUS_OPTIONS,
+        formatter: formatSeoArticleStatus
+      },
+      {
+        key: 'audience',
+        label: 'Célcsoport',
+        editable: true,
+        inputType: 'select',
+        options: SEO_ARTICLE_AUDIENCE_OPTIONS,
+        formatter: formatSeoArticleAudience
+      },
+      {
+        key: 'article_goal',
+        label: 'Cikk célja',
+        editable: true,
+        inputType: 'select',
+        options: SEO_ARTICLE_GOAL_OPTIONS,
+        formatter: formatSeoArticleGoal
+      },
+      { key: 'category', label: 'Kategória', editable: true },
+      { key: 'title', label: 'Cím', editable: true },
+      { key: 'slug', label: 'Slug', editable: true },
+      { key: 'primary_keyword', label: 'Fő kulcsszó', editable: true },
+      { key: 'published_at', label: 'Publikálva', editable: true, inputType: 'datetime-local', type: 'date' },
+      { key: 'updated_at', label: 'Frissítve', type: 'date' },
+      { key: 'excerpt', label: 'Kivonat', editable: true, inputType: 'textarea', hiddenInTable: true },
+      { key: 'seo_title', label: 'SEO cím', editable: true, hiddenInTable: true },
+      { key: 'meta_description', label: 'Meta leírás', editable: true, inputType: 'textarea', hiddenInTable: true },
+      { key: 'body', label: 'Törzsszöveg', editable: true, inputType: 'textarea', hiddenInTable: true },
+      { key: 'hero_image_url', label: 'Hero kép URL', editable: true, hiddenInTable: true },
+      { key: 'hero_image_alt', label: 'Hero kép alt', editable: true, hiddenInTable: true },
+      { key: 'secondary_keywords', label: 'Másodlagos kulcsszavak', editable: true, inputType: 'textarea', hiddenInTable: true },
+      { key: 'manual_related_article_ids', label: 'Kézi ajánlott cikk ID-k', editable: true, inputType: 'textarea', hiddenInTable: true },
+      { key: 'auto_related_enabled', label: 'Automatikus ajánlók', editable: true, inputType: 'checkbox', type: 'boolean', hiddenInTable: true },
+      { key: 'is_indexable', label: 'Indexelhető', editable: true, inputType: 'checkbox', type: 'boolean', hiddenInTable: true },
+      { key: 'internal_note', label: 'Belső megjegyzés', editable: true, inputType: 'textarea', hiddenInTable: true },
+      { key: 'created_at', label: 'Létrehozva', type: 'date', hiddenInTable: true },
       { key: 'id', label: 'ID', hiddenInTable: true, hiddenInDetails: true }
     ]
   },

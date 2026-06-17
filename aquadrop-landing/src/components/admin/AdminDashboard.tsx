@@ -20,6 +20,7 @@ import {
   getBudapestDateKey,
   getBudapestDateTimeParts
 } from '@/lib/datetime/budapest';
+import { SeoArticleEditor } from '@/components/admin/SeoArticleEditor';
 
 type Row = Record<string, unknown>;
 type AdminUser = { id: string; name: string; email: string };
@@ -46,6 +47,7 @@ const TABLE_ORDER: AdminTableViewName[] = [
   'announcement_signups',
   'unsubscribed',
   'media_kit_downloads',
+  'seo_articles',
   'gift_claims',
   'reseller_applications',
   'admin_users'
@@ -118,6 +120,14 @@ function renderCellValue(column: AdminColumnConfig, value: unknown) {
     return value ? 'Igen' : 'Nem';
   }
   return stringifyValue(value) || '-';
+}
+
+function getOptionValue(option: string | { value: string; label: string }): string {
+  return typeof option === 'string' ? option : option.value;
+}
+
+function getOptionLabel(option: string | { value: string; label: string }): string {
+  return typeof option === 'string' ? option : option.label;
 }
 
 function normalizeNextActionParts(value: unknown): { date: string; hour: string; minute: string } {
@@ -230,6 +240,7 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedRow, setSelectedRow] = useState<Row | null>(null);
+  const [seoArticleEditorRow, setSeoArticleEditorRow] = useState<Row | null>(null);
   const [editValues, setEditValues] = useState<Record<string, string>>({});
   const [rowEdits, setRowEdits] = useState<Record<string, Record<string, unknown>>>({});
   const [rowSaveState, setRowSaveState] = useState<Record<string, { status: 'idle' | 'saving' | 'saved' | 'error'; message: string | null }>>({});
@@ -266,7 +277,7 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
     () => {
       const visible: AdminTableViewName[] =
         sessionUser.role === 'crm_user'
-          ? TABLE_ORDER.filter((table) => table !== 'admin_users')
+          ? TABLE_ORDER.filter((table) => table !== 'admin_users' && table !== 'seo_articles')
           : TABLE_ORDER;
       return visible
         .filter((key) => !(key === 'admin_users' && sessionUser.role !== 'admin'))
@@ -377,6 +388,7 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
   const activeConfig = adminTableConfigs[activeTable];
   const isResellerTable = activeTable === 'reseller_applications';
   const isGiftClaimsTable = activeTable === 'gift_claims';
+  const isSeoArticlesTable = activeTable === 'seo_articles';
   const canModifyActiveTable = isAdmin || CRM_EDITABLE_TABLES.includes(activeTable);
   const canDeleteInTable = isAdmin;
   const tableColumns = useMemo(
@@ -408,6 +420,22 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
       })
     );
   }, [query, rows, tableColumns]);
+
+  const seoArticleRows = useMemo(() => {
+    if (!isSeoArticlesTable) {
+      return filteredRows;
+    }
+
+    return filteredRows.filter((row) => {
+      if (statusFilter !== 'all' && stringifyValue(row.status) !== statusFilter) {
+        return false;
+      }
+      if (assignedFilter !== 'all' && stringifyValue(row.audience) !== assignedFilter) {
+        return false;
+      }
+      return true;
+    });
+  }, [assignedFilter, filteredRows, isSeoArticlesTable, statusFilter]);
 
   const resellerSearchRows = useMemo(() => {
     if (!isResellerTable) {
@@ -531,6 +559,11 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
   );
 
   function openRow(row: Row) {
+    if (activeTable === 'seo_articles') {
+      setSeoArticleEditorRow(row);
+      return;
+    }
+
     setSelectedRow(row);
 
     const nextValues: Record<string, string> = {};
@@ -835,7 +868,11 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
       return;
     }
 
-    const approved = window.confirm('Biztosan törlöd ezt a rekordot? Ez nem vonható vissza.');
+    const approved = window.confirm(
+      activeTable === 'seo_articles'
+        ? 'Biztosan archiválod ezt a cikket?'
+        : 'Biztosan törlöd ezt a rekordot? Ez nem vonható vissza.'
+    );
 
     if (!approved) {
       return;
@@ -858,6 +895,33 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
     }
 
     await loadRows();
+  }
+
+  async function closeSeoArticleEditorAfterSave() {
+    await loadRows();
+    setSeoArticleEditorRow(null);
+  }
+
+  async function createSeoArticle() {
+    if (!isAdmin || activeTable !== 'seo_articles') {
+      return;
+    }
+
+    const response = await fetch('/api/admin/table', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ table: 'seo_articles', row: {} })
+    });
+    const body = (await response.json()) as { row?: Row; error?: string };
+    if (!response.ok) {
+      alert(body.error ?? 'Sikertelen cikk létrehozás.');
+      return;
+    }
+
+    await loadRows();
+    if (body.row) {
+      openRow(body.row);
+    }
   }
 
   async function logout() {
@@ -1002,6 +1066,36 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
           placeholder="Keresés bármely mezőben..."
           className="mb-4 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white outline-none ring-cyan-400 transition focus:ring-2"
         />
+        {isSeoArticlesTable ? (
+          <div className="mb-4 flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={() => void createSeoArticle()}
+              className="rounded-md bg-cyan-500 px-3 py-2 text-sm font-semibold text-slate-950 hover:bg-cyan-400"
+            >
+              Új SEO cikk
+            </button>
+            <select
+              value={statusFilter}
+              onChange={(event) => setStatusFilter(event.target.value)}
+              className="rounded border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
+            >
+              <option value="all">Összes</option>
+              <option value="draft">Vázlat</option>
+              <option value="published">Publikált</option>
+              <option value="archived">Archivált</option>
+            </select>
+            <select
+              value={assignedFilter}
+              onChange={(event) => setAssignedFilter(event.target.value)}
+              className="rounded border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
+            >
+              <option value="all">Minden célcsoport</option>
+              <option value="consumer">Lakossági</option>
+              <option value="partner">Viszonteladói</option>
+            </select>
+          </div>
+        ) : null}
         {activeTable === 'admin_users' ? (
           <div className="space-y-4">
             <div className="grid gap-2 rounded-lg border border-slate-800 bg-slate-950/60 p-3 md:grid-cols-4">
@@ -1929,7 +2023,7 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
                 </tr>
               </thead>
               <tbody>
-                {filteredRows.map((row) => (
+                {seoArticleRows.map((row) => (
                   <tr
                     key={getRowId(row)}
                     className={`border-b border-slate-800 align-top ${activeConfig.newRowHighlight?.(row) ? 'bg-slate-800/60 font-semibold' : ''}`}
@@ -1962,7 +2056,7 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
                             onClick={() => void deleteRow(row)}
                             className="rounded border border-rose-500/40 px-2 py-1 text-xs text-rose-300 hover:bg-rose-500/15"
                           >
-                            Törlés
+                            {activeTable === 'seo_articles' ? 'Archiválás' : 'Törlés'}
                           </button>
                         ) : null}
                       </div>
@@ -1974,7 +2068,7 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
           </div>
         )}
 
-        {!loading && (isResellerTable ? resellerSearchRows : isGiftClaimsTable ? giftSearchRows : filteredRows).length === 0 ? (
+        {!loading && (isResellerTable ? resellerSearchRows : isGiftClaimsTable ? giftSearchRows : isSeoArticlesTable ? seoArticleRows : filteredRows).length === 0 ? (
           <p className="py-6 text-center text-sm text-slate-400">
             {activeConfig.emptyState ?? 'Nincs megjeleníthető rekord.'}
           </p>
@@ -1982,7 +2076,7 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
 
         <p className="text-slate-400 text-sm mt-4">
           {query.trim()
-            ? `Szűrt találatok: ${(isResellerTable ? resellerSearchRows : isGiftClaimsTable ? giftSearchRows : filteredRows).length} / ${rows.length} tétel`
+            ? `Szűrt találatok: ${(isResellerTable ? resellerSearchRows : isGiftClaimsTable ? giftSearchRows : isSeoArticlesTable ? seoArticleRows : filteredRows).length} / ${rows.length} tétel`
             : `Összesen: ${rows.length} tétel`}
         </p>
       </div>
@@ -2011,6 +2105,13 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
           </div>
         </div>
       ) : null}
+      {seoArticleEditorRow ? (
+        <SeoArticleEditor
+          article={seoArticleEditorRow}
+          onCancel={() => setSeoArticleEditorRow(null)}
+          onSaved={closeSeoArticleEditorAfterSave}
+        />
+      ) : null}
       {selectedRow ? (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 p-3 md:items-center">
           <div className="max-h-[90vh] w-full max-w-2xl overflow-auto rounded-xl border border-slate-700 bg-slate-900 p-4 md:p-6">
@@ -2036,8 +2137,8 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
                           className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
                         >
                           {(column.options ?? []).map((option) => (
-                            <option key={option} value={option}>
-                              {option}
+                            <option key={getOptionValue(option)} value={getOptionValue(option)}>
+                              {getOptionLabel(option)}
                             </option>
                           ))}
                         </select>

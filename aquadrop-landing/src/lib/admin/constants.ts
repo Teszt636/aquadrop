@@ -15,6 +15,7 @@ export const ADMIN_BASE_TABLES = [
   'announcement_signups',
   'unsubscribed',
   'media_kit_downloads',
+  'seo_articles',
   'gift_claims',
   'reseller_applications',
   'admin_users'
