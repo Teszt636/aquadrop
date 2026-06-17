@@ -2,6 +2,7 @@ import Link from 'next/link';
 
 import { JsonLd } from '@/components/JsonLd';
 import { FooterSection } from '@/components/sections';
+import { SafeMarkdown } from '@/components/seo-articles/SafeMarkdown';
 import {
   buildSeoArticlePath,
   getArticleCta,
@@ -31,43 +32,6 @@ function formatDate(value: string | null): string {
 function getExcerpt(article: SeoArticle): string {
   if (article.excerpt?.trim()) return article.excerpt.trim();
   return article.body.replace(/\s+/g, ' ').trim().slice(0, 180);
-}
-
-function renderBody(body: string) {
-  return body
-    .split(/\n{2,}/)
-    .map((block) => block.trim())
-    .filter(Boolean)
-    .map((block, index) => {
-      if (block.startsWith('## ')) {
-        return (
-          <h2 key={index} className="mt-10 text-2xl font-semibold leading-tight text-slate-950 md:text-3xl">
-            {block.replace(/^##\s+/, '')}
-          </h2>
-        );
-      }
-      if (block.startsWith('### ')) {
-        return (
-          <h3 key={index} className="mt-8 text-xl font-semibold leading-tight text-slate-950">
-            {block.replace(/^###\s+/, '')}
-          </h3>
-        );
-      }
-      if (/^[-*]\s+/m.test(block)) {
-        return (
-          <ul key={index} className="list-disc space-y-2 pl-6 text-slate-700">
-            {block.split('\n').map((item) => (
-              <li key={item}>{item.replace(/^[-*]\s+/, '')}</li>
-            ))}
-          </ul>
-        );
-      }
-      return (
-        <p key={index} className="text-base leading-8 text-slate-700 md:text-lg">
-          {block}
-        </p>
-      );
-    });
 }
 
 export function SeoArticleListPage({ audience, articles }: { audience: SeoArticleAudience; articles: SeoArticle[] }) {
@@ -166,7 +130,7 @@ export function SeoArticleDetailPage({
             ) : null}
 
             <div className="mt-10 space-y-6 rounded-lg border border-cyan-100 bg-white/85 p-6 shadow-sm md:p-9">
-              {renderBody(article.body)}
+              <SafeMarkdown markdown={article.body} className="space-y-6" />
             </div>
 
             <section className="mt-8 rounded-lg border border-cyan-200 bg-cyan-900 p-6 text-white md:p-8">

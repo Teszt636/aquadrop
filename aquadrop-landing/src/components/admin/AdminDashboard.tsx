@@ -20,6 +20,7 @@ import {
   getBudapestDateKey,
   getBudapestDateTimeParts
 } from '@/lib/datetime/budapest';
+import { SeoArticleEditor } from '@/components/admin/SeoArticleEditor';
 
 type Row = Record<string, unknown>;
 type AdminUser = { id: string; name: string; email: string };
@@ -239,6 +240,7 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedRow, setSelectedRow] = useState<Row | null>(null);
+  const [seoArticleEditorRow, setSeoArticleEditorRow] = useState<Row | null>(null);
   const [editValues, setEditValues] = useState<Record<string, string>>({});
   const [rowEdits, setRowEdits] = useState<Record<string, Record<string, unknown>>>({});
   const [rowSaveState, setRowSaveState] = useState<Record<string, { status: 'idle' | 'saving' | 'saved' | 'error'; message: string | null }>>({});
@@ -557,6 +559,11 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
   );
 
   function openRow(row: Row) {
+    if (activeTable === 'seo_articles') {
+      setSeoArticleEditorRow(row);
+      return;
+    }
+
     setSelectedRow(row);
 
     const nextValues: Record<string, string> = {};
@@ -861,7 +868,11 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
       return;
     }
 
-    const approved = window.confirm('Biztosan törlöd ezt a rekordot? Ez nem vonható vissza.');
+    const approved = window.confirm(
+      activeTable === 'seo_articles'
+        ? 'Biztosan archiválod ezt a cikket?'
+        : 'Biztosan törlöd ezt a rekordot? Ez nem vonható vissza.'
+    );
 
     if (!approved) {
       return;
@@ -884,6 +895,11 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
     }
 
     await loadRows();
+  }
+
+  async function closeSeoArticleEditorAfterSave() {
+    await loadRows();
+    setSeoArticleEditorRow(null);
   }
 
   async function createSeoArticle() {
@@ -2040,7 +2056,7 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
                             onClick={() => void deleteRow(row)}
                             className="rounded border border-rose-500/40 px-2 py-1 text-xs text-rose-300 hover:bg-rose-500/15"
                           >
-                            Törlés
+                            {activeTable === 'seo_articles' ? 'Archiválás' : 'Törlés'}
                           </button>
                         ) : null}
                       </div>
@@ -2060,7 +2076,7 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
 
         <p className="text-slate-400 text-sm mt-4">
           {query.trim()
-            ? `Szűrt találatok: ${(isResellerTable ? resellerSearchRows : isGiftClaimsTable ? giftSearchRows : filteredRows).length} / ${rows.length} tétel`
+            ? `Szűrt találatok: ${(isResellerTable ? resellerSearchRows : isGiftClaimsTable ? giftSearchRows : isSeoArticlesTable ? seoArticleRows : filteredRows).length} / ${rows.length} tétel`
             : `Összesen: ${rows.length} tétel`}
         </p>
       </div>
@@ -2088,6 +2104,13 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
             </div>
           </div>
         </div>
+      ) : null}
+      {seoArticleEditorRow ? (
+        <SeoArticleEditor
+          article={seoArticleEditorRow}
+          onCancel={() => setSeoArticleEditorRow(null)}
+          onSaved={closeSeoArticleEditorAfterSave}
+        />
       ) : null}
       {selectedRow ? (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 p-3 md:items-center">

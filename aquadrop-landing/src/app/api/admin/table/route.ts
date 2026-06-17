@@ -440,9 +440,6 @@ function assertPublishableSeoArticle(row: Record<string, unknown>) {
   if (!requireText(row, 'article_goal')) {
     throw new Error('Publikálás előtt add meg a cikk célját.');
   }
-  if (row.is_indexable !== true) {
-    throw new Error('Publikált cikkhez kapcsold be az indexelhetőséget.');
-  }
 }
 
 function getSafeTableName(table: unknown): AdminTableName | null {
@@ -960,8 +957,8 @@ export async function POST(request: Request) {
       status: 'draft',
       audience: 'consumer',
       article_goal: 'consumer_product_education',
-      title: typeof source.title === 'string' && source.title.trim() ? source.title.trim() : `Új SEO cikk ${nowSuffix}`,
-      slug: typeof source.slug === 'string' && source.slug.trim() ? source.slug.trim() : `uj-seo-cikk-${Date.now()}`,
+      title: typeof source.title === 'string' && source.title.trim() ? source.title.trim() : `SEO cikk vázlat ${nowSuffix}`,
+      slug: typeof source.slug === 'string' && source.slug.trim() ? source.slug.trim() : `seo-cikk-vazlat-${Date.now()}`,
       body: typeof source.body === 'string' && source.body.trim() ? source.body : 'A cikk törzsszövege ide kerül.',
       is_indexable: false,
       auto_related_enabled: true
