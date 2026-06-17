@@ -899,7 +899,6 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
 
   async function closeSeoArticleEditorAfterSave() {
     await loadRows();
-    setSeoArticleEditorRow(null);
   }
 
   async function createSeoArticle() {
