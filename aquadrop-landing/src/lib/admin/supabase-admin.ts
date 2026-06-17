@@ -191,6 +191,25 @@ export async function insertAdminUser(row: Record<string, unknown>): Promise<voi
   }
 }
 
+export async function insertAdminTableRow(
+  table: AdminTableViewName,
+  row: Record<string, unknown>
+): Promise<Record<string, unknown>> {
+  const sourceTable = resolveSourceTable(table);
+  const response = await fetch(`${getRestUrl()}/${sourceTable}`, {
+    method: 'POST',
+    headers: getServiceHeaders({ Prefer: 'return=representation' }),
+    body: JSON.stringify([row])
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to insert into ${sourceTable}: ${response.status} ${await response.text()}`);
+  }
+
+  const rows = (await response.json()) as Record<string, unknown>[];
+  return rows[0] ?? row;
+}
+
 export async function findOrCreateAdminUser(params: {
   email: string;
   name: string;

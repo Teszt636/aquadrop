@@ -1,6 +1,8 @@
 import Link from 'next/link';
 
 const legalLinks = [
+  { href: '/tudastar', label: 'Tudástár' },
+  { href: '/partner/tudastar', label: 'Viszonteladói tudástár' },
   { href: '/adatvedelmi-tajekoztato', label: 'Adatvédelmi tájékoztató' },
   { href: '/suti-tajekoztato', label: 'Süti tájékoztató' }
 ];
@@ -9,6 +11,7 @@ const knowledgeGroups = [
   {
     title: 'ALAPOK',
     links: [
+      { href: '/tudastar', label: 'Tudástár' },
       { href: '/mosokapszula-hasznalata', label: 'Mosókapszula használata' },
       { href: '/mosokapszula-adagolas', label: 'Mosókapszula adagolás' },
       { href: '/mosokapszula-dobba-vagy-adagoloba', label: 'Mosókapszula dobba vagy adagolóba' },

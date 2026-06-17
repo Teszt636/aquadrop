@@ -7,6 +7,7 @@ import {
   fetchAdminTableRowById,
   fetchAdminUsers,
   fetchAdminTableRows,
+  insertAdminTableRow,
   insertGiftActivityLogs,
   insertResellerActivityLogs,
   patchAdminTableRow
@@ -17,7 +18,10 @@ import {
   GIFT_RECEIPT_CHECK_STATUS_OPTIONS,
   GIFT_SHIPPING_STATUS_OPTIONS,
   GIFT_STATUS_OPTIONS,
-  RESELLER_PIPELINE_OPTIONS
+  RESELLER_PIPELINE_OPTIONS,
+  SEO_ARTICLE_AUDIENCE_OPTIONS,
+  SEO_ARTICLE_GOAL_OPTIONS,
+  SEO_ARTICLE_STATUS_OPTIONS
 } from '@/lib/admin/table-config';
 import {
   formatBudapestDateTime,
@@ -75,9 +79,34 @@ const EDITABLE_FIELDS: Record<AdminTableName, string[]> = {
     'message'
   ],
   admin_users: ['name', 'email', 'role', 'is_active'],
+  seo_articles: [
+    'status',
+    'audience',
+    'article_goal',
+    'category',
+    'title',
+    'slug',
+    'excerpt',
+    'seo_title',
+    'meta_description',
+    'body',
+    'hero_image_url',
+    'hero_image_alt',
+    'primary_keyword',
+    'secondary_keywords',
+    'manual_related_article_ids',
+    'auto_related_enabled',
+    'is_indexable',
+    'published_at',
+    'internal_note'
+  ],
   media_kit_downloads: [],
   unsubscribed: ['name', 'email']
 };
+
+const SEO_ARTICLE_STATUS_VALUES = new Set(SEO_ARTICLE_STATUS_OPTIONS.map((option) => option.value));
+const SEO_ARTICLE_AUDIENCE_VALUES = new Set(SEO_ARTICLE_AUDIENCE_OPTIONS.map((option) => option.value));
+const SEO_ARTICLE_GOAL_VALUES = new Set(SEO_ARTICLE_GOAL_OPTIONS.map((option) => option.value));
 
 const RESSELLER_TRACKED_FIELDS = new Set([
   'pipeline_status',
@@ -165,6 +194,58 @@ function sanitizeValue(key: string, value: unknown): unknown {
     if (value === 'true') return true;
     if (value === 'false') return false;
     throw new Error('A hot lead értéke csak logikai (boolean) lehet.');
+  }
+
+  if (key === 'auto_related_enabled' || key === 'is_indexable') {
+    if (typeof value === 'boolean') return value;
+    if (value === 'true') return true;
+    if (value === 'false') return false;
+    throw new Error('A mező értéke csak logikai (boolean) lehet.');
+  }
+
+  if (key === 'secondary_keywords') {
+    return sanitizeTextArray(value, 'A másodlagos kulcsszavak mező hibás.');
+  }
+
+  if (key === 'manual_related_article_ids') {
+    const ids = sanitizeTextArray(value, 'A kézi ajánlott cikk ID-k mező hibás.');
+    for (const id of ids) {
+      if (!isValidUuid(id)) {
+        throw new Error('A kézi ajánlott cikk ID csak UUID lehet.');
+      }
+    }
+    return ids;
+  }
+
+  if (key === 'audience') {
+    if (typeof value !== 'string' || !SEO_ARTICLE_AUDIENCE_VALUES.has(value)) {
+      throw new Error('Érvénytelen célcsoport.');
+    }
+    return value;
+  }
+
+  if (key === 'article_goal') {
+    if (typeof value !== 'string' || !SEO_ARTICLE_GOAL_VALUES.has(value)) {
+      throw new Error('Érvénytelen cikk cél.');
+    }
+    return value;
+  }
+
+  if (key === 'status' && typeof value === 'string' && SEO_ARTICLE_STATUS_VALUES.has(value)) {
+    return value;
+  }
+
+  if (key === 'published_at') {
+    if (value === '' || value === null) return null;
+    if (typeof value !== 'string') {
+      throw new Error('A publikálási dátum hibás.');
+    }
+    const normalized = value.includes('T') ? value : `${value}T00:00:00`;
+    const parsed = new Date(normalized);
+    if (Number.isNaN(parsed.getTime())) {
+      throw new Error('A publikálási dátum hibás.');
+    }
+    return parsed.toISOString();
   }
 
   if (key === 'lead_score') {
@@ -290,6 +371,78 @@ function sanitizeValue(key: string, value: unknown): unknown {
   }
 
   return value;
+}
+
+function sanitizeTextArray(value: unknown, errorMessage: string): string[] {
+  if (Array.isArray(value)) {
+    return value.map((item) => String(item).trim()).filter(Boolean);
+  }
+
+  if (value === null || value === undefined || value === '') {
+    return [];
+  }
+
+  if (typeof value !== 'string') {
+    throw new Error(errorMessage);
+  }
+
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return [];
+  }
+
+  if (trimmed.startsWith('[')) {
+    try {
+      const parsed = JSON.parse(trimmed) as unknown;
+      if (!Array.isArray(parsed)) {
+        throw new Error(errorMessage);
+      }
+      return parsed.map((item) => String(item).trim()).filter(Boolean);
+    } catch {
+      throw new Error(errorMessage);
+    }
+  }
+
+  return trimmed
+    .split(/[\n,]+/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function requireText(row: Record<string, unknown>, key: string): string {
+  const value = row[key];
+  return typeof value === 'string' ? value.trim() : '';
+}
+
+function assertPublishableSeoArticle(row: Record<string, unknown>) {
+  if (row.status !== 'published') {
+    return;
+  }
+
+  if (!requireText(row, 'title')) {
+    throw new Error('Publikálás előtt add meg a címet.');
+  }
+  if (!requireText(row, 'slug')) {
+    throw new Error('Publikálás előtt add meg a slug mezőt.');
+  }
+  if (requireText(row, 'body').length < 1000) {
+    throw new Error('A cikk törzsszövege túl rövid a publikáláshoz.');
+  }
+  if (!requireText(row, 'seo_title')) {
+    throw new Error('Publikálás előtt add meg a SEO címet.');
+  }
+  if (!requireText(row, 'meta_description')) {
+    throw new Error('Publikálás előtt add meg a meta leírást.');
+  }
+  if (!requireText(row, 'audience')) {
+    throw new Error('Publikálás előtt add meg a célcsoportot.');
+  }
+  if (!requireText(row, 'article_goal')) {
+    throw new Error('Publikálás előtt add meg a cikk célját.');
+  }
+  if (row.is_indexable !== true) {
+    throw new Error('Publikált cikkhez kapcsold be az indexelhetőséget.');
+  }
 }
 
 function getSafeTableName(table: unknown): AdminTableName | null {
@@ -612,6 +765,23 @@ export async function PATCH(request: Request) {
         .filter(([, value]) => value !== undefined)
     );
 
+    if (table === 'seo_articles') {
+      const beforeSeoArticle = await fetchAdminTableRowById(table, body.id);
+      if (!beforeSeoArticle) {
+        return NextResponse.json({ success: false, error: 'A cikk nem található.', details: null }, { status: 404 });
+      }
+      const nextSeoArticle = { ...beforeSeoArticle, ...sanitizedUpdates };
+      if (
+        nextSeoArticle.status === 'published' &&
+        !nextSeoArticle.published_at &&
+        sanitizedUpdates.published_at === undefined
+      ) {
+        sanitizedUpdates.published_at = new Date().toISOString();
+        nextSeoArticle.published_at = sanitizedUpdates.published_at;
+      }
+      assertPublishableSeoArticle(nextSeoArticle);
+    }
+
     if ('pipeline_status' in sanitizedUpdates) {
       sanitizedUpdates.next_action_description = null;
     }
@@ -768,6 +938,45 @@ export async function PATCH(request: Request) {
   }
 }
 
+export async function POST(request: Request) {
+  const body = (await request.json()) as { table?: string; row?: Record<string, unknown> };
+  const table = getSafeTableName(body.table);
+
+  if (!table) {
+    return NextResponse.json({ error: 'Nem engedélyezett tábla.' }, { status: 400 });
+  }
+
+  const { error: sessionError } = await assertSession(table, 'PATCH');
+  if (sessionError) return sessionError;
+
+  if (table !== 'seo_articles') {
+    return NextResponse.json({ error: 'Ehhez a táblához nincs létrehozási művelet.' }, { status: 400 });
+  }
+
+  try {
+    const nowSuffix = new Date().toISOString().slice(0, 10);
+    const source = body.row ?? {};
+    const row = {
+      status: 'draft',
+      audience: 'consumer',
+      article_goal: 'consumer_product_education',
+      title: typeof source.title === 'string' && source.title.trim() ? source.title.trim() : `Új SEO cikk ${nowSuffix}`,
+      slug: typeof source.slug === 'string' && source.slug.trim() ? source.slug.trim() : `uj-seo-cikk-${Date.now()}`,
+      body: typeof source.body === 'string' && source.body.trim() ? source.body : 'A cikk törzsszövege ide kerül.',
+      is_indexable: false,
+      auto_related_enabled: true
+    };
+    const created = await insertAdminTableRow(table, row);
+
+    return NextResponse.json({ success: true, row: created });
+  } catch (error) {
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : 'Létrehozási hiba.' },
+      { status: 500 }
+    );
+  }
+}
+
 export async function DELETE(request: Request) {
   const body = (await request.json()) as { table?: string; id?: string };
   const table = getSafeTableName(body.table);
@@ -783,6 +992,11 @@ export async function DELETE(request: Request) {
   }
 
   try {
+    if (table === 'seo_articles') {
+      await patchAdminTableRow(table, body.id, { status: 'archived' });
+      return NextResponse.json({ success: true });
+    }
+
     await deleteAdminTableRow(table, body.id);
 
     return NextResponse.json({ success: true });

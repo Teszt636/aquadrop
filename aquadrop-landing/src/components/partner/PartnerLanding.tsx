@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { CheckCircle2, CircleAlert, Compass, Gem, Handshake, LineChart, Megaphone, ShieldCheck } from 'lucide-react';
 
 import { PartnerMediaKitSection, ResellerSection } from '@/components/sections';
@@ -546,6 +547,24 @@ export function PartnerLanding() {
           <div id="jelentkezes" className="scroll-mt-24 lg:h-full">
             <ResellerSection />
           </div>
+        </div>
+      </section>
+
+      <section className="border-y border-white/10 bg-slate-900/80 px-5 py-14 sm:px-6 md:px-10 md:py-20">
+        <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 md:flex-row md:items-center md:justify-between">
+          <div className="max-w-3xl">
+            <p className="text-sm font-medium uppercase tracking-wide text-cyan-200">Partner tudástár</p>
+            <h2 className="mt-2 text-2xl font-semibold text-white md:text-4xl">Viszonteladói tudástár</h2>
+            <p className="mt-4 text-base leading-7 text-slate-200 md:text-lg">
+              Hasznos cikkek üzleteknek, webshopoknak és beszerzőknek az Aquadrop Expert Pro forgalmazásához.
+            </p>
+          </div>
+          <Link
+            href="/partner/tudastar"
+            className="inline-flex h-12 items-center justify-center rounded-xl bg-cyan-300 px-6 text-sm font-semibold text-slate-950 transition hover:bg-cyan-200"
+          >
+            Cikkek viszonteladóknak
+          </Link>
         </div>
       </section>
 
