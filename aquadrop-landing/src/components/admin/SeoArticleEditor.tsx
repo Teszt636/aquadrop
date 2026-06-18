@@ -111,6 +111,15 @@ function isPublished(state: FormState): boolean {
   return state.status === 'published';
 }
 
+function isScheduledForFuture(state: FormState): boolean {
+  if (!isPublished(state) || !state.is_indexable || !state.published_at) {
+    return false;
+  }
+
+  const publishDate = new Date(state.published_at);
+  return !Number.isNaN(publishDate.getTime()) && publishDate.getTime() > Date.now();
+}
+
 function getUserFacingSaveError(error: unknown): EditorError {
   const message = error instanceof Error ? error.message : 'Ismeretlen mentési hiba.';
   const knownHungarianMessages = [
@@ -164,6 +173,7 @@ export function SeoArticleEditor({ article, onCancel, onSaved }: SeoArticleEdito
     () => (form.audience === 'partner' ? `/partner/tudastar/${form.slug || '[slug]'}` : `/tudastar/${form.slug || '[slug]'}`),
     [form.audience, form.slug]
   );
+  const scheduledForFuture = isScheduledForFuture(form);
 
   function update<K extends keyof FormState>(key: K, value: FormState[K]) {
     setSuccessMessage(null);
@@ -276,6 +286,11 @@ export function SeoArticleEditor({ article, onCancel, onSaved }: SeoArticleEdito
           {isPublished(form) && !form.is_indexable ? (
             <p className="rounded-lg border border-amber-300 bg-amber-950/70 p-4 text-sm font-semibold text-amber-50 shadow-lg shadow-amber-950/30">
               A cikk publikált státuszú, de nem indexelhető. Így nem jelenik meg a publikus tudástárban és nem kerül be a sitemapbe.
+            </p>
+          ) : null}
+          {scheduledForFuture ? (
+            <p className="rounded-lg border border-cyan-300 bg-cyan-950/70 p-4 text-sm font-semibold text-cyan-50 shadow-lg shadow-cyan-950/30">
+              Időzítve: a cikk csak a publikálási dátum elérése után jelenik meg a publikus tudástárban, a sitemapben és az IndexNow beküldésben.
             </p>
           ) : null}
 
@@ -429,7 +444,7 @@ export function SeoArticleEditor({ article, onCancel, onSaved }: SeoArticleEdito
                 <span className="text-slate-400">Publikus URL előnézet: </span>
                 <span className="font-semibold text-cyan-200">{publicPath}</span>
                 <p className="mt-2 text-xs text-slate-400">
-                  Publikus oldalon csak akkor jelenik meg, ha a státusz Publikált és az Indexelhető mező be van kapcsolva.
+                  Publikus oldalon csak akkor jelenik meg, ha a státusz Publikált, az Indexelhető mező be van kapcsolva, és a publikálási dátum már elérkezett.
                 </p>
               </div>
               <label className="space-y-1 text-sm md:col-span-2">
