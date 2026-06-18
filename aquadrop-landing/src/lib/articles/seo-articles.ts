@@ -132,6 +132,8 @@ async function fetchSeoArticles(query: URLSearchParams): Promise<SeoArticle[]> {
 function addPublishedFilters(query: URLSearchParams) {
   query.set('status', 'eq.published');
   query.set('is_indexable', 'eq.true');
+  query.append('published_at', 'not.is.null');
+  query.append('published_at', `lte.${new Date().toISOString()}`);
 }
 
 export async function getPublishedSeoArticles(audience?: SeoArticleAudience): Promise<SeoArticle[]> {

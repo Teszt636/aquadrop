@@ -60,7 +60,7 @@ export function SeoArticleListPage({ audience, articles }: { audience: SeoArticl
                   <Link
                     key={article.id}
                     href={buildSeoArticlePath(article)}
-                    className="group rounded-lg border border-cyan-100 bg-white/85 p-5 shadow-sm transition hover:border-cyan-300 hover:shadow-lg"
+                    className="group flex h-full flex-col rounded-lg border border-cyan-100 bg-white/85 p-5 shadow-sm transition hover:border-cyan-300 hover:shadow-lg"
                   >
                     <p className="text-xs font-semibold uppercase tracking-wide text-cyan-700">
                       {article.category || copy.eyebrow}
@@ -69,7 +69,7 @@ export function SeoArticleListPage({ audience, articles }: { audience: SeoArticl
                       {article.title}
                     </h2>
                     <p className="mt-3 text-sm leading-6 text-slate-700">{getExcerpt(article)}</p>
-                    <p className="mt-4 text-sm text-slate-500">{formatDate(article.published_at)}</p>
+                    <p className="mt-auto pt-6 text-sm text-slate-500">{formatDate(article.published_at)}</p>
                   </Link>
                 ))}
               </div>

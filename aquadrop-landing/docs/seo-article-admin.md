@@ -65,10 +65,25 @@ Egy cikk akkor kerül sitemapbe, ha:
 
 - `status = published`
 - `is_indexable = true`
+- `published_at` ki van töltve
+- `published_at` időpontja már elérkezett
 - lakossági cikk esetén az URL `/tudastar/[slug]`
 - partner cikk esetén az URL `/partner/tudastar/[slug]`
 
-Ha egy cikk publikált, de nem indexelhető, megjelenhet publikus URL-en csak akkor, ha a publikus lekérő engedi. A jelenlegi publikus lekérők és sitemap csak `is_indexable=true` cikket adnak vissza.
+Ha egy cikk publikált, de nem indexelhető, vagy a publikálási dátuma jövőbeli, a jelenlegi publikus lekérők, a sitemap és az IndexNow szűrés nem adják vissza.
+
+## Időzített publikálás
+
+A `published_at` valódi időzítési dátum. Jövőbeli publikálási dátum esetén a cikk adminban látható és szerkeszthető, de a megadott időpontig nem jelenik meg publikus oldalon.
+
+Publikus SEO cikk csak akkor jelenik meg, ha:
+
+- `status = published`
+- `is_indexable = true`
+- `published_at` nem üres
+- `published_at <= aktuális szerveridő`
+
+A dátumot érdemes délelőtti időpontra állítani, például 08:00 vagy 09:00.
 
 ## IndexNow
 
@@ -76,6 +91,7 @@ Az adminos SEO cikkek akkor alkalmasak IndexNow beküldésre, ha:
 
 - `status = published`
 - `is_indexable = true`
+- `published_at` időpontja már elérkezett
 - a cikk URL-je szerepel a sitemapben
 
 A `/tudastar` és `/partner/tudastar` listaoldalak is beküldhetők IndexNow-ra. A cikk detail oldalaknál az IndexNow szűrés a sitemapben szereplő URL-ekkel van összhangban, ezért draft, archived és nem indexelhető cikkek nem küldhetők be.
