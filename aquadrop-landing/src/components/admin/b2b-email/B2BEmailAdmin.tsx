@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Eye, Mail, Plus, RefreshCw, Send, Users } from 'lucide-react';
 import {
   getB2BCampaignStatusLabel,
@@ -68,6 +68,17 @@ type Preview = {
   subject: string;
   html: string;
   text: string;
+};
+
+type QueueProcessResponse = {
+  mode?: 'single' | 'batch';
+  processed_count: number;
+  sent_count: number;
+  failed_count?: number;
+  skipped_count: number;
+  next_scheduled_at: string | null;
+  queue_finished: boolean;
+  message?: string;
 };
 
 type EmailHistoryEvent = {
@@ -189,6 +200,14 @@ function buildContactEditForm(contact: Contact): ContactEditFormState {
   };
 }
 
+function formatQueueProcessMessage(body: QueueProcessResponse): string {
+  if (body.queue_finished) return 'A kampány küldési sora befejeződött.';
+  const nextDate = formatDateTime(body.next_scheduled_at);
+  if (body.sent_count > 0) return `1 email elküldve. Következő esedékes küldés: ${nextDate}.`;
+  if (body.processed_count === 0) return `Még nincs esedékes címzett. Következő küldés: ${nextDate}.`;
+  return body.message ?? `Queue feldolgozás kész. Feldolgozva: ${body.processed_count}, elküldve: ${body.sent_count}, kihagyva: ${body.skipped_count}.`;
+}
+
 export function B2BEmailAdmin() {
   const [activeTab, setActiveTab] = useState<TabKey>('contacts');
   const [contacts, setContacts] = useState<Contact[]>([]);
@@ -210,6 +229,10 @@ export function B2BEmailAdmin() {
   const [selectedContactGroupIds, setSelectedContactGroupIds] = useState<string[]>([]);
   const [savingContactDetails, setSavingContactDetails] = useState(false);
   const [savingContactGroups, setSavingContactGroups] = useState(false);
+  const [manualScheduledCampaignId, setManualScheduledCampaignId] = useState<string | null>(null);
+  const manualScheduledCampaignIdRef = useRef<string | null>(null);
+  const manualScheduledIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const manualScheduledInFlightRef = useRef(false);
 
   const [contactForm, setContactForm] = useState({
     company_name: '',
@@ -268,6 +291,14 @@ export function B2BEmailAdmin() {
   useEffect(() => {
     void loadAll();
   }, [loadAll]);
+
+  useEffect(() => {
+    return () => {
+      if (manualScheduledIntervalRef.current) {
+        clearInterval(manualScheduledIntervalRef.current);
+      }
+    };
+  }, []);
 
   async function createContact() {
     setMessage(null);
@@ -379,22 +410,67 @@ export function B2BEmailAdmin() {
     }
   }
 
-  async function processCampaignQueue(campaignId: string) {
+  async function processCampaignQueue(campaignId: string, mode: 'single' | 'batch' = 'single'): Promise<QueueProcessResponse | null> {
     setError(null);
     setMessage(null);
     setSendingCampaignId(campaignId);
     try {
-      const body = await fetchJson<{ processed_count: number; sent_count: number; skipped_count: number }>(
+      const body = await fetchJson<QueueProcessResponse>(
         `/api/admin/b2b-email/campaigns/${campaignId}/process-queue`,
-        { method: 'POST' }
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ mode })
+        }
       );
-      setMessage(`Queue feldolgozás kész. Feldolgozva: ${body.processed_count}, elküldve: ${body.sent_count}, kihagyva: ${body.skipped_count}.`);
+      setMessage(formatQueueProcessMessage(body));
       await loadAll();
+      return body;
     } catch (processError) {
       setError(processError instanceof Error ? processError.message : 'Queue feldolgozási hiba.');
+      return null;
     } finally {
       setSendingCampaignId(null);
     }
+  }
+
+  function stopManualScheduledProcessing(showMessage = true) {
+    if (manualScheduledIntervalRef.current) {
+      clearInterval(manualScheduledIntervalRef.current);
+      manualScheduledIntervalRef.current = null;
+    }
+    manualScheduledCampaignIdRef.current = null;
+    manualScheduledInFlightRef.current = false;
+    setManualScheduledCampaignId(null);
+    if (showMessage) {
+      setMessage('Kézi küldés leállítva.');
+    }
+  }
+
+  function startManualScheduledProcessing(campaign: Campaign) {
+    stopManualScheduledProcessing(false);
+    const intervalMs = Math.max(30, campaign.per_email_delay_seconds ?? 30) * 1000;
+    manualScheduledCampaignIdRef.current = campaign.id;
+    setManualScheduledCampaignId(campaign.id);
+    setMessage(`Kézi ütemezett küldés elindítva. Egy körben legfeljebb 1 email megy ki, ${Math.round(intervalMs / 1000)} másodpercenként.`);
+
+    const tick = async () => {
+      if (manualScheduledInFlightRef.current || manualScheduledCampaignIdRef.current !== campaign.id) return;
+      manualScheduledInFlightRef.current = true;
+      try {
+        const body = await processCampaignQueue(campaign.id, 'single');
+        if (body?.queue_finished) {
+          stopManualScheduledProcessing(false);
+        }
+      } finally {
+        manualScheduledInFlightRef.current = false;
+      }
+    };
+
+    void tick();
+    manualScheduledIntervalRef.current = setInterval(() => {
+      void tick();
+    }, intervalMs);
   }
 
   function openSendModal(campaign: Campaign) {
@@ -768,39 +844,77 @@ export function B2BEmailAdmin() {
             <button type="button" onClick={() => void createCampaign()} className="w-full rounded-md bg-cyan-500 px-3 py-2 text-sm font-semibold text-slate-950 hover:bg-cyan-400">Kampány létrehozása</button>
           </div>
           <div className="space-y-3">
-            {campaigns.map((campaign) => (
-              <article key={campaign.id} className="rounded-lg border border-slate-800 bg-slate-950 p-3">
-                <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-                  <div>
-                    <h4 className="font-semibold text-white">{campaign.name}</h4>
-                    <div className="mt-2 flex flex-wrap gap-2 text-xs">
-                      <StatusBadge status={getB2BCampaignStatusLabel(campaign.status)} />
-                      <span className="rounded-full border border-slate-700 px-2 py-1 text-slate-300">Célzott: {campaign.target_count}</span>
-                      <span className="rounded-full border border-slate-700 px-2 py-1 text-slate-300">Elküldve: {campaign.sent_count}</span>
-                      <span className="rounded-full border border-slate-700 px-2 py-1 text-slate-300">Kézbesítve: {campaign.delivered_count}</span>
-                      <span className="rounded-full border border-slate-700 px-2 py-1 text-slate-300">Sikertelen: {campaign.failed_count}</span>
+            {campaigns.map((campaign) => {
+              const queueIsActive = ['queued', 'sending'].includes(campaign.status);
+              const manualSchedulerRunning = manualScheduledCampaignId === campaign.id;
+              return (
+                <article key={campaign.id} className="rounded-lg border border-slate-800 bg-slate-950 p-3">
+                  <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                    <div>
+                      <h4 className="font-semibold text-white">{campaign.name}</h4>
+                      <div className="mt-2 flex flex-wrap gap-2 text-xs">
+                        <StatusBadge status={getB2BCampaignStatusLabel(campaign.status)} />
+                        <span className="rounded-full border border-slate-700 px-2 py-1 text-slate-300">Célzott: {campaign.target_count}</span>
+                        <span className="rounded-full border border-slate-700 px-2 py-1 text-slate-300">Elküldve: {campaign.sent_count}</span>
+                        <span className="rounded-full border border-slate-700 px-2 py-1 text-slate-300">Kézbesítve: {campaign.delivered_count}</span>
+                        <span className="rounded-full border border-slate-700 px-2 py-1 text-slate-300">Sikertelen: {campaign.failed_count}</span>
+                      </div>
+                      {queueIsActive ? (
+                        <p className="mt-3 max-w-2xl rounded-md border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs leading-5 text-amber-100">
+                          A Sor feldolgozása gomb egyszeri manuális feldolgozás. A késleltetett, egymás utáni küldéshez használd a Kézi ütemezett küldés indítása gombot, és hagyd nyitva az admin oldalt.
+                        </p>
+                      ) : null}
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      <button type="button" onClick={() => void openPreview(campaign.id)} className="inline-flex items-center gap-2 rounded-md border border-slate-700 px-3 py-2 text-sm text-slate-100 hover:bg-slate-800"><Eye className="h-4 w-4" /> Előnézet</button>
+                      {queueIsActive ? (
+                        <>
+                          <button
+                            type="button"
+                            onClick={() => void processCampaignQueue(campaign.id, 'single')}
+                            disabled={sendingCampaignId === campaign.id}
+                            className="inline-flex items-center gap-2 rounded-md border border-cyan-500/50 px-3 py-2 text-sm text-cyan-200 hover:bg-cyan-500/10 disabled:opacity-60"
+                          >
+                            <RefreshCw className="h-4 w-4" /> Sor feldolgozása egyszer
+                          </button>
+                          {manualSchedulerRunning ? (
+                            <button
+                              type="button"
+                              onClick={() => stopManualScheduledProcessing()}
+                              className="inline-flex items-center gap-2 rounded-md border border-amber-500/50 px-3 py-2 text-sm text-amber-100 hover:bg-amber-500/10"
+                            >
+                              Kézi küldés leállítása
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => startManualScheduledProcessing(campaign)}
+                              disabled={Boolean(manualScheduledCampaignId)}
+                              className="inline-flex items-center gap-2 rounded-md border border-emerald-500/50 px-3 py-2 text-sm text-emerald-200 hover:bg-emerald-500/10 disabled:opacity-60"
+                            >
+                              Kézi ütemezett küldés indítása
+                            </button>
+                          )}
+                        </>
+                      ) : null}
+                      <button type="button" onClick={() => openSendModal(campaign)} disabled={sendingCampaignId === campaign.id || queueIsActive} className="inline-flex items-center gap-2 rounded-md bg-rose-500 px-3 py-2 text-sm font-semibold text-white hover:bg-rose-400 disabled:opacity-60"><Send className="h-4 w-4" /> Queue indítása</button>
+                      <button
+                        type="button"
+                        onClick={() => void deleteB2BEntity({
+                          endpoint: `/api/admin/b2b-email/campaigns/${campaign.id}`,
+                          confirmText: `Biztosan archiválod ezt a kampányt? A kampány eltűnik az aktív listából, de a küldési napló megmarad.${['queued', 'sending'].includes(campaign.status) ? ' A még el nem küldött címzettek skipped státuszba kerülnek.' : ''}`,
+                          fallbackSuccess: 'A kampány archiválva lett.',
+                          fallbackError: 'A kampány archiválása nem sikerült.'
+                        })}
+                        className="inline-flex items-center gap-2 rounded-md border border-rose-500/40 px-3 py-2 text-sm text-rose-200 hover:bg-rose-500/10"
+                      >
+                        Archiválás / törlés
+                      </button>
                     </div>
                   </div>
-                  <div className="flex flex-wrap gap-2">
-                    <button type="button" onClick={() => void openPreview(campaign.id)} className="inline-flex items-center gap-2 rounded-md border border-slate-700 px-3 py-2 text-sm text-slate-100 hover:bg-slate-800"><Eye className="h-4 w-4" /> Előnézet</button>
-                    <button type="button" onClick={() => void processCampaignQueue(campaign.id)} disabled={sendingCampaignId === campaign.id} className="inline-flex items-center gap-2 rounded-md border border-cyan-500/50 px-3 py-2 text-sm text-cyan-200 hover:bg-cyan-500/10 disabled:opacity-60"><RefreshCw className="h-4 w-4" /> Sor feldolgozása</button>
-                    <button type="button" onClick={() => openSendModal(campaign)} disabled={sendingCampaignId === campaign.id} className="inline-flex items-center gap-2 rounded-md bg-rose-500 px-3 py-2 text-sm font-semibold text-white hover:bg-rose-400 disabled:opacity-60"><Send className="h-4 w-4" /> Queue indítása</button>
-                    <button
-                      type="button"
-                      onClick={() => void deleteB2BEntity({
-                        endpoint: `/api/admin/b2b-email/campaigns/${campaign.id}`,
-                        confirmText: `Biztosan archiválod ezt a kampányt? A kampány eltűnik az aktív listából, de a küldési napló megmarad.${['queued', 'sending'].includes(campaign.status) ? ' A még el nem küldött címzettek skipped státuszba kerülnek.' : ''}`,
-                        fallbackSuccess: 'A kampány archiválva lett.',
-                        fallbackError: 'A kampány archiválása nem sikerült.'
-                      })}
-                      className="inline-flex items-center gap-2 rounded-md border border-rose-500/40 px-3 py-2 text-sm text-rose-200 hover:bg-rose-500/10"
-                    >
-                      Archiválás / törlés
-                    </button>
-                  </div>
-                </div>
-              </article>
-            ))}
+                </article>
+              );
+            })}
           </div>
         </div>
       ) : null}

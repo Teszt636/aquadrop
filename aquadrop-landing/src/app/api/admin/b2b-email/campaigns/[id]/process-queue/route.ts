@@ -4,9 +4,11 @@ import { requireAdminSession } from '@/lib/admin/auth';
 import {
   fetchCampaignById,
   fetchContactById,
+  fetchNextQueuedCampaignRecipient,
   finishCampaignIfQueueDrained,
   isSuppressedContact,
   listDueQueuedCampaignRecipients,
+  listCampaignRecipients,
   patchCampaign,
   patchCampaignRecipient,
   updateCampaignAggregates
@@ -22,7 +24,38 @@ function getFromEmail(): string {
   return value;
 }
 
-export async function POST(_request: Request, context: { params: Promise<{ id: string }> }) {
+type ProcessMode = 'single' | 'batch';
+
+function getProcessMode(value: unknown): ProcessMode {
+  return value === 'batch' ? 'batch' : 'single';
+}
+
+async function getQueueState(campaignId: string): Promise<{ nextScheduledAt: string | null; queueFinished: boolean }> {
+  const [nextRecipient, recipients] = await Promise.all([
+    fetchNextQueuedCampaignRecipient(campaignId),
+    listCampaignRecipients(campaignId)
+  ]);
+  const hasOpenQueue = recipients.some((recipient) => ['pending', 'queued', 'processing'].includes(recipient.status));
+  return {
+    nextScheduledAt: nextRecipient?.scheduled_at ?? null,
+    queueFinished: !hasOpenQueue
+  };
+}
+
+function buildQueueMessage(input: {
+  sentCount: number;
+  processedCount: number;
+  failedCount?: number;
+  nextScheduledAt: string | null;
+  queueFinished: boolean;
+}): string {
+  if (input.queueFinished) return 'A kampány küldési sora befejeződött.';
+  if (input.sentCount > 0) return `1 email elküldve. Következő esedékes küldés: ${input.nextScheduledAt ?? '-'}`;
+  if ((input.failedCount ?? 0) > 0 || input.processedCount > 0) return `A feldolgozás lefutott. Következő esedékes küldés: ${input.nextScheduledAt ?? '-'}`;
+  return `Még nincs esedékes címzett. A következő küldés időpontja: ${input.nextScheduledAt ?? '-'}`;
+}
+
+export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
   const sessionUser = await requireAdminSession(['admin']);
   if (!sessionUser) {
     return NextResponse.json({ error: 'Ehhez a művelethez admin jogosultság szükséges.' }, { status: 403 });
@@ -30,6 +63,8 @@ export async function POST(_request: Request, context: { params: Promise<{ id: s
 
   try {
     const { id } = await context.params;
+    const body = (await request.json().catch(() => ({}))) as { mode?: unknown };
+    const mode = getProcessMode(body.mode);
     const campaign = await fetchCampaignById(id);
     if (!campaign) {
       return NextResponse.json({ error: 'A kampány nem található.' }, { status: 404 });
@@ -40,13 +75,15 @@ export async function POST(_request: Request, context: { params: Promise<{ id: s
     }
 
     const now = new Date().toISOString();
-    const limit = Math.min(100, Math.max(1, campaign.max_emails_per_process ?? 10));
-    const dueRecipients = await listDueQueuedCampaignRecipients(campaign.id, now, limit);
+    const limit = mode === 'single' ? 1 : Math.min(10, Math.max(1, campaign.max_emails_per_process ?? 10));
+    const candidateLimit = mode === 'single' ? 100 : limit;
+    const dueRecipients = await listDueQueuedCampaignRecipients(campaign.id, now, candidateLimit);
     const sendable: Array<{ recipientId: string; attemptCount: number; item: SendBatchEmailItem }> = [];
     const skipped: string[] = [];
     const processorId = `admin:${sessionUser.email}`;
 
     for (const recipient of dueRecipients) {
+      if (sendable.length >= limit) break;
       const contact = recipient.contact_id ? await fetchContactById(recipient.contact_id) : null;
       if (!contact || isSuppressedContact(contact)) {
         skipped.push(recipient.id);
@@ -100,7 +137,22 @@ export async function POST(_request: Request, context: { params: Promise<{ id: s
     if (sendable.length === 0) {
       await updateCampaignAggregates(campaign.id);
       await finishCampaignIfQueueDrained(campaign.id);
-      return NextResponse.json({ success: true, processed_count: 0, sent_count: 0, skipped_count: skipped.length });
+      const queueState = await getQueueState(campaign.id);
+      return NextResponse.json({
+        success: true,
+        mode,
+        processed_count: 0,
+        sent_count: 0,
+        skipped_count: skipped.length,
+        next_scheduled_at: queueState.nextScheduledAt,
+        queue_finished: queueState.queueFinished,
+        message: buildQueueMessage({
+          sentCount: 0,
+          processedCount: 0,
+          nextScheduledAt: queueState.nextScheduledAt,
+          queueFinished: queueState.queueFinished
+        })
+      });
     }
 
     await patchCampaign(campaign.id, { status: 'sending' });
@@ -132,12 +184,23 @@ export async function POST(_request: Request, context: { params: Promise<{ id: s
 
       await updateCampaignAggregates(campaign.id);
       await finishCampaignIfQueueDrained(campaign.id);
+      const queueState = await getQueueState(campaign.id);
       return NextResponse.json({
         success: true,
+        mode,
         processed_count: sendable.length,
         sent_count: sentCount,
         failed_count: failedCount,
-        skipped_count: skipped.length
+        skipped_count: skipped.length,
+        next_scheduled_at: queueState.nextScheduledAt,
+        queue_finished: queueState.queueFinished,
+        message: buildQueueMessage({
+          sentCount,
+          processedCount: sendable.length,
+          failedCount,
+          nextScheduledAt: queueState.nextScheduledAt,
+          queueFinished: queueState.queueFinished
+        })
       });
     } catch (error) {
       const failedAt = new Date().toISOString();
