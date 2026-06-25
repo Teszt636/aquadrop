@@ -101,7 +101,21 @@ type EmailHistoryItem = {
 
 type ContactHistoryResponse = {
   contact: Contact;
+  contactGroupIds: string[];
+  activeGroups: Group[];
   history: EmailHistoryItem[];
+};
+
+type ContactEditFormState = {
+  company_name: string;
+  contact_name: string;
+  email: string;
+  phone: string;
+  website: string;
+  source: string;
+  legal_basis: string;
+  note: string;
+  is_active: boolean;
 };
 
 type TabKey = 'contacts' | 'groups' | 'templates' | 'campaigns';
@@ -161,6 +175,20 @@ function formatDuration(totalSeconds: number): string {
   return `${seconds} mp`;
 }
 
+function buildContactEditForm(contact: Contact): ContactEditFormState {
+  return {
+    company_name: contact.company_name,
+    contact_name: contact.contact_name ?? '',
+    email: contact.email,
+    phone: contact.phone ?? '',
+    website: contact.website ?? '',
+    source: contact.source ?? '',
+    legal_basis: contact.legal_basis ?? '',
+    note: contact.note ?? '',
+    is_active: contact.is_active
+  };
+}
+
 export function B2BEmailAdmin() {
   const [activeTab, setActiveTab] = useState<TabKey>('contacts');
   const [contacts, setContacts] = useState<Contact[]>([]);
@@ -177,6 +205,11 @@ export function B2BEmailAdmin() {
   const [contactHistory, setContactHistory] = useState<ContactHistoryResponse | null>(null);
   const [contactHistoryLoading, setContactHistoryLoading] = useState(false);
   const [resendingHistoryId, setResendingHistoryId] = useState<string | null>(null);
+  const [contactEditMode, setContactEditMode] = useState(false);
+  const [contactEditForm, setContactEditForm] = useState<ContactEditFormState | null>(null);
+  const [selectedContactGroupIds, setSelectedContactGroupIds] = useState<string[]>([]);
+  const [savingContactDetails, setSavingContactDetails] = useState(false);
+  const [savingContactGroups, setSavingContactGroups] = useState(false);
 
   const [contactForm, setContactForm] = useState({
     company_name: '',
@@ -378,10 +411,62 @@ export function B2BEmailAdmin() {
     try {
       const body = await fetchJson<ContactHistoryResponse>(`/api/admin/b2b-email/contacts/${contactId}/history`);
       setContactHistory(body);
+      setContactEditForm(buildContactEditForm(body.contact));
+      setSelectedContactGroupIds(body.contactGroupIds);
+      setContactEditMode(false);
     } catch (historyError) {
       setError(historyError instanceof Error ? historyError.message : 'Email előzmény lekérdezési hiba.');
     } finally {
       setContactHistoryLoading(false);
+    }
+  }
+
+  async function saveContactDetails() {
+    if (!contactHistory || !contactEditForm) return;
+    setError(null);
+    setMessage(null);
+    setSavingContactDetails(true);
+    try {
+      const body = await fetchJson<{ contact: Contact; message?: string }>(`/api/admin/b2b-email/contacts/${contactHistory.contact.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(contactEditForm)
+      });
+      const updatedHistory = { ...contactHistory, contact: body.contact };
+      setContactHistory(updatedHistory);
+      setContactEditForm(buildContactEditForm(body.contact));
+      setContactEditMode(false);
+      setMessage(body.message ?? 'Címzett adatai mentve.');
+      await loadAll();
+    } catch (saveError) {
+      setError(saveError instanceof Error ? saveError.message : 'A címzett mentése nem sikerült.');
+    } finally {
+      setSavingContactDetails(false);
+    }
+  }
+
+  async function saveContactGroups() {
+    if (!contactHistory) return;
+    setError(null);
+    setMessage(null);
+    setSavingContactGroups(true);
+    try {
+      const body = await fetchJson<{ contactGroupIds: string[]; activeGroups: Group[]; message?: string }>(
+        `/api/admin/b2b-email/contacts/${contactHistory.contact.id}/groups`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ groupIds: selectedContactGroupIds })
+        }
+      );
+      setSelectedContactGroupIds(body.contactGroupIds);
+      setContactHistory({ ...contactHistory, contactGroupIds: body.contactGroupIds, activeGroups: body.activeGroups });
+      setMessage(body.message ?? 'Célcsoportok mentve.');
+      await loadAll();
+    } catch (saveError) {
+      setError(saveError instanceof Error ? saveError.message : 'A célcsoport-tagság mentése nem sikerült.');
+    } finally {
+      setSavingContactGroups(false);
     }
   }
 
@@ -807,18 +892,145 @@ export function B2BEmailAdmin() {
 
             {contactHistory ? (
               <>
-                <div className="mt-4 grid gap-3 rounded-md border border-slate-800 bg-slate-950 p-3 text-sm text-slate-200 md:grid-cols-2">
-                  <div><span className="text-slate-400">Cégnév:</span> {contactHistory.contact.company_name}</div>
-                  <div><span className="text-slate-400">Kapcsolattartó:</span> {contactHistory.contact.contact_name || '-'}</div>
-                  <div><span className="text-slate-400">Email:</span> {contactHistory.contact.email}</div>
-                  <div><span className="text-slate-400">Telefon:</span> {contactHistory.contact.phone || '-'}</div>
-                  <div><span className="text-slate-400">Weboldal:</span> {contactHistory.contact.website || '-'}</div>
-                  <div><span className="text-slate-400">Forrás:</span> {contactHistory.contact.source || '-'}</div>
-                  <div><span className="text-slate-400">Aktív státusz:</span> {contactHistory.contact.is_active ? 'Aktív' : 'Inaktív'}</div>
-                  <div className="flex items-center gap-2"><span className="text-slate-400">Utolsó email státusz:</span> <StatusBadge status={getB2BEmailEventLabel(contactHistory.contact.last_email_status)} /></div>
-                  <div><span className="text-slate-400">Utolsó email esemény:</span> {formatDateTime(contactHistory.contact.last_email_event_at)}</div>
-                  <div className="md:col-span-2"><span className="text-slate-400">Megjegyzés:</span> {contactHistory.contact.note || '-'}</div>
-                </div>
+                <section className="mt-4 rounded-md border border-slate-800 bg-slate-950 p-3">
+                  <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                    <h4 className="font-semibold text-white">Alapadatok</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {contactEditMode ? (
+                        <>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setContactEditForm(buildContactEditForm(contactHistory.contact));
+                              setContactEditMode(false);
+                            }}
+                            className="rounded-md border border-slate-700 px-3 py-2 text-sm text-slate-100 hover:bg-slate-800"
+                          >
+                            Mégse
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => void saveContactDetails()}
+                            disabled={savingContactDetails}
+                            className="rounded-md bg-cyan-500 px-3 py-2 text-sm font-semibold text-slate-950 hover:bg-cyan-400 disabled:opacity-60"
+                          >
+                            {savingContactDetails ? 'Mentés...' : 'Mentés'}
+                          </button>
+                        </>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => setContactEditMode(true)}
+                          className="rounded-md border border-cyan-500/40 px-3 py-2 text-sm text-cyan-200 hover:bg-cyan-500/10"
+                        >
+                          Szerkesztés
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {contactEditMode && contactEditForm ? (
+                    <div className="mt-3 grid gap-3 text-sm md:grid-cols-2">
+                      <label>
+                        <span className="mb-1 block text-xs uppercase tracking-wide text-slate-400">Cégnév</span>
+                        <input value={contactEditForm.company_name} onChange={(event) => setContactEditForm((previous) => previous ? { ...previous, company_name: event.target.value } : previous)} className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-white" />
+                      </label>
+                      <label>
+                        <span className="mb-1 block text-xs uppercase tracking-wide text-slate-400">Kapcsolattartó neve</span>
+                        <input value={contactEditForm.contact_name} onChange={(event) => setContactEditForm((previous) => previous ? { ...previous, contact_name: event.target.value } : previous)} className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-white" />
+                      </label>
+                      <label>
+                        <span className="mb-1 block text-xs uppercase tracking-wide text-slate-400">Email</span>
+                        <input type="email" value={contactEditForm.email} onChange={(event) => setContactEditForm((previous) => previous ? { ...previous, email: event.target.value } : previous)} className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-white" />
+                      </label>
+                      <label>
+                        <span className="mb-1 block text-xs uppercase tracking-wide text-slate-400">Telefon</span>
+                        <input value={contactEditForm.phone} onChange={(event) => setContactEditForm((previous) => previous ? { ...previous, phone: event.target.value } : previous)} className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-white" />
+                      </label>
+                      <label>
+                        <span className="mb-1 block text-xs uppercase tracking-wide text-slate-400">Weboldal</span>
+                        <input value={contactEditForm.website} onChange={(event) => setContactEditForm((previous) => previous ? { ...previous, website: event.target.value } : previous)} className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-white" />
+                      </label>
+                      <label>
+                        <span className="mb-1 block text-xs uppercase tracking-wide text-slate-400">Forrás</span>
+                        <input value={contactEditForm.source} onChange={(event) => setContactEditForm((previous) => previous ? { ...previous, source: event.target.value } : previous)} className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-white" />
+                      </label>
+                      <label>
+                        <span className="mb-1 block text-xs uppercase tracking-wide text-slate-400">Jogalap</span>
+                        <input value={contactEditForm.legal_basis} onChange={(event) => setContactEditForm((previous) => previous ? { ...previous, legal_basis: event.target.value } : previous)} className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-white" />
+                      </label>
+                      <label className="flex items-center gap-2 self-end rounded-md border border-slate-800 bg-slate-900 px-3 py-2 text-slate-200">
+                        <input
+                          type="checkbox"
+                          checked={contactEditForm.is_active}
+                          disabled={Boolean((contactHistory.contact.unsubscribed_at || contactHistory.contact.complained_at || contactHistory.contact.suppressed_at) && !contactHistory.contact.is_active)}
+                          onChange={(event) => setContactEditForm((previous) => previous ? { ...previous, is_active: event.target.checked } : previous)}
+                        />
+                        Aktív címzett
+                      </label>
+                      <label className="md:col-span-2">
+                        <span className="mb-1 block text-xs uppercase tracking-wide text-slate-400">Megjegyzés</span>
+                        <textarea value={contactEditForm.note} onChange={(event) => setContactEditForm((previous) => previous ? { ...previous, note: event.target.value } : previous)} className="min-h-20 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-white" />
+                      </label>
+                      {contactHistory.contact.unsubscribed_at || contactHistory.contact.complained_at || contactHistory.contact.suppressed_at ? (
+                        <p className="md:col-span-2 rounded-md border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-xs text-amber-100">
+                          Ez a címzett leiratkozott, panaszt tett vagy tiltólistára került. Nem aktiválható újra egyszerű szerkesztéssel.
+                        </p>
+                      ) : null}
+                    </div>
+                  ) : (
+                    <div className="mt-3 grid gap-3 text-sm text-slate-200 md:grid-cols-2">
+                      <div><span className="text-slate-400">Cégnév:</span> {contactHistory.contact.company_name}</div>
+                      <div><span className="text-slate-400">Kapcsolattartó:</span> {contactHistory.contact.contact_name || '-'}</div>
+                      <div><span className="text-slate-400">Email:</span> {contactHistory.contact.email}</div>
+                      <div><span className="text-slate-400">Telefon:</span> {contactHistory.contact.phone || '-'}</div>
+                      <div><span className="text-slate-400">Weboldal:</span> {contactHistory.contact.website || '-'}</div>
+                      <div><span className="text-slate-400">Forrás:</span> {contactHistory.contact.source || '-'}</div>
+                      <div><span className="text-slate-400">Jogalap:</span> {contactHistory.contact.legal_basis || '-'}</div>
+                      <div><span className="text-slate-400">Aktív státusz:</span> {contactHistory.contact.is_active ? 'Aktív' : 'Inaktív'}</div>
+                      <div className="md:col-span-2"><span className="text-slate-400">Megjegyzés:</span> {contactHistory.contact.note || '-'}</div>
+                    </div>
+                  )}
+                </section>
+
+                <section className="mt-4 rounded-md border border-slate-800 bg-slate-950 p-3">
+                  <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                    <h4 className="font-semibold text-white">Célcsoport-tagság</h4>
+                    <button
+                      type="button"
+                      onClick={() => void saveContactGroups()}
+                      disabled={savingContactGroups}
+                      className="rounded-md border border-cyan-500/40 px-3 py-2 text-sm text-cyan-200 hover:bg-cyan-500/10 disabled:opacity-60"
+                    >
+                      {savingContactGroups ? 'Mentés...' : 'Célcsoportok mentése'}
+                    </button>
+                  </div>
+                  <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                    {contactHistory.activeGroups.map((group) => (
+                      <label key={group.id} className="flex items-center gap-2 rounded-md border border-slate-800 bg-slate-900 px-3 py-2 text-sm text-slate-200">
+                        <input
+                          type="checkbox"
+                          checked={selectedContactGroupIds.includes(group.id)}
+                          onChange={() => setSelectedContactGroupIds((previous) => toggleSelection(previous, group.id))}
+                        />
+                        {group.name}
+                      </label>
+                    ))}
+                    {contactHistory.activeGroups.length === 0 ? <p className="text-sm text-slate-400">Nincs aktív célcsoport.</p> : null}
+                  </div>
+                </section>
+
+                <section className="mt-4 rounded-md border border-slate-800 bg-slate-950 p-3">
+                  <h4 className="font-semibold text-white">Email állapot</h4>
+                  <div className="mt-3 grid gap-3 text-sm text-slate-200 md:grid-cols-2">
+                    <div className="flex items-center gap-2"><span className="text-slate-400">Utolsó email státusz:</span> <StatusBadge status={getB2BEmailEventLabel(contactHistory.contact.last_email_status)} /></div>
+                    <div><span className="text-slate-400">Utolsó email esemény:</span> {formatDateTime(contactHistory.contact.last_email_event_at)}</div>
+                    <div><span className="text-slate-400">Leiratkozott:</span> {contactHistory.contact.unsubscribed_at ? formatDateTime(contactHistory.contact.unsubscribed_at) : 'nem'}</div>
+                    <div><span className="text-slate-400">Visszapattant:</span> {contactHistory.contact.bounced_at ? formatDateTime(contactHistory.contact.bounced_at) : 'nem'}</div>
+                    <div><span className="text-slate-400">Panaszos:</span> {contactHistory.contact.complained_at ? formatDateTime(contactHistory.contact.complained_at) : 'nem'}</div>
+                    <div><span className="text-slate-400">Tiltólistás:</span> {contactHistory.contact.suppressed_at ? formatDateTime(contactHistory.contact.suppressed_at) : 'nem'}</div>
+                  </div>
+                </section>
 
                 <div className="mt-5">
                   <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">

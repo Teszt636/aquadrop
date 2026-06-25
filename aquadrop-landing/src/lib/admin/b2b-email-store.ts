@@ -214,6 +214,17 @@ export async function b2bPatch<T>(table: string, query: URLSearchParams, updates
   return (await response.json()) as T[];
 }
 
+export async function b2bDelete(table: string, query: URLSearchParams): Promise<void> {
+  const response = await fetch(restUrl(table, query), {
+    method: 'DELETE',
+    headers: getSupabaseAdminHeaders()
+  });
+
+  if (!response.ok) {
+    throw new Error(`Supabase delete failed for ${table}: ${response.status} ${await response.text()}`);
+  }
+}
+
 export async function listContacts(): Promise<B2BContact[]> {
   return b2bSelect<B2BContact>(
     'b2b_email_contacts',
@@ -247,6 +258,67 @@ export async function createContact(input: JsonRow): Promise<B2BContact> {
   return created;
 }
 
+async function emailExistsOnOtherActiveContact(email: string, contactId: string): Promise<boolean> {
+  const rows = await b2bSelect<Pick<B2BContact, 'id'>>(
+    'b2b_email_contacts',
+    new URLSearchParams({
+      select: 'id',
+      email: `ilike.${email}`,
+      is_active: 'eq.true',
+      deleted_at: 'is.null',
+      limit: '2'
+    })
+  );
+  return rows.some((row) => row.id !== contactId);
+}
+
+export async function updateContactDetails(id: string, input: JsonRow): Promise<B2BContact> {
+  const existing = await fetchContactById(id);
+  if (!existing || existing.deleted_at) {
+    throw new Error('A címzett nem található.');
+  }
+
+  const companyName = cleanText(input.company_name);
+  const email = sanitizeEmailAddress(input.email);
+  const requestedActive = typeof input.is_active === 'boolean' ? input.is_active : existing.is_active;
+  if (!companyName) {
+    throw new Error('A cégnév kötelező.');
+  }
+  if (requestedActive && (existing.unsubscribed_at || existing.complained_at || existing.suppressed_at)) {
+    throw new Error('Ez a címzett leiratkozott, panaszt tett vagy tiltólistára került. Nem aktiválható újra egyszerű szerkesztéssel.');
+  }
+  if (await emailExistsOnOtherActiveContact(email, id)) {
+    throw new Error('Ez az email cím már szerepel egy másik címzettnél.');
+  }
+
+  let updated: B2BContact | null = null;
+  try {
+    updated = await patchContact(id, {
+      company_name: companyName,
+      contact_name: cleanText(input.contact_name),
+      email,
+      phone: cleanText(input.phone),
+      website: cleanText(input.website),
+      source: cleanText(input.source),
+      legal_basis: cleanText(input.legal_basis),
+      note: cleanText(input.note),
+      is_active: requestedActive,
+      updated_at: new Date().toISOString()
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : '';
+    if (message.includes('b2b_email_contacts_lower_email_idx') || message.includes('duplicate key')) {
+      throw new Error('Ez az email cím már szerepel egy másik címzettnél.');
+    }
+    throw error;
+  }
+
+  if (!updated) {
+    throw new Error('A címzett mentése nem sikerült.');
+  }
+  return updated;
+}
+
 export async function listGroups(): Promise<Array<B2BGroup & { member_count?: number }>> {
   const groups = await b2bSelect<B2BGroup>(
     'b2b_email_groups',
@@ -269,6 +341,19 @@ export async function listGroups(): Promise<Array<B2BGroup & { member_count?: nu
   return groups.map((group) => ({ ...group, member_count: counts[group.id] ?? 0 }));
 }
 
+export async function listActiveGroups(): Promise<B2BGroup[]> {
+  return b2bSelect<B2BGroup>(
+    'b2b_email_groups',
+    new URLSearchParams({
+      select: '*',
+      is_active: 'eq.true',
+      deleted_at: 'is.null',
+      order: 'name.asc',
+      limit: '300'
+    })
+  );
+}
+
 export async function createGroup(input: JsonRow): Promise<B2BGroup> {
   const name = cleanText(input.name);
   if (!name) {
@@ -286,6 +371,54 @@ export async function addContactsToGroups(contactIdsInput: unknown, groupIdsInpu
 
   const rows = groupIds.flatMap((groupId) => contactIds.map((contactId) => ({ group_id: groupId, contact_id: contactId })));
   await b2bInsert('b2b_email_group_members', rows, 'group_id,contact_id');
+}
+
+export async function listContactGroupIds(contactId: string): Promise<string[]> {
+  const rows = await b2bSelect<{ group_id: string }>(
+    'b2b_email_group_members',
+    new URLSearchParams({ select: 'group_id', contact_id: `eq.${contactId}`, limit: '500' })
+  );
+  return [...new Set(rows.map((row) => row.group_id).filter(Boolean))];
+}
+
+export async function syncContactGroupMembership(contactId: string, groupIdsInput: unknown): Promise<string[]> {
+  const contact = await fetchContactById(contactId);
+  if (!contact || contact.deleted_at) {
+    throw new Error('A címzett nem található.');
+  }
+
+  const requestedGroupIds = cleanIds(groupIdsInput);
+  const activeGroups = await listActiveGroups();
+  const activeGroupIds = new Set(activeGroups.map((group) => group.id));
+  const invalidGroupIds = requestedGroupIds.filter((groupId) => !activeGroupIds.has(groupId));
+  if (invalidGroupIds.length > 0) {
+    throw new Error('Csak aktív, nem törölt célcsoport választható.');
+  }
+
+  const currentGroupIds = await listContactGroupIds(contactId);
+  const nextGroupIds = [...new Set(requestedGroupIds)];
+  const toRemove = currentGroupIds.filter((groupId) => !nextGroupIds.includes(groupId));
+  const toAdd = nextGroupIds.filter((groupId) => !currentGroupIds.includes(groupId));
+
+  if (toRemove.length > 0) {
+    await b2bDelete(
+      'b2b_email_group_members',
+      new URLSearchParams({
+        contact_id: `eq.${contactId}`,
+        group_id: `in.(${toRemove.join(',')})`
+      })
+    );
+  }
+
+  if (toAdd.length > 0) {
+    await b2bInsert(
+      'b2b_email_group_members',
+      toAdd.map((groupId) => ({ group_id: groupId, contact_id: contactId })),
+      'group_id,contact_id'
+    );
+  }
+
+  return nextGroupIds;
 }
 
 export async function listTemplates(): Promise<B2BTemplate[]> {
