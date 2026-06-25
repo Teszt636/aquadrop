@@ -164,13 +164,32 @@ The admin UI includes tabs, search, detail view, edit mode, delete confirmation,
 
 The admin dashboard includes a **B2B email kampányok** tab for managing B2B contacts, target groups, email templates, and campaigns. Campaign creation stores a template snapshot and the selected recipients in Supabase; it does not send email by itself.
 
-Actual campaign sending is handled by `POST /api/admin/b2b-email/campaigns/[id]/send` and requires:
+Campaign queue startup is handled by `POST /api/admin/b2b-email/campaigns/[id]/send` and requires:
 
 - a valid admin session with role `admin`,
 - request body `confirmSend: true`,
 - at most 100 active, non-unsubscribed, non-bounced, non-complained, non-suppressed recipients.
 
-Every recipient is sent as a separate Resend batch email object. The app stores the Resend email id on `b2b_email_campaign_recipients` and updates campaign counters from webhook events.
+This endpoint does **not** send all emails immediately. It calculates `scheduled_at` for every eligible `b2b_email_campaign_recipients` row, sets the recipient status to `queued`, stores `queued_at`, and updates the campaign to queued sending mode. `per_email_delay_seconds` controls the spacing between recipients, and `max_emails_per_process` controls how many due recipients one processing call may send.
+
+The `queued` status means the recipient is waiting in the database-backed sending queue. A queued recipient is only eligible for sending when `scheduled_at <= now()`.
+
+Queue processing is handled by `POST /api/admin/b2b-email/campaigns/[id]/process-queue`:
+
+- requires admin session,
+- selects only due `queued` recipients for that campaign,
+- skips contacts that became unsubscribed, bounced, complained, or suppressed,
+- processes at most `campaign.max_emails_per_process` rows,
+- temporarily marks rows as `processing`,
+- sends each due recipient as a separate Resend batch email object,
+- stores the Resend email id and recipient status,
+- updates campaign aggregate counters and finishes the campaign as `sent` or `partial_failed` when no queued/processing rows remain.
+
+The queue can be processed manually from the admin campaign card with the **Sor feldolgozása** button. Later, the same endpoint can be called from Vercel Cron, for example every minute, to drain due campaign recipients without requiring a browser session workflow.
+
+The module intentionally does not use `setTimeout`, long `await sleep`, or any long-running wait inside a Vercel Function. Serverless functions should finish quickly; the delay lives in the database as `scheduled_at`, and repeated short process calls pick up the rows whose scheduled time has arrived.
+
+The app stores the Resend email id on `b2b_email_campaign_recipients` and updates campaign counters from webhook events.
 
 Required server-side environment variables:
 
