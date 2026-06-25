@@ -360,18 +360,29 @@ export async function createCampaign(input: JsonRow, createdByEmail: string | nu
     }
   ]);
 
-  await b2bInsert<B2BCampaignRecipient>(
-    'b2b_email_campaign_recipients',
-    contacts.map((contact) => ({
-      campaign_id: campaign.id,
-      contact_id: contact.id,
-      email: contact.email,
-      company_name: contact.company_name,
-      contact_name: contact.contact_name,
-      status: 'pending'
-    })),
-    'campaign_id,contact_id'
-  );
+  try {
+    await b2bInsert<B2BCampaignRecipient>(
+      'b2b_email_campaign_recipients',
+      contacts.map((contact) => ({
+        campaign_id: campaign.id,
+        contact_id: contact.id,
+        email: normalizeEmail(contact.email),
+        company_name: contact.company_name,
+        contact_name: contact.contact_name,
+        status: 'pending'
+      })),
+      'campaign_id,email'
+    );
+  } catch (error) {
+    console.error('[b2b-email] campaign recipient upsert failed', {
+      campaignId: campaign.id,
+      contactCount: contacts.length,
+      error
+    });
+    throw new Error(
+      'A kampány címzettjeit nem sikerült létrehozni. Valószínűleg adatbázis egyediségi beállítás hiányzik vagy duplikált címzett szerepel a kampányban.'
+    );
+  }
 
   return campaign;
 }
