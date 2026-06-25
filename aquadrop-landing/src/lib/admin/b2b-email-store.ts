@@ -48,10 +48,16 @@ export type B2BCampaign = {
   id: string;
   name: string;
   template_id: string | null;
-  status: 'draft' | 'ready' | 'sending' | 'sent' | 'partial_failed' | 'failed' | 'cancelled';
+  status: 'draft' | 'ready' | 'queued' | 'sending' | 'sent' | 'partial_failed' | 'failed' | 'cancelled';
   subject_snapshot: string | null;
   html_snapshot: string | null;
   text_snapshot: string | null;
+  sending_mode: 'queued';
+  per_email_delay_seconds: number;
+  max_emails_per_process: number;
+  scheduled_start_at: string | null;
+  queue_started_at: string | null;
+  queue_finished_at: string | null;
   target_count: number;
   sent_count: number;
   delivered_count: number;
@@ -72,11 +78,18 @@ export type B2BCampaignRecipient = {
   email: string;
   company_name: string | null;
   contact_name: string | null;
-  status: 'pending' | 'sent' | 'delivered' | 'bounced' | 'failed' | 'complained' | 'suppressed' | 'skipped';
+  status: 'pending' | 'queued' | 'processing' | 'sent' | 'delivered' | 'bounced' | 'failed' | 'complained' | 'suppressed' | 'skipped';
   resend_email_id: string | null;
   resend_error: string | null;
   last_event_type: string | null;
   last_event_at: string | null;
+  scheduled_at: string | null;
+  queued_at: string | null;
+  processing_started_at: string | null;
+  attempt_count: number;
+  next_attempt_at: string | null;
+  locked_at: string | null;
+  locked_by: string | null;
   sent_at: string | null;
   delivered_at: string | null;
   bounced_at: string | null;
@@ -86,6 +99,7 @@ export type B2BCampaignRecipient = {
 };
 
 type JsonRow = Record<string, unknown>;
+const TERMINAL_RECIPIENT_STATUSES = ['sent', 'delivered', 'bounced', 'failed', 'complained', 'suppressed', 'skipped'];
 
 function restUrl(table: string, query?: URLSearchParams): string {
   const base = `${getSupabaseAdminRestUrl()}/${table}`;
@@ -369,15 +383,29 @@ export async function listCampaignRecipients(campaignId: string): Promise<B2BCam
   );
 }
 
-export async function listPendingCampaignRecipients(campaignId: string): Promise<B2BCampaignRecipient[]> {
+export async function listQueueableCampaignRecipients(campaignId: string): Promise<B2BCampaignRecipient[]> {
   return b2bSelect<B2BCampaignRecipient>(
     'b2b_email_campaign_recipients',
     new URLSearchParams({
       select: '*',
       campaign_id: `eq.${campaignId}`,
-      status: 'eq.pending',
+      status: 'in.(pending,queued)',
       order: 'created_at.asc',
-      limit: '200'
+      limit: '1000'
+    })
+  );
+}
+
+export async function listDueQueuedCampaignRecipients(campaignId: string, nowIso: string, limit: number): Promise<B2BCampaignRecipient[]> {
+  return b2bSelect<B2BCampaignRecipient>(
+    'b2b_email_campaign_recipients',
+    new URLSearchParams({
+      select: '*',
+      campaign_id: `eq.${campaignId}`,
+      status: 'eq.queued',
+      scheduled_at: `lte.${nowIso}`,
+      order: 'scheduled_at.asc',
+      limit: String(limit)
     })
   );
 }
@@ -438,6 +466,28 @@ export async function updateCampaignAggregates(campaignId: string): Promise<void
   });
 }
 
+export async function finishCampaignIfQueueDrained(campaignId: string): Promise<B2BCampaign | null> {
+  const recipients = await listCampaignRecipients(campaignId);
+  const hasOpenQueue = recipients.some((recipient) => ['queued', 'processing', 'pending'].includes(recipient.status));
+  if (hasOpenQueue) {
+    return null;
+  }
+
+  const failedCount = recipients.filter((recipient) => ['failed', 'bounced', 'complained', 'suppressed'].includes(recipient.status)).length;
+  const sentCount = recipients.filter((recipient) => ['sent', 'delivered'].includes(recipient.status)).length;
+  const skippedCount = recipients.filter((recipient) => recipient.status === 'skipped').length;
+  const nextStatus = sentCount > 0 && failedCount === 0 ? 'sent' : sentCount > 0 ? 'partial_failed' : skippedCount > 0 ? 'failed' : 'failed';
+
+  return patchCampaign(campaignId, {
+    status: nextStatus,
+    queue_finished_at: new Date().toISOString()
+  });
+}
+
 export function isSuppressedContact(contact: Pick<B2BContact, 'is_active' | 'unsubscribed_at' | 'bounced_at' | 'complained_at' | 'suppressed_at'>): boolean {
   return !contact.is_active || Boolean(contact.unsubscribed_at || contact.bounced_at || contact.complained_at || contact.suppressed_at);
+}
+
+export function isTerminalRecipientStatus(status: B2BCampaignRecipient['status']): boolean {
+  return TERMINAL_RECIPIENT_STATUSES.includes(status);
 }

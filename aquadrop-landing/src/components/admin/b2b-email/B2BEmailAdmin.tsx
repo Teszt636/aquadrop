@@ -36,6 +36,11 @@ type Campaign = {
   id: string;
   name: string;
   status: string;
+  per_email_delay_seconds: number;
+  max_emails_per_process: number;
+  scheduled_start_at: string | null;
+  queue_started_at: string | null;
+  queue_finished_at: string | null;
   target_count: number;
   sent_count: number;
   delivered_count: number;
@@ -73,12 +78,29 @@ async function fetchJson<T>(url: string, init?: RequestInit): Promise<T> {
 function statusTone(value: string): string {
   if (['sent', 'delivered'].includes(value)) return 'border-emerald-500/40 bg-emerald-500/10 text-emerald-200';
   if (['failed', 'bounced', 'complained', 'suppressed'].includes(value)) return 'border-rose-500/40 bg-rose-500/10 text-rose-200';
-  if (value === 'sending') return 'border-amber-500/40 bg-amber-500/10 text-amber-200';
+  if (['queued', 'processing', 'sending'].includes(value)) return 'border-amber-500/40 bg-amber-500/10 text-amber-200';
   return 'border-slate-700 bg-slate-900 text-slate-300';
 }
 
 function toggleSelection(values: string[], value: string): string[] {
   return values.includes(value) ? values.filter((item) => item !== value) : [...values, value];
+}
+
+function formatDateTime(value: string | null): string {
+  if (!value) return '-';
+  return new Intl.DateTimeFormat('hu-HU', {
+    dateStyle: 'short',
+    timeStyle: 'short'
+  }).format(new Date(value));
+}
+
+function formatDuration(totalSeconds: number): string {
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  if (hours > 0) return `${hours} óra ${minutes} perc`;
+  if (minutes > 0) return `${minutes} perc ${seconds} mp`;
+  return `${seconds} mp`;
 }
 
 export function B2BEmailAdmin() {
@@ -93,6 +115,7 @@ export function B2BEmailAdmin() {
   const [preview, setPreview] = useState<Preview | null>(null);
   const [sendCampaign, setSendCampaign] = useState<Campaign | null>(null);
   const [sendingCampaignId, setSendingCampaignId] = useState<string | null>(null);
+  const [queueSettings, setQueueSettings] = useState({ perEmailDelaySeconds: 30, maxEmailsPerProcess: 10 });
 
   const [contactForm, setContactForm] = useState({
     company_name: '',
@@ -236,12 +259,23 @@ export function B2BEmailAdmin() {
     setError(null);
     setMessage(null);
     try {
-      const body = await fetchJson<{ sentCount: number; skippedCount: number }>(`/api/admin/b2b-email/campaigns/${sendCampaign.id}/send`, {
+      const body = await fetchJson<{
+        queued_count: number;
+        skipped_count: number;
+        first_scheduled_at: string | null;
+        last_scheduled_at: string | null;
+      }>(`/api/admin/b2b-email/campaigns/${sendCampaign.id}/send`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ confirmSend: true })
+        body: JSON.stringify({
+          confirmSend: true,
+          per_email_delay_seconds: queueSettings.perEmailDelaySeconds,
+          max_emails_per_process: queueSettings.maxEmailsPerProcess
+        })
       });
-      setMessage(`Küldés kész. Elküldve: ${body.sentCount}, kihagyva: ${body.skippedCount}.`);
+      setMessage(
+        `Küldési sor elindítva. Sorba állítva: ${body.queued_count}, kihagyva: ${body.skipped_count}. Első: ${formatDateTime(body.first_scheduled_at)}, utolsó: ${formatDateTime(body.last_scheduled_at)}.`
+      );
       setSendCampaign(null);
       await loadAll();
     } catch (sendError) {
@@ -249,6 +283,32 @@ export function B2BEmailAdmin() {
     } finally {
       setSendingCampaignId(null);
     }
+  }
+
+  async function processCampaignQueue(campaignId: string) {
+    setError(null);
+    setMessage(null);
+    setSendingCampaignId(campaignId);
+    try {
+      const body = await fetchJson<{ processed_count: number; sent_count: number; skipped_count: number }>(
+        `/api/admin/b2b-email/campaigns/${campaignId}/process-queue`,
+        { method: 'POST' }
+      );
+      setMessage(`Queue feldolgozás kész. Feldolgozva: ${body.processed_count}, elküldve: ${body.sent_count}, kihagyva: ${body.skipped_count}.`);
+      await loadAll();
+    } catch (processError) {
+      setError(processError instanceof Error ? processError.message : 'Queue feldolgozási hiba.');
+    } finally {
+      setSendingCampaignId(null);
+    }
+  }
+
+  function openSendModal(campaign: Campaign) {
+    setQueueSettings({
+      perEmailDelaySeconds: campaign.per_email_delay_seconds ?? 30,
+      maxEmailsPerProcess: campaign.max_emails_per_process ?? 10
+    });
+    setSendCampaign(campaign);
   }
 
   async function sendTestEmail(templateId: string) {
@@ -459,7 +519,8 @@ export function B2BEmailAdmin() {
                   </div>
                   <div className="flex flex-wrap gap-2">
                     <button type="button" onClick={() => void openPreview(campaign.id)} className="inline-flex items-center gap-2 rounded-md border border-slate-700 px-3 py-2 text-sm text-slate-100 hover:bg-slate-800"><Eye className="h-4 w-4" /> Előnézet</button>
-                    <button type="button" onClick={() => setSendCampaign(campaign)} disabled={sendingCampaignId === campaign.id} className="inline-flex items-center gap-2 rounded-md bg-rose-500 px-3 py-2 text-sm font-semibold text-white hover:bg-rose-400 disabled:opacity-60"><Send className="h-4 w-4" /> Küldés</button>
+                    <button type="button" onClick={() => void processCampaignQueue(campaign.id)} disabled={sendingCampaignId === campaign.id} className="inline-flex items-center gap-2 rounded-md border border-cyan-500/50 px-3 py-2 text-sm text-cyan-200 hover:bg-cyan-500/10 disabled:opacity-60"><RefreshCw className="h-4 w-4" /> Sor feldolgozása</button>
+                    <button type="button" onClick={() => openSendModal(campaign)} disabled={sendingCampaignId === campaign.id} className="inline-flex items-center gap-2 rounded-md bg-rose-500 px-3 py-2 text-sm font-semibold text-white hover:bg-rose-400 disabled:opacity-60"><Send className="h-4 w-4" /> Queue indítása</button>
                   </div>
                 </div>
               </article>
@@ -485,14 +546,55 @@ export function B2BEmailAdmin() {
       {sendCampaign ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
           <div className="w-full max-w-xl rounded-lg border border-rose-500/40 bg-slate-900 p-5">
-            <h3 className="text-lg font-semibold text-white">Végleges kampányküldés</h3>
+            <h3 className="text-lg font-semibold text-white">Küldési sor indítása</h3>
+            {(() => {
+              const recipientCount = sendCampaign.target_count;
+              const delay = queueSettings.perEmailDelaySeconds;
+              const first = new Date();
+              const last = new Date(first.getTime() + Math.max(0, recipientCount - 1) * delay * 1000);
+              const totalSeconds = Math.max(0, recipientCount - 1) * delay;
+              return (
+                <div className="mt-4 grid gap-3 rounded-md border border-slate-800 bg-slate-950 p-3 text-sm text-slate-200">
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <label>
+                      <span className="mb-1 block text-xs uppercase tracking-wide text-slate-400">Emailenkénti késleltetés (mp)</span>
+                      <input
+                        type="number"
+                        min={0}
+                        max={3600}
+                        value={queueSettings.perEmailDelaySeconds}
+                        onChange={(event) => setQueueSettings((previous) => ({ ...previous, perEmailDelaySeconds: Number(event.target.value) }))}
+                        className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white"
+                      />
+                    </label>
+                    <label>
+                      <span className="mb-1 block text-xs uppercase tracking-wide text-slate-400">Max email / feldolgozás</span>
+                      <input
+                        type="number"
+                        min={1}
+                        max={100}
+                        value={queueSettings.maxEmailsPerProcess}
+                        onChange={(event) => setQueueSettings((previous) => ({ ...previous, maxEmailsPerProcess: Number(event.target.value) }))}
+                        className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white"
+                      />
+                    </label>
+                  </div>
+                  <div className="grid gap-2 text-xs text-slate-300 sm:grid-cols-2">
+                    <span>Címzettek száma: {recipientCount}</span>
+                    <span>Becsült teljes idő: {formatDuration(totalSeconds)}</span>
+                    <span>Első küldés várható ideje: {formatDateTime(first.toISOString())}</span>
+                    <span>Utolsó küldés várható ideje: {formatDateTime(last.toISOString())}</span>
+                  </div>
+                </div>
+              );
+            })()}
             <p className="mt-3 text-sm leading-6 text-slate-200">
-              Biztosan kiküldöd ezt a kampányt? A rendszer legfeljebb 100 aktív, nem leiratkozott címzettnek küldi ki külön emailként. A küldés naplózásra kerül, és nem vonható vissza.
+              Biztosan elindítod a kampány küldési sorát? A rendszer nem egyszerre küldi ki a leveleket, hanem címzettenként késleltetve, külön emailként. A küldés naplózásra kerül, és a visszapattanásokat / sikertelen kézbesítéseket külön státuszként menti.
             </p>
             <div className="mt-5 flex flex-wrap justify-end gap-2">
               <button type="button" onClick={() => setSendCampaign(null)} className="rounded-md border border-slate-700 px-4 py-2 text-sm text-slate-100 hover:bg-slate-800">Mégse</button>
               <button type="button" onClick={() => void sendConfirmedCampaign()} disabled={sendingCampaignId === sendCampaign.id} className="rounded-md bg-rose-500 px-4 py-2 text-sm font-semibold text-white hover:bg-rose-400 disabled:opacity-60">
-                {sendingCampaignId === sendCampaign.id ? 'Küldés...' : 'Igen, kiküldöm'}
+                {sendingCampaignId === sendCampaign.id ? 'Sor indítása...' : 'Igen, elindítom'}
               </button>
             </div>
           </div>
