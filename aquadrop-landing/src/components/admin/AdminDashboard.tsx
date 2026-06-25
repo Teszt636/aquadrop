@@ -21,6 +21,7 @@ import {
   getBudapestDateTimeParts
 } from '@/lib/datetime/budapest';
 import { SeoArticleEditor } from '@/components/admin/SeoArticleEditor';
+import { B2BEmailAdmin } from '@/components/admin/b2b-email/B2BEmailAdmin';
 
 type Row = Record<string, unknown>;
 type AdminUser = { id: string; name: string; email: string };
@@ -235,6 +236,7 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
   const [activeTable, setActiveTable] = useState<AdminTableViewName>(
     'announcement_signups'
   );
+  const [showB2BEmailAdmin, setShowB2BEmailAdmin] = useState(false);
   const [rows, setRows] = useState<Row[]>([]);
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
@@ -1046,9 +1048,12 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
         {TABLES.map((table) => (
           <button
             key={table.key}
-            onClick={() => setActiveTable(table.key as AdminTableViewName)}
+            onClick={() => {
+              setShowB2BEmailAdmin(false);
+              setActiveTable(table.key as AdminTableViewName);
+            }}
             className={`rounded-md px-3 py-2 text-sm font-medium transition ${
-              activeTable === table.key
+              !showB2BEmailAdmin && activeTable === table.key
                 ? 'bg-cyan-500 text-slate-950'
                 : 'border border-slate-800 bg-slate-900 text-slate-200 hover:bg-slate-800'
             }`}
@@ -1056,9 +1061,22 @@ export function AdminDashboard({ sessionUser }: { sessionUser: AdminSessionUser 
             {table.label}
           </button>
         ))}
+        <button
+          type="button"
+          onClick={() => setShowB2BEmailAdmin(true)}
+          className={`rounded-md px-3 py-2 text-sm font-medium transition ${
+            showB2BEmailAdmin
+              ? 'bg-cyan-500 text-slate-950'
+              : 'border border-slate-800 bg-slate-900 text-slate-200 hover:bg-slate-800'
+          }`}
+        >
+          B2B email kampányok
+        </button>
       </nav>
 
-      <div className="rounded-xl border border-slate-800 bg-slate-900 p-4">
+      {showB2BEmailAdmin ? <B2BEmailAdmin /> : null}
+
+      <div className={`rounded-xl border border-slate-800 bg-slate-900 p-4 ${showB2BEmailAdmin ? 'hidden' : ''}`}>
         <input
           value={query}
           onChange={(event) => setQuery(event.target.value)}

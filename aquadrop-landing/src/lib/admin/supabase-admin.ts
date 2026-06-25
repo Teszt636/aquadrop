@@ -45,6 +45,14 @@ function getServiceHeaders(additionalHeaders?: HeadersInit): HeadersInit {
   };
 }
 
+export function getSupabaseAdminRestUrl(): string {
+  return getRestUrl();
+}
+
+export function getSupabaseAdminHeaders(additionalHeaders?: HeadersInit): HeadersInit {
+  return getServiceHeaders(additionalHeaders);
+}
+
 function resolveSourceTable(table: AdminTableViewName): AdminBaseTableName {
   return table === 'unsubscribed' ? 'announcement_signups' : table;
 }
