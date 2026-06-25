@@ -4,7 +4,9 @@ import { requireAdminSession } from '@/lib/admin/auth';
 import {
   fetchCampaignsByIds,
   fetchContactById,
+  listActiveGroups,
   listContactCampaignRecipients,
+  listContactGroupIds,
   listContactSendAttempts,
   listEventsByResendEmailIds,
   type B2BEmailEvent
@@ -46,7 +48,12 @@ export async function GET(_request: Request, context: { params: Promise<{ id: st
       return NextResponse.json({ error: 'A címzett nem található.' }, { status: 404 });
     }
 
-    const [recipients, attempts] = await Promise.all([listContactCampaignRecipients(contact.id), listContactSendAttempts(contact.id)]);
+    const [recipients, attempts, contactGroupIds, activeGroups] = await Promise.all([
+      listContactCampaignRecipients(contact.id),
+      listContactSendAttempts(contact.id),
+      listContactGroupIds(contact.id),
+      listActiveGroups()
+    ]);
     const campaignIds = [
       ...recipients.map((recipient) => recipient.campaign_id),
       ...attempts.map((attempt) => attempt.campaign_id).filter((campaignId): campaignId is string => Boolean(campaignId))
@@ -124,7 +131,7 @@ export async function GET(_request: Request, context: { params: Promise<{ id: st
       return new Date(rightTime).getTime() - new Date(leftTime).getTime();
     });
 
-    return NextResponse.json({ contact, history });
+    return NextResponse.json({ contact, contactGroupIds, activeGroups, history });
   } catch (error) {
     return NextResponse.json({ error: error instanceof Error ? error.message : 'Email előzmény lekérdezési hiba.' }, { status: 500 });
   }
