@@ -654,6 +654,20 @@ export async function listDueQueuedCampaignRecipients(campaignId: string, nowIso
   );
 }
 
+export async function fetchNextQueuedCampaignRecipient(campaignId: string): Promise<B2BCampaignRecipient | null> {
+  const rows = await b2bSelect<B2BCampaignRecipient>(
+    'b2b_email_campaign_recipients',
+    new URLSearchParams({
+      select: '*',
+      campaign_id: `eq.${campaignId}`,
+      status: 'eq.queued',
+      order: 'scheduled_at.asc.nullslast,created_at.asc',
+      limit: '1'
+    })
+  );
+  return rows[0] ?? null;
+}
+
 export async function patchCampaign(id: string, updates: JsonRow): Promise<B2BCampaign | null> {
   const rows = await b2bPatch<B2BCampaign>('b2b_email_campaigns', new URLSearchParams({ id: `eq.${id}` }), updates);
   return rows[0] ?? null;
