@@ -18,6 +18,7 @@ export type B2BContact = {
   suppressed_at: string | null;
   last_email_status: string | null;
   last_email_event_at: string | null;
+  deleted_at: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -26,6 +27,8 @@ export type B2BGroup = {
   id: string;
   name: string;
   description: string | null;
+  is_active: boolean;
+  deleted_at: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -40,6 +43,7 @@ export type B2BTemplate = {
   cta_label: string | null;
   cta_url: string | null;
   is_active: boolean;
+  deleted_at: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -67,6 +71,8 @@ export type B2BCampaign = {
   suppressed_count: number;
   created_by_email: string | null;
   sent_at: string | null;
+  archived_at: string | null;
+  deleted_at: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -174,7 +180,12 @@ export async function b2bPatch<T>(table: string, query: URLSearchParams, updates
 export async function listContacts(): Promise<B2BContact[]> {
   return b2bSelect<B2BContact>(
     'b2b_email_contacts',
-    new URLSearchParams({ select: '*', order: 'updated_at.desc.nullslast,created_at.desc', limit: '500' })
+    new URLSearchParams({
+      select: '*',
+      deleted_at: 'is.null',
+      order: 'updated_at.desc.nullslast,created_at.desc',
+      limit: '500'
+    })
   );
 }
 
@@ -202,7 +213,13 @@ export async function createContact(input: JsonRow): Promise<B2BContact> {
 export async function listGroups(): Promise<Array<B2BGroup & { member_count?: number }>> {
   const groups = await b2bSelect<B2BGroup>(
     'b2b_email_groups',
-    new URLSearchParams({ select: '*', order: 'name.asc', limit: '300' })
+    new URLSearchParams({
+      select: '*',
+      is_active: 'eq.true',
+      deleted_at: 'is.null',
+      order: 'name.asc',
+      limit: '300'
+    })
   );
   const members = await b2bSelect<{ group_id: string }>(
     'b2b_email_group_members',
@@ -237,7 +254,13 @@ export async function addContactsToGroups(contactIdsInput: unknown, groupIdsInpu
 export async function listTemplates(): Promise<B2BTemplate[]> {
   return b2bSelect<B2BTemplate>(
     'b2b_email_templates',
-    new URLSearchParams({ select: '*', order: 'updated_at.desc.nullslast,created_at.desc', limit: '300' })
+    new URLSearchParams({
+      select: '*',
+      is_active: 'eq.true',
+      deleted_at: 'is.null',
+      order: 'updated_at.desc.nullslast,created_at.desc',
+      limit: '300'
+    })
   );
 }
 
@@ -271,7 +294,7 @@ export async function saveTemplate(input: JsonRow): Promise<B2BTemplate> {
 export async function listCampaigns(): Promise<B2BCampaign[]> {
   return b2bSelect<B2BCampaign>(
     'b2b_email_campaigns',
-    new URLSearchParams({ select: '*', order: 'created_at.desc', limit: '300' })
+    new URLSearchParams({ select: '*', deleted_at: 'is.null', order: 'created_at.desc', limit: '300' })
   );
 }
 
@@ -303,15 +326,32 @@ async function fetchContactsByIds(ids: string[]): Promise<B2BContact[]> {
   if (ids.length === 0) return [];
   return b2bSelect<B2BContact>(
     'b2b_email_contacts',
-    new URLSearchParams({ select: '*', id: `in.(${ids.join(',')})`, limit: '500' })
+    new URLSearchParams({
+      select: '*',
+      id: `in.(${ids.join(',')})`,
+      deleted_at: 'is.null',
+      limit: '500'
+    })
   );
 }
 
 async function fetchContactIdsByGroupIds(groupIds: string[]): Promise<string[]> {
   if (groupIds.length === 0) return [];
+  const activeGroups = await b2bSelect<{ id: string }>(
+    'b2b_email_groups',
+    new URLSearchParams({
+      select: 'id',
+      id: `in.(${groupIds.join(',')})`,
+      is_active: 'eq.true',
+      deleted_at: 'is.null',
+      limit: '500'
+    })
+  );
+  const activeGroupIds = activeGroups.map((group) => group.id);
+  if (activeGroupIds.length === 0) return [];
   const rows = await b2bSelect<{ contact_id: string }>(
     'b2b_email_group_members',
-    new URLSearchParams({ select: 'contact_id', group_id: `in.(${groupIds.join(',')})`, limit: '5000' })
+    new URLSearchParams({ select: 'contact_id', group_id: `in.(${activeGroupIds.join(',')})`, limit: '5000' })
   );
   return [...new Set(rows.map((row) => row.contact_id).filter(Boolean))];
 }
@@ -342,7 +382,7 @@ export async function createCampaign(input: JsonRow, createdByEmail: string | nu
   }
 
   const template = await fetchTemplateById(templateId);
-  if (!template) {
+  if (!template || !template.is_active || template.deleted_at) {
     throw new Error('A kiválasztott sablon nem található.');
   }
 
@@ -426,6 +466,57 @@ export async function patchCampaign(id: string, updates: JsonRow): Promise<B2BCa
   return rows[0] ?? null;
 }
 
+export async function archiveContact(id: string): Promise<B2BContact | null> {
+  return patchContact(id, {
+    is_active: false,
+    deleted_at: new Date().toISOString()
+  });
+}
+
+export async function archiveGroup(id: string): Promise<B2BGroup | null> {
+  const rows = await b2bPatch<B2BGroup>('b2b_email_groups', new URLSearchParams({ id: `eq.${id}` }), {
+    is_active: false,
+    deleted_at: new Date().toISOString()
+  });
+  return rows[0] ?? null;
+}
+
+export async function archiveTemplate(id: string): Promise<B2BTemplate | null> {
+  const rows = await b2bPatch<B2BTemplate>('b2b_email_templates', new URLSearchParams({ id: `eq.${id}` }), {
+    is_active: false,
+    deleted_at: new Date().toISOString()
+  });
+  return rows[0] ?? null;
+}
+
+export async function archiveCampaign(id: string): Promise<B2BCampaign | null> {
+  const now = new Date().toISOString();
+  const campaign = await patchCampaign(id, {
+    archived_at: now,
+    deleted_at: now
+  });
+
+  if (campaign && ['queued', 'sending'].includes(campaign.status)) {
+    await b2bPatch<B2BCampaignRecipient>(
+      'b2b_email_campaign_recipients',
+      new URLSearchParams({
+        campaign_id: `eq.${id}`,
+        status: 'in.(pending,queued)'
+      }),
+      {
+        status: 'skipped',
+        last_event_type: 'campaign_archived',
+        last_event_at: now,
+        locked_at: null,
+        locked_by: null
+      }
+    );
+    await updateCampaignAggregates(id);
+  }
+
+  return campaign;
+}
+
 export async function patchCampaignRecipient(id: string, updates: JsonRow): Promise<B2BCampaignRecipient | null> {
   const rows = await b2bPatch<B2BCampaignRecipient>(
     'b2b_email_campaign_recipients',
@@ -495,8 +586,8 @@ export async function finishCampaignIfQueueDrained(campaignId: string): Promise<
   });
 }
 
-export function isSuppressedContact(contact: Pick<B2BContact, 'is_active' | 'unsubscribed_at' | 'bounced_at' | 'complained_at' | 'suppressed_at'>): boolean {
-  return !contact.is_active || Boolean(contact.unsubscribed_at || contact.bounced_at || contact.complained_at || contact.suppressed_at);
+export function isSuppressedContact(contact: Pick<B2BContact, 'is_active' | 'deleted_at' | 'unsubscribed_at' | 'bounced_at' | 'complained_at' | 'suppressed_at'>): boolean {
+  return !contact.is_active || Boolean(contact.deleted_at || contact.unsubscribed_at || contact.bounced_at || contact.complained_at || contact.suppressed_at);
 }
 
 export function isTerminalRecipientStatus(status: B2BCampaignRecipient['status']): boolean {
