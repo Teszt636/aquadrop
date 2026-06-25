@@ -326,6 +326,24 @@ export function B2BEmailAdmin() {
     }
   }
 
+  async function deleteB2BEntity(params: {
+    endpoint: string;
+    confirmText: string;
+    fallbackSuccess: string;
+    fallbackError: string;
+  }) {
+    if (!window.confirm(params.confirmText)) return;
+    setError(null);
+    setMessage(null);
+    try {
+      const body = await fetchJson<{ message?: string }>(params.endpoint, { method: 'DELETE' });
+      setMessage(body.message ?? params.fallbackSuccess);
+      await loadAll();
+    } catch (deleteError) {
+      setError(deleteError instanceof Error ? deleteError.message : params.fallbackError);
+    }
+  }
+
   return (
     <section className="space-y-4 rounded-lg border border-slate-800 bg-slate-900 p-4">
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
@@ -391,7 +409,7 @@ export function B2BEmailAdmin() {
           <div className="overflow-x-auto rounded-lg border border-slate-800">
             <table className="min-w-full text-left text-sm text-slate-200">
               <thead className="bg-slate-950 text-xs uppercase tracking-wide text-slate-400">
-                <tr><th className="px-3 py-2">Cég</th><th className="px-3 py-2">Email</th><th className="px-3 py-2">Státusz</th><th className="px-3 py-2">Utolsó email</th></tr>
+                <tr><th className="px-3 py-2">Cég</th><th className="px-3 py-2">Email</th><th className="px-3 py-2">Státusz</th><th className="px-3 py-2">Utolsó email</th><th className="px-3 py-2">Művelet</th></tr>
               </thead>
               <tbody>
                 {contacts.map((contact) => (
@@ -400,6 +418,20 @@ export function B2BEmailAdmin() {
                     <td className="px-3 py-2">{contact.email}</td>
                     <td className="px-3 py-2">{activeContacts.some((item) => item.id === contact.id) ? 'Aktív' : 'Kizárt / leiratkozott'}</td>
                     <td className="px-3 py-2">{contact.last_email_status || '-'}</td>
+                    <td className="px-3 py-2">
+                      <button
+                        type="button"
+                        onClick={() => void deleteB2BEntity({
+                          endpoint: `/api/admin/b2b-email/contacts/${contact.id}`,
+                          confirmText: 'Biztosan inaktiválod ezt a címzettet? A korábbi kampánynaplók megmaradnak, de a rendszer nem küld neki új B2B kampányt.',
+                          fallbackSuccess: 'A címzett inaktiválva lett.',
+                          fallbackError: 'A címzett inaktiválása nem sikerült.'
+                        })}
+                        className="rounded-md border border-rose-500/40 px-2 py-1 text-xs text-rose-200 hover:bg-rose-500/10"
+                      >
+                        Inaktiválás
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -429,7 +461,21 @@ export function B2BEmailAdmin() {
               <article key={group.id} className="rounded-lg border border-slate-800 bg-slate-950 p-3">
                 <h4 className="font-semibold text-white">{group.name}</h4>
                 <p className="mt-1 text-sm text-slate-400">{group.description || '-'}</p>
-                <p className="mt-3 text-xs text-cyan-200">{group.member_count ?? 0} címzett</p>
+                <div className="mt-3 flex items-center justify-between gap-2">
+                  <p className="text-xs text-cyan-200">{group.member_count ?? 0} címzett</p>
+                  <button
+                    type="button"
+                    onClick={() => void deleteB2BEntity({
+                      endpoint: `/api/admin/b2b-email/groups/${group.id}`,
+                      confirmText: 'Biztosan archiválod ezt a célcsoportot? Új kampányhoz már nem lesz választható, de a korábbi kampányadatok megmaradnak.',
+                      fallbackSuccess: 'A célcsoport archiválva lett.',
+                      fallbackError: 'A célcsoport archiválása nem sikerült.'
+                    })}
+                    className="rounded-md border border-rose-500/40 px-2 py-1 text-xs text-rose-200 hover:bg-rose-500/10"
+                  >
+                    Archiválás
+                  </button>
+                </div>
               </article>
             ))}
           </div>
@@ -460,6 +506,18 @@ export function B2BEmailAdmin() {
                   <div className="flex flex-wrap gap-2">
                     <button type="button" onClick={() => setTemplateForm({ id: template.id, name: template.name, subject: template.subject, html_body: template.html_body, text_body: template.text_body ?? '', is_active: template.is_active })} className="rounded-md border border-slate-700 px-3 py-2 text-sm text-slate-100 hover:bg-slate-800">Szerkesztés</button>
                     <button type="button" onClick={() => void sendTestEmail(template.id)} className="inline-flex items-center gap-2 rounded-md border border-cyan-500/50 px-3 py-2 text-sm text-cyan-200 hover:bg-cyan-500/10"><Send className="h-4 w-4" /> Teszt</button>
+                    <button
+                      type="button"
+                      onClick={() => void deleteB2BEntity({
+                        endpoint: `/api/admin/b2b-email/templates/${template.id}`,
+                        confirmText: 'Biztosan archiválod ezt a sablont? Új kampányhoz már nem lesz választható, de a korábbi kampányok nem sérülnek.',
+                        fallbackSuccess: 'A sablon archiválva lett.',
+                        fallbackError: 'A sablon archiválása nem sikerült.'
+                      })}
+                      className="rounded-md border border-rose-500/40 px-3 py-2 text-sm text-rose-200 hover:bg-rose-500/10"
+                    >
+                      Archiválás
+                    </button>
                   </div>
                 </div>
               </article>
@@ -521,6 +579,18 @@ export function B2BEmailAdmin() {
                     <button type="button" onClick={() => void openPreview(campaign.id)} className="inline-flex items-center gap-2 rounded-md border border-slate-700 px-3 py-2 text-sm text-slate-100 hover:bg-slate-800"><Eye className="h-4 w-4" /> Előnézet</button>
                     <button type="button" onClick={() => void processCampaignQueue(campaign.id)} disabled={sendingCampaignId === campaign.id} className="inline-flex items-center gap-2 rounded-md border border-cyan-500/50 px-3 py-2 text-sm text-cyan-200 hover:bg-cyan-500/10 disabled:opacity-60"><RefreshCw className="h-4 w-4" /> Sor feldolgozása</button>
                     <button type="button" onClick={() => openSendModal(campaign)} disabled={sendingCampaignId === campaign.id} className="inline-flex items-center gap-2 rounded-md bg-rose-500 px-3 py-2 text-sm font-semibold text-white hover:bg-rose-400 disabled:opacity-60"><Send className="h-4 w-4" /> Queue indítása</button>
+                    <button
+                      type="button"
+                      onClick={() => void deleteB2BEntity({
+                        endpoint: `/api/admin/b2b-email/campaigns/${campaign.id}`,
+                        confirmText: `Biztosan archiválod ezt a kampányt? A kampány eltűnik az aktív listából, de a küldési napló megmarad.${['queued', 'sending'].includes(campaign.status) ? ' A még el nem küldött címzettek skipped státuszba kerülnek.' : ''}`,
+                        fallbackSuccess: 'A kampány archiválva lett.',
+                        fallbackError: 'A kampány archiválása nem sikerült.'
+                      })}
+                      className="inline-flex items-center gap-2 rounded-md border border-rose-500/40 px-3 py-2 text-sm text-rose-200 hover:bg-rose-500/10"
+                    >
+                      Archiválás / törlés
+                    </button>
                   </div>
                 </div>
               </article>
