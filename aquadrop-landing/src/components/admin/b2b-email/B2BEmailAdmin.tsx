@@ -2,18 +2,31 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Eye, Mail, Plus, RefreshCw, Send, Users } from 'lucide-react';
+import {
+  getB2BCampaignStatusLabel,
+  getB2BEmailEventLabel,
+  getB2BRecipientStatusLabel,
+  type B2BStatusLabel,
+  type B2BStatusTone
+} from '@/lib/email/b2b-email-status';
 
 type Contact = {
   id: string;
   company_name: string;
   contact_name: string | null;
   email: string;
+  phone: string | null;
+  website: string | null;
+  source: string | null;
+  legal_basis: string | null;
+  note: string | null;
   is_active: boolean;
   unsubscribed_at: string | null;
   bounced_at: string | null;
   complained_at: string | null;
   suppressed_at: string | null;
   last_email_status: string | null;
+  last_email_event_at: string | null;
 };
 
 type Group = {
@@ -57,6 +70,40 @@ type Preview = {
   text: string;
 };
 
+type EmailHistoryEvent = {
+  id: string;
+  event_type: string;
+  created_at: string;
+};
+
+type EmailHistoryItem = {
+  id: string;
+  source: 'campaign_recipient' | 'send_attempt';
+  campaign_id: string | null;
+  campaign_name: string | null;
+  campaign_recipient_id: string | null;
+  email: string;
+  subject: string | null;
+  status: string;
+  last_event_type: string | null;
+  resend_email_id: string | null;
+  resend_error: string | null;
+  sent_at: string | null;
+  delivered_at: string | null;
+  opened_at: string | null;
+  clicked_at: string | null;
+  bounced_at: string | null;
+  failed_at: string | null;
+  complained_at: string | null;
+  created_at: string;
+  events: EmailHistoryEvent[];
+};
+
+type ContactHistoryResponse = {
+  contact: Contact;
+  history: EmailHistoryItem[];
+};
+
 type TabKey = 'contacts' | 'groups' | 'templates' | 'campaigns';
 
 const tabs: Array<{ key: TabKey; label: string }> = [
@@ -75,11 +122,17 @@ async function fetchJson<T>(url: string, init?: RequestInit): Promise<T> {
   return body;
 }
 
-function statusTone(value: string): string {
-  if (['sent', 'delivered'].includes(value)) return 'border-emerald-500/40 bg-emerald-500/10 text-emerald-200';
-  if (['failed', 'bounced', 'complained', 'suppressed'].includes(value)) return 'border-rose-500/40 bg-rose-500/10 text-rose-200';
-  if (['queued', 'processing', 'sending'].includes(value)) return 'border-amber-500/40 bg-amber-500/10 text-amber-200';
+function statusTone(tone: B2BStatusTone): string {
+  if (tone === 'emerald') return 'border-emerald-500/40 bg-emerald-500/10 text-emerald-200';
+  if (tone === 'rose') return 'border-rose-500/40 bg-rose-500/10 text-rose-200';
+  if (tone === 'amber') return 'border-amber-500/40 bg-amber-500/10 text-amber-200';
+  if (tone === 'cyan') return 'border-cyan-500/40 bg-cyan-500/10 text-cyan-200';
+  if (tone === 'violet') return 'border-violet-500/40 bg-violet-500/10 text-violet-200';
   return 'border-slate-700 bg-slate-900 text-slate-300';
+}
+
+function StatusBadge({ status }: { status: B2BStatusLabel }) {
+  return <span className={`rounded-full border px-2 py-1 text-xs ${statusTone(status.tone)}`}>{status.label}</span>;
 }
 
 function toggleSelection(values: string[], value: string): string[] {
@@ -89,8 +142,13 @@ function toggleSelection(values: string[], value: string): string[] {
 function formatDateTime(value: string | null): string {
   if (!value) return '-';
   return new Intl.DateTimeFormat('hu-HU', {
-    dateStyle: 'short',
-    timeStyle: 'short'
+    timeZone: 'Europe/Budapest',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
   }).format(new Date(value));
 }
 
@@ -116,6 +174,9 @@ export function B2BEmailAdmin() {
   const [sendCampaign, setSendCampaign] = useState<Campaign | null>(null);
   const [sendingCampaignId, setSendingCampaignId] = useState<string | null>(null);
   const [queueSettings, setQueueSettings] = useState({ perEmailDelaySeconds: 30, maxEmailsPerProcess: 10 });
+  const [contactHistory, setContactHistory] = useState<ContactHistoryResponse | null>(null);
+  const [contactHistoryLoading, setContactHistoryLoading] = useState(false);
+  const [resendingHistoryId, setResendingHistoryId] = useState<string | null>(null);
 
   const [contactForm, setContactForm] = useState({
     company_name: '',
@@ -311,6 +372,57 @@ export function B2BEmailAdmin() {
     setSendCampaign(campaign);
   }
 
+  async function openContactHistory(contactId: string) {
+    setError(null);
+    setContactHistoryLoading(true);
+    try {
+      const body = await fetchJson<ContactHistoryResponse>(`/api/admin/b2b-email/contacts/${contactId}/history`);
+      setContactHistory(body);
+    } catch (historyError) {
+      setError(historyError instanceof Error ? historyError.message : 'Email előzmény lekérdezési hiba.');
+    } finally {
+      setContactHistoryLoading(false);
+    }
+  }
+
+  async function resendHistoryItem(item: EmailHistoryItem) {
+    if (!contactHistory) return;
+    const isBlocked = Boolean(
+      contactHistory.contact.unsubscribed_at || contactHistory.contact.complained_at || contactHistory.contact.suppressed_at
+    );
+    if (isBlocked) {
+      setError('Erre a címzettre nem küldhető új email, mert leiratkozott, panaszt tett vagy tiltólistára került.');
+      return;
+    }
+
+    const bouncedWarning = item.status === 'bounced' ? '\n\nEz az email korábban visszapattant. Csak akkor küldd újra, ha ellenőrizted a címet.' : '';
+    if (!window.confirm(`Biztosan újraküldöd ezt az emailt a címzettnek? Az újraküldés külön eseményként naplózásra kerül.${bouncedWarning}`)) {
+      return;
+    }
+
+    setError(null);
+    setMessage(null);
+    setResendingHistoryId(item.id);
+    try {
+      await fetchJson(`/api/admin/b2b-email/contacts/${contactHistory.contact.id}/resend`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          confirmSend: true,
+          campaignRecipientId: item.campaign_recipient_id,
+          sendAttemptId: item.source === 'send_attempt' ? item.id : undefined
+        })
+      });
+      setMessage('Az email újraküldése naplózva lett.');
+      await openContactHistory(contactHistory.contact.id);
+      await loadAll();
+    } catch (resendError) {
+      setError(resendError instanceof Error ? resendError.message : 'Újraküldési hiba.');
+    } finally {
+      setResendingHistoryId(null);
+    }
+  }
+
   async function sendTestEmail(templateId: string) {
     setError(null);
     setMessage(null);
@@ -417,20 +529,29 @@ export function B2BEmailAdmin() {
                     <td className="px-3 py-2"><span className="font-medium text-white">{contact.company_name}</span><br /><span className="text-xs text-slate-400">{contact.contact_name || '-'}</span></td>
                     <td className="px-3 py-2">{contact.email}</td>
                     <td className="px-3 py-2">{activeContacts.some((item) => item.id === contact.id) ? 'Aktív' : 'Kizárt / leiratkozott'}</td>
-                    <td className="px-3 py-2">{contact.last_email_status || '-'}</td>
+                    <td className="px-3 py-2"><StatusBadge status={getB2BEmailEventLabel(contact.last_email_status)} /></td>
                     <td className="px-3 py-2">
-                      <button
-                        type="button"
-                        onClick={() => void deleteB2BEntity({
-                          endpoint: `/api/admin/b2b-email/contacts/${contact.id}`,
-                          confirmText: 'Biztosan inaktiválod ezt a címzettet? A korábbi kampánynaplók megmaradnak, de a rendszer nem küld neki új B2B kampányt.',
-                          fallbackSuccess: 'A címzett inaktiválva lett.',
-                          fallbackError: 'A címzett inaktiválása nem sikerült.'
-                        })}
-                        className="rounded-md border border-rose-500/40 px-2 py-1 text-xs text-rose-200 hover:bg-rose-500/10"
-                      >
-                        Inaktiválás
-                      </button>
+                      <div className="flex flex-wrap gap-2">
+                        <button
+                          type="button"
+                          onClick={() => void openContactHistory(contact.id)}
+                          className="rounded-md border border-cyan-500/40 px-2 py-1 text-xs text-cyan-200 hover:bg-cyan-500/10"
+                        >
+                          Részletek
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => void deleteB2BEntity({
+                            endpoint: `/api/admin/b2b-email/contacts/${contact.id}`,
+                            confirmText: 'Biztosan inaktiválod ezt a címzettet? A korábbi kampánynaplók megmaradnak, de a rendszer nem küld neki új B2B kampányt.',
+                            fallbackSuccess: 'A címzett inaktiválva lett.',
+                            fallbackError: 'A címzett inaktiválása nem sikerült.'
+                          })}
+                          className="rounded-md border border-rose-500/40 px-2 py-1 text-xs text-rose-200 hover:bg-rose-500/10"
+                        >
+                          Inaktiválás
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -568,11 +689,11 @@ export function B2BEmailAdmin() {
                   <div>
                     <h4 className="font-semibold text-white">{campaign.name}</h4>
                     <div className="mt-2 flex flex-wrap gap-2 text-xs">
-                      <span className={`rounded-full border px-2 py-1 ${statusTone(campaign.status)}`}>{campaign.status}</span>
+                      <StatusBadge status={getB2BCampaignStatusLabel(campaign.status)} />
                       <span className="rounded-full border border-slate-700 px-2 py-1 text-slate-300">Célzott: {campaign.target_count}</span>
-                      <span className="rounded-full border border-slate-700 px-2 py-1 text-slate-300">Sent: {campaign.sent_count}</span>
-                      <span className="rounded-full border border-slate-700 px-2 py-1 text-slate-300">Delivered: {campaign.delivered_count}</span>
-                      <span className="rounded-full border border-slate-700 px-2 py-1 text-slate-300">Failed: {campaign.failed_count}</span>
+                      <span className="rounded-full border border-slate-700 px-2 py-1 text-slate-300">Elküldve: {campaign.sent_count}</span>
+                      <span className="rounded-full border border-slate-700 px-2 py-1 text-slate-300">Kézbesítve: {campaign.delivered_count}</span>
+                      <span className="rounded-full border border-slate-700 px-2 py-1 text-slate-300">Sikertelen: {campaign.failed_count}</span>
                     </div>
                   </div>
                   <div className="flex flex-wrap gap-2">
@@ -667,6 +788,122 @@ export function B2BEmailAdmin() {
                 {sendingCampaignId === sendCampaign.id ? 'Sor indítása...' : 'Igen, elindítom'}
               </button>
             </div>
+          </div>
+        </div>
+      ) : null}
+
+      {contactHistory || contactHistoryLoading ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
+          <div className="max-h-[92vh] w-full max-w-5xl overflow-auto rounded-lg border border-slate-700 bg-slate-900 p-5">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div>
+                <h3 className="text-lg font-semibold text-white">Címzett részletei</h3>
+                {contactHistoryLoading ? <p className="mt-2 text-sm text-slate-400">Előzmények betöltése...</p> : null}
+              </div>
+              <button type="button" onClick={() => setContactHistory(null)} className="rounded-md border border-slate-700 px-3 py-2 text-sm text-slate-100 hover:bg-slate-800">
+                Bezárás
+              </button>
+            </div>
+
+            {contactHistory ? (
+              <>
+                <div className="mt-4 grid gap-3 rounded-md border border-slate-800 bg-slate-950 p-3 text-sm text-slate-200 md:grid-cols-2">
+                  <div><span className="text-slate-400">Cégnév:</span> {contactHistory.contact.company_name}</div>
+                  <div><span className="text-slate-400">Kapcsolattartó:</span> {contactHistory.contact.contact_name || '-'}</div>
+                  <div><span className="text-slate-400">Email:</span> {contactHistory.contact.email}</div>
+                  <div><span className="text-slate-400">Telefon:</span> {contactHistory.contact.phone || '-'}</div>
+                  <div><span className="text-slate-400">Weboldal:</span> {contactHistory.contact.website || '-'}</div>
+                  <div><span className="text-slate-400">Forrás:</span> {contactHistory.contact.source || '-'}</div>
+                  <div><span className="text-slate-400">Aktív státusz:</span> {contactHistory.contact.is_active ? 'Aktív' : 'Inaktív'}</div>
+                  <div className="flex items-center gap-2"><span className="text-slate-400">Utolsó email státusz:</span> <StatusBadge status={getB2BEmailEventLabel(contactHistory.contact.last_email_status)} /></div>
+                  <div><span className="text-slate-400">Utolsó email esemény:</span> {formatDateTime(contactHistory.contact.last_email_event_at)}</div>
+                  <div className="md:col-span-2"><span className="text-slate-400">Megjegyzés:</span> {contactHistory.contact.note || '-'}</div>
+                </div>
+
+                <div className="mt-5">
+                  <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                      <h4 className="font-semibold text-white">Kiküldött emailek</h4>
+                      <p className="mt-1 max-w-3xl text-xs leading-5 text-slate-400">
+                        A megnyitás mérése csak akkor látható, ha a Resend tracking és a webhook esemény engedélyezve van. Egyes levelezők adatvédelmi okokból pontatlanul mérhetik.
+                      </p>
+                    </div>
+                    {contactHistory.contact.unsubscribed_at || contactHistory.contact.complained_at || contactHistory.contact.suppressed_at ? (
+                      <p className="rounded-md border border-rose-500/40 bg-rose-500/10 px-3 py-2 text-xs text-rose-200">
+                        Erre a címzettre nem küldhető új email, mert leiratkozott, panaszt tett vagy tiltólistára került.
+                      </p>
+                    ) : null}
+                  </div>
+
+                  <div className="mt-3 space-y-3">
+                    {contactHistory.history.length === 0 ? (
+                      <p className="rounded-md border border-slate-800 bg-slate-950 p-3 text-sm text-slate-400">Még nincs kiküldött email ehhez a címzetthez.</p>
+                    ) : null}
+                    {contactHistory.history.map((item) => {
+                      const displayStatus = item.clicked_at
+                        ? getB2BEmailEventLabel('email.clicked')
+                        : item.opened_at
+                          ? getB2BEmailEventLabel('email.opened')
+                          : getB2BRecipientStatusLabel(item.status);
+                      const resendBlocked = Boolean(
+                        contactHistory.contact.unsubscribed_at || contactHistory.contact.complained_at || contactHistory.contact.suppressed_at
+                      );
+                      return (
+                        <article key={`${item.source}-${item.id}`} className="rounded-md border border-slate-800 bg-slate-950 p-3">
+                          <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+                            <div className="min-w-0 space-y-2">
+                              <div className="flex flex-wrap items-center gap-2">
+                                <StatusBadge status={displayStatus} />
+                                <span className="text-xs text-slate-400">{item.source === 'send_attempt' ? 'Manuális újraküldés' : 'Kampányküldés'}</span>
+                              </div>
+                              <div>
+                                <p className="font-medium text-white">{item.campaign_name || 'Ismeretlen kampány'}</p>
+                                <p className="text-sm text-slate-300">{item.subject || '-'}</p>
+                                <p className="text-xs text-slate-500">{item.email}</p>
+                              </div>
+                              <div className="grid gap-1 text-xs text-slate-300 sm:grid-cols-2 lg:grid-cols-3">
+                                <span>Elküldve: {formatDateTime(item.sent_at)}</span>
+                                <span>Kézbesítve: {formatDateTime(item.delivered_at)}</span>
+                                <span>Megnyitotta: {item.opened_at ? formatDateTime(item.opened_at) : 'nincs adat'}</span>
+                                <span>Kattintott: {item.clicked_at ? formatDateTime(item.clicked_at) : 'nincs adat'}</span>
+                                <span>Utolsó esemény: {getB2BEmailEventLabel(item.last_event_type).label}</span>
+                                <span>Resend ID: {item.resend_email_id || '-'}</span>
+                              </div>
+                              {item.resend_error ? <p className="rounded-md border border-rose-500/30 bg-rose-500/10 p-2 text-xs text-rose-200">{item.resend_error}</p> : null}
+                              {item.status === 'bounced' ? (
+                                <p className="text-xs text-amber-200">Ez az email korábban visszapattant. Csak ellenőrzött címre küldd újra.</p>
+                              ) : null}
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => void resendHistoryItem(item)}
+                              disabled={resendBlocked || resendingHistoryId === item.id}
+                              className="inline-flex items-center justify-center gap-2 rounded-md border border-cyan-500/50 px-3 py-2 text-sm text-cyan-200 hover:bg-cyan-500/10 disabled:cursor-not-allowed disabled:opacity-50"
+                            >
+                              <Send className="h-4 w-4" />
+                              {resendingHistoryId === item.id ? 'Újraküldés...' : 'Újraküldés'}
+                            </button>
+                          </div>
+
+                          {item.events.length > 0 ? (
+                            <div className="mt-3 border-t border-slate-800 pt-3">
+                              <p className="mb-2 text-xs uppercase tracking-wide text-slate-500">Resend események</p>
+                              <div className="flex flex-wrap gap-2">
+                                {item.events.slice(0, 8).map((event) => (
+                                  <span key={event.id} className="rounded-full border border-slate-700 px-2 py-1 text-xs text-slate-300">
+                                    {getB2BEmailEventLabel(event.event_type).label} · {formatDateTime(event.created_at)}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          ) : null}
+                        </article>
+                      );
+                    })}
+                  </div>
+                </div>
+              </>
+            ) : null}
           </div>
         </div>
       ) : null}
