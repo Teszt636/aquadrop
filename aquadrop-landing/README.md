@@ -185,11 +185,19 @@ Queue processing is handled by `POST /api/admin/b2b-email/campaigns/[id]/process
 - stores the Resend email id and recipient status,
 - updates campaign aggregate counters and finishes the campaign as `sent` or `partial_failed` when no queued/processing rows remain.
 
-The queue can be processed manually from the admin campaign card with the **Sor feldolgozása** button. Later, the same endpoint can be called from Vercel Cron, for example every minute, to drain due campaign recipients without requiring a browser session workflow.
+The queue can be processed manually from the admin campaign card with the **Sor feldolgozása** button. The same endpoint can also be called later from Vercel Cron, for example every minute, to drain due campaign recipients without requiring a browser session workflow. This repository change does not add automatic Cron processing; campaign queue startup and queue processing remain manual admin actions unless a separate Cron configuration is added later.
 
 The module intentionally does not use `setTimeout`, long `await sleep`, or any long-running wait inside a Vercel Function. Serverless functions should finish quickly; the delay lives in the database as `scheduled_at`, and repeated short process calls pick up the rows whose scheduled time has arrived.
 
-The app stores the Resend email id on `b2b_email_campaign_recipients` and updates campaign counters from webhook events.
+The app stores the original Resend email id on `b2b_email_campaign_recipients` and updates campaign counters from webhook events. Manual individual resends are stored separately in `b2b_email_send_attempts`, so a resend does not overwrite the original `resend_email_id` or the original delivery history.
+
+The contact detail view in the admin shows a merged email history from:
+
+- original `b2b_email_campaign_recipients` rows,
+- manual resend rows in `b2b_email_send_attempts`,
+- related `b2b_email_events` webhook records.
+
+Use `GET /api/admin/b2b-email/contacts/[id]/history` to fetch that merged history. Use `POST /api/admin/b2b-email/contacts/[id]/resend` with `confirmSend: true` and either `campaignRecipientId` or `sendAttemptId` for one-off direct resend. Resends are logged as `attempt_type = manual_resend` and are sent immediately to that single contact without creating a new campaign or starting the queue.
 
 Required server-side environment variables:
 
@@ -215,7 +223,9 @@ Select these Resend events for the webhook:
 - `email.delivery_delayed`
 - `email.complained`
 - `email.suppressed`
-- optionally `email.opened` and `email.clicked` for logging only
+- optionally `email.opened` and `email.clicked` for open/click history
+
+`email.opened` and `email.clicked` only appear when Resend tracking and the matching webhook events are enabled. Open tracking is not 100% accurate because some mail clients and privacy protections can proxy, block, or prefetch tracking pixels. The UI therefore treats open/click timestamps as helpful signals, not guaranteed proof.
 
 Unsubscribe links use a signed URL in this form:
 

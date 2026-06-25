@@ -98,9 +98,46 @@ export type B2BCampaignRecipient = {
   locked_by: string | null;
   sent_at: string | null;
   delivered_at: string | null;
+  opened_at: string | null;
+  clicked_at: string | null;
   bounced_at: string | null;
   failed_at: string | null;
   complained_at: string | null;
+  created_at: string;
+};
+
+export type B2BEmailSendAttempt = {
+  id: string;
+  campaign_id: string | null;
+  campaign_recipient_id: string | null;
+  contact_id: string | null;
+  email: string;
+  attempt_type: 'initial' | 'manual_resend';
+  status: B2BCampaignRecipient['status'];
+  resend_email_id: string | null;
+  resend_error: string | null;
+  subject_snapshot: string | null;
+  sent_at: string | null;
+  delivered_at: string | null;
+  opened_at: string | null;
+  clicked_at: string | null;
+  bounced_at: string | null;
+  failed_at: string | null;
+  complained_at: string | null;
+  last_event_type: string | null;
+  last_event_at: string | null;
+  created_by_email: string | null;
+  created_at: string;
+};
+
+export type B2BEmailEvent = {
+  id: string;
+  svix_id: string | null;
+  resend_email_id: string | null;
+  event_type: string;
+  recipient_email: string | null;
+  campaign_recipient_id: string | null;
+  payload: Record<string, unknown>;
   created_at: string;
 };
 
@@ -322,6 +359,22 @@ export async function fetchContactById(id: string): Promise<B2BContact | null> {
   return rows[0] ?? null;
 }
 
+export async function fetchCampaignRecipientById(id: string): Promise<B2BCampaignRecipient | null> {
+  const rows = await b2bSelect<B2BCampaignRecipient>(
+    'b2b_email_campaign_recipients',
+    new URLSearchParams({ select: '*', id: `eq.${id}`, limit: '1' })
+  );
+  return rows[0] ?? null;
+}
+
+export async function fetchCampaignsByIds(ids: string[]): Promise<B2BCampaign[]> {
+  if (ids.length === 0) return [];
+  return b2bSelect<B2BCampaign>(
+    'b2b_email_campaigns',
+    new URLSearchParams({ select: '*', id: `in.(${[...new Set(ids)].join(',')})`, limit: '500' })
+  );
+}
+
 async function fetchContactsByIds(ids: string[]): Promise<B2BContact[]> {
   if (ids.length === 0) return [];
   return b2bSelect<B2BContact>(
@@ -434,6 +487,13 @@ export async function listCampaignRecipients(campaignId: string): Promise<B2BCam
   );
 }
 
+export async function listContactCampaignRecipients(contactId: string): Promise<B2BCampaignRecipient[]> {
+  return b2bSelect<B2BCampaignRecipient>(
+    'b2b_email_campaign_recipients',
+    new URLSearchParams({ select: '*', contact_id: `eq.${contactId}`, order: 'created_at.desc', limit: '500' })
+  );
+}
+
 export async function listQueueableCampaignRecipients(campaignId: string): Promise<B2BCampaignRecipient[]> {
   return b2bSelect<B2BCampaignRecipient>(
     'b2b_email_campaign_recipients',
@@ -537,6 +597,57 @@ export async function fetchRecipientByResendEmailId(resendEmailId: string): Prom
     new URLSearchParams({ select: '*', resend_email_id: `eq.${resendEmailId}`, limit: '1' })
   );
   return rows[0] ?? null;
+}
+
+export async function listContactSendAttempts(contactId: string): Promise<B2BEmailSendAttempt[]> {
+  return b2bSelect<B2BEmailSendAttempt>(
+    'b2b_email_send_attempts',
+    new URLSearchParams({ select: '*', contact_id: `eq.${contactId}`, order: 'created_at.desc', limit: '500' })
+  );
+}
+
+export async function fetchSendAttemptById(id: string): Promise<B2BEmailSendAttempt | null> {
+  const rows = await b2bSelect<B2BEmailSendAttempt>(
+    'b2b_email_send_attempts',
+    new URLSearchParams({ select: '*', id: `eq.${id}`, limit: '1' })
+  );
+  return rows[0] ?? null;
+}
+
+export async function fetchSendAttemptByResendEmailId(resendEmailId: string): Promise<B2BEmailSendAttempt | null> {
+  const rows = await b2bSelect<B2BEmailSendAttempt>(
+    'b2b_email_send_attempts',
+    new URLSearchParams({ select: '*', resend_email_id: `eq.${resendEmailId}`, limit: '1' })
+  );
+  return rows[0] ?? null;
+}
+
+export async function insertSendAttempt(row: JsonRow): Promise<B2BEmailSendAttempt> {
+  const [created] = await b2bInsert<B2BEmailSendAttempt>('b2b_email_send_attempts', [row]);
+  return created;
+}
+
+export async function patchSendAttempt(id: string, updates: JsonRow): Promise<B2BEmailSendAttempt | null> {
+  const rows = await b2bPatch<B2BEmailSendAttempt>(
+    'b2b_email_send_attempts',
+    new URLSearchParams({ id: `eq.${id}` }),
+    updates
+  );
+  return rows[0] ?? null;
+}
+
+export async function listEventsByResendEmailIds(resendEmailIds: string[]): Promise<B2BEmailEvent[]> {
+  const ids = [...new Set(resendEmailIds.filter(Boolean))];
+  if (ids.length === 0) return [];
+  return b2bSelect<B2BEmailEvent>(
+    'b2b_email_events',
+    new URLSearchParams({
+      select: '*',
+      resend_email_id: `in.(${ids.join(',')})`,
+      order: 'created_at.desc',
+      limit: '1000'
+    })
+  );
 }
 
 export async function eventExists(svixId: string): Promise<boolean> {
