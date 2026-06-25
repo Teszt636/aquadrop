@@ -160,14 +160,60 @@ Admin data operations:
 
 The admin UI includes tabs, search, detail view, edit mode, delete confirmation, refresh, and date-desc sorting behavior.
 
-## 9) Planned later phases
+## 9) B2B email campaign admin
+
+The admin dashboard includes a **B2B email kampányok** tab for managing B2B contacts, target groups, email templates, and campaigns. Campaign creation stores a template snapshot and the selected recipients in Supabase; it does not send email by itself.
+
+Actual campaign sending is handled by `POST /api/admin/b2b-email/campaigns/[id]/send` and requires:
+
+- a valid admin session with role `admin`,
+- request body `confirmSend: true`,
+- at most 100 active, non-unsubscribed, non-bounced, non-complained, non-suppressed recipients.
+
+Every recipient is sent as a separate Resend batch email object. The app stores the Resend email id on `b2b_email_campaign_recipients` and updates campaign counters from webhook events.
+
+Required server-side environment variables:
+
+```bash
+RESEND_API_KEY=<your-resend-api-key>
+RESEND_FROM_EMAIL="Aquadrop Expert Pro <hello@aquadrop.hu>"
+RESEND_WEBHOOK_SECRET=<your-resend-webhook-secret>
+SITE_URL=https://www.aquadrop.hu
+```
+
+Configure this webhook URL in the Resend dashboard:
+
+```text
+https://www.aquadrop.hu/api/webhooks/resend-events
+```
+
+Select these Resend events for the webhook:
+
+- `email.sent`
+- `email.delivered`
+- `email.bounced`
+- `email.failed`
+- `email.delivery_delayed`
+- `email.complained`
+- `email.suppressed`
+- optionally `email.opened` and `email.clicked` for logging only
+
+Unsubscribe links use a signed URL in this form:
+
+```text
+/leiratkozas?contact=<contact-id>&sig=<hmac>
+```
+
+The unsubscribe flow sets `b2b_email_contacts.unsubscribed_at` and `is_active = false`, so later sends skip the contact.
+
+## 10) Planned later phases
 
 Planned but not yet implemented:
 
 - OCR pipeline for automated receipt parsing/validation,
 - Aquadrop Care system integration and related operational flows.
 
-## 10) Development checklist for every change
+## 11) Development checklist for every change
 
 For every code modification, follow this order before finishing work:
 
